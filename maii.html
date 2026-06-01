@@ -1,0 +1,545 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TripVerse - Explore. Experience. Enjoy.</title>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+   <style>
+    /* --- Global Resets & Variables --- */
+:root {
+    --primary: #007c67; /* Exact Teal Brand Color */
+    --primary-light: #48d1cc;
+    --text-main: #111827;
+    --text-muted: #6B7280;
+    --bg-light: #ffffff;
+    --white: #FFFFFF;
+    --border: #E5E7EB;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Plus Jakarta Sans', sans-serif;
+}
+
+body {
+    background-color: var(--white);
+    color: var(--text-main);
+    overflow-x: hidden;
+}
+
+a { text-decoration: none; }
+ul { list-style: none; }
+
+/* --- Header / Navigation --- */
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 18px 48px;
+    background: var(--white);
+    border-bottom: 1px solid var(--border);
+}
+
+.logo {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+.logo-icon {
+    position: relative;
+    color: var(--primary);
+    font-size: 28px;
+}
+.small-check {
+    position: absolute;
+    bottom: 2px;
+    right: -4px;
+    font-size: 10px;
+    background: white;
+    border-radius: 50%;
+    color: var(--primary);
+}
+.logo-text h1 { font-size: 24px; font-weight: 800; color: #111; line-height: 1; letter-spacing: -0.5px;}
+.logo-text p { font-size: 11px; font-weight: 500; color: var(--text-muted); margin-top: 2px;}
+
+.nav-links {
+    display: flex;
+    gap: 32px;
+}
+.nav-links a {
+    color: var(--text-main);
+    font-size: 15px;
+    font-weight: 600;
+}
+.nav-links a.active { color: var(--primary); border-bottom: 2px solid var(--primary); padding-bottom: 6px; }
+.nav-links i { font-size: 11px; margin-left: 4px; color: var(--text-main); }
+
+.nav-buttons { 
+    display: flex; 
+    align-items: center;
+    gap: 16px; 
+}
+
+.btn-text {
+    color: var(--primary);
+    font-size: 15px;
+    font-weight: 600;
+}
+.btn {
+    padding: 10px 20px;
+    border-radius: 6px;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: 0.2s;
+}
+.btn-outline {
+    background: transparent;
+    border: 1px solid var(--primary);
+    color: var(--primary);
+}
+.btn-primary {
+    background: var(--primary);
+    border: 1px solid var(--primary);
+    color: var(--white);
+}
+
+/* --- Hero Section --- */
+.hero {
+    position: relative;
+    height: 480px;
+    background: linear-gradient(rgba(17, 33, 45, 0.4), rgba(17, 33, 45, 0.2)), url('../src/assets/hero.png') center 60%/cover no-repeat;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 0 48px;
+}
+
+.hero-content { margin-bottom: 25px; color: var(--white); transform: translateY(-40px); }
+.hero-title { font-size: 54px; font-weight: 800; line-height: 1.15; margin-bottom: 12px; letter-spacing: -1px; }
+.hero-title .highlight { color: var(--primary-light); }
+.hero-subtitle { font-size: 18px; font-weight: 500; line-height: 1.5; opacity: 0.95; }
+
+/* --- Search Bar --- */
+.search-wrapper {
+    position: absolute;
+    bottom: 85px; /* Sits above the trust banner */
+    left: 48px;
+    right: 48px;
+}
+.search-bar {
+    display: flex;
+    align-items: center;
+    background: var(--white);
+    border-radius: 60px;
+    padding: 12px;
+    padding-left: 20px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+}
+
+.search-item {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 5px 25px;
+    flex: 1;
+}
+.search-item i { font-size: 20px; color: var(--text-main); }
+.search-text { display: flex; flex-direction: column; }
+.search-text strong { font-size: 15px; font-weight: 700; color: var(--text-main); margin-bottom: 2px;}
+.search-text span { font-size: 13px; font-weight: 500; color: var(--text-muted); }
+
+.search-divider { width: 1px; height: 40px; background: #E5E7EB; }
+.ms-auto { margin-left: auto; }
+.dropdown-item { flex: 1.2; padding-right: 10px;}
+.dropdown-icon { font-size: 14px !important; color: var(--text-main) !important;}
+.search-btn { padding: 16px 36px; border-radius: 40px; font-size: 16px; font-weight: 700; margin-left: 5px; }
+
+/* --- Trust Banner --- */
+.trust-banner {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    background: rgba(0, 0, 0, 0.45);
+    backdrop-filter: blur(8px);
+    display: flex;
+    justify-content: flex-start;
+    gap: 60px;
+    padding: 16px 48px;
+    color: var(--white);
+}
+.trust-item { display: flex; align-items: center; gap: 12px; }
+.trust-item i { font-size: 22px; color: var(--white); opacity: 0.9;}
+.trust-text { display: flex; flex-direction: column; }
+.trust-text strong { font-size: 14px; font-weight: 700; }
+.trust-text span { font-size: 12px; font-weight: 500; color: #E5E7EB; }
+
+/* --- Categories Section --- */
+.categories {
+    display: flex;
+    justify-content: space-between;
+    padding: 40px 48px;
+    background: #fafafa;
+    border-bottom: 1px solid var(--border);
+}
+.category-card {
+    background: var(--white);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 24px 10px;
+    text-align: center;
+    width: 135px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.02);
+    transition: transform 0.2s;
+}
+.category-card:hover { transform: translateY(-3px); }
+.category-icon { width: 50px; height: 50px; margin-bottom: 16px; object-fit: contain; }
+.category-card h3 { font-size: 14px; font-weight: 700; margin-bottom: 10px; color: #111;}
+.category-card a { font-size: 13px; color: var(--primary); font-weight: 600; }
+
+/* --- Trending Section --- */
+.trending { padding: 48px; position: relative; }
+.section-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px; }
+.section-header h2 { font-size: 24px; font-weight: 800; color: #111; }
+.view-all { color: var(--primary); font-size: 15px; font-weight: 700; display: flex; align-items: center; gap: 8px;}
+
+.slider-container {
+    position: relative;
+    width: 100%;
+}
+
+.cards-wrapper {
+    display: flex;
+    gap: 24px;
+    overflow-x: hidden; /* Hidden to emulate the exact static view */
+    padding-bottom: 10px;
+}
+
+.card {
+    background: var(--white);
+    border-radius: 16px;
+    overflow: hidden;
+    border: 1px solid var(--border);
+    box-shadow: 0 4px 20px rgba(0,0,0,0.04);
+    min-width: 280px;
+    flex: 1;
+}
+
+.card-img-wrapper { position: relative; height: 200px; }
+.card-img-wrapper img { width: 100%; height: 100%; object-fit: cover; }
+.badge {
+    position: absolute; top: 16px; left: 16px;
+    padding: 5px 12px; border-radius: 20px;
+    color: white; font-size: 12px; font-weight: 700;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+}
+/* Exact Badge Colors */
+.badge-green { background: #059669; }
+.badge-orange { background: #f97316; }
+.badge-purple { background: #8b5cf6; }
+.badge-blue { background: #2563eb; }
+.badge-darkgreen { background: #047857; }
+
+.heart-icon {
+    position: absolute; top: 16px; right: 16px;
+    color: white; font-size: 22px; cursor: pointer;
+    text-shadow: 0 2px 6px rgba(0,0,0,0.6);
+}
+
+.card-content { padding: 20px; }
+.card-title { font-size: 17px; font-weight: 800; margin-bottom: 6px; color: #111; }
+.card-location { font-size: 14px; font-weight: 500; color: var(--text-muted); margin-bottom: 12px; }
+.card-rating { font-size: 14px; font-weight: 600; color: var(--text-main); margin-bottom: 12px; display: flex; align-items: center; gap: 6px; }
+.card-rating i { color: #f59e0b; font-size: 13px; }
+.card-price { font-size: 14px; font-weight: 500; color: var(--primary); }
+.card-price strong { font-size: 18px; font-weight: 800; }
+
+/* The Right Scroll Arrow Overlap */
+.slider-arrow {
+    position: absolute;
+    top: 50%;
+    right: -20px; /* Overlaps the edge exactly like the design */
+    transform: translateY(-50%);
+    width: 48px;
+    height: 48px;
+    background: var(--white);
+    border: 1px solid var(--border);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    cursor: pointer;
+    color: #111;
+    font-size: 18px;
+    z-index: 10;
+}
+.slider-arrow:hover { background: #f9fafb; }
+   </style>
+</head>
+<body>
+
+    <header class="navbar">
+        <div class="logo">
+            <div class="logo-icon">
+                <i class="fa-solid fa-location-dot"></i>
+                <i class="fa-solid fa-check small-check"></i>
+            </div>
+            <div class="logo-text">
+                <h1>TripVerse</h1>
+                <p>Explore. Experience. Enjoy.</p>
+            </div>
+        </div>
+        
+        <nav class="nav-links">
+            <a href="#" class="active">Home</a>
+            <a href="#">Stays</a>
+            <a href="#">Rentals <i class="fa-solid fa-chevron-down"></i></a>
+            <a href="#">Food Spots</a>
+            <a href="#">Adventures</a>
+            <a href="#">Taxi Booking</a>
+            <a href="#">Services <i class="fa-solid fa-chevron-down"></i></a>
+            <a href="#">Tour Packages</a>
+        </nav>
+        
+        <div class="nav-buttons">
+            <a href="#" class="btn-text">Become a Host</a>
+            <button class="btn btn-outline">Login</button>
+            <button class="btn btn-primary">Register</button>
+        </div>
+    </header>
+
+    <section class="hero">
+        <div class="hero-content">
+            <h1 class="hero-title">Your Journey<br><span class="highlight">Starts Here</span></h1>
+            <p class="hero-subtitle">Find the best stays, rentals, food, adventures<br>and more in one place.</p>
+        </div>
+
+        <div class="search-wrapper">
+            <div class="search-bar">
+                <div class="search-item">
+                    <i class="fa-solid fa-magnifying-glass"></i>
+                    <div class="search-text">
+                        <strong>Search for anything</strong>
+                        <span>Rooms, Bikes, Food, Adventures...</span>
+                    </div>
+                </div>
+                <div class="search-divider"></div>
+                <div class="search-item">
+                    <i class="fa-solid fa-location-dot"></i>
+                    <div class="search-text">
+                        <strong>Location</strong>
+                        <span>Pondicherry, India</span>
+                    </div>
+                </div>
+                <div class="search-divider"></div>
+                <div class="search-item">
+                    <i class="fa-regular fa-calendar"></i>
+                    <div class="search-text">
+                        <strong>Check-in</strong>
+                        <span>21 Jun 2025 (Sat)</span>
+                    </div>
+                </div>
+                <div class="search-divider"></div>
+                <div class="search-item">
+                    <i class="fa-regular fa-calendar-check"></i>
+                    <div class="search-text">
+                        <strong>Check-out</strong>
+                        <span>25 Jun 2025 (Wed)</span>
+                    </div>
+                </div>
+                <div class="search-divider"></div>
+                <div class="search-item dropdown-item">
+                    <i class="fa-regular fa-user"></i>
+                    <div class="search-text">
+                        <strong>Guests & Rooms</strong>
+                        <span>3 Adults, 1 Child, 1 Room</span>
+                    </div>
+                    <i class="fa-solid fa-chevron-down ms-auto dropdown-icon"></i>
+                </div>
+                <button class="btn btn-primary search-btn">Search</button>
+            </div>
+        </div>
+
+        <div class="trust-banner">
+            <div class="trust-item">
+                <i class="fa-solid fa-tag"></i>
+                <div class="trust-text">
+                    <strong>Best Prices</strong>
+                    <span>Guaranteed</span>
+                </div>
+            </div>
+            <div class="trust-item">
+                <i class="fa-solid fa-shield-halved"></i>
+                <div class="trust-text">
+                    <strong>Verified Listings</strong>
+                    <span>Trusted & Reliable</span>
+                </div>
+            </div>
+            <div class="trust-item">
+                <i class="fa-solid fa-headset"></i>
+                <div class="trust-text">
+                    <strong>24/7 Support</strong>
+                    <span>We're here to help</span>
+                </div>
+            </div>
+            <div class="trust-item">
+                <i class="fa-regular fa-clipboard"></i>
+                <div class="trust-text">
+                    <strong>Easy Booking</strong>
+                    <span>Hassle-free</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="categories">
+        <div class="category-card">
+            <img src="https://img.icons8.com/color/96/000000/city-buildings.png" alt="Stays" class="category-icon">
+            <h3>Stays</h3>
+            <a href="#">Explore</a>
+        </div>
+        <div class="category-card">
+            <img src="https://img.icons8.com/color/96/000000/bicycle.png" alt="Bike Rental" class="category-icon">
+            <h3>Bike Rental</h3>
+            <a href="#">Explore</a>
+        </div>
+        <div class="category-card">
+            <img src="https://img.icons8.com/color/96/000000/car--v1.png" alt="Car Rental" class="category-icon">
+            <h3>Car Rental</h3>
+            <a href="#">Explore</a>
+        </div>
+        <div class="category-card">
+            <img src="https://img.icons8.com/color/96/000000/hamburger.png" alt="Food Spots" class="category-icon">
+            <h3>Food Spots</h3>
+            <a href="#">Explore</a>
+        </div>
+        <div class="category-card">
+            <img src="https://img.icons8.com/color/96/000000/parachute.png" alt="Adventures" class="category-icon">
+            <h3>Adventures</h3>
+            <a href="#">Explore</a>
+        </div>
+        <div class="category-card">
+            <img src="https://img.icons8.com/color/96/000000/taxi.png" alt="Taxi Booking" class="category-icon">
+            <h3>Taxi Booking</h3>
+            <a href="#">Explore</a>
+        </div>
+        <div class="category-card">
+            <img src="https://img.icons8.com/color/96/000000/wheel.png" alt="Puncture Service" class="category-icon">
+            <h3>Puncture Service</h3>
+            <a href="#">Explore</a>
+        </div>
+        <div class="category-card">
+            <img src="https://img.icons8.com/color/96/000000/maintenance.png" alt="Mechanic Service" class="category-icon">
+            <h3>Mechanic Service</h3>
+            <a href="#">Explore</a>
+        </div>
+        <div class="category-card">
+            <img src="https://img.icons8.com/color/96/000000/luggage.png" alt="Tour Packages" class="category-icon">
+            <h3>Tour Packages</h3>
+            <a href="#">Explore</a>
+        </div>
+    </section>
+
+    <section class="trending">
+        <div class="section-header">
+            <h2>Trending Near You</h2>
+            <a href="#" class="view-all">View All <i class="fa-solid fa-arrow-right"></i></a>
+        </div>
+        
+        <div class="slider-container">
+            <div class="cards-wrapper">
+                <div class="card">
+                    <div class="card-img-wrapper">
+                        <span class="badge badge-green">Top Rated</span>
+                        <i class="fa-regular fa-heart heart-icon"></i>
+                        <img src="https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=60" alt="Resort">
+                    </div>
+                    <div class="card-content">
+                        <h3 class="card-title">Sea Breeze Resort</h3>
+                        <p class="card-location">Pondicherry</p>
+                        <div class="card-rating">
+                            <i class="fa-solid fa-star"></i> 4.6 (128 reviews)
+                        </div>
+                        <p class="card-price"><strong>₹2,499</strong> / night</p>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-img-wrapper">
+                        <span class="badge badge-orange">Popular</span>
+                        <i class="fa-regular fa-heart heart-icon"></i>
+                        <img src="https://images.unsplash.com/photo-1558981403-c5f9899a28bc?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=60" alt="Bike">
+                    </div>
+                    <div class="card-content">
+                        <h3 class="card-title">Royal Enfield Classic 350</h3>
+                        <p class="card-location">Pondicherry</p>
+                        <div class="card-rating">
+                            <i class="fa-solid fa-star"></i> 4.8 (96 reviews)
+                        </div>
+                        <p class="card-price"><strong>₹500</strong> / day</p>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-img-wrapper">
+                        <span class="badge badge-purple">Must Try</span>
+                        <i class="fa-regular fa-heart heart-icon"></i>
+                        <img src="https://images.unsplash.com/photo-1513104890138-7c749659a591?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=60" alt="Pizza">
+                    </div>
+                    <div class="card-content">
+                        <h3 class="card-title">Cafe Xtasi</h3>
+                        <p class="card-location">Pondicherry</p>
+                        <div class="card-rating">
+                            <i class="fa-solid fa-star"></i> 4.5 (230 reviews)
+                        </div>
+                        <p class="card-price"><strong>₹300</strong> for two</p>
+                    </div>
+                </div>
+                
+                 <div class="card">
+                    <div class="card-img-wrapper">
+                        <span class="badge badge-blue">Adventure</span>
+                        <i class="fa-regular fa-heart heart-icon"></i>
+                        <img src="https://images.unsplash.com/photo-1520638515082-fdb9bc8259db?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=60" alt="Paragliding">
+                    </div>
+                    <div class="card-content">
+                        <h3 class="card-title">Paragliding Experience</h3>
+                        <p class="card-location">Auroville, Pondicherry</p>
+                        <div class="card-rating">
+                            <i class="fa-solid fa-star"></i> 4.9 (75 reviews)
+                        </div>
+                        <p class="card-price"><strong>₹2,999</strong> / person</p>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-img-wrapper">
+                        <span class="badge badge-darkgreen">Best Seller</span>
+                        <i class="fa-regular fa-heart heart-icon"></i>
+                        <img src="https://images.unsplash.com/photo-1524492412937-b28074a5d7da?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=60" alt="Tour">
+                    </div>
+                    <div class="card-content">
+                        <h3 class="card-title">Pondicherry 3N/4D Tour</h3>
+                        <p class="card-location">Pondicherry</p>
+                        <div class="card-rating">
+                            <i class="fa-solid fa-star"></i> 4.7 (160 reviews)
+                        </div>
+                        <p class="card-price"><strong>₹8,999</strong> / person</p>
+                    </div>
+                </div>
+            </div>
+            
+            <button class="slider-arrow">
+                <i class="fa-solid fa-arrow-right"></i>
+            </button>
+        </div>
+    </section>
+
+</body>
+</html>

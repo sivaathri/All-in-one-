@@ -1,0 +1,446 @@
+/* --- Global Resets & Variables --- */
+:root {
+    --primary: #007c67; /* Exact Teal Brand Color */
+    --primary-light: #48d1cc;
+    --text-main: #111827;
+    --text-muted: #6B7280;
+    --bg-light: #ffffff;
+    --white: #FFFFFF;
+    --border: #E5E7EB;
+}
+
+/* Let's scope the resets or apply them locally to not break the rest of the app, 
+   but since this is the main page and has its own css, let's ensure it has correct fonts. */
+.maii-page {
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    background-color: var(--white);
+    color: var(--text-main);
+    min-height: 100vh;
+    width: 100%;
+}
+
+.maii-page * {
+    box-sizing: border-box;
+    font-family: 'Plus Jakarta Sans', sans-serif;
+}
+
+.maii-page a { text-decoration: none; }
+.maii-page ul { list-style: none; }
+
+/* --- Header / Navigation --- */
+.maii-page .navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 18px 48px;
+    background: var(--white);
+    border-bottom: 1px solid var(--border);
+    width: 100%;
+}
+
+.maii-page .logo {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+.maii-page .logo-icon {
+    position: relative;
+    color: var(--primary);
+    font-size: 28px;
+}
+.maii-page .small-check {
+    position: absolute;
+    bottom: 2px;
+    right: -4px;
+    font-size: 10px;
+    background: white;
+    border-radius: 50%;
+    color: var(--primary);
+}
+.maii-page .logo-text h1 { font-size: 24px; font-weight: 800; color: #111; line-height: 1; letter-spacing: -0.5px;}
+.maii-page .logo-text p { font-size: 11px; font-weight: 500; color: var(--text-muted); margin-top: 2px;}
+
+.maii-page .nav-links {
+    display: flex;
+    gap: 32px;
+}
+.maii-page .nav-links a {
+    color: var(--text-main);
+    font-size: 15px;
+    font-weight: 600;
+}
+.maii-page .nav-links a.active { color: var(--primary); border-bottom: 2px solid var(--primary); padding-bottom: 6px; }
+.maii-page .nav-links i { font-size: 11px; margin-left: 4px; color: var(--text-main); }
+
+.maii-page .nav-buttons { 
+    display: flex; 
+    align-items: center;
+    gap: 16px; 
+}
+
+.maii-page .btn-text {
+    color: var(--primary);
+    font-size: 15px;
+    font-weight: 600;
+}
+.maii-page .btn {
+    padding: 10px 20px;
+    border-radius: 6px;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: 0.2s;
+}
+.maii-page .btn-outline {
+    background: transparent;
+    border: 1px solid var(--primary);
+    color: var(--primary);
+}
+.maii-page .btn-outline:hover {
+    background: var(--primary);
+    color: var(--white);
+}
+.maii-page .btn-primary {
+    background: var(--primary);
+    border: 1px solid var(--primary);
+    color: var(--white);
+}
+.maii-page .btn-primary:hover {
+    background: #006352;
+    border-color: #006352;
+}
+
+/* --- Hero Section --- */
+.maii-page .hero {
+    position: relative;
+    height: 480px;
+  background: linear-gradient(rgba(17, 33, 45, 0.4), rgba(17, 33, 45, 0.2)), url('../src/assets/hero.png') center 60%/cover no-repeat;    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 0 48px;
+    width: 100%;
+}
+
+.maii-page .hero-content { margin-bottom: 25px; color: var(--white); transform: translateY(-40px); text-align: left; }
+.maii-page .hero-title { font-size: 54px; font-weight: 800; line-height: 1.15; margin-bottom: 12px; letter-spacing: -1px; }
+.maii-page .hero-title .highlight { color: var(--primary-light); }
+.maii-page .hero-subtitle { font-size: 18px; font-weight: 500; line-height: 1.5; opacity: 0.95; }
+
+/* --- Search Bar --- */
+.maii-page .search-wrapper {
+    position: absolute;
+    bottom: 85px; /* Sits above the trust banner */
+    left: 48px;
+    right: 48px;
+}
+.maii-page .search-bar {
+    display: flex;
+    align-items: center;
+    background: var(--white);
+    border-radius: 60px;
+    padding: 12px;
+    padding-left: 20px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+}
+
+.maii-page .search-item {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 5px 25px;
+    flex: 1;
+    text-align: left;
+}
+.maii-page .search-item i { font-size: 20px; color: var(--text-main); }
+.maii-page .search-text { display: flex; flex-direction: column; }
+.maii-page .search-text strong { font-size: 15px; font-weight: 700; color: var(--text-main); margin-bottom: 2px;}
+.maii-page .search-text span { font-size: 13px; font-weight: 500; color: var(--text-muted); }
+
+/* Inputs styling inside search text */
+.maii-page .search-input {
+    border: none;
+    outline: none;
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--text-muted);
+    background: transparent;
+    width: 100%;
+    margin-top: 2px;
+}
+
+.maii-page .search-divider { width: 1px; height: 40px; background: #E5E7EB; }
+.maii-page .ms-auto { margin-left: auto; }
+.maii-page .dropdown-item { flex: 1.2; padding-right: 10px; cursor: pointer; position: relative; }
+.maii-page .dropdown-icon { font-size: 14px !important; color: var(--text-main) !important;}
+.maii-page .search-btn { padding: 16px 36px; border-radius: 40px; font-size: 16px; font-weight: 700; margin-left: 5px; }
+
+/* Custom Guest Dropdown Modal */
+.maii-page .guests-dropdown-modal {
+    position: absolute;
+    top: 110%;
+    right: 0;
+    width: 280px;
+    background: var(--white);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+    z-index: 100;
+    padding: 16px;
+}
+.maii-page .guests-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 12px;
+}
+.maii-page .guests-label {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--text-main);
+}
+.maii-page .guests-control {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+.maii-page .guests-btn {
+    width: 28px;
+    height: 28px;
+    border-radius: 4px;
+    border: 1px solid var(--border);
+    background: var(--white);
+    color: var(--text-main);
+    font-weight: 700;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 16px;
+}
+.maii-page .guests-btn:hover {
+    background: #f3f4f6;
+}
+.maii-page .guests-val {
+    font-size: 14px;
+    font-weight: 750;
+    min-width: 15px;
+    text-align: center;
+}
+.maii-page .guests-apply {
+    width: 100%;
+    padding: 8px;
+    background: var(--primary);
+    color: var(--white);
+    border: none;
+    border-radius: 6px;
+    font-weight: 700;
+    font-size: 13px;
+    cursor: pointer;
+    margin-top: 8px;
+}
+.maii-page .guests-apply:hover {
+    background: #006352;
+}
+
+/* --- Trust Banner --- */
+.maii-page .trust-banner {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    background: rgba(0, 0, 0, 0.45);
+    backdrop-filter: blur(8px);
+    display: flex;
+    justify-content: flex-start;
+    gap: 60px;
+    padding: 16px 48px;
+    color: var(--white);
+}
+.maii-page .trust-item { display: flex; align-items: center; gap: 12px; text-align: left; }
+.maii-page .trust-item i { font-size: 22px; color: var(--white); opacity: 0.9;}
+.maii-page .trust-text { display: flex; flex-direction: column; }
+.maii-page .trust-text strong { font-size: 14px; font-weight: 700; }
+.maii-page .trust-text span { font-size: 12px; font-weight: 500; color: #E5E7EB; }
+
+/* --- Categories Section --- */
+.maii-page .categories {
+    display: flex;
+    justify-content: space-between;
+    padding: 40px 48px;
+    background: #fafafa;
+    border-bottom: 1px solid var(--border);
+    width: 100%;
+    gap: 12px;
+    overflow-x: auto;
+}
+.maii-page .category-card {
+    background: var(--white);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 24px 10px;
+    text-align: center;
+    width: 135px;
+    min-width: 120px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.02);
+    transition: transform 0.2s, border-color 0.2s;
+    cursor: pointer;
+    flex-shrink: 0;
+}
+.maii-page .category-card:hover { 
+    transform: translateY(-3px); 
+    border-color: var(--primary);
+}
+.maii-page .category-icon { width: 50px; height: 50px; margin-bottom: 16px; object-fit: contain; }
+.maii-page .category-card h3 { font-size: 14px; font-weight: 700; margin-bottom: 10px; color: #111;}
+.maii-page .category-card a { font-size: 13px; color: var(--primary); font-weight: 600; }
+
+/* --- Trending Section --- */
+.maii-page .trending { padding: 48px; position: relative; width: 100%; }
+.maii-page .section-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px; }
+.maii-page .section-header h2 { font-size: 24px; font-weight: 800; color: #111; }
+.maii-page .view-all { color: var(--primary); font-size: 15px; font-weight: 700; display: flex; align-items: center; gap: 8px;}
+
+.maii-page .slider-container {
+    position: relative;
+    width: 100%;
+}
+
+.maii-page .cards-wrapper {
+    display: flex;
+    gap: 24px;
+    overflow-x: auto; /* Changed to auto for actual scrollability */
+    scroll-behavior: smooth;
+    padding-bottom: 15px;
+}
+/* Hide scrollbar for Chrome, Safari and Opera */
+.maii-page .cards-wrapper::-webkit-scrollbar {
+    display: none;
+}
+/* Hide scrollbar for IE, Edge and Firefox */
+.maii-page .cards-wrapper {
+    -ms-overflow-style: none;  /* IE and Edge */
+    scrollbar-width: none;  /* Firefox */
+}
+
+.maii-page .card {
+    background: var(--white);
+    border-radius: 16px;
+    overflow: hidden;
+    border: 1px solid var(--border);
+    box-shadow: 0 4px 20px rgba(0,0,0,0.04);
+    min-width: 280px;
+    max-width: 280px;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    text-align: left;
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+.maii-page .card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 30px rgba(0,0,0,0.08);
+}
+
+.maii-page .card-img-wrapper { position: relative; height: 200px; width: 100%; }
+.maii-page .card-img-wrapper img { width: 100%; height: 100%; object-fit: cover; }
+.maii-page .badge {
+    position: absolute; top: 16px; left: 16px;
+    padding: 5px 12px; border-radius: 20px;
+    color: white; font-size: 12px; font-weight: 700;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+}
+/* Exact Badge Colors */
+.maii-page .badge-green { background: #059669; }
+.maii-page .badge-orange { background: #f97316; }
+.maii-page .badge-purple { background: #8b5cf6; }
+.maii-page .badge-blue { background: #2563eb; }
+.maii-page .badge-darkgreen { background: #047857; }
+
+.maii-page .heart-icon {
+    position: absolute; top: 16px; right: 16px;
+    color: white; font-size: 22px; cursor: pointer;
+    text-shadow: 0 2px 6px rgba(0,0,0,0.6);
+    background: transparent;
+    border: none;
+    outline: none;
+    transition: scale 0.15s ease;
+}
+.maii-page .heart-icon:active {
+    scale: 0.9;
+}
+.maii-page .heart-icon.liked {
+    color: #ef4444;
+}
+
+.maii-page .card-content { padding: 20px; flex-grow: 1; display: flex; flex-direction: column; }
+.maii-page .card-title { font-size: 17px; font-weight: 800; margin-bottom: 6px; color: #111; }
+.maii-page .card-location { font-size: 14px; font-weight: 500; color: var(--text-muted); margin-bottom: 12px; }
+.maii-page .card-rating { font-size: 14px; font-weight: 600; color: var(--text-main); margin-bottom: 12px; display: flex; align-items: center; gap: 6px; }
+.maii-page .card-rating i { color: #f59e0b; font-size: 13px; }
+.maii-page .card-price { font-size: 14px; font-weight: 500; color: var(--primary); margin-top: auto; }
+.maii-page .card-price strong { font-size: 18px; font-weight: 800; }
+
+/* The Right Scroll Arrow Overlap */
+.maii-page .slider-arrow {
+    position: absolute;
+    top: 50%;
+    right: -20px; /* Overlaps the edge exactly like the design */
+    transform: translateY(-50%);
+    width: 48px;
+    height: 48px;
+    background: var(--white);
+    border: 1px solid var(--border);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    cursor: pointer;
+    color: #111;
+    font-size: 18px;
+    z-index: 10;
+    transition: background 0.2s, transform 0.2s;
+}
+.maii-page .slider-arrow:hover { background: #f9fafb; transform: translateY(-50%) scale(1.05); }
+.maii-page .slider-arrow:active { transform: translateY(-50%) scale(0.95); }
+
+/* Left Arrow for Slider - extra comfort */
+.maii-page .slider-arrow-left {
+    position: absolute;
+    top: 50%;
+    left: -20px;
+    transform: translateY(-50%);
+    width: 48px;
+    height: 48px;
+    background: var(--white);
+    border: 1px solid var(--border);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    cursor: pointer;
+    color: #111;
+    font-size: 18px;
+    z-index: 10;
+    transition: background 0.2s, transform 0.2s;
+}
+.maii-page .slider-arrow-left:hover { background: #f9fafb; transform: translateY(-50%) scale(1.05); }
+.maii-page .slider-arrow-left:active { transform: translateY(-50%) scale(0.95); }
+
+/* Responsive adjustments */
+@media (max-width: 1024px) {
+    .maii-page .navbar { padding: 18px 24px; }
+    .maii-page .nav-links { display: none; } /* Simulating typical collapse or layout shift */
+    .maii-page .hero { height: auto; padding: 60px 24px 140px 24px; }
+    .maii-page .search-wrapper { position: static; bottom: auto; left: auto; right: auto; margin-top: 30px; transform: none; }
+    .maii-page .search-bar { flex-direction: column; border-radius: 20px; padding: 16px; gap: 12px; }
+    .maii-page .search-divider { width: 100%; height: 1px; }
+    .maii-page .search-item { padding: 8px 10px; width: 100%; }
+    .maii-page .search-btn { width: 100%; margin-left: 0; margin-top: 10px; border-radius: 12px; }
+    .maii-page .trust-banner { position: static; bottom: auto; background: rgba(0,0,0,0.85); flex-wrap: wrap; gap: 20px; padding: 24px; margin-top: 30px; border-radius: 12px;}
+    .maii-page .categories { padding: 30px 24px; }
+    .maii-page .trending { padding: 30px 24px; }
+    .maii-page .slider-arrow, .maii-page .slider-arrow-left { display: none; } /* Hide arrow, let native swipe do work */
+    .maii-page .cards-wrapper { overflow-x: auto; }
+}
