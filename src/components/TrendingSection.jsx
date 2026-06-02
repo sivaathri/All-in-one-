@@ -62,6 +62,50 @@ export default function TrendingSection() {
       pricePeriod: 'person',
       badge: 'Best Seller',
       image: 'https://images.unsplash.com/photo-1590001155093-a3c66ab0c3ff?auto=format&fit=crop&w=600&q=80'
+    },
+    {
+      id: 6,
+      title: 'Scuba Diving Adventure',
+      location: 'Chunambar, Pondicherry',
+      rating: 4.8,
+      reviews: 142,
+      price: 3499,
+      pricePeriod: 'person',
+      badge: 'Adventure',
+      image: 'https://images.unsplash.com/photo-1544551763-46a013bb70d5?auto=format&fit=crop&w=600&q=80'
+    },
+    {
+      id: 7,
+      title: 'Auroville Matrimandir Visit',
+      location: 'Auroville, Pondicherry',
+      rating: 4.9,
+      reviews: 310,
+      price: 0,
+      pricePeriod: 'entry free',
+      badge: 'Top Rated',
+      image: 'https://images.unsplash.com/photo-1548013146-72479768bada?auto=format&fit=crop&w=600&q=80'
+    },
+    {
+      id: 8,
+      title: 'Surfing Lesson',
+      location: 'Serenity Beach, Pondicherry',
+      rating: 4.7,
+      reviews: 115,
+      price: 1200,
+      pricePeriod: 'session',
+      badge: 'Adventure',
+      image: 'https://images.unsplash.com/photo-1502680390469-be75c86b636f?auto=format&fit=crop&w=600&q=80'
+    },
+    {
+      id: 9,
+      title: 'Pondicherry Museum Tour',
+      location: 'White Town, Pondicherry',
+      rating: 4.4,
+      reviews: 88,
+      price: 150,
+      pricePeriod: 'person',
+      badge: 'Must Try',
+      image: 'https://images.unsplash.com/photo-1566121318576-53b482a0ec2d?auto=format&fit=crop&w=600&q=80'
     }
   ];
 
@@ -99,22 +143,19 @@ export default function TrendingSection() {
   };
 
   return (
-    <section className="w-full py-16 bg-white overflow-hidden">
-      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+    <section className="w-full pt-6 pb-16 bg-white overflow-hidden">
+      <div className="mx-auto max-w-[1760px] px-4 sm:px-6 lg:px-8">
         {/* Header Row */}
         <div className="flex items-center justify-between mb-8">
-          <div className="flex flex-col text-left">
-            <h2 className="text-2xl font-bold tracking-tight text-slate-900 sm:text-3xl">
-              Trending Near You
-            </h2>
-            <div className="h-1 w-12 bg-primary rounded-full mt-2" />
-          </div>
+          <h2 className="text-2xl sm:text-[26px] font-black text-slate-900 tracking-tight text-left">
+            Trending Near You
+          </h2>
           <a
             href="#all-trending"
-            className="flex items-center gap-1.5 text-sm font-bold text-primary hover:text-teal-850 hover:underline transition-all duration-200 cursor-pointer"
+            className="flex items-center gap-1.5 text-sm font-extrabold text-[#0F766E] hover:underline transition-all duration-200 cursor-pointer"
           >
-            View All
-            <ArrowRight className="h-4 w-4" />
+            <span>View All</span>
+            <ArrowRight className="h-4.5 w-4.5 text-[#0F766E] stroke-[2.5]" />
           </a>
         </div>
 
@@ -136,10 +177,10 @@ export default function TrendingSection() {
           {showLeftArrow && (
             <button
               onClick={() => handleScroll('left')}
-              className="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-4 z-20 flex h-12 w-12 items-center justify-center rounded-full bg-white border border-slate-200 shadow-lg text-slate-700 hover:bg-slate-50 hover:scale-105 active:scale-95 transition-all duration-200 cursor-pointer"
+              className="absolute left-0 top-[40%] -translate-y-1/2 -translate-x-5.5 z-20 flex h-11 w-11 items-center justify-center rounded-full bg-white border border-slate-200 shadow-md text-slate-700 hover:bg-slate-50 hover:scale-105 active:scale-95 transition-all duration-200 cursor-pointer"
               aria-label="Scroll left"
             >
-              <ChevronLeft className="h-6 w-6" />
+              <ChevronLeft className="h-5.5 w-5.5" strokeWidth={2.5} />
             </button>
           )}
 
@@ -147,10 +188,10 @@ export default function TrendingSection() {
           {showRightArrow && (
             <button
               onClick={() => handleScroll('right')}
-              className="absolute right-0 top-1/2 -translate-y-1/2 translate-x-4 z-20 flex h-12 w-12 items-center justify-center rounded-full bg-white border border-slate-200 shadow-lg text-slate-700 hover:bg-slate-50 hover:scale-105 active:scale-95 transition-all duration-200 cursor-pointer"
+              className="absolute right-0 top-[40%] -translate-y-1/2 translate-x-5.5 z-20 flex h-11 w-11 items-center justify-center rounded-full bg-white border border-slate-200 shadow-md text-slate-700 hover:bg-slate-50 hover:scale-105 active:scale-95 transition-all duration-200 cursor-pointer"
               aria-label="Scroll right"
             >
-              <ChevronRight className="h-6 w-6" strokeWidth={2.5} />
+              <ChevronRight className="h-5.5 w-5.5" strokeWidth={2.5} />
             </button>
           )}
         </div>
