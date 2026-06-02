@@ -264,14 +264,14 @@ export default function StayDetail({ stay, searchParams, onBack, isLiked, onTogg
 
                   {/* Middle — 2 stacked, each 50% height */}
                   <div style={{ width: '25%', flexShrink: 0, display: 'flex', flexDirection: 'column', gap: '3px' }}>
-                    <div style={{ height: '103px', overflow: 'hidden' }}>
+                    <div style={{ flex: 1, overflow: 'hidden' }}>
                       <img
                         src={stay.images?.[1] || 'https://images.unsplash.com/photo-1582719508461-905c673771fd?auto=format&fit=crop&w=400&q=80'}
                         alt={stay.name}
                         style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }}
                       />
                     </div>
-                    <div style={{ height: '103px', overflow: 'hidden' }}>
+                    <div style={{ flex: 1, overflow: 'hidden' }}>
                       <img
                         src={stay.images?.[2] || 'https://images.unsplash.com/photo-1571896349842-33c89424de2d?auto=format&fit=crop&w=400&q=80'}
                         alt={stay.name}
@@ -282,14 +282,14 @@ export default function StayDetail({ stay, searchParams, onBack, isLiked, onTogg
 
                   {/* Right — 2 stacked, each 50% height */}
                   <div style={{ width: '25%', flexShrink: 0, display: 'flex', flexDirection: 'column', gap: '3px' }}>
-                    <div style={{ height: '103px', overflow: 'hidden' }}>
+                    <div style={{ flex: 1, overflow: 'hidden' }}>
                       <img
                         src={stay.images?.[3] || 'https://images.unsplash.com/photo-1505691938895-1758d7feb511?auto=format&fit=crop&w=400&q=80'}
                         alt={stay.name}
                         style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }}
                       />
                     </div>
-                    <div style={{ height: '103px', overflow: 'hidden', position: 'relative' }}>
+                    <div style={{ flex: 1, overflow: 'hidden', position: 'relative' }}>
                       <img
                         src={stay.images?.[4] || 'https://images.unsplash.com/photo-1611891487122-2075b9627dde?auto=format&fit=crop&w=400&q=80'}
                         alt={stay.name}
