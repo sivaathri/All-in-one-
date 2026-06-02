@@ -1,8 +1,146 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { ArrowLeft, Save, ArrowRight, ShieldCheck, Gift, MapPin, Plus, Trash2, Info, Undo2, Redo2, Bold, Italic, Underline, List, ListOrdered } from 'lucide-react';
+import {
+  ArrowLeft,
+  Save,
+  ArrowRight,
+  ShieldCheck,
+  Gift,
+  MapPin,
+  Plus,
+  Trash2,
+  Info,
+  Undo2,
+  Redo2,
+  Bold,
+  Italic,
+  Underline,
+  List,
+  ListOrdered,
+  // Amenity Icons
+  Dumbbell,
+  Waves,
+  Flower2,
+  Utensils,
+  Bell,
+  Sofa,
+  Wind,
+  Wine,
+  ParkingCircle,
+  Wifi,
+  Refrigerator,
+  WashingMachine,
+  Sparkles,
+  Snowflake,
+  Zap,
+  BatteryCharging,
+  Eye,
+  Umbrella,
+  ArrowUpDown,
+  Network,
+  Coffee,
+  Flame,
+  Croissant,
+  Tv,
+  Briefcase,
+  AlarmClock,
+  ConciergeBell,
+  Stethoscope,
+  Accessibility,
+  Languages,
+  Heart,
+  Printer,
+  Copy,
+  Users,
+  GlassWater,
+  Star,
+  Building2,
+  UtensilsCrossed
+} from 'lucide-react';
 import stayPropertyImg from '../assets/step2.png';
 import puducherryMapImg from '../assets/puducherry_map.png';
 import step3Img from '../assets/step3.png';
+
+// Icon mappings for amenities
+const amenityIcons = {
+  // Highlighted Amenities
+  'Gym': Dumbbell,
+  'Swimming Pool': Waves,
+  'Spa': Flower2,
+  'Restaurant': Utensils,
+  '24-hour Room Service': Bell,
+  'Lounge': Sofa,
+  'Steam and Sauna': Wind,
+  'Bar': Wine,
+
+  // Basic Facilities
+  'Free Parking': ParkingCircle,
+  'Free Wi-Fi': Wifi,
+  'Refrigerator': Refrigerator,
+  'Laundry Service': WashingMachine,
+  'Housekeeping': Sparkles,
+  'Air Conditioning': Snowflake,
+  'Power Backup': Zap,
+  'EV Charging Station': BatteryCharging,
+  'Smoke Detector': Eye,
+  'Umbrellas': Umbrella,
+  'Elevator/Lift': ArrowUpDown,
+  'Paid LAN': Network,
+
+  // Food and Drinks
+  'Dining Area': UtensilsCrossed,
+  '24-hour Cafe': Coffee,
+  'Barbeque': Flame,
+  'Bakery': Croissant,
+  '24-hour Coffee Shop': Coffee,
+
+  // Safety and Security
+  'Fire Extinguishers': Flame,
+  'CCTV': Eye,
+  'Security Alarms': Bell,
+
+  // Health and Wellness
+  'Reflexology': Sparkles,
+  'First-aid Services': Heart,
+
+  // Media and Technology
+  'TV': Tv,
+
+  // General Services
+  'Luggage Storage': Briefcase,
+  'Wake-up Call': AlarmClock,
+  'Concierge': ConciergeBell,
+  'Doctor on Call': Stethoscope,
+  'Wheelchair': Accessibility,
+  'Luggage Assistance': Briefcase,
+  'Bellboy Service': ConciergeBell,
+  'Facilities for Guests with Disabilities': Accessibility,
+  'Pool/Beach towels': Waves,
+  'Multilingual Staff': Languages,
+
+  // Beauty and Spa
+  'Massage': Heart,
+
+  // Business Center
+  'Printer': Printer,
+  'Photocopying': Copy,
+  'Conference Room': Users,
+  'Banquet': GlassWater
+};
+
+// Icon mappings for categories
+const categoryIcons = {
+  'Highlighted Amenities': Star,
+  'Basic Facilities': Building2,
+  'Food and Drinks': UtensilsCrossed,
+  'Safety and Security': ShieldCheck,
+  'Health and Wellness': Heart,
+  'Media and Technology': Tv,
+  'General Services': Bell,
+  'Facilities for Guests with Disabilities': Accessibility,
+  'Beauty and Spa': Flower2,
+  'Business Center': Briefcase
+};
+
 
 export default function StayPropertyForm({ onBack }) {
   const [currentStep, setCurrentStep] = useState(1);
@@ -80,6 +218,15 @@ export default function StayPropertyForm({ onBack }) {
   const [instantBooking, setInstantBooking] = useState('No');
   const [manualApproval, setManualApproval] = useState('Yes');
   const [aboutPropertyText, setAboutPropertyText] = useState('');
+
+  // Step 9 States (Legal Info)
+  const [gstin, setGstin] = useState('');
+  const [licenseNumber, setLicenseNumber] = useState('');
+  const [businessName, setBusinessName] = useState('');
+  const [pan, setPan] = useState('');
+  const [tradeLicense, setTradeLicense] = useState('');
+  const [fireSafetyNumber, setFireSafetyNumber] = useState('');
+  const [isLegalDeclared, setIsLegalDeclared] = useState(false);
 
   // Step 7 States (Pricing & Availability)
   const [roomPrices, setRoomPrices] = useState({
@@ -230,6 +377,7 @@ export default function StayPropertyForm({ onBack }) {
     { number: 6, title: 'Facilities & Amenities', desc: 'Select facilities and amenities available', active: currentStep === 6, completed: currentStep > 6 },
     { number: 7, title: 'Photos', desc: 'Upload property photos', active: currentStep === 7, completed: currentStep > 7 },
     { number: 8, title: 'About this property', desc: 'Set distances, booking rules and preferences', active: currentStep === 8, completed: currentStep > 8 },
+    { number: 9, title: 'Legal Info', desc: 'Add licensing, GST and safety declarations', active: currentStep === 9, completed: currentStep > 9 },
   ];
 
   const propertyTypes = [
@@ -1386,44 +1534,54 @@ export default function StayPropertyForm({ onBack }) {
                           category: 'Business Center',
                           items: ['Printer', 'Photocopying', 'Conference Room', 'Banquet']
                         }
-                      ].map((grp) => (
-                        <div key={grp.category}>
-                          <h5 className="text-[14.5px] font-bold text-slate-800 mb-3.5 border-b border-slate-100 pb-1 max-w-fit pr-4">{grp.category}</h5>
-                          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
-                            {grp.items.map((ame) => {
-                              const isSel = selectedAmenities.includes(ame);
-                              return (
-                                <div
-                                  key={ame}
-                                  onClick={() => {
-                                    if (isSel) {
-                                      setSelectedAmenities(selectedAmenities.filter(a => a !== ame));
-                                    } else {
-                                      setSelectedAmenities([...selectedAmenities, ame]);
-                                    }
-                                  }}
-                                  className={`flex items-center gap-3 rounded-xl border p-4.5 cursor-pointer transition-all duration-200 ${
-                                    isSel
-                                      ? 'border-[#007F55] bg-[#E6F4EA]/15 text-[#007F55] font-bold'
-                                      : 'border-slate-150 hover:border-slate-350 bg-white text-slate-700 font-semibold'
-                                  }`}
-                                >
-                                  <div className={`flex h-4.5 w-4.5 shrink-0 items-center justify-center rounded border transition-all ${
-                                    isSel ? 'bg-[#007F55] border-[#007F55] text-white' : 'border-slate-300 bg-white'
-                                  }`}>
-                                    {isSel && (
-                                      <svg className="w-3.5 h-3.5 stroke-[3.5]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                        <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
-                                      </svg>
-                                    )}
+                      ].map((grp) => {
+                        const CatIcon = categoryIcons[grp.category] || Star;
+                        return (
+                          <div key={grp.category}>
+                            <h5 className="flex items-center gap-2 text-[14.5px] font-bold text-slate-800 mb-3.5 border-b border-slate-100 pb-1 max-w-fit pr-4">
+                              <CatIcon className="h-4.5 w-4.5 text-slate-600 shrink-0" />
+                              {grp.category}
+                            </h5>
+                            <div className="flex flex-wrap gap-3">
+                              {grp.items.map((ame) => {
+                                const isSel = selectedAmenities.includes(ame);
+                                const IconComp = amenityIcons[ame] || Sparkles;
+                                return (
+                                  <div
+                                    key={ame}
+                                    onClick={() => {
+                                      if (isSel) {
+                                        setSelectedAmenities(selectedAmenities.filter(a => a !== ame));
+                                      } else {
+                                        setSelectedAmenities([...selectedAmenities, ame]);
+                                      }
+                                    }}
+                                    className={`flex items-center justify-between gap-6 rounded-xl border px-4 py-3 cursor-pointer transition-all duration-200 select-none min-w-[150px] sm:min-w-[170px] ${
+                                      isSel
+                                        ? 'border-[#007F55] bg-[#007F55]/5 text-slate-900 font-bold shadow-xs'
+                                        : 'border-slate-200 hover:border-slate-300 bg-white text-slate-700 font-medium'
+                                    }`}
+                                  >
+                                    <div className="flex items-center gap-3">
+                                      <IconComp className={`h-5 w-5 shrink-0 transition-colors ${isSel ? 'text-slate-800' : 'text-slate-500'}`} />
+                                      <span className="text-[13px]">{ame}</span>
+                                    </div>
+                                    <div className={`flex h-4.5 w-4.5 shrink-0 items-center justify-center rounded border transition-all ${
+                                      isSel ? 'bg-[#007F55] border-[#007F55] text-white' : 'border-slate-300 bg-white'
+                                    }`}>
+                                      {isSel && (
+                                        <svg className="w-3.5 h-3.5 stroke-[3.5]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                          <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
+                                        </svg>
+                                      )}
+                                    </div>
                                   </div>
-                                  <span className="text-[13px]">{ame}</span>
-                                </div>
-                              );
-                            })}
+                                );
+                              })}
+                            </div>
                           </div>
-                        </div>
-                      ))}
+                        );
+                      })}
                     </div>
                   </div>
                 </>
@@ -2460,6 +2618,156 @@ export default function StayPropertyForm({ onBack }) {
                 </>
               )}
 
+              {currentStep === 9 && (
+                <>
+                  {/* Step 9 Header Block */}
+                  <div className="w-full bg-white rounded-2xl border border-slate-100 p-6 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-6">
+                    <div className="text-left">
+                      <div className="flex items-center gap-3 mb-2">
+                        <div className="flex h-8 w-8 items-center justify-center rounded-full bg-[#007F55] text-white text-sm font-bold animate-pulse">
+                          9
+                        </div>
+                        <h3 className="text-xl font-bold text-slate-900">Step 9: Legal & License Information</h3>
+                      </div>
+                      <p className="text-[14px] font-medium text-slate-500 pl-11">
+                        Provide property license, GST details, tax registration, and legal declarations.
+                      </p>
+                    </div>
+                    <div className="shrink-0 max-w-[120px] self-end sm:self-center">
+                      <img
+                        src={stayPropertyImg}
+                        alt="Legal Info Illustration"
+                        className="w-full h-auto object-contain select-none pointer-events-none"
+                      />
+                    </div>
+                  </div>
+
+                  {/* Form Box Step 9 */}
+                  <div className="w-full bg-white rounded-2xl border border-slate-100 p-8 flex flex-col gap-6 text-left">
+                    <h4 className="text-[16px] font-bold text-[#007F55] border-b border-slate-100 pb-2.5">
+                      Business & Tax Registrations
+                    </h4>
+
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                      {/* Registered Business Name */}
+                      <div className="flex flex-col gap-1.5">
+                        <label className="text-[13px] font-bold text-slate-700">Registered Business Name (Company / Owner)</label>
+                        <input
+                          type="text"
+                          placeholder="e.g. Greenwood Hospitality Pvt Ltd"
+                          value={businessName}
+                          onChange={(e) => setBusinessName(e.target.value)}
+                          className="w-full rounded-xl border border-slate-200 bg-white px-4 py-2.5 text-[14px] font-bold text-slate-800 outline-none focus:border-[#007F55] focus:ring-1 focus:ring-[#007F55] transition-all"
+                        />
+                      </div>
+
+                      {/* Business PAN */}
+                      <div className="flex flex-col gap-1.5">
+                        <label className="text-[13px] font-bold text-slate-700">Business PAN (10-Digit Alphanumeric)</label>
+                        <input
+                          type="text"
+                          maxLength={10}
+                          placeholder="e.g. ABCDE1234F"
+                          value={pan}
+                          onChange={(e) => setPan(e.target.value.toUpperCase())}
+                          className="w-full rounded-xl border border-slate-200 bg-white px-4 py-2.5 text-[14px] font-bold text-slate-800 outline-none focus:border-[#007F55] focus:ring-1 focus:ring-[#007F55] transition-all"
+                        />
+                      </div>
+                    </div>
+
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                      {/* GSTIN */}
+                      <div className="flex flex-col gap-1.5">
+                        <label className="text-[13px] font-bold text-slate-700 flex items-center gap-1.5">
+                          GSTIN (15-Digit GST Number)
+                          <span className="text-[11px] font-medium text-slate-400 font-normal">(Optional)</span>
+                        </label>
+                        <input
+                          type="text"
+                          maxLength={15}
+                          placeholder="e.g. 36AAAAA1111A1Z1"
+                          value={gstin}
+                          onChange={(e) => setGstin(e.target.value.toUpperCase())}
+                          className="w-full rounded-xl border border-slate-200 bg-white px-4 py-2.5 text-[14px] font-bold text-slate-800 outline-none focus:border-[#007F55] focus:ring-1 focus:ring-[#007F55] transition-all"
+                        />
+                      </div>
+
+                      {/* Tourism/Hotel Registration License Number */}
+                      <div className="flex flex-col gap-1.5">
+                        <label className="text-[13px] font-bold text-slate-700">Property License / Tourism Reg. Number</label>
+                        <input
+                          type="text"
+                          placeholder="e.g. TRN/HOTEL/2026/098"
+                          value={licenseNumber}
+                          onChange={(e) => setLicenseNumber(e.target.value)}
+                          className="w-full rounded-xl border border-slate-200 bg-white px-4 py-2.5 text-[14px] font-bold text-slate-800 outline-none focus:border-[#007F55] focus:ring-1 focus:ring-[#007F55] transition-all"
+                        />
+                      </div>
+                    </div>
+
+                    <h4 className="text-[16px] font-bold text-[#007F55] border-b border-slate-100 pb-2.5 mt-4">
+                      Local Municipal & Safety Certificates
+                    </h4>
+
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                      {/* Trade License Number */}
+                      <div className="flex flex-col gap-1.5">
+                        <label className="text-[13px] font-bold text-slate-700 flex items-center gap-1.5">
+                          Trade License Number
+                          <span className="text-[11px] font-medium text-slate-400 font-normal">(Optional)</span>
+                        </label>
+                        <input
+                          type="text"
+                          placeholder="e.g. TL-MUNICIPAL-8876"
+                          value={tradeLicense}
+                          onChange={(e) => setTradeLicense(e.target.value)}
+                          className="w-full rounded-xl border border-slate-200 bg-white px-4 py-2.5 text-[14px] font-bold text-slate-800 outline-none focus:border-[#007F55] focus:ring-1 focus:ring-[#007F55] transition-all"
+                        />
+                      </div>
+
+                      {/* Fire Safety NOC Number */}
+                      <div className="flex flex-col gap-1.5">
+                        <label className="text-[13px] font-bold text-slate-700">Fire Safety NOC / Certificate Number</label>
+                        <input
+                          type="text"
+                          placeholder="e.g. FIRE/NOC/ZONE4/552"
+                          value={fireSafetyNumber}
+                          onChange={(e) => setFireSafetyNumber(e.target.value)}
+                          className="w-full rounded-xl border border-slate-200 bg-white px-4 py-2.5 text-[14px] font-bold text-slate-800 outline-none focus:border-[#007F55] focus:ring-1 focus:ring-[#007F55] transition-all"
+                        />
+                      </div>
+                    </div>
+
+                    <h4 className="text-[16px] font-bold text-[#007F55] border-b border-slate-100 pb-2.5 mt-4">
+                      Declarations & Agreement
+                    </h4>
+
+                    <div className="flex items-start gap-3.5 bg-slate-50/60 p-4 rounded-xl border border-slate-150 mt-1">
+                      <div
+                        onClick={() => setIsLegalDeclared(!isLegalDeclared)}
+                        className={`flex h-5 w-5 shrink-0 items-center justify-center rounded border mt-0.5 cursor-pointer transition-all ${
+                          isLegalDeclared ? 'bg-[#007F55] border-[#007F55] text-white' : 'border-slate-350 bg-white'
+                        }`}
+                      >
+                        {isLegalDeclared && (
+                          <svg className="w-3.5 h-3.5 stroke-[3.5]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
+                          </svg>
+                        )}
+                      </div>
+                      <div className="flex flex-col text-left">
+                        <span className="text-[13.5px] font-bold text-slate-800 leading-snug">
+                          I certify that all licensing, registration, tax numbers, and safety information provided above are valid, legal, and belong to the respective property owner.
+                        </span>
+                        <span className="text-[12px] font-semibold text-slate-400 mt-1 leading-normal">
+                          Providing false or fabricated details may lead to immediate suspension of your listing and potential legal action under applicable laws.
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+                </>
+              )}
+
               {/* Bottom Actions Row */}
               <div className="w-full flex items-center justify-between gap-4 mt-6">
                 {currentStep === 1 ? (
@@ -2481,15 +2789,19 @@ export default function StayPropertyForm({ onBack }) {
                 <div className="flex items-center gap-3">
                   <button
                     onClick={() => {
-                      if (currentStep < 8) {
+                      if (currentStep < 9) {
                         setCurrentStep(currentStep + 1);
                       } else {
+                        if (!isLegalDeclared) {
+                          alert('Please check the declaration box to confirm details and submit.');
+                          return;
+                        }
                         setIsSubmitted(true);
                       }
                     }}
                     className="flex items-center gap-2 rounded-xl bg-[#007F55] px-6 py-3 text-[14px] font-bold text-white shadow-md hover:bg-[#006644] active:scale-95 transition-all cursor-pointer"
                   >
-                    {currentStep === 8 ? 'Submit' : 'Continue'}
+                    {currentStep === 9 ? 'Submit' : 'Continue'}
                     <ArrowRight className="h-4.5 w-4.5" />
                   </button>
                 </div>
