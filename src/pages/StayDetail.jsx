@@ -412,27 +412,27 @@ export default function StayDetail({ stay, searchParams, onBack, isLiked, onTogg
               <h2 className="text-[17px] font-black text-slate-900 mb-4">Select Your Room</h2>
               
               {/* Responsive Scrollable Container */}
-              <div className="w-full overflow-x-auto no-scrollbar border border-slate-200/90 rounded-2xl">
-                <table className="w-full border-collapse text-left text-xs min-w-[950px] bg-white">
+              <div className="w-full overflow-x-auto no-scrollbar rounded-2xl border border-[#0F766E]/30">
+                <table className="w-full text-left text-xs min-w-[950px] bg-white" style={{borderCollapse:'collapse'}}>
                   
                   {/* Table Header */}
                   <thead>
-                    <tr className="bg-slate-50 border-b border-slate-200 text-slate-500 font-extrabold text-[11px] uppercase tracking-wider">
-                      <th className="p-4 w-[40%] font-extrabold">Room type</th>
-                      <th className="p-4 w-[15%] font-extrabold text-center">Number of guests</th>
-                      <th className="p-4 w-[15%] font-extrabold">Price for 3 nights</th>
-                      <th className="p-4 w-[20%] font-extrabold">Your choices</th>
-                      <th className="p-4 w-[10%] font-extrabold text-center">Select Rooms</th>
+                    <tr className="bg-[#0F766E] text-white font-extrabold text-[11px] uppercase tracking-wider">
+                      <th className="p-4 w-[38%] font-extrabold border-r border-[#0d9488]/50">Room type</th>
+                      <th className="p-4 w-[12%] font-extrabold text-center border-r border-[#0d9488]/50">Number of guests</th>
+                      <th className="p-4 w-[16%] font-extrabold border-r border-[#0d9488]/50">Price for 3 nights</th>
+                      <th className="p-4 w-[22%] font-extrabold border-r border-[#0d9488]/50">Your choices</th>
+                      <th className="p-4 w-[12%] font-extrabold text-center">Select Rooms</th>
                     </tr>
                   </thead>
 
                   {/* Table Body */}
-                  <tbody className="divide-y divide-slate-200">
+                  <tbody>
                     {roomsData.map((room) => (
-                      <tr key={room.id} className="align-top hover:bg-slate-50/30 transition-colors">
+                      <tr key={room.id} className="align-top hover:bg-[#f0faf9] transition-colors">
                         
                         {/* 1. Room Type Column */}
-                        <td className="p-4">
+                        <td className="p-4 border-b border-[#0F766E]/15">
                           <div className="flex gap-4">
                             {/* Room Image */}
                             <img 
@@ -534,7 +534,7 @@ export default function StayDetail({ stay, searchParams, onBack, isLiked, onTogg
                         </td>
 
                         {/* 2. Number of Guests Column */}
-                        <td className="p-4 text-center">
+                        <td className="p-4 text-center border-l border-b border-[#0F766E]/15">
                           <div className="flex flex-col items-center justify-center pt-2">
                             <svg className="w-5 h-5 text-slate-650" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                               <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" />
@@ -552,7 +552,7 @@ export default function StayDetail({ stay, searchParams, onBack, isLiked, onTogg
                         </td>
 
                         {/* 3. Price for 3 Nights Column */}
-                        <td className="p-4">
+                        <td className="p-4 border-l border-b border-[#0F766E]/15">
                           <div className="pt-2">
                             <span className="text-[16px] font-black text-slate-900">
                               ₹ {room.price3Nights.toLocaleString()}
@@ -564,7 +564,7 @@ export default function StayDetail({ stay, searchParams, onBack, isLiked, onTogg
                         </td>
 
                         {/* 4. Your Choices Column */}
-                        <td className="p-4">
+                        <td className="p-4 border-l border-b border-[#0F766E]/15">
                           <div className="pt-2 space-y-3 font-semibold text-slate-700">
                             {room.choices.map((choice, i) => {
                               const isGreen = choice.type === 'breakfast_included';
@@ -594,7 +594,7 @@ export default function StayDetail({ stay, searchParams, onBack, isLiked, onTogg
                         </td>
 
                         {/* 5. Select Rooms Column */}
-                        <td className="p-4 text-center">
+                        <td className="p-4 text-center border-l border-b border-[#0F766E]/15">
                           <div className="pt-1.5 flex justify-center">
                             <div className="relative">
                               <select
@@ -895,45 +895,7 @@ export default function StayDetail({ stay, searchParams, onBack, isLiked, onTogg
             </div>
 
             {/* 2. Why book with TripVerse */}
-            <div className="bg-slate-50/50 border border-slate-200 rounded-3xl p-5 shadow-xs text-left">
-              <h4 className="text-[14px] font-black text-slate-800 mb-4">Why book with TripVerse?</h4>
-              
-              <div className="space-y-4">
-                {[
-                  { 
-                    icon: <Check className="h-4 w-4 text-[#15803D] stroke-[3]" />, 
-                    title: 'Best Price Guarantee', 
-                    desc: 'Get the best price, always' 
-                  },
-                  { 
-                    icon: <Check className="h-4 w-4 text-[#15803D] stroke-[3]" />, 
-                    title: 'Secure Payments', 
-                    desc: '100% safe and secure transactions' 
-                  },
-                  { 
-                    icon: <Check className="h-4 w-4 text-[#15803D] stroke-[3]" />, 
-                    title: 'Free Cancellation', 
-                    desc: 'Cancel for free before 18 Jun 2025' 
-                  },
-                  { 
-                    icon: <Headphones className="h-4.5 w-4.5 text-slate-500 stroke-[2.2]" />, 
-                    title: '24/7 Customer Support', 
-                    desc: "We're here to help you anytime" 
-                  }
-                ].map((item, index) => (
-                  <div key={index} className="flex gap-3 items-start">
-                    <div className="h-6 w-6 rounded-full bg-slate-100/80 flex items-center justify-center shrink-0 mt-0.5">
-                      {item.icon}
-                    </div>
-                    <div>
-                      <h5 className="text-[13px] font-bold text-slate-850 leading-tight">{item.title}</h5>
-                      <p className="text-[11.5px] font-semibold text-slate-450 mt-0.5 leading-normal">{item.desc}</p>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div>
-
+           
           </div>
 
         </div>
