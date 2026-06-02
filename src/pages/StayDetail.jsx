@@ -18,6 +18,132 @@ export default function StayDetail({ stay, searchParams, onBack, isLiked, onTogg
     { sender: 'property', text: "Hello! Thank you for choosing Sea Breeze Resort. How can we help you today?" }
   ]);
   const [newMessage, setNewMessage] = useState('');
+  
+  // Track selected room quantities from the table
+  const [selectedRooms, setSelectedRooms] = useState({
+    room1: 0,
+    room2: 0,
+    room3: 0,
+    room4: 0
+  });
+
+  // Track bed selection choices for standard double or twin room
+  const [bedChoice, setBedChoice] = useState('twin');
+
+  const roomsData = [
+    {
+      id: 'room1',
+      name: 'Standard Double or Twin Room',
+      image: 'https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=400&q=80',
+      isHighFloor: true,
+      hasBedChoices: true,
+      size: '29 m²',
+      view: 'City view',
+      ac: true,
+      tv: true,
+      wifi: true,
+      minibar: true,
+      flatScreen: true,
+      guests: '2 Adults, 1 Child',
+      price3Nights: 11200,
+      taxes3Nights: 560,
+      choices: [
+        { type: 'breakfast_optional', text: 'Breakfast ₹ 413 (optional)' },
+        { type: 'non_refundable', text: 'Non-refundable' },
+        { type: 'pay_before', text: 'Pay the property before arrival' }
+      ]
+    },
+    {
+      id: 'room2',
+      name: 'Standard Double or Twin Room',
+      image: 'https://images.unsplash.com/photo-1611891487122-2075b9627dde?auto=format&fit=crop&w=400&q=80',
+      isHighFloor: true,
+      hasBreakfastIncluded: true,
+      size: '29 m²',
+      view: 'City view',
+      ac: true,
+      flatScreen: true,
+      wifi: true,
+      guests: '2 Adults, 1 Child',
+      price3Nights: 11800,
+      taxes3Nights: 590,
+      choices: [
+        { type: 'breakfast_included', text: 'Continental breakfast included' },
+        { type: 'non_refundable', text: 'Non-refundable' },
+        { type: 'pay_before', text: 'Pay the property before arrival' }
+      ]
+    },
+    {
+      id: 'room3',
+      name: 'Queen Suite',
+      image: 'https://images.unsplash.com/photo-1582719508461-905c673771fd?auto=format&fit=crop&w=400&q=80',
+      isHighFloor: true,
+      leftWarning: 'We have 1 left',
+      hasQueenBed: true,
+      size: '55 m²',
+      privateSuite: true,
+      view: 'City view',
+      seaView: true,
+      ac: true,
+      spaTub: true,
+      flatScreen: true,
+      minibar: true,
+      wifi: true,
+      guests: '2 Adults, 1 Child',
+      price3Nights: 21900,
+      taxes3Nights: 1095,
+      choices: [
+        { type: 'breakfast_optional', text: 'Breakfast ₹ 413 (optional)' },
+        { type: 'non_refundable', text: 'Non-refundable' },
+        { type: 'pay_before', text: 'Pay the property before arrival' }
+      ]
+    },
+    {
+      id: 'room4',
+      name: 'Queen Suite',
+      image: 'https://images.unsplash.com/photo-1505691938895-1758d7feb511?auto=format&fit=crop&w=400&q=80',
+      isHighFloor: true,
+      hasBreakfastIncluded: true,
+      size: '55 m²',
+      privateSuite: true,
+      view: 'City view',
+      ac: true,
+      flatScreen: true,
+      minibar: true,
+      wifi: true,
+      guests: '2 Adults, 1 Child',
+      price3Nights: 22500,
+      taxes3Nights: 1125,
+      choices: [
+        { type: 'breakfast_included', text: 'Continental breakfast included' },
+        { type: 'non_refundable', text: 'Non-refundable' },
+        { type: 'pay_before', text: 'Pay the property before arrival' }
+      ]
+    }
+  ];
+
+  // Calculate pricing based on selections
+  let totalSelectedBase = 0;
+  let totalSelectedTaxes = 0;
+  let selectedRoomsList = [];
+
+  roomsData.forEach(room => {
+    const qty = selectedRooms[room.id] || 0;
+    if (qty > 0) {
+      totalSelectedBase += room.price3Nights * qty;
+      totalSelectedTaxes += room.taxes3Nights * qty;
+      selectedRoomsList.push({
+        id: room.id,
+        name: room.name,
+        qty: qty,
+        price: room.price3Nights * qty,
+        hasBreakfastIncluded: room.hasBreakfastIncluded
+      });
+    }
+  });
+
+  const totalSelectedGrand = totalSelectedBase + totalSelectedTaxes;
+  const hasSelectedRooms = selectedRoomsList.length > 0;
 
   // Date Formatting Helpers
   const formatDateString = (dateStr) => {
