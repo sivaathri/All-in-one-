@@ -524,54 +524,54 @@ export default function StayDetail({ stay, searchParams, onBack, isLiked, onTogg
               {/* Property Card */}
               <div className="bg-white rounded-2xl border border-slate-200 overflow-hidden shadow-xs">
 
-                {/* Photo Gallery — 1 large left + 2 stacked middle + 2 stacked right */}
-                <div style={{ display: 'flex', height: '210px', gap: '3px', width: '100%' }}>
+                {/* Photo Gallery */}
+                <div className="flex gap-[3px] h-[160px] sm:h-[210px] w-full rounded-t-2xl overflow-hidden">
 
                   {/* Left — large full-height image */}
-                  <div style={{ flex: '0 0 50%', overflow: 'hidden' }}>
+                  <div className="flex-[2] overflow-hidden">
                     <img
                       src={stay.images?.[0] || stay.image || 'https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=800&q=80'}
                       alt={stay.name}
-                      style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }}
+                      className="w-full h-full object-cover block"
                     />
                   </div>
 
-                  {/* Middle — 2 stacked, each 50% height */}
-                  <div style={{ flex: '0 0 25%', display: 'flex', flexDirection: 'column', gap: '3px' }}>
-                    <div style={{ flex: 1, overflow: 'hidden' }}>
+                  {/* Middle — 2 stacked */}
+                  <div className="hidden sm:flex flex-1 flex-col gap-[3px]">
+                    <div className="flex-1 overflow-hidden">
                       <img
                         src={stay.images?.[1] || 'https://images.unsplash.com/photo-1582719508461-905c673771fd?auto=format&fit=crop&w=400&q=80'}
                         alt={stay.name}
-                        style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }}
+                        className="w-full h-full object-cover block"
                       />
                     </div>
-                    <div style={{ flex: 1, overflow: 'hidden' }}>
+                    <div className="flex-1 overflow-hidden">
                       <img
                         src={stay.images?.[2] || 'https://images.unsplash.com/photo-1571896349842-33c89424de2d?auto=format&fit=crop&w=400&q=80'}
                         alt={stay.name}
-                        style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }}
+                        className="w-full h-full object-cover block"
                       />
                     </div>
                   </div>
 
-                  {/* Right — 2 stacked, each 50% height */}
-                  <div style={{ flex: '0 0 25%', display: 'flex', flexDirection: 'column', gap: '3px' }}>
-                    <div style={{ flex: 1, overflow: 'hidden' }}>
+                  {/* Right — 2 stacked */}
+                  <div className="hidden sm:flex flex-1 flex-col gap-[3px]">
+                    <div className="flex-1 overflow-hidden">
                       <img
                         src={stay.images?.[3] || 'https://images.unsplash.com/photo-1505691938895-1758d7feb511?auto=format&fit=crop&w=400&q=80'}
                         alt={stay.name}
-                        style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }}
+                        className="w-full h-full object-cover block"
                       />
                     </div>
-                    <div style={{ flex: 1, overflow: 'hidden', position: 'relative' }}>
+                    <div className="flex-1 overflow-hidden relative">
                       <img
                         src={stay.images?.[4] || 'https://images.unsplash.com/photo-1611891487122-2075b9627dde?auto=format&fit=crop&w=400&q=80'}
                         alt={stay.name}
-                        style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }}
+                        className="w-full h-full object-cover block"
                       />
                       {stay.images?.length > 5 && (
-                        <div style={{ position: 'absolute', inset: 0, background: 'rgba(0,0,0,0.45)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                          <span style={{ color: '#fff', fontSize: '13px', fontWeight: 800 }}>+{stay.images.length - 5} photos</span>
+                        <div className="absolute inset-0 bg-black/45 flex items-center justify-center">
+                          <span className="text-white text-xs font-bold">+{stay.images.length - 5} photos</span>
                         </div>
                       )}
                     </div>
@@ -952,37 +952,37 @@ export default function StayDetail({ stay, searchParams, onBack, isLiked, onTogg
           </div>
 
           {/* 3. Photo Gallery */}
-          <div style={{ display: 'flex', gap: '8px', height: '360px', borderRadius: '20px', overflow: 'hidden', marginBottom: '24px' }}>
+          <div className="flex flex-col md:flex-row gap-2 h-[240px] sm:h-[320px] md:h-[400px] rounded-2xl overflow-hidden mb-6">
 
             {/* Left — large main image */}
-            <div style={{ flex: '7', position: 'relative', overflow: 'hidden', cursor: 'pointer' }} onClick={() => { setGalleryIndex(0); setShowGallery(true); }}>
-              <img src={stay.images[0]} alt={`${stay.name} Main View`} style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block', transition: 'transform 0.5s' }} onMouseOver={e => e.currentTarget.style.transform='scale(1.03)'} onMouseOut={e => e.currentTarget.style.transform='scale(1)'} />
+            <div className="flex-[7] relative overflow-hidden cursor-pointer" onClick={() => { setGalleryIndex(0); setShowGallery(true); }}>
+              <img src={stay.images[0]} alt={`${stay.name} Main View`} className="w-full h-full object-cover transition-transform duration-500 hover:scale-103" />
               <button onClick={(e) => { e.stopPropagation(); setGalleryIndex(0); setShowGallery(true); }} className="absolute bottom-4 left-4 bg-white/90 backdrop-blur-xs hover:bg-white text-slate-800 text-[12px] font-bold px-3.5 py-2 rounded-xl shadow-md flex items-center gap-1.5 border border-slate-200/40 cursor-pointer transition-all active:scale-95">
                 <Camera className="h-4 w-4 text-slate-700" />
                 <span>View All Photos</span>
               </button>
             </div>
 
-            {/* Right — 2×2 grid of smaller images */}
-            <div style={{ flex: '5', display: 'flex', flexDirection: 'column', gap: '8px', height: '100%' }}>
+            {/* Right — 2×2 grid of smaller images (hidden on mobile) */}
+            <div className="hidden md:flex flex-[5] flex-col gap-2 h-full">
               {/* Row 1 */}
-              <div style={{ flex: 1, display: 'flex', gap: '8px', minHeight: 0 }}>
-                <div style={{ flex: 1, overflow: 'hidden', cursor: 'pointer' }} onClick={() => { setGalleryIndex(1); setShowGallery(true); }}>
-                  <img src={stay.images[1]} alt={`${stay.name} view 1`} style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block', transition: 'transform 0.5s' }} onMouseOver={e => e.currentTarget.style.transform='scale(1.03)'} onMouseOut={e => e.currentTarget.style.transform='scale(1)'} />
+              <div className="flex-1 flex gap-2 min-h-0">
+                <div className="flex-1 overflow-hidden cursor-pointer" onClick={() => { setGalleryIndex(1); setShowGallery(true); }}>
+                  <img src={stay.images[1]} alt={`${stay.name} view 1`} className="w-full h-full object-cover hover:scale-103 transition-transform duration-500" />
                 </div>
-                <div style={{ flex: 1, overflow: 'hidden', cursor: 'pointer' }} onClick={() => { setGalleryIndex(2); setShowGallery(true); }}>
-                  <img src={stay.images[2]} alt={`${stay.name} view 2`} style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block', transition: 'transform 0.5s' }} onMouseOver={e => e.currentTarget.style.transform='scale(1.03)'} onMouseOut={e => e.currentTarget.style.transform='scale(1)'} />
+                <div className="flex-1 overflow-hidden cursor-pointer" onClick={() => { setGalleryIndex(2); setShowGallery(true); }}>
+                  <img src={stay.images[2]} alt={`${stay.name} view 2`} className="w-full h-full object-cover hover:scale-103 transition-transform duration-500" />
                 </div>
               </div>
               {/* Row 2 */}
-              <div style={{ flex: 1, display: 'flex', gap: '8px', minHeight: 0 }}>
-                <div style={{ flex: 1, overflow: 'hidden', cursor: 'pointer' }} onClick={() => { setGalleryIndex(3); setShowGallery(true); }}>
-                  <img src={stay.images[3]} alt={`${stay.name} view 3`} style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block', transition: 'transform 0.5s' }} onMouseOver={e => e.currentTarget.style.transform='scale(1.03)'} onMouseOut={e => e.currentTarget.style.transform='scale(1)'} />
+              <div className="flex-1 flex gap-2 min-h-0">
+                <div className="flex-1 overflow-hidden cursor-pointer" onClick={() => { setGalleryIndex(3); setShowGallery(true); }}>
+                  <img src={stay.images[3]} alt={`${stay.name} view 3`} className="w-full h-full object-cover hover:scale-103 transition-transform duration-500" />
                 </div>
-                <div style={{ flex: 1, overflow: 'hidden', cursor: 'pointer', position: 'relative' }} onClick={() => { setGalleryIndex(4); setShowGallery(true); }}>
-                  <img src={stay.images[4]} alt={`${stay.name} view 4`} style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block', transition: 'transform 0.5s' }} onMouseOver={e => e.currentTarget.style.transform='scale(1.03)'} onMouseOut={e => e.currentTarget.style.transform='scale(1)'} />
-                  <div style={{ position: 'absolute', inset: 0, background: 'rgba(0,0,0,0.45)', display: 'flex', alignItems: 'center', justifyContent: 'center'}}>
-                    <span style={{ color: '#fff', fontSize: '18px', fontWeight: 900 }}>+32 Photos</span>
+                <div className="flex-1 overflow-hidden cursor-pointer relative" onClick={() => { setGalleryIndex(4); setShowGallery(true); }}>
+                  <img src={stay.images[4]} alt={`${stay.name} view 4`} className="w-full h-full object-cover hover:scale-103 transition-transform duration-500" />
+                  <div className="absolute inset-0 bg-black/45 flex items-center justify-center">
+                    <span className="text-white text-base font-extrabold">+32 Photos</span>
                   </div>
                 </div>
               </div>
@@ -1016,7 +1016,7 @@ export default function StayDetail({ stay, searchParams, onBack, isLiked, onTogg
           <div className="grid grid-cols-1 md:grid-cols-12 gap-8 mt-8">
 
             {/* Left Column (Content) */}
-            <div className="md:col-span-9 space-y-8">
+            <div className="md:col-span-8 lg:col-span-9 space-y-8">
 
               {/* Overview Section */}
               <section id="overview-section" className="bg-white rounded-3xl border border-slate-200 p-6 shadow-xs">
@@ -1047,24 +1047,23 @@ export default function StayDetail({ stay, searchParams, onBack, isLiked, onTogg
                     { icon: <Utensils className="h-4.5 w-4.5 text-slate-500 stroke-[2.2]" />, label: 'Restaurant' },
                     { icon: <Car className="h-4.5 w-4.5 text-slate-500 stroke-[2.2]" />, label: 'Free Parking' },
                     { icon: <Clock className="h-4.5 w-4.5 text-slate-500 stroke-[2.2]" />, label: '24/7 Front Desk' }
-                  ].map((highlight, index) => (
-                    <div
-                      key={index}
-                      className="flex items-center gap-3 p-3.5 rounded-2xl border border-slate-200/60 bg-slate-50/30 text-slate-700 text-[13px] font-bold"
-                    >
-                      {highlight.icon}
-                      <span>{highlight.label}</span>
+                  ].map((hi, i) => (
+                    <div key={i} className="flex items-center gap-3">
+                      {hi.icon}
+                      <span className="text-[13px] text-slate-700 font-semibold">{hi.label}</span>
                     </div>
                   ))}
                 </div>
               </section>
 
               {/* Rooms Section */}
-              <section id="rooms-section" className="bg-white rounded-3xl border border-slate-200 p-6 shadow-xs text-left">
-                <h2 className="text-[17px] font-black text-slate-900 mb-4">Select Your Room</h2>
+              <section id="rooms-section" className="bg-white rounded-3xl border border-slate-200 p-6 shadow-xs">
+                <div className="flex justify-between items-center mb-5">
+                  <h2 className="text-[17px] font-black text-slate-900">Available Rooms</h2>
+                </div>
 
-                {/* Responsive Scrollable Container */}
-                <div className="w-full overflow-x-auto no-scrollbar rounded-2xl border border-[#0F766E]/30">
+                {/* Desktop Table view */}
+                <div className="hidden md:block w-full overflow-x-auto no-scrollbar rounded-2xl border border-[#0F766E]/30">
                   <table className="w-full text-left text-xs min-w-[950px] bg-white" style={{ borderCollapse: 'collapse' }}>
 
                     {/* Table Header */}
@@ -1127,7 +1126,7 @@ export default function StayDetail({ stay, searchParams, onBack, isLiked, onTogg
                                         onChange={() => setBedChoice('twin')}
                                         className="accent-[#0F766E]"
                                       />
-                                      <span className="text-[11.5px] font-semibold text-slate-650 flex items-center gap-1">
+                                      <span className="text-[11.5px] font-semibold text-slate-655 flex items-center gap-1">
                                         2 twin beds
                                         <svg className="w-3.5 h-3.5 text-slate-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M2 20v-8a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v8M4 10V6a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v4M2 14h20" /></svg>
                                       </span>
@@ -1141,7 +1140,7 @@ export default function StayDetail({ stay, searchParams, onBack, isLiked, onTogg
                                         onChange={() => setBedChoice('king')}
                                         className="accent-[#0F766E]"
                                       />
-                                      <span className="text-[11.5px] font-semibold text-slate-650 flex items-center gap-1">
+                                      <span className="text-[11.5px] font-semibold text-slate-655 flex items-center gap-1">
                                         1 king bed
                                         <svg className="w-3.5 h-3.5 text-slate-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M2 20v-8a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v8M4 10V6a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v4M2 14h20" /></svg>
                                       </span>
@@ -1150,7 +1149,7 @@ export default function StayDetail({ stay, searchParams, onBack, isLiked, onTogg
                                 )}
 
                                 {room.hasQueenBed && (
-                                  <div className="text-[11.5px] font-semibold text-slate-650 flex items-center gap-1.5">
+                                  <div className="text-[11.5px] font-semibold text-slate-655 flex items-center gap-1.5">
                                     <span>1 queen bed</span>
                                     <svg className="w-3.5 h-3.5 text-slate-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M2 20v-8a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v8M4 10V6a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v4M2 14h20" /></svg>
                                   </div>
@@ -1229,7 +1228,7 @@ export default function StayDetail({ stay, searchParams, onBack, isLiked, onTogg
                                     ) : choice.type === 'non_refundable' ? (
                                       <div className="w-4 h-4 rounded-full bg-slate-100 flex items-center justify-center shrink-0 mt-0.5 text-slate-500 font-bold text-[9px]">X</div>
                                     ) : (
-                                      <span className="text-slate-450 mt-0.5 shrink-0 text-sm">•</span>
+                                      <span className="text-slate-455 mt-0.5 shrink-0 text-sm">•</span>
                                     )}
                                     <div className="flex items-center gap-1">
                                       <span className={isGreen ? 'text-emerald-700 font-extrabold' : 'font-semibold'}>
@@ -1274,6 +1273,143 @@ export default function StayDetail({ stay, searchParams, onBack, isLiked, onTogg
                     </tbody>
 
                   </table>
+                </div>
+
+                {/* Mobile Cards view */}
+                <div className="block md:hidden space-y-4">
+                  {roomsData.map((room) => (
+                    <div key={room.id} className="bg-white rounded-2xl border border-slate-200 p-4 space-y-4 text-left">
+                      {/* Image & Title Header */}
+                      <div className="flex gap-4">
+                        <img
+                          src={room.image}
+                          alt={room.name}
+                          className="w-[100px] h-[75px] rounded-xl object-cover shrink-0 border border-slate-100 shadow-xs"
+                        />
+                        <div className="space-y-1 min-w-0">
+                          <h4 className="text-[14px] font-extrabold text-[#0F766E] leading-snug">
+                            {room.name}
+                          </h4>
+                          {room.isHighFloor && (
+                            <div className="flex items-center gap-1 text-[10.5px] font-bold text-slate-500">
+                              <span>↑ High floor</span>
+                            </div>
+                          )}
+                          {room.leftWarning && (
+                            <div className="flex items-center gap-1 text-[10.5px] font-extrabold text-red-650">
+                              <span>● {room.leftWarning}</span>
+                            </div>
+                          )}
+                        </div>
+                      </div>
+
+                      {/* Bed Preferences (Radio Choices) */}
+                      {room.hasBedChoices && (
+                        <div className="space-y-1.5 bg-slate-50/65 rounded-xl p-2.5 border border-slate-150/50">
+                          <span className="text-[9px] text-slate-400 font-extrabold uppercase tracking-wider block">
+                            Select your bed (if available)
+                          </span>
+                          <div className="flex gap-4">
+                            <label className="flex items-center gap-2 cursor-pointer select-none">
+                              <input
+                                type="radio"
+                                name={`bed-mobile-${room.id}`}
+                                checked={bedChoice === 'twin'}
+                                onChange={() => setBedChoice('twin')}
+                                className="accent-[#0F766E]"
+                              />
+                              <span className="text-[11px] font-semibold text-slate-655 flex items-center gap-1">
+                                2 twin beds
+                              </span>
+                            </label>
+                            <label className="flex items-center gap-2 cursor-pointer select-none">
+                              <input
+                                type="radio"
+                                name={`bed-mobile-${room.id}`}
+                                checked={bedChoice === 'king'}
+                                onChange={() => setBedChoice('king')}
+                                className="accent-[#0F766E]"
+                              />
+                              <span className="text-[11px] font-semibold text-slate-655 flex items-center gap-1">
+                                1 king bed
+                              </span>
+                            </label>
+                          </div>
+                        </div>
+                      )}
+
+                      {room.hasQueenBed && (
+                        <div className="text-[11px] font-semibold text-slate-655 flex items-center gap-1.5 bg-slate-50/40 px-2.5 py-1.5 rounded-lg border border-slate-100">
+                          <span className="text-slate-400 font-extrabold text-[9px] uppercase tracking-wider mr-1">Bed:</span>
+                          <span className="text-[11px] font-semibold">1 queen bed</span>
+                        </div>
+                      )}
+
+                      {/* Room Specs Pills */}
+                      <div className="flex flex-wrap gap-1 mt-1 text-[10px] font-bold text-slate-600">
+                        <span className="px-2 py-0.5 rounded-md border border-slate-200 bg-slate-50">{room.size}</span>
+                        {room.privateSuite && <span className="px-2 py-0.5 rounded-md border border-slate-200 bg-slate-50">Private suite</span>}
+                        <span className="px-2 py-0.5 rounded-md border border-slate-200 bg-slate-50">{room.view}</span>
+                        {room.seaView && <span className="px-2 py-0.5 rounded-md border border-slate-200 bg-slate-50">Sea view</span>}
+                        {room.ac && <span className="px-2 py-0.5 rounded-md border border-slate-200 bg-slate-50">AC</span>}
+                        {room.spaTub && <span className="px-2 py-0.5 rounded-md border border-slate-200 bg-slate-50">Spa tub</span>}
+                        {room.flatScreen && <span className="px-2 py-0.5 rounded-md border border-slate-200 bg-slate-50">TV</span>}
+                        {room.wifi && <span className="px-2 py-0.5 rounded-md border border-slate-200 bg-slate-50">WiFi</span>}
+                      </div>
+
+                      {/* Number of Guests */}
+                      <div className="flex justify-between items-center text-xs font-semibold border-t border-slate-100 pt-3 text-slate-600">
+                        <span>Max Occupancy</span>
+                        <span className="font-extrabold text-slate-800">{room.guests}</span>
+                      </div>
+
+                      {/* Choices (Breakfast/Refundable) */}
+                      <div className="space-y-2 border-t border-slate-100 pt-3">
+                        {room.choices.map((choice, i) => {
+                          const isGreen = choice.type === 'breakfast_included';
+                          return (
+                            <div key={i} className="flex gap-2 items-start text-[11px] font-semibold text-slate-655">
+                              <span className="text-[#0F766E] font-bold">•</span>
+                              <span className={isGreen ? 'text-emerald-700 font-extrabold' : ''}>
+                                {choice.text}
+                              </span>
+                            </div>
+                          );
+                        })}
+                      </div>
+
+                      {/* Price & Selection */}
+                      <div className="flex justify-between items-end bg-[#0F766E]/5 rounded-2xl p-4 border border-[#0F766E]/10 mt-2">
+                        <div className="text-left">
+                          <span className="text-[10px] font-extrabold text-slate-450 uppercase tracking-wider block">Price for 3 Nights</span>
+                          <span className="text-[16px] font-black text-slate-900 block mt-1">₹{room.price3Nights.toLocaleString()}</span>
+                          <span className="text-[9px] text-slate-400 font-semibold block mt-0.5">+ ₹{room.taxes3Nights} taxes</span>
+                        </div>
+                        <div className="flex flex-col items-end gap-1.5">
+                          <label className="text-[10px] font-bold text-slate-500">Select Rooms</label>
+                          <div className="relative">
+                            <select
+                              value={selectedRooms[room.id] || 0}
+                              onChange={(e) => setSelectedRooms(prev => ({ ...prev, [room.id]: parseInt(e.target.value) }))}
+                              className="appearance-none bg-white border border-slate-300 text-slate-800 text-[11px] font-bold pl-3.5 pr-8 py-2 rounded-xl outline-none focus:border-[#0F766E] cursor-pointer"
+                            >
+                              <option value={0}>0</option>
+                              {[...Array(10)].map((_, idx) => {
+                                const qty = idx + 1;
+                                return (
+                                  <option key={qty} value={qty}>
+                                    {qty}
+                                  </option>
+                                );
+                              })}
+                            </select>
+                            <ChevronDown className="absolute right-2 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-slate-500 pointer-events-none stroke-[2.5]" />
+                          </div>
+                        </div>
+                      </div>
+
+                    </div>
+                  ))}
                 </div>
               </section>
 
@@ -1431,7 +1567,7 @@ export default function StayDetail({ stay, searchParams, onBack, isLiked, onTogg
             </div>
 
             {/* Right Column (Sticky Booking Card) */}
-            <div className="md:col-span-3 space-y-6">
+            <div className="md:col-span-4 lg:col-span-3 space-y-6">
 
               {/* 1. Booking widget */}
               <div className="bg-white rounded-3xl border border-slate-200 p-5 shadow-sm sticky top-36 text-left">

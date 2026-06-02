@@ -208,7 +208,7 @@ export default function MyBookings({ onNavigate }) {
               <CheckCircle2 className="h-4 w-4 shrink-0 text-[#0F766E]" strokeWidth={2.5} />
               <span>CONFIRMED</span>
             </div>
-            <div className="text-[10px] text-slate-500 font-semibold mt-1 whitespace-nowrap">
+            <div className="text-[10px] text-slate-500 font-semibold mt-1">
               {statusDetail}
             </div>
           </div>
@@ -220,7 +220,7 @@ export default function MyBookings({ onNavigate }) {
               <Clock className="h-4 w-4 shrink-0 text-[#D97706]" strokeWidth={2.5} />
               <span>PENDING CONFIRMATION</span>
             </div>
-            <div className="text-[10px] text-slate-500 font-semibold mt-1 whitespace-nowrap">
+            <div className="text-[10px] text-slate-500 font-semibold mt-1">
               {statusDetail}
             </div>
           </div>
@@ -232,7 +232,7 @@ export default function MyBookings({ onNavigate }) {
               <CheckCircle2 className="h-4 w-4 shrink-0 text-slate-500" strokeWidth={2.5} />
               <span>COMPLETED</span>
             </div>
-            <div className="text-[10px] text-slate-500 font-semibold mt-1 whitespace-nowrap">
+            <div className="text-[10px] text-slate-500 font-semibold mt-1">
               {statusDetail}
             </div>
           </div>
@@ -244,7 +244,7 @@ export default function MyBookings({ onNavigate }) {
               <XCircle className="h-4 w-4 shrink-0 text-red-500" strokeWidth={2.5} />
               <span>CANCELLED</span>
             </div>
-            <div className="text-[10px] text-slate-500 font-semibold mt-1 whitespace-nowrap">
+            <div className="text-[10px] text-slate-500 font-semibold mt-1">
               {statusDetail}
             </div>
           </div>
@@ -276,8 +276,8 @@ export default function MyBookings({ onNavigate }) {
               </div>
             </div>
 
-            {/* Navigation Menu - clean list */}
-            <div className="flex flex-col text-left gap-1">
+            {/* Navigation Menu - Desktop (Vertical) */}
+            <div className="hidden lg:flex flex-col text-left gap-1">
               {[
                 { name: 'Dashboard', icon: LayoutDashboard },
                 { name: 'My Bookings', icon: Calendar },
@@ -327,8 +327,56 @@ export default function MyBookings({ onNavigate }) {
               })}
             </div>
 
+            {/* Navigation Menu - Mobile/Tablet (Horizontal) */}
+            <div className="flex lg:hidden overflow-x-auto no-scrollbar gap-2 py-1 -mx-4 px-4 sm:-mx-6 sm:px-6">
+              {[
+                { name: 'Dashboard', icon: LayoutDashboard },
+                { name: 'My Bookings', icon: Calendar },
+                { name: 'My Wishlist', icon: Heart },
+                { name: 'My Reviews', icon: Star },
+                { name: 'My Trips', icon: Compass },
+                { name: 'Profile Settings', icon: User },
+                { name: 'Payment Methods', icon: CreditCard },
+                { name: 'Address Book', icon: BookOpen },
+                { name: 'Support', icon: Headphones },
+                { name: 'Logout', icon: LogOut }
+              ].map((item) => {
+                const IconComponent = item.icon;
+                const isActive = activeTab === item.name;
+                const isLogout = item.name === 'Logout';
+
+                return (
+                  <button
+                    key={item.name}
+                    onClick={() => {
+                      if (isLogout) {
+                        if (confirm('Are you sure you want to log out?')) {
+                          onNavigate('home');
+                        }
+                      } else {
+                        setActiveTab(item.name);
+                      }
+                    }}
+                    className={`shrink-0 rounded-full px-4.5 py-2.5 text-xs font-extrabold flex items-center gap-2 border transition-all duration-200 cursor-pointer ${
+                      isActive 
+                        ? 'bg-teal-50 border-[#0F766E]/30 text-[#0F766E]' 
+                        : isLogout 
+                          ? 'border-red-150 text-red-500 hover:bg-red-50' 
+                          : 'border-slate-200 text-slate-600 hover:bg-slate-50'
+                    }`}
+                  >
+                    <IconComponent 
+                      className={`h-4.5 w-4.5 shrink-0 ${isActive ? 'text-[#0F766E]' : isLogout ? 'text-red-500' : 'text-slate-405'}`} 
+                      strokeWidth={isActive ? 2.5 : 2} 
+                    />
+                    <span>{item.name}</span>
+                  </button>
+                );
+              })}
+            </div>
+
             {/* Refer & Earn Promo Card */}
-            <div className="bg-gradient-to-br from-[#E6F4F1] to-[#F0FDFA] border border-teal-100 rounded-3xl p-6 text-left relative overflow-hidden shadow-sm flex flex-col gap-3 min-h-[220px] justify-between">
+            <div className="hidden lg:flex bg-gradient-to-br from-[#E6F4F1] to-[#F0FDFA] border border-teal-100 rounded-3xl p-6 text-left relative overflow-hidden shadow-sm flex-col gap-3 min-h-[220px] justify-between">
               <div>
                 <h4 className="text-base font-extrabold text-[#0D3833]">Refer & Earn</h4>
                 <p className="text-xs font-semibold text-slate-500 mt-2 leading-relaxed max-w-[170px]">
@@ -465,7 +513,7 @@ export default function MyBookings({ onNavigate }) {
                             </div>
 
                             {/* Status & Price Column */}
-                            <div className="w-full md:w-[220px] shrink-0 border-l border-slate-200 pl-6 py-1 text-left flex flex-col justify-between gap-4">
+                            <div className="w-full md:w-[220px] shrink-0 border-t md:border-t-0 md:border-l border-slate-200 pt-4 md:pt-1 pl-0 md:pl-6 text-left flex flex-col justify-between gap-4">
                               {/* Status Badge Box */}
                               <div className="w-full">
                                 {getStatusBadge(booking.status, booking.statusDetail)}

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Star, MapPin, Heart, ChevronLeft, ChevronRight, ChevronDown, Check, ShieldCheck, Headphones, Wifi, Waves, Coffee, Car, Wind, Sprout } from 'lucide-react';
+import { Star, MapPin, Heart, ChevronLeft, ChevronRight, ChevronDown, Check, ShieldCheck, Headphones, Wifi, Waves, Coffee, Car, Wind, Sprout, X, SlidersHorizontal } from 'lucide-react';
 import SearchBar from '../components/SearchBar';
 import puducherryMap from '../assets/puducherry_map.png';
 import StayDetail from './StayDetail';
@@ -202,6 +202,7 @@ export default function StaysResults({ searchParams, onSearch }) {
   const [hoveredStay, setHoveredStay] = useState(null);
   const [sortBy, setSortBy] = useState("Recommended");
   const [selectedStay, setSelectedStay] = useState(null);
+  const [showMobileFilters, setShowMobileFilters] = useState(false);
 
   // ── animation state ──────────────────────────────────
   const [mounted, setMounted] = useState(false);
@@ -414,20 +415,32 @@ export default function StaysResults({ searchParams, onSearch }) {
         <div className="grid grid-cols-1 md:grid-cols-12 gap-6 text-left">
           
           {/* 1. Left Column: Filters Sidebar */}
-          <aside className={`md:col-span-3 lg:col-span-3 xl:col-span-2 space-y-6 sr-anim sr-fade-left sr-d1${mounted ? ' sr-in' : ''}`}>
-            <div className="bg-white rounded-3xl border border-slate-200 p-5 shadow-xs">
+          <aside className={`fixed inset-0 z-50 bg-slate-950/45 backdrop-blur-xs p-4 flex justify-end md:static md:z-0 md:bg-transparent md:backdrop-blur-none md:p-0 transition-opacity duration-200 ${
+            showMobileFilters ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none md:opacity-100 md:pointer-events-auto md:block'
+          } md:col-span-3 lg:col-span-3 xl:col-span-2`}>
+            <div className={`bg-white rounded-3xl border border-slate-200 p-5 shadow-xl md:shadow-xs w-full max-w-[340px] md:max-w-none h-[90vh] md:h-auto overflow-y-auto no-scrollbar md:overflow-visible transition-transform duration-300 transform ${
+              showMobileFilters ? 'translate-x-0' : 'translate-x-8 md:translate-x-0'
+            } md:transform-none`}>
               
               {/* Header Title */}
               <div className="flex justify-between items-center pb-4 border-b border-slate-200">
                 <span className="text-[15px] font-extrabold text-slate-800">
                   Filters
                 </span>
-                <button 
-                  onClick={handleResetFilters}
-                  className="text-[13px] font-bold text-[#0F766E] hover:underline cursor-pointer"
-                >
-                  Reset
-                </button>
+                <div className="flex items-center gap-3">
+                  <button 
+                    onClick={handleResetFilters}
+                    className="text-[13px] font-bold text-[#0F766E] hover:underline cursor-pointer"
+                  >
+                    Reset
+                  </button>
+                  <button 
+                    onClick={() => setShowMobileFilters(false)}
+                    className="md:hidden p-1.5 rounded-full hover:bg-slate-100 text-slate-400 hover:text-slate-700 cursor-pointer"
+                  >
+                    <X className="h-4.5 w-4.5" />
+                  </button>
+                </div>
               </div>
 
               {/* Price filter */}
@@ -631,7 +644,17 @@ export default function StaysResults({ searchParams, onSearch }) {
               </div>
 
               {/* Sort selector */}
-              <div className="flex items-center gap-2 shrink-0">
+              <div className="flex items-center gap-3 shrink-0 flex-wrap sm:flex-nowrap">
+                {/* Mobile Filter Button */}
+                <button
+                  type="button"
+                  onClick={() => setShowMobileFilters(true)}
+                  className="md:hidden flex items-center gap-1.5 bg-white border border-slate-200 text-slate-700 text-[12px] font-bold px-4 py-2 rounded-xl hover:bg-slate-50 transition-all cursor-pointer shadow-sm"
+                >
+                  <SlidersHorizontal className="h-3.5 w-3.5 text-slate-500 stroke-[2.3]" />
+                  <span>Filters</span>
+                </button>
+
                 <span className="text-[12px] font-bold text-slate-450 whitespace-nowrap">Sort by:</span>
                 <div className="relative">
                   <select
@@ -852,7 +875,7 @@ export default function StaysResults({ searchParams, onSearch }) {
             
             {/* Map crop Card using real Puducherry Map asset with increased height */}
             <div className="bg-white rounded-3xl border border-slate-200  shadow-xs overflow-hidden relative">
-              <div className="w-full h-[650px] rounded-2xl bg-slate-100 overflow-hidden relative border border-slate-200">
+              <div className="w-full h-[300px] sm:h-[450px] lg:h-[650px] rounded-2xl bg-slate-100 overflow-hidden relative border border-slate-200">
                 <iframe
                   src="https://maps.google.com/maps?q=Pondicherry,India&t=&z=14&ie=UTF8&iwloc=&output=embed"
                   className="w-full h-full rounded-2xl border-0"

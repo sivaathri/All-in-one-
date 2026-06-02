@@ -4,7 +4,7 @@ import heroBg from '../assets/hero.png';
 
 export default function HeroSection({ onSearch }) {
   return (
-    <section className="relative w-full h-[540px] md:h-[580px] lg:h-[420px]">
+    <section className="relative w-full min-h-[580px] sm:min-h-[640px] lg:h-[420px] lg:min-h-0 py-8 lg:py-0">
       {/* Background Container */}
       <div 
         className="absolute inset-0 bg-cover bg-center bg-no-repeat"

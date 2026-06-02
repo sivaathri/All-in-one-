@@ -152,7 +152,7 @@ export default function SearchBar({ onSearch, isModifySearch }) {
   };
 
   return (
-    <div className={isModifySearch ? "w-full" : "w-800 max-w-6xl"}>
+    <div className={isModifySearch ? "w-full" : "w-full max-w-6xl"}>
       <form
         onSubmit={handleSearch}
         className="w-full rounded-2xl bg-white py-4 pl-4 pr-4 shadow-xl border border-slate-100/80 flex flex-col lg:flex-row items-center gap-4 lg:gap-0 lg:divide-x lg:divide-slate-200/50"
@@ -177,7 +177,7 @@ export default function SearchBar({ onSearch, isModifySearch }) {
 
           {/* Autocomplete Dropdown */}
           {isLocationOpen && (
-            <div className="absolute left-0 top-full mt-3 w-80 rounded-2xl border border-gray-150 bg-white py-1 shadow-2xl z-50 overflow-hidden">
+            <div className="absolute left-1/2 -translate-x-1/2 lg:left-0 lg:translate-x-0 top-full mt-3 w-80 rounded-2xl border border-gray-150 bg-white py-1 shadow-2xl z-50 overflow-hidden">
               {filteredLocations.length > 0 ? (
                 <div className="flex flex-col">
                   {filteredLocations.map((loc, idx) => (
@@ -227,7 +227,7 @@ export default function SearchBar({ onSearch, isModifySearch }) {
             <div 
               ref={calendarRef}
               onClick={(e) => e.stopPropagation()}
-              className="absolute left-[-20px] lg:left-0 top-full mt-3 w-[340px] bg-white rounded-2xl border border-gray-150 p-5 shadow-2xl z-50"
+              className="absolute left-1/2 -translate-x-1/2 lg:left-0 lg:translate-x-0 top-full mt-3 w-[340px] bg-white rounded-2xl border border-gray-150 p-5 shadow-2xl z-50"
             >
               {/* Month Selector Header */}
               <div className="flex items-center justify-between mb-4">
@@ -333,7 +333,7 @@ export default function SearchBar({ onSearch, isModifySearch }) {
 
           {/* Simple Dropdown for Guests selection */}
           {isGuestsOpen && (
-            <div className="absolute right-0 bottom-full lg:bottom-auto lg:top-full mt-2 w-64 rounded-xl border border-gray-150 bg-white p-4 shadow-xl z-50">
+            <div className="absolute left-1/2 -translate-x-1/2 lg:left-auto lg:translate-x-0 lg:right-0 bottom-full lg:bottom-auto lg:top-full mt-2 w-64 rounded-xl border border-gray-150 bg-white p-4 shadow-xl z-50">
               <div className="space-y-3.5">
                 {/* Adults Count */}
                 <div className="flex items-center justify-between">

@@ -489,7 +489,7 @@ export default function Navbar({ onNavigate = () => {}, currentPage = 'home' }) 
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/40 backdrop-blur-md animate-modal-backdrop">
           <div 
             ref={authModalRef}
-            className="bg-white rounded-[32px] border border-slate-100 shadow-2xl w-full max-w-[460px] p-8 pb-0 flex flex-col gap-6 relative overflow-hidden animate-modal-box animate-duration-300"
+            className="bg-white rounded-[32px] border border-slate-100 shadow-2xl w-full max-w-[460px] p-6 sm:p-8 pb-0 flex flex-col gap-6 relative overflow-y-auto max-h-[90vh] no-scrollbar animate-modal-box animate-duration-300"
           >
             {/* Close Button */}
             <button

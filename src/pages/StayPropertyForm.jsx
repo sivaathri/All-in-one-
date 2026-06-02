@@ -599,12 +599,29 @@ export default function StayPropertyForm({ onBack }) {
           <aside className="w-full lg:w-[320px] bg-white rounded-2xl border border-slate-100 p-6 flex flex-col justify-between shrink-0">
             <div>
               <h2 className="text-2xl font-bold text-slate-900 text-left mb-2">Become a Host</h2>
-              <p className="text-[13px] font-medium text-slate-500 text-left mb-8">
+              <p className="text-[13px] font-medium text-slate-500 text-left mb-4 lg:mb-8">
                 List your property and start welcoming guests.
               </p>
 
+              {/* Step Progress Bar for Mobile/Tablet */}
+              <div className="block lg:hidden w-full mb-4">
+                <div className="flex justify-between items-center mb-1.5 text-xs font-bold text-slate-700">
+                  <span>Step {currentStep} of 9</span>
+                  <span className="text-[#007F55] font-extrabold">{Math.round((currentStep / 9) * 100)}% Completed</span>
+                </div>
+                <div className="w-full bg-slate-100 h-2 rounded-full overflow-hidden">
+                  <div 
+                    className="bg-[#007F55] h-full transition-all duration-300 rounded-full" 
+                    style={{ width: `${(currentStep / 9) * 100}%` }}
+                  />
+                </div>
+                <div className="mt-2 text-[11px] font-semibold text-slate-500 text-left">
+                  Current: <span className="font-bold text-slate-800">{steps[currentStep - 1].title}</span>
+                </div>
+              </div>
+
               {/* Steps Vertical List */}
-              <div className="space-y-4">
+              <div className="hidden lg:block space-y-4">
                 {steps.map((step) => (
                   <div 
                     key={step.number} 
@@ -650,7 +667,7 @@ export default function StayPropertyForm({ onBack }) {
             </div>
 
             {/* Launch Offer Card */}
-            <div className="mt-10 rounded-xl bg-[#E6F4EA]/30 border border-emerald-500/10 p-4 text-left flex gap-3.5 items-start">
+            <div className="hidden lg:flex mt-10 rounded-xl bg-[#E6F4EA]/30 border border-emerald-500/10 p-4 text-left gap-3.5 items-start">
               <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-emerald-100/40">
                 <Gift className="h-5 w-5 text-[#007F55]" />
               </div>
