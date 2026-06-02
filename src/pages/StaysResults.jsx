@@ -635,23 +635,25 @@ export default function StaysResults({ searchParams, onSearch }) {
 
           </main>
 
-          {/* 3. Right Column: Summary widgets and Map */}
-          <aside className="md:col-span-12 lg:col-span-3 xl:col-span-3 space-y-6">
+          {/* 3. Right Column: Summary widgets and Map (Sticky on Scroll) */}
+          <aside className="md:col-span-12 lg:col-span-3 xl:col-span-3 space-y-6 lg:sticky lg:top-24 self-start">
             
-            {/* Map crop Card using real Puducherry Map asset */}
-            <div className="bg-white rounded-3xl border border-slate-200 p-3 shadow-xs overflow-hidden relative">
-              <div className="w-full h-44 rounded-2xl bg-slate-100 overflow-hidden relative border border-slate-200">
-                <img 
-                  src={puducherryMap} 
-                  alt="Pondicherry Map" 
-                  className="w-full h-full object-cover rounded-2xl"
-                />
+            {/* Map crop Card using real Puducherry Map asset with increased height */}
+            <div className="bg-white rounded-3xl border border-slate-200  shadow-xs overflow-hidden relative">
+              <div className="w-full h-[650px] rounded-2xl bg-slate-100 overflow-hidden relative border border-slate-200">
+                <iframe
+                  src="https://maps.google.com/maps?q=Pondicherry,India&t=&z=14&ie=UTF8&iwloc=&output=embed"
+                  className="w-full h-full rounded-2xl border-0"
+                  allowFullScreen=""
+                  loading="lazy"
+                  title="Pondicherry Map"
+                ></iframe>
 
                 {/* Floating Map price markers */}
                 
                 {/* 1. Sea Breeze Resort (₹4,000) - green by default or if hovered */}
                 <div 
-                  className={`absolute top-[28%] left-[86%] -translate-x-1/2 -translate-y-1/2 transition-all duration-200 z-20 ${
+                  className={`absolute top-[38%] left-[64%] -translate-x-1/2 -translate-y-1/2 transition-all duration-200 z-20 pointer-events-none ${
                     hoveredStay === 1 ? 'scale-110' : 'scale-100'
                   }`}
                 >
@@ -669,7 +671,7 @@ export default function StaysResults({ searchParams, onSearch }) {
 
                 {/* 2. Le Royal Residency (₹3,570) - green if hovered, white otherwise */}
                 <div 
-                  className={`absolute top-[16%] left-[82%] -translate-x-1/2 -translate-y-1/2 transition-all duration-200 z-10 ${
+                  className={`absolute top-[74%] left-[58%] -translate-x-1/2 -translate-y-1/2 transition-all duration-200 z-10 pointer-events-none ${
                     hoveredStay === 2 ? 'scale-110' : 'scale-100'
                   }`}
                 >
@@ -687,7 +689,7 @@ export default function StaysResults({ searchParams, onSearch }) {
 
                 {/* 3. Heritage Home Stay (₹2,880) - green if hovered, white otherwise */}
                 <div 
-                  className={`absolute top-[46%] left-[92%] -translate-x-1/2 -translate-y-1/2 transition-all duration-200 z-10 ${
+                  className={`absolute top-[64%] left-[52%] -translate-x-1/2 -translate-y-1/2 transition-all duration-200 z-10 pointer-events-none ${
                     hoveredStay === 3 ? 'scale-110' : 'scale-100'
                   }`}
                 >
@@ -703,38 +705,10 @@ export default function StaysResults({ searchParams, onSearch }) {
                   </div>
                 </div>
 
-                {/* Static mock marker 4 (₹5,280) */}
-                <div className="absolute top-[42%] left-[20%] -translate-x-1/2 -translate-y-1/2">
-                  <div className="flex flex-col items-center select-none">
-                    <div className="bg-white text-slate-800 px-2.5 py-1 rounded-lg font-black text-[11px] shadow-md border border-slate-200">
-                      ₹5,280
-                    </div>
-                    <div className="w-0 h-0 border-l-[4px] border-l-transparent border-r-[4px] border-r-transparent border-t-[4px] border-t-white -mt-[1px]" />
-                  </div>
-                </div>
-
-                {/* Static mock marker 5 (₹5,200) */}
-                <div className="absolute top-[64%] left-[45%] -translate-x-1/2 -translate-y-1/2">
-                  <div className="flex flex-col items-center select-none">
-                    <div className="bg-white text-slate-800 px-2.5 py-1 rounded-lg font-black text-[11px] shadow-md border border-slate-200">
-                      ₹5,200
-                    </div>
-                    <div className="w-0 h-0 border-l-[4px] border-l-transparent border-r-[4px] border-r-transparent border-t-[4px] border-t-white -mt-[1px]" />
-                  </div>
-                </div>
-
-                {/* Static mock marker 6 (₹2,450) */}
-                <div className="absolute top-[68%] left-[94%] -translate-x-1/2 -translate-y-1/2">
-                  <div className="flex flex-col items-center select-none">
-                    <div className="bg-white text-slate-800 px-2.5 py-1 rounded-lg font-black text-[11px] shadow-md border border-slate-200">
-                      ₹2,450
-                    </div>
-                    <div className="w-0 h-0 border-l-[4px] border-l-transparent border-r-[4px] border-r-transparent border-t-[4px] border-t-white -mt-[1px]" />
-                  </div>
-                </div>
-
               </div>
             </div>
+
+
 
 
           </aside>
