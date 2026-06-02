@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Star, MapPin, Heart, ChevronLeft, ChevronRight, ChevronDown, Check, ShieldCheck, Headphones, Wifi, Waves, Coffee, Car, Wind, Sprout } from 'lucide-react';
 import SearchBar from '../components/SearchBar';
 import puducherryMap from '../assets/puducherry_map.png';
+import StayDetail from './StayDetail';
 
 const INITIAL_STAYS = [
   {
@@ -17,14 +18,40 @@ const INITIAL_STAYS = [
     totalPrice: 16000,
     taxes: 2560,
     images: [
-      "https://images.unsplash.com/photo-1540541338287-41700207dee6?auto=format&fit=crop&w=600&q=80",
+      "https://images.unsplash.com/photo-1540541338287-41700207dee6?auto=format&fit=crop&w=1200&q=80",
       "https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=600&q=80",
       "https://images.unsplash.com/photo-1520250497591-112f2f40a3f4?auto=format&fit=crop&w=600&q=80",
-      "https://images.unsplash.com/photo-1584132967334-10e028bd69f7?auto=format&fit=crop&w=600&q=80"
+      "https://images.unsplash.com/photo-1584132967334-10e028bd69f7?auto=format&fit=crop&w=600&q=80",
+      "https://images.unsplash.com/photo-1571896349842-33c89424de2d?auto=format&fit=crop&w=600&q=80"
     ],
     amenities: ["Free Wi-Fi", "Pool", "Breakfast", "Parking"],
     extraAmenitiesCount: 3,
-    verified: true
+    verified: true,
+    description: "Sea Breeze Resort is a premium beachside property in the heart of Pondicherry. Enjoy elegant rooms, amazing sea views, lush gardens, and warm hospitality.",
+    subRatings: {
+      cleanliness: 4.7,
+      location: 4.6,
+      service: 4.6,
+      value: 4.4,
+      comfort: 4.5,
+      facilities: 4.6
+    },
+    reviews: [
+      {
+        id: 1,
+        name: "Ananya Sharma",
+        rating: 5,
+        date: "2 weeks ago",
+        comment: "Amazing sea view and awesome hospitality. Food was delicious!"
+      },
+      {
+        id: 2,
+        name: "Rahul Verma",
+        rating: 4,
+        date: "1 month ago",
+        comment: "Great location, clean rooms and very helpful staff."
+      }
+    ]
   },
   {
     id: 2,
@@ -39,14 +66,40 @@ const INITIAL_STAYS = [
     totalPrice: 14280,
     taxes: 2285,
     images: [
-      "https://images.unsplash.com/photo-1551882547-ff40c63fe5fa?auto=format&fit=crop&w=600&q=80",
+      "https://images.unsplash.com/photo-1551882547-ff40c63fe5fa?auto=format&fit=crop&w=1200&q=80",
       "https://images.unsplash.com/photo-1611891487122-2075b9627dde?auto=format&fit=crop&w=600&q=80",
       "https://images.unsplash.com/photo-1582719508461-905c673771fd?auto=format&fit=crop&w=600&q=80",
-      "https://images.unsplash.com/photo-1445019980597-93fa8acb246c?auto=format&fit=crop&w=600&q=80"
+      "https://images.unsplash.com/photo-1445019980597-93fa8acb246c?auto=format&fit=crop&w=600&q=80",
+      "https://images.unsplash.com/photo-1566665797739-1674de7a421a?auto=format&fit=crop&w=600&q=80"
     ],
     amenities: ["Free Wi-Fi", "Breakfast", "Parking", "AC"],
     extraAmenitiesCount: 2,
-    verified: true
+    verified: true,
+    description: "Le Royal Residency offers a sophisticated blend of French colonial elegance and modern comfort. Situated in the historic White Town, it features fine dining, quiet courtyards, and exceptional service.",
+    subRatings: {
+      cleanliness: 4.5,
+      location: 4.8,
+      service: 4.4,
+      value: 4.2,
+      comfort: 4.4,
+      facilities: 4.3
+    },
+    reviews: [
+      {
+        id: 1,
+        name: "Vikram Malhotra",
+        rating: 5,
+        date: "3 weeks ago",
+        comment: "Excellent experience. Loved the colonial architecture and French food."
+      },
+      {
+        id: 2,
+        name: "Neha Patel",
+        rating: 4,
+        date: "1 month ago",
+        comment: "Very cozy rooms and perfect location in White Town. Recommended!"
+      }
+    ]
   },
   {
     id: 3,
@@ -61,14 +114,40 @@ const INITIAL_STAYS = [
     totalPrice: 11520,
     taxes: 1843,
     images: [
-      "https://images.unsplash.com/photo-1618773928121-c32242e63f39?auto=format&fit=crop&w=600&q=80",
+      "https://images.unsplash.com/photo-1618773928121-c32242e63f39?auto=format&fit=crop&w=1200&q=80",
       "https://images.unsplash.com/photo-1598928506311-c55ded91a20c?auto=format&fit=crop&w=600&q=80",
       "https://images.unsplash.com/photo-1505691938895-1758d7feb511?auto=format&fit=crop&w=600&q=80",
-      "https://images.unsplash.com/photo-1540518614846-7eded433c457?auto=format&fit=crop&w=600&q=80"
+      "https://images.unsplash.com/photo-1540518614846-7eded433c457?auto=format&fit=crop&w=600&q=80",
+      "https://images.unsplash.com/photo-1512917774080-9991f1c4c750?auto=format&fit=crop&w=600&q=80"
     ],
     amenities: ["Free Wi-Fi", "Breakfast", "AC", "Garden"],
     extraAmenitiesCount: 2,
-    verified: false
+    verified: false,
+    description: "Heritage Home Stay provides a cozy, traditional experience in a beautifully restored Tamil house. Experience local culture, homemade South Indian breakfast, and personalized recommendations.",
+    subRatings: {
+      cleanliness: 4.8,
+      location: 4.7,
+      service: 4.8,
+      value: 4.6,
+      comfort: 4.6,
+      facilities: 4.5
+    },
+    reviews: [
+      {
+        id: 1,
+        name: "Suresh Pillai",
+        rating: 5,
+        date: "1 week ago",
+        comment: "Felt like home. The host is incredibly warm and served delicious idlis."
+      },
+      {
+        id: 2,
+        name: "Priya Das",
+        rating: 4,
+        date: "2 weeks ago",
+        comment: "Beautiful courtyard, peaceful atmosphere, very near to temples."
+      }
+    ]
   }
 ];
 
@@ -122,6 +201,7 @@ export default function StaysResults({ searchParams, onSearch }) {
   const [wishlist, setWishlist] = useState({ 1: false, 2: false, 3: false });
   const [hoveredStay, setHoveredStay] = useState(null);
   const [sortBy, setSortBy] = useState("Recommended");
+  const [selectedStay, setSelectedStay] = useState(null);
 
   const formatDateString = (dateStr) => {
     if (!dateStr) return '21 Jun 2025';
@@ -167,6 +247,18 @@ export default function StaysResults({ searchParams, onSearch }) {
     setGuestRatings({ r45: true, r40: false, r35: false, r30: false });
     setAmenities({ wifi: true, breakfast: true, pool: false, parking: false, ac: true });
   };
+
+  if (selectedStay) {
+    return (
+      <StayDetail 
+        stay={selectedStay} 
+        searchParams={searchParams} 
+        onBack={() => setSelectedStay(null)} 
+        isLiked={!!wishlist[selectedStay.id]}
+        onToggleLike={toggleWishlist}
+      />
+    );
+  }
 
   return (
     <div style={{ fontFamily: "'Plus Jakarta Sans', 'Outfit', sans-serif" }} className="bg-[#F8FAFC] min-h-screen">
@@ -615,7 +707,10 @@ export default function StaysResults({ searchParams, onSearch }) {
                           + ₹{stay.taxes.toLocaleString()} taxes & fees
                         </span>
 
-                        <button className="w-full bg-[#0F766E] text-white py-2.5 rounded-xl font-bold text-[12.5px] shadow-sm hover:bg-[#0c625c] active:scale-95 transition-all duration-150 mt-4 cursor-pointer text-center block">
+                        <button 
+                          onClick={() => setSelectedStay(stay)}
+                          className="w-full bg-[#0F766E] text-white py-2.5 rounded-xl font-bold text-[12.5px] shadow-sm hover:bg-[#0c625c] active:scale-95 transition-all duration-150 mt-4 cursor-pointer text-center block"
+                        >
                           View Rooms
                         </button>
                       </div>
