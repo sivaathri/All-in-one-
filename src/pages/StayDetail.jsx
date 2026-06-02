@@ -213,7 +213,7 @@ export default function StayDetail({ stay, searchParams, onBack, isLiked, onTogg
 
   return (
     <div style={{ fontFamily: "'Plus Jakarta Sans', 'Outfit', sans-serif" }} className="bg-[#F8FAFC] min-h-screen text-left">
-      <div className="max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-8 py-6">
+      <div className="max-w-[1760px] mx-auto px-4 sm:px-6 lg:px-8 py-6">
         
         {/* 1. Breadcrumbs & Actions Row */}
         <div className="flex flex-col sm:flex-row justify-between sm:items-center gap-4 mb-5">
@@ -361,10 +361,10 @@ export default function StayDetail({ stay, searchParams, onBack, isLiked, onTogg
         </div>
 
         {/* 5. Main Content Columns */}
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 mt-8">
+        <div className="grid grid-cols-1 md:grid-cols-12 gap-8 mt-8">
           
           {/* Left Column (Content) */}
-          <div className="lg:col-span-8 space-y-8">
+          <div className="md:col-span-9 space-y-8">
             
             {/* Overview Section */}
             <section id="overview-section" className="bg-white rounded-3xl border border-slate-200 p-6 shadow-xs">
@@ -407,64 +407,221 @@ export default function StayDetail({ stay, searchParams, onBack, isLiked, onTogg
               </div>
             </section>
 
-            {/* Rooms Section (Mock list for detailed view) */}
-            <section id="rooms-section" className="bg-white rounded-3xl border border-slate-200 p-6 shadow-xs">
-              <h2 className="text-[17px] font-black text-slate-900 mb-4">Available Rooms</h2>
-              <div className="space-y-4">
-                {[
-                  {
-                    name: "Deluxe Ocean View Room",
-                    size: "350 sq ft",
-                    bed: "1 King Bed",
-                    guests: "Max 3 Adults",
-                    price: stay.price,
-                    image: "https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=400&q=80"
-                  },
-                  {
-                    name: "Executive Suite",
-                    size: "520 sq ft",
-                    bed: "1 King Bed & 1 Sofa Bed",
-                    guests: "Max 4 Guests",
-                    price: stay.price + 1500,
-                    image: "https://images.unsplash.com/photo-1611891487122-2075b9627dde?auto=format&fit=crop&w=400&q=80"
-                  }
-                ].map((room, index) => (
-                  <div key={index} className="flex flex-col sm:flex-row gap-4 p-4 border border-slate-200/80 rounded-2xl bg-white hover:border-[#0F766E]/40 transition-colors">
-                    <img 
-                      src={room.image} 
-                      alt={room.name} 
-                      className="w-full sm:w-[150px] h-[100px] object-cover rounded-xl shrink-0" 
-                    />
-                    <div className="flex-1 flex flex-col justify-between text-left">
-                      <div>
-                        <h4 className="text-[14.5px] font-bold text-slate-800 leading-tight">{room.name}</h4>
-                        <div className="flex flex-wrap gap-x-3 gap-y-1 mt-1.5 text-xs text-slate-500 font-semibold">
-                          <span>{room.size}</span>
-                          <span>•</span>
-                          <span>{room.bed}</span>
-                          <span>•</span>
-                          <span>{room.guests}</span>
-                        </div>
-                      </div>
-                      <div className="flex items-center gap-1.5 mt-2">
-                        <Check className="h-3.5 w-3.5 text-emerald-600 stroke-[3]" />
-                        <span className="text-xs text-emerald-700 font-bold">Free cancellation before 18 Jun 2025</span>
-                      </div>
-                    </div>
-                    <div className="sm:border-l border-slate-100 sm:pl-4 flex sm:flex-col justify-between items-end shrink-0 gap-2">
-                      <div className="text-right">
-                        <span className="text-[18px] font-black text-slate-900">₹{room.price.toLocaleString()}</span>
-                        <span className="text-[10px] text-slate-450 block font-semibold uppercase">per night</span>
-                      </div>
-                      <button 
-                        onClick={() => setShowBookingSuccess(true)}
-                        className="bg-[#0F766E] hover:bg-[#0c625c] text-white text-xs font-bold px-4 py-2.5 rounded-xl cursor-pointer transition-all active:scale-95 shadow-sm"
-                      >
-                        Book Now
-                      </button>
-                    </div>
-                  </div>
-                ))}
+            {/* Rooms Section */}
+            <section id="rooms-section" className="bg-white rounded-3xl border border-slate-200 p-6 shadow-xs text-left">
+              <h2 className="text-[17px] font-black text-slate-900 mb-4">Select Your Room</h2>
+              
+              {/* Responsive Scrollable Container */}
+              <div className="w-full overflow-x-auto no-scrollbar border border-slate-200/90 rounded-2xl">
+                <table className="w-full border-collapse text-left text-xs min-w-[950px] bg-white">
+                  
+                  {/* Table Header */}
+                  <thead>
+                    <tr className="bg-slate-50 border-b border-slate-200 text-slate-500 font-extrabold text-[11px] uppercase tracking-wider">
+                      <th className="p-4 w-[40%] font-extrabold">Room type</th>
+                      <th className="p-4 w-[15%] font-extrabold text-center">Number of guests</th>
+                      <th className="p-4 w-[15%] font-extrabold">Price for 3 nights</th>
+                      <th className="p-4 w-[20%] font-extrabold">Your choices</th>
+                      <th className="p-4 w-[10%] font-extrabold text-center">Select Rooms</th>
+                    </tr>
+                  </thead>
+
+                  {/* Table Body */}
+                  <tbody className="divide-y divide-slate-200">
+                    {roomsData.map((room) => (
+                      <tr key={room.id} className="align-top hover:bg-slate-50/30 transition-colors">
+                        
+                        {/* 1. Room Type Column */}
+                        <td className="p-4">
+                          <div className="flex gap-4">
+                            {/* Room Image */}
+                            <img 
+                              src={room.image} 
+                              alt={room.name}
+                              className="w-[120px] h-[90px] rounded-xl object-cover shrink-0 border border-slate-100 shadow-xs"
+                            />
+                            {/* Room Info */}
+                            <div className="space-y-1.5 text-left">
+                              <h4 className="text-[14px] font-extrabold text-[#0F766E] hover:underline cursor-pointer">
+                                {room.name}
+                              </h4>
+                              
+                              {room.isHighFloor && (
+                                <div className="flex items-center gap-1 text-[11px] font-bold text-slate-500">
+                                  <span>↑</span>
+                                  <span>High floor</span>
+                                </div>
+                              )}
+
+                              {room.leftWarning && (
+                                <div className="flex items-center gap-1 text-[11px] font-extrabold text-red-650">
+                                  <span>●</span>
+                                  <span>{room.leftWarning}</span>
+                                </div>
+                              )}
+
+                              {/* Bed Preferences (Radio Choices) */}
+                              {room.hasBedChoices && (
+                                <div className="space-y-1.5 mt-2 bg-slate-50/65 rounded-xl p-2.5 border border-slate-150/50 max-w-[200px]">
+                                  <span className="text-[10px] text-slate-400 font-extrabold uppercase tracking-wider block">
+                                    Select your bed (if available)
+                                  </span>
+                                  
+                                  <label className="flex items-center gap-2 cursor-pointer select-none">
+                                    <input 
+                                      type="radio" 
+                                      name={`bed-${room.id}`}
+                                      checked={bedChoice === 'twin'}
+                                      onChange={() => setBedChoice('twin')}
+                                      className="accent-[#0F766E]"
+                                    />
+                                    <span className="text-[11.5px] font-semibold text-slate-650 flex items-center gap-1">
+                                      2 twin beds
+                                      <svg className="w-3.5 h-3.5 text-slate-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M2 20v-8a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v8M4 10V6a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v4M2 14h20" /></svg>
+                                    </span>
+                                  </label>
+
+                                  <label className="flex items-center gap-2 cursor-pointer select-none">
+                                    <input 
+                                      type="radio" 
+                                      name={`bed-${room.id}`}
+                                      checked={bedChoice === 'king'}
+                                      onChange={() => setBedChoice('king')}
+                                      className="accent-[#0F766E]"
+                                    />
+                                    <span className="text-[11.5px] font-semibold text-slate-650 flex items-center gap-1">
+                                      1 king bed
+                                      <svg className="w-3.5 h-3.5 text-slate-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M2 20v-8a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v8M4 10V6a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v4M2 14h20" /></svg>
+                                    </span>
+                                  </label>
+                                </div>
+                              )}
+
+                              {room.hasQueenBed && (
+                                <div className="text-[11.5px] font-semibold text-slate-650 flex items-center gap-1.5">
+                                  <span>1 queen bed</span>
+                                  <svg className="w-3.5 h-3.5 text-slate-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M2 20v-8a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v8M4 10V6a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v4M2 14h20" /></svg>
+                                </div>
+                              )}
+
+                              {/* Size/Room Tags Row */}
+                              <div className="flex flex-wrap gap-1.5 mt-2.5 text-[11px] font-bold text-slate-600">
+                                <span className="px-2 py-0.5 rounded-md border border-slate-200 bg-slate-50">{room.size}</span>
+                                {room.privateSuite && <span className="px-2 py-0.5 rounded-md border border-slate-200 bg-slate-50">Private suite</span>}
+                                <span className="px-2 py-0.5 rounded-md border border-slate-200 bg-slate-50">{room.view}</span>
+                                {room.seaView && <span className="px-2 py-0.5 rounded-md border border-slate-200 bg-slate-50">Sea view</span>}
+                                {room.ac && <span className="px-2 py-0.5 rounded-md border border-slate-200 bg-slate-50">Air conditioning</span>}
+                                {room.spaTub && <span className="px-2 py-0.5 rounded-md border border-slate-200 bg-slate-50">Spa tub</span>}
+                                {room.flatScreen && <span className="px-2 py-0.5 rounded-md border border-slate-200 bg-slate-50">Flat-screen TV</span>}
+                                {room.minibar && <span className="px-2 py-0.5 rounded-md border border-slate-200 bg-slate-50">Minibar</span>}
+                                {room.wifi && <span className="px-2 py-0.5 rounded-md border border-slate-200 bg-slate-50">Free WiFi</span>}
+                              </div>
+
+                              {/* Detailed Checklist of Amenities */}
+                              {room.amenities && (
+                                <div className="grid grid-cols-2 gap-x-4 gap-y-1 mt-3 pt-3 border-t border-slate-100 text-[11px] text-slate-500 font-semibold max-w-[400px]">
+                                  {room.amenities.map((amenity, i) => (
+                                    <div key={i} className="flex items-center gap-1.5">
+                                      <Check className="h-3 w-3 text-emerald-600 shrink-0 stroke-[3.5]" />
+                                      <span className="truncate">{amenity}</span>
+                                    </div>
+                                  ))}
+                                </div>
+                              )}
+
+                            </div>
+                          </div>
+                        </td>
+
+                        {/* 2. Number of Guests Column */}
+                        <td className="p-4 text-center">
+                          <div className="flex flex-col items-center justify-center pt-2">
+                            <svg className="w-5 h-5 text-slate-650" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                              <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" />
+                              <circle cx="9" cy="7" r="4" />
+                              <path d="M23 21v-2a4 4 0 0 0-3-3.87" />
+                              <path d="M16 3.13a4 4 0 0 1 0 7.75" />
+                            </svg>
+                            <span className="text-[11.5px] font-extrabold text-slate-700 mt-2 block leading-none">
+                              {room.guests.split(',')[0]}
+                            </span>
+                            <span className="text-[10px] font-bold text-slate-450 mt-1 block leading-none">
+                              {room.guests.split(',')[1]?.trim() || ''}
+                            </span>
+                          </div>
+                        </td>
+
+                        {/* 3. Price for 3 Nights Column */}
+                        <td className="p-4">
+                          <div className="pt-2">
+                            <span className="text-[16px] font-black text-slate-900">
+                              ₹ {room.price3Nights.toLocaleString()}
+                            </span>
+                            <span className="text-[10.5px] font-bold text-slate-450 block mt-1 leading-normal">
+                              + ₹ {room.taxes3Nights} taxes and fees
+                            </span>
+                          </div>
+                        </td>
+
+                        {/* 4. Your Choices Column */}
+                        <td className="p-4">
+                          <div className="pt-2 space-y-3 font-semibold text-slate-700">
+                            {room.choices.map((choice, i) => {
+                              const isGreen = choice.type === 'breakfast_included';
+                              const isOptional = choice.type === 'breakfast_optional';
+                              
+                              return (
+                                <div key={i} className="flex gap-2 items-start leading-normal text-[11.5px]">
+                                  {choice.type.startsWith('breakfast') ? (
+                                    <Coffee className={`h-4 w-4 shrink-0 mt-0.5 ${isGreen ? 'text-emerald-600' : 'text-slate-500'}`} />
+                                  ) : choice.type === 'non_refundable' ? (
+                                    <div className="w-4 h-4 rounded-full bg-slate-100 flex items-center justify-center shrink-0 mt-0.5 text-slate-500 font-bold text-[9px]">X</div>
+                                  ) : (
+                                    <span className="text-slate-450 mt-0.5 shrink-0 text-sm">•</span>
+                                  )}
+                                  <div className="flex items-center gap-1">
+                                    <span className={isGreen ? 'text-emerald-700 font-extrabold' : 'font-semibold'}>
+                                      {choice.text}
+                                    </span>
+                                    {isOptional && (
+                                      <Info className="h-3 w-3 text-slate-400 cursor-help shrink-0" title="Breakfast can be added at checkout." />
+                                    )}
+                                  </div>
+                                </div>
+                              );
+                            })}
+                          </div>
+                        </td>
+
+                        {/* 5. Select Rooms Column */}
+                        <td className="p-4 text-center">
+                          <div className="pt-1.5 flex justify-center">
+                            <div className="relative">
+                              <select
+                                value={selectedRooms[room.id] || 0}
+                                onChange={(e) => setSelectedRooms(prev => ({ ...prev, [room.id]: parseInt(e.target.value) }))}
+                                className="appearance-none bg-white border border-slate-355 text-slate-800 text-[12px] font-bold pl-3 pr-8 py-2 rounded-xl outline-none focus:border-[#0F766E] cursor-pointer"
+                              >
+                                <option value={0}>0</option>
+                                {[...Array(10)].map((_, idx) => {
+                                  const qty = idx + 1;
+                                  return (
+                                    <option key={qty} value={qty}>
+                                      {qty} (&nbsp;₹&nbsp;{(room.price3Nights * qty).toLocaleString()})
+                                    </option>
+                                  );
+                                })}
+                              </select>
+                              <ChevronDown className="absolute right-2 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-slate-500 pointer-events-none stroke-[2.5]" />
+                            </div>
+                          </div>
+                        </td>
+
+                      </tr>
+                    ))}
+                  </tbody>
+
+                </table>
               </div>
             </section>
 
@@ -622,107 +779,117 @@ export default function StayDetail({ stay, searchParams, onBack, isLiked, onTogg
           </div>
 
           {/* Right Column (Sticky Booking Card) */}
-          <div className="lg:col-span-4 space-y-6">
+          <div className="md:col-span-3 space-y-6">
             
             {/* 1. Booking widget */}
-            <div className="bg-white rounded-3xl border border-slate-200 p-5 shadow-sm sticky top-36">
-              {/* Pricing */}
-              <div className="flex items-baseline justify-between gap-1 flex-wrap mb-4">
-                <div className="flex items-baseline gap-1">
-                  <span className="text-[24px] font-black text-slate-900">₹{price.toLocaleString()}</span>
-                  <span className="text-[12.5px] text-slate-400 font-semibold">/ night</span>
-                </div>
-                <div className="flex items-center gap-2">
-                  <span className="text-slate-400 text-xs font-semibold line-through">₹{originalPrice.toLocaleString()}</span>
-                  <span className="bg-[#EF4444] text-white px-2 py-0.5 rounded text-[10px] font-black uppercase tracking-wide">
-                    {stay.discount || "20% OFF"}
-                  </span>
-                </div>
-              </div>
+            <div className="bg-white rounded-3xl border border-slate-200 p-5 shadow-sm sticky top-36 text-left">
+              <h3 className="text-[15px] font-black text-slate-900 mb-4 pb-3 border-b border-slate-100">
+                Your Selection
+              </h3>
 
-              {/* Informative Tip Badges */}
-              <div className="space-y-2 mb-5">
-                <div className="flex items-center gap-2 p-2.5 rounded-xl bg-emerald-50/50 border border-emerald-100 text-emerald-800 text-xs font-bold">
-                  <ShieldCheck className="h-4.5 w-4.5 text-emerald-600 shrink-0" />
-                  <span>Great choice! This property is in high demand.</span>
+              {/* Dynamic Empty / Active States */}
+              {!hasSelectedRooms ? (
+                /* Empty state with suitcase SVG */
+                <div className="flex flex-col items-center justify-center py-8 px-4 text-center mb-4">
+                  <svg className="w-20 h-20 text-slate-200/90 mb-4" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    {/* Palm trees */}
+                    <path d="M70 45C68 35 55 35 55 45M55 45C55 55 60 58 60 68M60 68C60 70 58 72 58 72H72C72 72 70 70 70 68C70 58 75 55 75 45M75 45C75 35 88 35 88 45" stroke="#CBD5E1" strokeWidth="2" strokeLinecap="round"/>
+                    <path d="M65 68V80M80 68V80" stroke="#94A3B8" strokeWidth="2.5" strokeLinecap="round"/>
+                    {/* Suitcase */}
+                    <rect x="25" y="45" width="34" height="28" rx="6" fill="#F8FAFC" stroke="#64748B" strokeWidth="2"/>
+                    <path d="M34 45V38a4 4 0 0 1 4-4h8a4 4 0 0 1 4 4v7" stroke="#475569" strokeWidth="2" strokeLinecap="round"/>
+                    <line x1="32" y1="54" x2="52" y2="54" stroke="#CBD5E1" strokeWidth="2" strokeLinecap="round"/>
+                    <line x1="32" y1="60" x2="52" y2="60" stroke="#CBD5E1" strokeWidth="2" strokeLinecap="round"/>
+                  </svg>
+                  <h4 className="text-[13.5px] font-black text-slate-800 leading-tight">No rooms selected yet</h4>
+                  <p className="text-[11px] font-semibold text-slate-450 mt-1.5 leading-relaxed max-w-[180px] mx-auto">
+                    Select your preferred rooms from the list.
+                  </p>
                 </div>
-                <div className="flex items-center gap-2 p-2.5 rounded-xl bg-emerald-50/50 border border-emerald-100 text-emerald-800 text-xs font-bold">
-                  <ShieldCheck className="h-4.5 w-4.5 text-emerald-600 shrink-0" />
-                  <span>Free cancellation before 18 Jun 2025</span>
+              ) : (
+                /* Active state: List of selected rooms */
+                <div className="space-y-3 mb-5 pb-4 border-b border-slate-100 max-h-[180px] overflow-y-auto pr-1">
+                  {selectedRoomsList.map((selRoom, idx) => (
+                    <div key={idx} className="flex justify-between items-start text-xs font-semibold text-slate-700 leading-tight">
+                      <div className="flex-1 pr-3">
+                        <span className="font-extrabold text-[#0F766E]">{selRoom.qty} x </span>
+                        <span>{selRoom.name}</span>
+                        {selRoom.hasBreakfastIncluded && (
+                          <span className="block text-[10px] font-bold text-emerald-600 mt-0.5">Breakfast Included</span>
+                        )}
+                      </div>
+                      <span className="font-extrabold text-slate-900 shrink-0">
+                        ₹{(selRoom.price).toLocaleString()}
+                      </span>
+                    </div>
+                  ))}
                 </div>
-              </div>
-
-              {/* Checkin / Checkout date blocks */}
-              <div className="grid grid-cols-2 gap-3 mb-3 text-left">
-                <div className="border border-slate-200 rounded-2xl p-3 bg-slate-50/20 relative">
-                  <span className="text-[10px] text-slate-400 font-black uppercase tracking-wider block">Check-in</span>
-                  <span className="text-[13px] font-extrabold text-slate-800 block mt-1">
-                    {formatDateString(searchParams?.checkIn)}
-                  </span>
-                  <span className="text-[10.5px] font-semibold text-slate-450">
-                    ({getDayOfWeek(searchParams?.checkIn)})
-                  </span>
-                </div>
-                <div className="border border-slate-200 rounded-2xl p-3 bg-slate-50/20 relative">
-                  <span className="text-[10px] text-slate-400 font-black uppercase tracking-wider block">Check-out</span>
-                  <span className="text-[13px] font-extrabold text-slate-800 block mt-1">
-                    {formatDateString(searchParams?.checkOut)}
-                  </span>
-                  <span className="text-[10.5px] font-semibold text-slate-450">
-                    ({getDayOfWeek(searchParams?.checkOut)})
-                  </span>
-                </div>
-              </div>
-
-              {/* Guests Count box */}
-              <div className="border border-slate-200 rounded-2xl p-3 bg-slate-50/20 flex justify-between items-center mb-5 text-left">
-                <div>
-                  <span className="text-[10px] text-slate-400 font-black uppercase tracking-wider block">Guests & Rooms</span>
-                  <span className="text-[13px] font-extrabold text-slate-800 block mt-1">
-                    {searchParams?.guests || "3 Adults, 1 Child"}
-                  </span>
-                </div>
-                <button className="text-[12px] font-extrabold text-[#0F766E] hover:underline cursor-pointer">
-                  Edit
-                </button>
-              </div>
+              )}
 
               {/* Price Details */}
-              <div className="space-y-3 pt-4 border-t border-slate-100 text-[13px] font-semibold text-slate-650">
-                <h4 className="text-[13px] font-black text-slate-800">Price Details</h4>
+              <div className="space-y-3 text-[13px] font-semibold text-slate-650">
                 <div className="flex justify-between">
-                  <span>₹{price.toLocaleString()} x {totalNights} nights</span>
-                  <span className="text-slate-800 font-bold">₹{totalPriceCalculated.toLocaleString()}</span>
+                  <span>Price ({hasSelectedRooms ? '3 nights' : '0 nights'})</span>
+                  <span className="text-slate-850 font-bold">
+                    ₹{hasSelectedRooms ? totalSelectedBase.toLocaleString() : '0'}
+                  </span>
                 </div>
                 <div className="flex justify-between items-center">
                   <span className="flex items-center gap-1.5">
                     Taxes & Fees 
                     <Info className="h-3.5 w-3.5 text-slate-400 cursor-help" title="Government GST and local resort surcharges" />
                   </span>
-                  <span className="text-slate-800 font-bold">₹{taxesCalculated.toLocaleString()}</span>
+                  <span className="text-slate-855 font-bold">
+                    ₹{hasSelectedRooms ? totalSelectedTaxes.toLocaleString() : '0'}
+                  </span>
                 </div>
+                
                 <div className="border-t border-slate-100 my-2 pt-3 flex justify-between items-center text-slate-800">
                   <span className="font-extrabold">Total Amount</span>
-                  <span className="text-[17px] font-black">₹{finalAmount.toLocaleString()}</span>
+                  <span className="text-[17px] font-black">
+                    ₹{hasSelectedRooms ? totalSelectedGrand.toLocaleString() : '0'}
+                  </span>
                 </div>
-                <span className="text-[10.5px] text-slate-400 font-semibold block -mt-1 leading-none text-right">
+                <span className="text-[10.5px] text-slate-455 font-semibold block -mt-1 leading-none text-right">
                   Inclusive of all taxes
                 </span>
               </div>
 
               {/* Actions CTAs */}
               <button 
-                onClick={() => setShowBookingSuccess(true)}
-                className="w-full bg-[#0F766E] text-white py-3 rounded-xl font-bold text-[13.5px] shadow-sm hover:bg-[#0c625c] active:scale-95 transition-all duration-150 mt-5 cursor-pointer text-center block"
+                onClick={() => {
+                  if (hasSelectedRooms) {
+                    setShowBookingSuccess(true);
+                  } else {
+                    alert("Please select at least one room before checking out!");
+                  }
+                }}
+                className={`w-full py-3.5 rounded-xl font-bold text-[13px] shadow-xs mt-5 cursor-pointer text-center block transition-all active:scale-97 ${
+                  hasSelectedRooms 
+                    ? 'bg-[#0F766E] hover:bg-[#0c625c] text-white font-extrabold' 
+                    : 'bg-slate-100 text-slate-400 cursor-not-allowed font-extrabold'
+                }`}
               >
-                Select Room
+                Reserve Now
               </button>
 
+              <div className="flex items-center justify-center gap-1.5 text-[11px] font-bold text-slate-500 mt-3.5">
+                <svg className="w-3.5 h-3.5 text-slate-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+                <span>You won't be charged yet</span>
+              </div>
+
+              {/* Informative Tip Badge */}
+              <div className="flex items-center gap-2 p-2.5 rounded-xl bg-emerald-50/50 border border-emerald-100 text-emerald-800 text-[11px] font-bold mt-4 leading-snug">
+                <ShieldCheck className="h-4.5 w-4.5 text-emerald-600 shrink-0" />
+                <span>Great choice! This property is in high demand.</span>
+              </div>
+
+              {/* Chat Button inside Selection Sidebar */}
               <button 
                 onClick={() => setShowChat(true)}
-                className="w-full border border-slate-200 bg-white hover:bg-slate-50 text-slate-700 py-3 rounded-xl font-bold text-[13.5px] shadow-xs active:scale-95 transition-all duration-150 mt-2.5 cursor-pointer flex items-center justify-center gap-2"
+                className="w-full border border-slate-200 bg-white hover:bg-slate-50 text-slate-700 py-2.5 rounded-xl font-bold text-[12px] shadow-xs active:scale-95 transition-all duration-150 mt-3.5 cursor-pointer flex items-center justify-center gap-2"
               >
-                <MessageSquare className="h-4.5 w-4.5 text-slate-500" />
+                <MessageSquare className="h-4 w-4 text-slate-500" />
                 <span>Chat with Property</span>
               </button>
             </div>
@@ -813,23 +980,37 @@ export default function StayDetail({ stay, searchParams, onBack, isLiked, onTogg
       {/* 7. Booking Success Dialog */}
       {showBookingSuccess && (
         <div className="fixed inset-0 z-55 flex items-center justify-center p-4 bg-slate-950/65 backdrop-blur-sm">
-          <div className="bg-white rounded-3xl p-8 max-w-sm w-full text-center border border-slate-100 shadow-2xl relative">
+          <div className="bg-white rounded-3xl p-8 max-w-sm w-full border border-slate-100 shadow-2xl relative text-left">
             <div className="h-16 w-16 bg-emerald-50 border border-emerald-100 rounded-full flex items-center justify-center text-emerald-700 mx-auto mb-4">
               <Check className="h-8 w-8 stroke-[3.5]" />
             </div>
-            <h3 className="text-xl font-black text-slate-900">Room Selected!</h3>
-            <p className="text-slate-500 text-xs font-bold mt-2 leading-relaxed">
-              You have successfully selected the rooms at <strong>{stay.name}</strong>. We've locked this rate for the next 15 minutes.
+            <h3 className="text-xl font-black text-slate-900 text-center">Room Selected!</h3>
+            <p className="text-slate-500 text-[11.5px] font-semibold mt-2 leading-relaxed text-center">
+              You are reserving the following rooms at <strong>{stay.name}</strong>:
             </p>
+            
+            <div className="my-4 space-y-2 border-t border-b border-slate-100 py-3 text-xs font-semibold text-slate-700">
+              {selectedRoomsList.map((selRoom, idx) => (
+                <div key={idx} className="flex justify-between items-start">
+                  <span className="pr-2">{selRoom.qty} x {selRoom.name}</span>
+                  <span className="font-extrabold text-slate-900 shrink-0">₹{selRoom.price.toLocaleString()}</span>
+                </div>
+              ))}
+              <div className="flex justify-between border-t border-slate-100 pt-2.5 font-bold text-slate-900 text-[13px]">
+                <span>Grand Total</span>
+                <span className="font-black text-[#0F766E]">₹{totalSelectedGrand.toLocaleString()}</span>
+              </div>
+            </div>
+
             <button 
               onClick={() => setShowBookingSuccess(false)}
-              className="w-full bg-[#0F766E] text-white py-3 rounded-xl font-bold text-xs shadow-md hover:bg-[#0c625c] transition-all mt-6 cursor-pointer"
+              className="w-full bg-[#0F766E] text-white py-3 rounded-xl font-bold text-xs shadow-md hover:bg-[#0c625c] transition-all cursor-pointer text-center block"
             >
-              Proceed to Payment
+              Confirm & Proceed to Payment
             </button>
             <button 
               onClick={() => setShowBookingSuccess(false)}
-              className="w-full text-slate-450 hover:text-slate-700 font-bold text-xs mt-3 cursor-pointer"
+              className="w-full text-slate-450 hover:text-slate-700 font-bold text-xs mt-3 cursor-pointer text-center block"
             >
               Cancel
             </button>
