@@ -1,6 +1,7 @@
 import HeroSection from '../components/HeroSection';
 import Categories from '../components/Categories';
 import TrendingSection from '../components/TrendingSection';
+import RentalServices from '../components/RentalServices';
 
 export default function Home({ onSearch }) {
   return (
@@ -13,6 +14,9 @@ export default function Home({ onSearch }) {
 
       {/* Trending Section */}
       <TrendingSection />
+
+      {/* Rental Services Section */}
+      <RentalServices />
     </main>
   );
 }
