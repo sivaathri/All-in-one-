@@ -409,7 +409,7 @@ export default function StaysResults({ searchParams, onSearch }) {
           </aside>
 
           {/* 2. Middle Column: Stay Search Results */}
-          <main className="md:col-span-9 lg:col-span-5 xl:col-span-6 space-y-6">
+          <main className="md:col-span-9 lg:col-span-6 xl:col-span-7 space-y-6">
             
             {/* Header Result Counts */}
             <div className="flex flex-col sm:flex-row justify-between sm:items-center gap-4 bg-white rounded-2xl border border-slate-200 p-5 shadow-xs">
@@ -453,7 +453,7 @@ export default function StaysResults({ searchParams, onSearch }) {
                     onMouseEnter={() => setHoveredStay(stay.id)}
                     onMouseLeave={() => setHoveredStay(null)}
                     className={`bg-white rounded-3xl border ${
-                      isHovered ? 'border-[#0F766E]/40 shadow-md scale-[1.005]' : 'border-slate-200 shadow-xs'
+                      isHovered ? 'border-[#0F766E]/40 shadow-md' : 'border-slate-200 shadow-xs'
                     } p-4.5 flex flex-col md:flex-row gap-5 transition-all duration-200`}
                   >
                     
@@ -485,7 +485,7 @@ export default function StaysResults({ searchParams, onSearch }) {
                         <img
                           src={stay.images[currentImgIdx]}
                           alt={stay.name}
-                          className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-102"
+                          className="w-full h-full object-cover"
                         />
 
                         {/* Navigation Chevrons */}
@@ -636,7 +636,7 @@ export default function StaysResults({ searchParams, onSearch }) {
           </main>
 
           {/* 3. Right Column: Summary widgets and Map (Sticky on Scroll) */}
-          <aside className="md:col-span-12 lg:col-span-4 xl:col-span-4 space-y-6 lg:sticky lg:top-24 self-start">
+          <aside className="md:col-span-12 lg:col-span-3 xl:col-span-3 space-y-6 lg:sticky lg:top-24 self-start">
             
             {/* Map crop Card using real Puducherry Map asset with increased height */}
             <div className="bg-white rounded-3xl border border-slate-200  shadow-xs overflow-hidden relative">
@@ -653,7 +653,7 @@ export default function StaysResults({ searchParams, onSearch }) {
                 
                 {/* 1. Sea Breeze Resort (₹4,000) - green by default or if hovered */}
                 <div 
-                  className={`absolute top-[39%] left-[58%] -translate-x-1/2 -translate-y-1/2 transition-all duration-200 z-20 pointer-events-none ${
+                  className={`absolute top-[38%] left-[64%] -translate-x-1/2 -translate-y-1/2 transition-all duration-200 z-20 pointer-events-none ${
                     hoveredStay === 1 ? 'scale-110' : 'scale-100'
                   }`}
                 >
@@ -671,7 +671,7 @@ export default function StaysResults({ searchParams, onSearch }) {
 
                 {/* 2. Le Royal Residency (₹3,570) - green if hovered, white otherwise */}
                 <div 
-                  className={`absolute top-[73%] left-[50%] -translate-x-1/2 -translate-y-1/2 transition-all duration-200 z-10 pointer-events-none ${
+                  className={`absolute top-[74%] left-[58%] -translate-x-1/2 -translate-y-1/2 transition-all duration-200 z-10 pointer-events-none ${
                     hoveredStay === 2 ? 'scale-110' : 'scale-100'
                   }`}
                 >
@@ -689,7 +689,7 @@ export default function StaysResults({ searchParams, onSearch }) {
 
                 {/* 3. Heritage Home Stay (₹2,880) - green if hovered, white otherwise */}
                 <div 
-                  className={`absolute top-[63%] left-[45%] -translate-x-1/2 -translate-y-1/2 transition-all duration-200 z-10 pointer-events-none ${
+                  className={`absolute top-[64%] left-[52%] -translate-x-1/2 -translate-y-1/2 transition-all duration-200 z-10 pointer-events-none ${
                     hoveredStay === 3 ? 'scale-110' : 'scale-100'
                   }`}
                 >
