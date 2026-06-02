@@ -4,6 +4,7 @@ import Home from './pages/Home';
 import BecomeHost from './pages/BecomeHost';
 import Footer from './components/Footer';
 import StaysResults from './pages/StaysResults';
+import MyBookings from './pages/MyBookings';
 import './App.css';
 
 // ─── Search transition overlay ──────────────────────────────────────────────
@@ -72,6 +73,8 @@ function App() {
         <Home onSearch={handleSearch} />
       ) : currentPage === 'stays-results' ? (
         <StaysResults key={resultsKey} searchParams={searchParams} onSearch={handleSearch} />
+      ) : currentPage === 'my-bookings' ? (
+        <MyBookings onNavigate={setCurrentPage} />
       ) : (
         <BecomeHost onBackToHome={() => setCurrentPage('home')} />
       )}

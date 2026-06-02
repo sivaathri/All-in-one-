@@ -262,6 +262,7 @@ export default function Navbar({ onNavigate = () => {}, currentPage = 'home' }) 
                     <button
                       onClick={() => {
                         setProfileDropdownOpen(false);
+                        onNavigate('my-bookings');
                       }}
                       className="w-full text-left rounded-lg px-3.5 py-2.5 text-[12.5px] font-bold text-slate-700 hover:bg-slate-50 transition-colors cursor-pointer"
                     >
@@ -407,6 +408,7 @@ export default function Navbar({ onNavigate = () => {}, currentPage = 'home' }) 
                 <button
                   onClick={() => {
                     setIsOpen(false);
+                    onNavigate('my-bookings');
                   }}
                   className="w-full rounded-xl border border-slate-200 py-3 text-center text-sm font-semibold text-slate-700 hover:bg-slate-50 transition-colors"
                 >
