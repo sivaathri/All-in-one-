@@ -8,10 +8,10 @@ const POPULAR_LOCATIONS = [
   { name: 'Kochi', subtitle: 'Kerala, India' }
 ];
 
-export default function SearchBar() {
-  const [searchQuery, setSearchQuery] = useState('');
-  const [checkIn, setCheckIn] = useState('2026-06-03');
-  const [checkOut, setCheckOut] = useState('2026-06-06');
+export default function SearchBar({ onSearch, isModifySearch }) {
+  const [searchQuery, setSearchQuery] = useState('Pondicherry, India');
+  const [checkIn, setCheckIn] = useState('2025-06-21');
+  const [checkOut, setCheckOut] = useState('2025-06-25');
   const [guests, setGuests] = useState('3 Adults, 1 Child, 1 Room');
   const [isGuestsOpen, setIsGuestsOpen] = useState(false);
   const [adults, setAdults] = useState(3);
@@ -19,7 +19,7 @@ export default function SearchBar() {
   const [rooms, setRooms] = useState(1);
   const [isLocationOpen, setIsLocationOpen] = useState(false);
   const [isCalendarOpen, setIsCalendarOpen] = useState(false);
-  const [currentMonth, setCurrentMonth] = useState(new Date(2026, 5)); // June 2026
+  const [currentMonth, setCurrentMonth] = useState(new Date(2025, 5)); // June 2025
 
   const dropdownRef = useRef(null);
   const locationRef = useRef(null);
@@ -141,11 +141,18 @@ export default function SearchBar() {
 
   const handleSearch = (e) => {
     e.preventDefault();
-    alert(`Searching for: "${searchQuery}" from ${formatDateDisplay(checkIn)} to ${formatDateDisplay(checkOut)} for ${guests}`);
+    if (onSearch) {
+      onSearch({
+        searchQuery,
+        checkIn,
+        checkOut,
+        guests
+      });
+    }
   };
 
   return (
-    <div className="w-800 max-w-6xl">
+    <div className={isModifySearch ? "w-full" : "w-800 max-w-6xl"}>
       <form
         onSubmit={handleSearch}
         className="w-full rounded-2xl bg-white py-4 pl-4 pr-4 shadow-xl border border-slate-100/80 flex flex-col lg:flex-row items-center gap-4 lg:gap-0 lg:divide-x lg:divide-slate-200/50"
@@ -275,8 +282,8 @@ export default function SearchBar() {
                     dayClass += "text-slate-800 hover:bg-slate-50 hover:rounded-full";
                   }
 
-                  const today = new Date(2026, 5, 1);
-                  const isPast = date.getTime() < today.getTime() && !isSameDay('2026-06-01', date);
+                  const today = new Date(2025, 5, 1);
+                  const isPast = date.getTime() < today.getTime() && !isSameDay('2025-06-01', date);
 
                   return (
                     <button
@@ -434,9 +441,16 @@ export default function SearchBar() {
         <div className="w-full lg:w-auto p-1.5 shrink-0 pl-4 lg:pl-3">
           <button
             type="submit"
-            className="w-full lg:w-auto rounded-xl bg-[#0F766E] px-8 py-3 text-sm font-semibold text-white shadow-sm hover:bg-[#0c625c] active:scale-95 transition-all duration-200 cursor-pointer"
+            className="w-full lg:w-auto rounded-xl bg-[#0F766E] px-8 py-3 text-sm font-semibold text-white shadow-sm hover:bg-[#0c625c] active:scale-95 transition-all duration-200 cursor-pointer flex items-center justify-center gap-2"
           >
-            Search
+            {isModifySearch ? (
+              <>
+                <Search className="h-4 w-4 text-white stroke-[2.5]" />
+                <span>Modify Search</span>
+              </>
+            ) : (
+              <span>Search</span>
+            )}
           </button>
         </div>
       </form>

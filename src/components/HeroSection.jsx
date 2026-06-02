@@ -2,7 +2,7 @@ import SearchBar from './SearchBar';
 import Features from './Features';
 import heroBg from '../assets/hero.png';
 
-export default function HeroSection() {
+export default function HeroSection({ onSearch }) {
   return (
     <section className="relative w-full h-[540px] md:h-[580px] lg:h-[420px]">
       {/* Background Container */}
@@ -34,7 +34,7 @@ export default function HeroSection() {
 
         {/* Search Bar & Features container at the bottom */}
         <div className="w-full flex flex-col items-center gap-6">
-          <SearchBar />
+          <SearchBar onSearch={onSearch} />
           <Features />
         </div>
 
