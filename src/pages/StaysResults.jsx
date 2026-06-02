@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Star, MapPin, Heart, ChevronLeft, ChevronRight, ChevronDown, Check, ShieldCheck, Headphones, Wifi, Waves, Coffee, Car, Wind, Sprout } from 'lucide-react';
 import SearchBar from '../components/SearchBar';
 import puducherryMap from '../assets/puducherry_map.png';
@@ -203,6 +203,13 @@ export default function StaysResults({ searchParams, onSearch }) {
   const [sortBy, setSortBy] = useState("Recommended");
   const [selectedStay, setSelectedStay] = useState(null);
 
+  // ── animation state ──────────────────────────────────
+  const [mounted, setMounted] = useState(false);
+  useEffect(() => {
+    const t = setTimeout(() => setMounted(true), 30);
+    return () => clearTimeout(t);
+  }, []);
+
   const formatDateString = (dateStr) => {
     if (!dateStr) return '21 Jun 2025';
     const date = new Date(dateStr);
@@ -233,11 +240,12 @@ export default function StaysResults({ searchParams, onSearch }) {
     }));
   };
 
+  const [heartAnimIds, setHeartAnimIds] = useState({});
+
   const toggleWishlist = (id) => {
-    setWishlist(prev => ({
-      ...prev,
-      [id]: !prev[id]
-    }));
+    setWishlist(prev => ({ ...prev, [id]: !prev[id] }));
+    setHeartAnimIds(prev => ({ ...prev, [id]: true }));
+    setTimeout(() => setHeartAnimIds(prev => ({ ...prev, [id]: false })), 400);
   };
 
   const handleResetFilters = () => {
@@ -263,6 +271,7 @@ export default function StaysResults({ searchParams, onSearch }) {
   return (
     <div style={{ fontFamily: "'Plus Jakarta Sans', 'Outfit', sans-serif" }} className="stays-page-enter bg-[#F8FAFC] min-h-screen">
       <style>{`
+        /* ── range slider thumbs ───────────────────────────── */
         .double-range-input::-webkit-slider-thumb {
           pointer-events: auto;
           appearance: none;
@@ -284,10 +293,117 @@ export default function StaysResults({ searchParams, onSearch }) {
           box-shadow: 0 2px 4px rgba(15,118,110,0.3);
           cursor: pointer;
         }
+
+        /* ── shared fade-slide-up ──────────────────────────── */
+        @keyframes srFadeUp {
+          from { opacity: 0; transform: translateY(22px); }
+          to   { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes srFadeLeft {
+          from { opacity: 0; transform: translateX(-20px); }
+          to   { opacity: 1; transform: translateX(0); }
+        }
+        @keyframes srFadeRight {
+          from { opacity: 0; transform: translateX(20px); }
+          to   { opacity: 1; transform: translateX(0); }
+        }
+        @keyframes srScaleIn {
+          from { opacity: 0; transform: scale(0.96); }
+          to   { opacity: 1; transform: scale(1); }
+        }
+
+        /* ── shimmer skeleton ──────────────────────────────── */
+        @keyframes shimmer {
+          0%   { background-position: -600px 0; }
+          100% { background-position: 600px 0; }
+        }
+        .sr-shimmer {
+          background: linear-gradient(90deg, #f0f2f5 25%, #e4e8ee 50%, #f0f2f5 75%);
+          background-size: 600px 100%;
+          animation: shimmer 1.3s infinite linear;
+          border-radius: 12px;
+        }
+
+        /* ── entry helpers (opacity:0 base, animate when .sr-in added) ── */
+        .sr-anim { opacity: 0; }
+        .sr-anim.sr-in { animation-fill-mode: both; animation-timing-function: cubic-bezier(0.22,1,0.36,1); }
+
+        .sr-fade-up.sr-in  { animation-name: srFadeUp; }
+        .sr-fade-left.sr-in  { animation-name: srFadeLeft; }
+        .sr-fade-right.sr-in  { animation-name: srFadeRight; }
+        .sr-scale.sr-in  { animation-name: srScaleIn; }
+
+        /* delays */
+        .sr-d0  { animation-duration: 0.55s; animation-delay: 0ms; }
+        .sr-d1  { animation-duration: 0.55s; animation-delay: 80ms; }
+        .sr-d2  { animation-duration: 0.55s; animation-delay: 160ms; }
+        .sr-d3  { animation-duration: 0.55s; animation-delay: 240ms; }
+        .sr-d4  { animation-duration: 0.55s; animation-delay: 320ms; }
+        .sr-d5  { animation-duration: 0.55s; animation-delay: 400ms; }
+        .sr-d6  { animation-duration: 0.55s; animation-delay: 480ms; }
+
+        /* ── card hover lift ──────────────────────────────── */
+        .stay-card {
+          transition: transform 0.22s cubic-bezier(0.22,1,0.36,1),
+                      box-shadow 0.22s cubic-bezier(0.22,1,0.36,1),
+                      border-color 0.22s ease;
+        }
+        .stay-card:hover {
+          transform: translateY(-3px) scale(1.005);
+          box-shadow: 0 12px 40px -8px rgba(15,118,110,0.15), 0 4px 16px -4px rgba(0,0,0,0.07);
+        }
+
+        /* ── image zoom on card hover ─────────────────────── */
+        .stay-card .card-img {
+          transition: transform 0.5s cubic-bezier(0.22,1,0.36,1);
+        }
+        .stay-card:hover .card-img {
+          transform: scale(1.06);
+        }
+
+        /* ── View Rooms button shine ──────────────────────── */
+        .view-rooms-btn {
+          position: relative;
+          overflow: hidden;
+        }
+        .view-rooms-btn::after {
+          content: '';
+          position: absolute;
+          top: 0; left: -75%;
+          width: 50%;
+          height: 100%;
+          background: linear-gradient(120deg, transparent 0%, rgba(255,255,255,0.25) 50%, transparent 100%);
+          transform: skewX(-20deg);
+          transition: left 0s;
+        }
+        .view-rooms-btn:hover::after {
+          left: 150%;
+          transition: left 0.55s ease;
+        }
+
+        /* ── wishlist heart pop ───────────────────────────── */
+        @keyframes heartPop {
+          0%   { transform: scale(1); }
+          40%  { transform: scale(1.45); }
+          70%  { transform: scale(0.88); }
+          100% { transform: scale(1); }
+        }
+        .heart-pop { animation: heartPop 0.38s cubic-bezier(0.34,1.56,0.64,1); }
+
+        /* ── price counter roll-up ────────────────────────── */
+        @keyframes priceRoll {
+          from { opacity: 0; transform: translateY(10px); }
+          to   { opacity: 1; transform: translateY(0); }
+        }
+        .price-roll { animation: priceRoll 0.45s 0.35s cubic-bezier(0.22,1,0.36,1) both; }
+
+        /* ── map fade in ──────────────────────────────────── */
+        .map-col { transition: all 0.3s ease; }
+        .map-col:hover { transform: translateY(-2px); }
       `}</style>
       
       {/* Top Banner containing Modify Search bar */}
-      <div className="w-full bg-[#F1F5F9]/60 py-6 border-b border-slate-200/50 px-4 sm:px-6 lg:px-6">
+      <div className={`w-full bg-[#F1F5F9]/60 py-6 border-b border-slate-200/50 px-4 sm:px-6 lg:px-6 sr-anim sr-fade-up sr-d0${mounted ? ' sr-in' : ''}`}>
         <div className="max-w-[1760px] mx-auto w-full">
           <SearchBar onSearch={onSearch} isModifySearch={true} />
         </div>
@@ -298,7 +414,7 @@ export default function StaysResults({ searchParams, onSearch }) {
         <div className="grid grid-cols-1 md:grid-cols-12 gap-6 text-left">
           
           {/* 1. Left Column: Filters Sidebar */}
-          <aside className="md:col-span-3 lg:col-span-3 xl:col-span-2 space-y-6">
+          <aside className={`md:col-span-3 lg:col-span-3 xl:col-span-2 space-y-6 sr-anim sr-fade-left sr-d1${mounted ? ' sr-in' : ''}`}>
             <div className="bg-white rounded-3xl border border-slate-200 p-5 shadow-xs">
               
               {/* Header Title */}
@@ -504,7 +620,7 @@ export default function StaysResults({ searchParams, onSearch }) {
           <main className="md:col-span-9 lg:col-span-6 xl:col-span-7 space-y-6">
             
             {/* Header Result Counts */}
-            <div className="flex flex-col sm:flex-row justify-between sm:items-center gap-4 bg-white rounded-2xl border border-slate-200 p-5 shadow-xs">
+            <div className={`flex flex-col sm:flex-row justify-between sm:items-center gap-4 bg-white rounded-2xl border border-slate-200 p-5 shadow-xs sr-anim sr-fade-up sr-d2${mounted ? ' sr-in' : ''}`}>
               <div className="text-left">
                 <h2 className="text-xl font-extrabold text-slate-900 tracking-tight">
                   120 Stays found in Pondicherry
@@ -535,18 +651,19 @@ export default function StaysResults({ searchParams, onSearch }) {
 
             {/* Stays List */}
             <div className="space-y-6">
-              {INITIAL_STAYS.map((stay) => {
+              {INITIAL_STAYS.map((stay, stayIdx) => {
                 const currentImgIdx = activeImageIndices[stay.id] || 0;
                 const isHovered = hoveredStay === stay.id;
+                const cardDelay = ['sr-d3','sr-d4','sr-d5'][stayIdx] || 'sr-d5';
 
                 return (
                   <div
                     key={stay.id}
                     onMouseEnter={() => setHoveredStay(stay.id)}
                     onMouseLeave={() => setHoveredStay(null)}
-                    className={`bg-white rounded-3xl border ${
-                      isHovered ? 'border-[#0F766E]/40 shadow-md' : 'border-slate-200 shadow-xs'
-                    } p-4.5 flex flex-col md:flex-row gap-5 transition-all duration-200`}
+                    className={`stay-card bg-white rounded-3xl border ${
+                      isHovered ? 'border-[#0F766E]/40' : 'border-slate-200 shadow-xs'
+                    } p-4.5 flex flex-col md:flex-row gap-5 sr-anim sr-fade-up ${cardDelay}${mounted ? ' sr-in' : ''}`}
                   >
                     
                     {/* Carousel Section */}
@@ -560,7 +677,7 @@ export default function StaysResults({ searchParams, onSearch }) {
                         <Heart
                           className={`h-4.5 w-4.5 ${
                             wishlist[stay.id] ? 'fill-red-500 text-red-500' : 'text-white'
-                          }`}
+                          } ${heartAnimIds[stay.id] ? 'heart-pop' : ''}`}
                           strokeWidth={2.5}
                         />
                       </button>
@@ -577,7 +694,7 @@ export default function StaysResults({ searchParams, onSearch }) {
                         <img
                           src={stay.images[currentImgIdx]}
                           alt={stay.name}
-                          className="w-full h-full object-cover"
+                          className="card-img w-full h-full object-cover"
                         />
 
                         {/* Navigation Chevrons */}
@@ -687,7 +804,7 @@ export default function StaysResults({ searchParams, onSearch }) {
                         </div>
 
                         {/* Price */}
-                        <div className="mt-1 flex items-baseline gap-1">
+                        <div className="mt-1 flex items-baseline gap-1 price-roll">
                           <span className="text-slate-900 text-[24px] font-black tracking-tight leading-none">
                             ₹{stay.price.toLocaleString()}
                           </span>
@@ -709,7 +826,7 @@ export default function StaysResults({ searchParams, onSearch }) {
 
                         <button 
                           onClick={() => setSelectedStay(stay)}
-                          className="w-full bg-[#0F766E] text-white py-2.5 rounded-xl font-bold text-[12.5px] shadow-sm hover:bg-[#0c625c] active:scale-95 transition-all duration-150 mt-4 cursor-pointer text-center block"
+                          className="view-rooms-btn w-full bg-[#0F766E] text-white py-2.5 rounded-xl font-bold text-[12.5px] shadow-sm hover:bg-[#0c625c] active:scale-95 transition-all duration-150 mt-4 cursor-pointer text-center block"
                         >
                           View Rooms
                         </button>
@@ -723,7 +840,7 @@ export default function StaysResults({ searchParams, onSearch }) {
             </div>
 
             {/* Load more button */}
-            <button className="w-full bg-white border border-slate-200 text-slate-700 py-3.5 rounded-2xl text-[13px] font-extrabold hover:bg-slate-50 hover:border-slate-350 transition-colors flex items-center justify-center gap-2 cursor-pointer shadow-xs">
+            <button className={`w-full bg-white border border-slate-200 text-slate-700 py-3.5 rounded-2xl text-[13px] font-extrabold hover:bg-slate-50 hover:border-slate-350 transition-colors flex items-center justify-center gap-2 cursor-pointer shadow-xs sr-anim sr-fade-up sr-d6${mounted ? ' sr-in' : ''}`}>
               Load More Properties
               <ChevronDown className="h-4 w-4 stroke-[2.5]" />
             </button>
@@ -731,7 +848,7 @@ export default function StaysResults({ searchParams, onSearch }) {
           </main>
 
           {/* 3. Right Column: Summary widgets and Map (Sticky on Scroll) */}
-          <aside className="md:col-span-12 lg:col-span-3 xl:col-span-3 space-y-6 lg:sticky lg:top-24 self-start">
+          <aside className={`map-col md:col-span-12 lg:col-span-3 xl:col-span-3 space-y-6 lg:sticky lg:top-24 self-start sr-anim sr-fade-right sr-d3${mounted ? ' sr-in' : ''}`}>
             
             {/* Map crop Card using real Puducherry Map asset with increased height */}
             <div className="bg-white rounded-3xl border border-slate-200  shadow-xs overflow-hidden relative">
