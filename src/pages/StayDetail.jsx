@@ -14,6 +14,7 @@ export default function StayDetail({ stay, searchParams, onBack, isLiked, onTogg
   const [shareTooltip, setShareTooltip] = useState(false);
   const [showBookingSuccess, setShowBookingSuccess] = useState(false);
   const [showReviewPage, setShowReviewPage] = useState(false);
+  const [showConfirmationPage, setShowConfirmationPage] = useState(false);
   const [showChat, setShowChat] = useState(false);
   const [guestDetails, setGuestDetails] = useState({ name: '', email: '', phone: '', whatsapp: false, specialRequests: '' });
   const [chatMessages, setChatMessages] = useState([
@@ -217,9 +218,282 @@ export default function StayDetail({ stay, searchParams, onBack, isLiked, onTogg
     <div style={{ fontFamily: "'Plus Jakarta Sans', 'Outfit', sans-serif" }} className="bg-[#F8FAFC] min-h-screen text-left">
 
       {/* ═══════════════════════════════════════════════ */}
+      {/* RESERVATION CONFIRMED PAGE                      */}
+      {/* ═══════════════════════════════════════════════ */}
+      {showConfirmationPage && (
+        <div className="max-w-[1200px] mx-auto px-4 sm:px-6 py-6">
+          {/* Breadcrumb */}
+          <div className="flex items-center gap-1.5 text-[12px] font-semibold text-slate-400 mb-6 flex-wrap">
+            <span className="hover:text-[#0F766E] cursor-pointer" onClick={onBack}>Home</span>
+            <span>›</span><span>Stays</span>
+            <span>›</span><span>{stay.name}</span>
+            <span>›</span><span>Review Reservation</span>
+            <span>›</span><span className="text-[#0F766E] font-bold">Reservation Confirmed</span>
+          </div>
+
+          <div className="grid grid-cols-1 lg:grid-cols-[1fr_340px] gap-6 items-start">
+            {/* ── LEFT COLUMN ── */}
+            <div className="space-y-5">
+
+              {/* Hero confirmation banner */}
+              <div className="bg-white rounded-2xl border border-slate-200 p-5 shadow-xs">
+                <div className="flex flex-col sm:flex-row gap-5 items-start">
+                  {/* Green check circle */}
+                  <div className="shrink-0 h-16 w-16 rounded-full bg-[#0F766E] flex items-center justify-center shadow-md">
+                    <Check className="h-9 w-9 text-white stroke-[3.5]" />
+                  </div>
+                  <div className="flex-1">
+                    <h1 className="text-[19px] font-black text-slate-900 leading-tight">Your Reservation Request is Submitted!</h1>
+                    <p className="text-[12.5px] text-slate-500 font-semibold mt-1">We've sent your reservation request to the property owner.<br/>You will receive a confirmation shortly.</p>
+                    <div className="mt-3">
+                      <div className="text-[11px] font-bold text-slate-400 uppercase tracking-wide">Reservation ID</div>
+                      <div className="flex items-center gap-2 mt-1">
+                        <span className="text-[20px] font-black text-slate-900 tracking-tight">TVR-2025-67890</span>
+                        <button className="text-slate-400 hover:text-[#0F766E] cursor-pointer transition-colors">
+                          <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2.5"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                  {/* Status pill */}
+                  <div className="shrink-0 border border-slate-200 rounded-xl p-4 min-w-[200px]">
+                    <div className="text-[10.5px] font-bold text-slate-400 uppercase tracking-wide mb-2">Current Status</div>
+                    <div className="inline-flex items-center gap-1.5 border border-orange-300 text-orange-600 bg-orange-50 px-3 py-1.5 rounded-full text-[11.5px] font-black">
+                      <span className="h-2 w-2 rounded-full bg-orange-400 animate-pulse" />
+                      PENDING CONFIRMATION
+                    </div>
+                    <p className="text-[11px] text-slate-400 font-semibold mt-2 leading-snug">We will notify you as soon as the property owner confirms your reservation.</p>
+                  </div>
+                </div>
+              </div>
+
+              {/* What's Next steps */}
+              <div className="bg-white rounded-2xl border border-slate-200 p-5 shadow-xs">
+                <div className="text-[13px] font-black text-slate-700 mb-4">What's Next?</div>
+                <div className="flex flex-col sm:flex-row items-start sm:items-center gap-2">
+                  {[
+                    { icon: '✉️', text: "We've sent your request to the property owner" },
+                    { icon: '📞', text: "The property owner will contact you soon" },
+                    { icon: '✅', text: "Once confirmed, you're all set for your stay!" },
+                  ].map((step, i, arr) => (
+                    <React.Fragment key={i}>
+                      <div className="flex flex-col items-center text-center gap-2 flex-1 min-w-[100px]">
+                        <div className="h-11 w-11 rounded-xl bg-slate-50 border border-slate-200 flex items-center justify-center text-xl">{step.icon}</div>
+                        <p className="text-[11.5px] font-semibold text-slate-600 leading-snug">{step.text}</p>
+                      </div>
+                      {i < arr.length - 1 && <span className="text-slate-300 text-lg hidden sm:block">→</span>}
+                    </React.Fragment>
+                  ))}
+                </div>
+              </div>
+
+              {/* Property owner contact */}
+              <div className="bg-white rounded-2xl border border-slate-200 p-5 shadow-xs flex flex-col sm:flex-row sm:items-center gap-4">
+                <div className="flex items-center gap-3 flex-1">
+                  <div className="h-10 w-10 rounded-xl bg-slate-100 flex items-center justify-center shrink-0">
+                    <svg className="h-5 w-5 text-slate-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+                  </div>
+                  <div>
+                    <div className="text-[13px] font-extrabold text-slate-800">Property Owner Contact</div>
+                    <div className="text-[11.5px] text-slate-400 font-semibold">The property owner will contact you to confirm your reservation</div>
+                  </div>
+                </div>
+                <div className="flex gap-2 shrink-0">
+                  <button className="flex items-center gap-1.5 border border-slate-200 rounded-xl px-4 py-2 text-[12.5px] font-bold text-slate-700 hover:bg-slate-50 cursor-pointer transition-colors">
+                    <svg className="h-4 w-4 text-slate-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2.5"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12a19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 3.56 1.18h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 8.91a16 16 0 0 0 6.29 6.29l.91-.91a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+                    Call Owner
+                  </button>
+                  <button className="flex items-center gap-1.5 border border-[#25D366] rounded-xl px-4 py-2 text-[12.5px] font-bold text-[#25D366] hover:bg-green-50 cursor-pointer transition-colors">
+                    <svg className="h-4 w-4" fill="currentColor" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M11.93 0C5.351 0 0 5.351 0 11.93c0 2.106.556 4.136 1.61 5.918L.057 23.868l6.153-1.612A11.868 11.868 0 0 0 11.93 23.86c6.578 0 11.93-5.351 11.93-11.93C23.86 5.351 18.509 0 11.93 0zm0 21.782a9.824 9.824 0 0 1-5.016-1.374l-.359-.213-3.727.977.995-3.636-.234-.374A9.805 9.805 0 0 1 2.148 11.93c0-5.4 4.394-9.793 9.782-9.793 5.387 0 9.782 4.393 9.782 9.793 0 5.387-4.395 9.782-9.782 9.782z"/></svg>
+                    WhatsApp
+                  </button>
+                </div>
+              </div>
+
+              {/* Reservation Details rooms */}
+              <div className="bg-white rounded-2xl border border-slate-200 p-5 shadow-xs">
+                <div className="text-[13.5px] font-black text-slate-800 mb-4">Reservation Details</div>
+                <div className="space-y-3">
+                  {selectedRoomsList.map((selRoom, idx) => {
+                    const rd = roomsData.find(r => r.id === selRoom.id);
+                    return (
+                      <div key={idx} className="flex gap-3 p-3 rounded-xl border border-slate-100 bg-slate-50/40">
+                        <div className="shrink-0 h-6 w-6 rounded-full bg-[#0F766E] text-white text-[10px] font-black flex items-center justify-center mt-1">{idx+1}</div>
+                        <img src={rd?.image} alt={selRoom.name} className="w-[80px] h-[60px] rounded-lg object-cover shrink-0" />
+                        <div className="flex-1">
+                          <div className="text-[13.5px] font-extrabold text-slate-900">{selRoom.name}</div>
+                          <div className="text-[11.5px] text-slate-500 font-semibold">{rd?.view || 'City View'}</div>
+                          <div className="flex flex-wrap gap-3 mt-1.5 text-[11px] text-slate-500 font-semibold">
+                            <span>🛏 1 King Bed</span>
+                            <span>👥 {rd?.guests || '2 Adults + 1 Child'}</span>
+                            <span>📐 {rd?.size || '250 sq.ft'}</span>
+                          </div>
+                        </div>
+                        <div className="text-right shrink-0">
+                          <div className="text-[15px] font-black text-slate-900">₹{(selRoom.price / 3).toLocaleString()} <span className="text-[10px] font-semibold text-slate-400">/ night</span></div>
+                          <div className="text-[11px] text-slate-400 font-semibold">₹{selRoom.price.toLocaleString()} for {totalNights} nights</div>
+                        </div>
+                      </div>
+                    );
+                  })}
+                </div>
+
+                {/* Stay info row */}
+                <div className="grid grid-cols-2 sm:grid-cols-5 gap-4 mt-5 pt-5 border-t border-slate-100">
+                  {[
+                    { icon: <Calendar className="h-4 w-4 text-slate-400" />, label: 'Check-in', val: formatDateString(searchParams?.checkIn), sub: 'Saturday' },
+                    { icon: <Calendar className="h-4 w-4 text-slate-400" />, label: 'Check-out', val: formatDateString(searchParams?.checkOut), sub: 'Wednesday' },
+                    { icon: <Clock className="h-4 w-4 text-slate-400" />, label: 'Duration', val: `${totalNights} Nights`, sub: '' },
+                    { icon: <Compass className="h-4 w-4 text-slate-400" />, label: 'Rooms', val: `${selectedRoomsList.reduce((s,r)=>s+r.qty,0)} Rooms`, sub: '' },
+                    { icon: null, label: 'Guests', val: searchParams?.guests || '4 Adults, 2 Children', sub: '' },
+                  ].map((it,i) => (
+                    <div key={i}>
+                      <div className="flex items-center gap-1 text-[10px] font-bold text-slate-400 uppercase tracking-wide mb-1">{it.icon}{it.label}</div>
+                      <div className="text-[12.5px] font-extrabold text-slate-800">{it.val}</div>
+                      {it.sub && <div className="text-[11px] text-slate-400 font-semibold">{it.sub}</div>}
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              {/* What would you like to do next */}
+              <div className="bg-white rounded-2xl border border-slate-200 p-5 shadow-xs">
+                <div className="text-[13px] font-black text-slate-700 mb-4">What would you like to do next?</div>
+                <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+                  {[
+                    { icon: '📋', title: 'View My Reservations', sub: 'See all your bookings' },
+                    { icon: '🏨', title: 'Explore More Stays', sub: 'Find more properties' },
+                    { icon: '📅', title: 'Add to Calendar', sub: 'Save your travel dates' },
+                    { icon: '🔗', title: 'Share Trip Details', sub: 'Share with your friends' },
+                  ].map((action, i) => (
+                    <button key={i} className="flex flex-col items-center text-center gap-2 p-3.5 rounded-xl border border-slate-200 hover:border-[#0F766E]/40 hover:bg-[#0F766E]/5 transition-all cursor-pointer group">
+                      <span className="text-2xl">{action.icon}</span>
+                      <div>
+                        <div className="text-[11.5px] font-extrabold text-slate-800 group-hover:text-[#0F766E] transition-colors leading-tight">{action.title}</div>
+                        <div className="text-[10.5px] text-slate-400 font-semibold mt-0.5">{action.sub}</div>
+                      </div>
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              {/* Info footer note */}
+              <div className="flex items-center gap-2 bg-blue-50 border border-blue-100 rounded-xl p-3.5 text-[11.5px] font-semibold text-blue-700">
+                <svg className="h-4 w-4 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2.5"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+                You can check the status of your reservation anytime from My Reservations.
+              </div>
+            </div>
+
+            {/* ── RIGHT SIDEBAR ── */}
+            <div className="lg:sticky lg:top-6 space-y-4">
+              <div className="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
+                <div className="p-5 border-b border-slate-100">
+                  <div className="text-[14px] font-black text-slate-900 mb-3">Booking Summary</div>
+                  <div className="flex gap-3">
+                    <img src={stay.images?.[0]} alt={stay.name} className="w-[64px] h-[50px] rounded-xl object-cover border border-slate-100 shrink-0" />
+                    <div>
+                      <div className="text-[13px] font-extrabold text-slate-900">{stay.name}</div>
+                      <div className="text-[11px] text-slate-400 font-semibold">{stay.location?.split('•')[0]?.trim() || 'Pondicherry Beach, Pondicherry'}</div>
+                      <div className="flex items-center gap-1 mt-0.5">
+                        <span className="bg-[#15803D] text-white text-[10px] font-black px-1.5 py-0.5 rounded flex items-center gap-0.5">{stay.rating}<Star className="h-2.5 w-2.5 fill-white text-white"/></span>
+                        <span className="text-[10.5px] text-slate-400 font-semibold">({stay.reviewsCount} reviews)</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Check-in / Check-out */}
+                <div className="px-5 py-4 border-b border-slate-100 grid grid-cols-2 gap-3 text-[11.5px]">
+                  <div>
+                    <div className="text-[10px] font-bold text-slate-400 uppercase tracking-wide mb-0.5">Check-in</div>
+                    <div className="font-extrabold text-slate-800">{formatDateString(searchParams?.checkIn)}</div>
+                    <div className="text-slate-400 font-semibold">Saturday</div>
+                  </div>
+                  <div>
+                    <div className="text-[10px] font-bold text-slate-400 uppercase tracking-wide mb-0.5">Check-out</div>
+                    <div className="font-extrabold text-slate-800">{formatDateString(searchParams?.checkOut)}</div>
+                    <div className="text-slate-400 font-semibold">Wednesday</div>
+                  </div>
+                  <div>
+                    <div className="text-[10px] font-bold text-slate-400 uppercase tracking-wide mb-0.5">Guests</div>
+                    <div className="font-extrabold text-slate-800">{searchParams?.guests || '4 Adults, 2 Children'}</div>
+                  </div>
+                  <div>
+                    <div className="text-[10px] font-bold text-slate-400 uppercase tracking-wide mb-0.5">Rooms</div>
+                    <div className="font-extrabold text-slate-800">{selectedRoomsList.reduce((s,r)=>s+r.qty,0)} Rooms</div>
+                  </div>
+                  <div className="col-span-2">
+                    <div className="text-[10px] font-bold text-slate-400 uppercase tracking-wide mb-0.5">Duration</div>
+                    <div className="font-extrabold text-slate-800">{totalNights} Nights</div>
+                  </div>
+                </div>
+
+                {/* Price Details */}
+                <div className="px-5 py-4 border-b border-slate-100 space-y-2 text-[12px]">
+                  <div className="text-[10.5px] font-bold text-slate-400 uppercase tracking-wide mb-2">Price Details</div>
+                  {selectedRoomsList.map((sr, i) => (
+                    <div key={i} className="flex justify-between text-slate-600 font-semibold">
+                      <span>{sr.name} ({totalNights} Nights)</span>
+                      <span className="font-bold text-slate-800">₹{sr.price.toLocaleString()}</span>
+                    </div>
+                  ))}
+                  <div className="flex justify-between items-center text-slate-600 font-semibold">
+                    <span className="flex items-center gap-1">Taxes & Fees <Info className="h-3 w-3 text-slate-400" /></span>
+                    <span className="font-bold text-slate-800">₹{totalSelectedTaxes.toLocaleString()}</span>
+                  </div>
+                  <div className="flex justify-between items-center pt-2 border-t border-slate-100 mt-1">
+                    <span className="text-[13px] font-black text-slate-900">Total Amount</span>
+                    <span className="text-[15px] font-black text-slate-900">₹{totalSelectedGrand.toLocaleString()}</span>
+                  </div>
+                  <div className="text-[10.5px] text-slate-400 font-semibold">Inclusive of all taxes</div>
+                </div>
+
+                {/* Payment Method */}
+                <div className="px-5 py-4 border-b border-slate-100">
+                  <div className="text-[10.5px] font-bold text-slate-400 uppercase tracking-wide mb-2.5">Payment Method</div>
+                  <div className="flex items-start gap-2.5 p-3 rounded-xl bg-[#0F766E]/6 border border-[#0F766E]/20">
+                    <div className="w-5 h-5 rounded-full bg-[#0F766E] flex items-center justify-center shrink-0 mt-0.5">
+                      <Check className="h-3 w-3 text-white stroke-[3]" />
+                    </div>
+                    <div>
+                      <div className="text-[12.5px] font-extrabold text-[#0F766E]">Pay Directly at Property</div>
+                      <div className="space-y-1.5 mt-2">
+                        {['No advance payment required','You will pay at the property during check-in','The property owner will contact you to confirm your reservation'].map((t,i)=>(
+                          <div key={i} className="flex items-start gap-1.5 text-[10.5px] text-slate-500 font-semibold">
+                            <Check className="h-3 w-3 text-[#0F766E] stroke-[3] shrink-0 mt-0.5" /><span>{t}</span>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                    {/* Hotel illustration */}
+                    <svg className="h-14 w-14 text-[#0F766E]/20 shrink-0 ml-auto" fill="currentColor" viewBox="0 0 64 64"><path d="M8 56V20l24-12 24 12v36H8zm8-4h32V24L32 14 16 24v28zm8-20h4v4h-4zm8 0h4v4h-4zm8 0h4v4h-4zM24 44h16v8H24z"/></svg>
+                  </div>
+                </div>
+
+                {/* Need Help */}
+                <div className="px-5 py-4">
+                  <div className="text-[12px] font-extrabold text-slate-800 mb-3">Need Help?</div>
+                  <div className="space-y-2">
+                    <div className="flex items-center gap-2 text-[12px] text-slate-600 font-semibold">
+                      <svg className="h-4 w-4 text-[#0F766E]" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2.5"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12a19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 3.56 1.18h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 8.91a16 16 0 0 0 6.29 6.29l.91-.91a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+                      +91 98765 43210
+                    </div>
+                    <div className="flex items-center gap-2 text-[12px] text-slate-600 font-semibold">
+                      <svg className="h-4 w-4 text-[#25D366]" fill="currentColor" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M11.93 0C5.351 0 0 5.351 0 11.93c0 2.106.556 4.136 1.61 5.918L.057 23.868l6.153-1.612A11.868 11.868 0 0 0 11.93 23.86c6.578 0 11.93-5.351 11.93-11.93C23.86 5.351 18.509 0 11.93 0zm0 21.782a9.824 9.824 0 0 1-5.016-1.374l-.359-.213-3.727.977.995-3.636-.234-.374A9.805 9.805 0 0 1 2.148 11.93c0-5.4 4.394-9.793 9.782-9.793 5.387 0 9.782 4.393 9.782 9.793 0 5.387-4.395 9.782-9.782 9.782z"/></svg>
+                      24/7 Customer Support
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* ═══════════════════════════════════════════════ */}
       {/* REVIEW YOUR RESERVATION PAGE                    */}
       {/* ═══════════════════════════════════════════════ */}
-      {showReviewPage && (
+      {showReviewPage && !showConfirmationPage && (
         <div className="max-w-[1200px] mx-auto px-4 sm:px-6 py-6">
 
           {/* Breadcrumb */}
@@ -571,7 +845,13 @@ export default function StayDetail({ stay, searchParams, onBack, isLiked, onTogg
 
                 {/* Reserve Now Button */}
                 <div className="p-5">
-                  <button className="w-full bg-[#0F766E] hover:bg-[#0c625c] active:scale-[0.98] text-white py-3.5 rounded-xl font-black text-[13.5px] shadow-md transition-all cursor-pointer flex items-center justify-center gap-2">
+                  <button
+                    onClick={() => {
+                      setShowReviewPage(false);
+                      setShowConfirmationPage(true);
+                      window.scrollTo({ top: 0, behavior: 'smooth' });
+                    }}
+                    className="w-full bg-[#0F766E] hover:bg-[#0c625c] active:scale-[0.98] text-white py-3.5 rounded-xl font-black text-[13.5px] shadow-md transition-all cursor-pointer flex items-center justify-center gap-2">
                     <Calendar className="h-4 w-4" />
                     Reserve Now
                   </button>
@@ -591,7 +871,7 @@ export default function StayDetail({ stay, searchParams, onBack, isLiked, onTogg
       {/* ═══════════════════════════════════════════════ */}
       {/* MAIN STAY DETAIL PAGE (hidden while reviewing) */}
       {/* ═══════════════════════════════════════════════ */}
-      {!showReviewPage && (
+      {!showReviewPage && !showConfirmationPage && (
         <div className="max-w-[1760px] mx-auto px-4 sm:px-6 lg:px-8 py-6">
 
 
