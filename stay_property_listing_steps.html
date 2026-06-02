@@ -1,0 +1,924 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=index.html">
+  <title>Stay Property Listing - 9 Step Specification Document</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;850&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --primary: #007F55;
+      --primary-light: #E6F4EA;
+      --slate-50: #F8FAFC;
+      --slate-100: #F1F5F9;
+      --slate-200: #E2E8F0;
+      --slate-300: #CBD5E1;
+      --slate-550: #64748B;
+      --slate-700: #475569;
+      --slate-800: #1E293B;
+      --slate-900: #0F172A;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background-color: var(--slate-50);
+      color: var(--slate-800);
+      line-height: 1.6;
+      padding: 40px 20px;
+    }
+
+    .container {
+      max-width: 1000px;
+      margin: 0 auto;
+      background: #ffffff;
+      border: 1px solid var(--slate-200);
+      border-radius: 24px;
+      box-shadow: 0 4px 20px rgba(15, 23, 42, 0.05);
+      padding: 50px;
+    }
+
+    /* Cover Header */
+    .header-block {
+      border-bottom: 2px solid var(--primary-light);
+      padding-bottom: 30px;
+      margin-bottom: 40px;
+      text-align: left;
+    }
+
+    .header-block h1 {
+      font-size: 32px;
+      font-weight: 850;
+      color: var(--slate-900);
+      margin-bottom: 10px;
+    }
+
+    .header-block h1 span {
+      color: var(--primary);
+    }
+
+    .header-block p {
+      font-size: 16px;
+      font-weight: 500;
+      color: var(--slate-550);
+    }
+
+    /* Document Metadata */
+    .metadata-grid {
+      display: grid;
+      grid-template-cols: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 20px;
+      background: var(--slate-50);
+      border: 1px solid var(--slate-100);
+      padding: 20px;
+      border-radius: 16px;
+      margin-bottom: 40px;
+    }
+
+    .metadata-item h4 {
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--slate-550);
+      margin-bottom: 5px;
+    }
+
+    .metadata-item p {
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--slate-800);
+    }
+
+    /* Step Card */
+    .step-section {
+      margin-bottom: 50px;
+    }
+
+    .step-header {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+      margin-bottom: 20px;
+      border-bottom: 1px solid var(--slate-100);
+      padding-bottom: 12px;
+    }
+
+    .step-number {
+      background: var(--primary);
+      color: #ffffff;
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      font-size: 15px;
+    }
+
+    .step-title {
+      font-size: 20px;
+      font-weight: 800;
+      color: var(--slate-900);
+    }
+
+    .step-desc {
+      font-size: 14px;
+      color: var(--slate-550);
+      margin-bottom: 20px;
+      font-style: italic;
+    }
+
+    /* Table Styling */
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-bottom: 25px;
+      text-align: left;
+    }
+
+    th, td {
+      padding: 12px 16px;
+      font-size: 13.5px;
+      border-bottom: 1px solid var(--slate-100);
+    }
+
+    th {
+      background: var(--slate-50);
+      font-weight: 700;
+      color: var(--slate-800);
+      text-transform: uppercase;
+      font-size: 11.5px;
+      letter-spacing: 0.03em;
+    }
+
+    td.field-name {
+      font-family: monospace;
+      font-weight: bold;
+      color: var(--primary);
+    }
+
+    td.badge {
+      font-weight: 700;
+      font-size: 11px;
+    }
+
+    .badge-req {
+      color: #EF4444;
+    }
+
+    .badge-opt {
+      color: var(--slate-550);
+    }
+
+    /* Code Block (Mock Data) */
+    .mock-data-title {
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--slate-700);
+      margin-bottom: 8px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    pre {
+      background: var(--slate-900);
+      color: #F8FAFC;
+      padding: 18px;
+      border-radius: 12px;
+      font-family: 'Courier New', Courier, monospace;
+      font-size: 12.5px;
+      overflow-x: auto;
+      margin-bottom: 40px;
+      border: 1px solid #1E293B;
+    }
+
+    /* Print Styles */
+    @media print {
+      body {
+        background-color: #ffffff;
+        padding: 0;
+      }
+      .container {
+        border: none;
+        box-shadow: none;
+        padding: 0;
+        max-width: 100%;
+      }
+      .step-section {
+        page-break-before: always;
+      }
+      .step-section:first-of-type {
+        page-break-before: avoid;
+      }
+      pre {
+        background: #F8FAFC;
+        color: #0F172A;
+        border: 1px solid #E2E8F0;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <!-- Header -->
+    <div class="header-block">
+      <h1>Stay Property Listing <span>Specification</span></h1>
+      <p>A comprehensive guide to inputs, variables, data structures, and mock payloads for the 9-step hosting form.</p>
+    </div>
+
+    <!-- Metadata -->
+    <div class="metadata-grid">
+      <div class="metadata-item">
+        <h4>Document Type</h4>
+        <p>Technical Reference Sheet</p>
+      </div>
+      <div class="metadata-item">
+        <h4>Target Component</h4>
+        <p>StayPropertyForm.jsx</p>
+      </div>
+      <div class="metadata-item">
+        <h4>Total Steps</h4>
+        <p>9 Categories</p>
+      </div>
+      <div class="metadata-item">
+        <h4>Output Format</h4>
+        <p>JSON Schema & Mock Payloads</p>
+      </div>
+    </div>
+
+    <!-- ==================== STEP 1 ==================== -->
+    <div class="step-section">
+      <div class="step-header">
+        <div class="step-number">1</div>
+        <h2 class="step-title">Basic Information</h2>
+      </div>
+      <p class="step-desc">Collects the property title and primary category type.</p>
+      <table>
+        <thead>
+          <tr>
+            <th>Field Name</th>
+            <th>State Variable</th>
+            <th>Type</th>
+            <th>Validation</th>
+            <th>Description</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="field-name">Property Name</td>
+            <td>propertyName</td>
+            <td>String</td>
+            <td class="badge badge-req">Required</td>
+            <td>Display title of the property listing.</td>
+          </tr>
+          <tr>
+            <td class="field-name">Property Type</td>
+            <td>propertyType</td>
+            <td>String (Enum)</td>
+            <td class="badge badge-req">Required</td>
+            <td>Hotel, Apartment, Hut House, Resort, Beach House, Villa.</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <div class="mock-data-title">Step 1 Mock Data (Payload)</div>
+      <pre>{
+  "propertyName": "Greenwood Whispering Pines Resort",
+  "propertyType": "Resort"
+}</pre>
+    </div>
+
+    <!-- ==================== STEP 2 ==================== -->
+    <div class="step-section">
+      <div class="step-header">
+        <div class="step-number">2</div>
+        <h2 class="step-title">Location Details</h2>
+      </div>
+      <p class="step-desc">Gathers physical address components and map coordinate markers.</p>
+      <table>
+        <thead>
+          <tr>
+            <th>Field Name</th>
+            <th>State Variable</th>
+            <th>Type</th>
+            <th>Validation</th>
+            <th>Description</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="field-name">Address Line 1</td>
+            <td>addressLine1</td>
+            <td>String</td>
+            <td class="badge badge-req">Required</td>
+            <td>Street name, plot number, building address.</td>
+          </tr>
+          <tr>
+            <td class="field-name">Address Line 2</td>
+            <td>addressLine2</td>
+            <td>String</td>
+            <td class="badge badge-opt">Optional</td>
+            <td>Locality, suite, landmark.</td>
+          </tr>
+          <tr>
+            <td class="field-name">City</td>
+            <td>city</td>
+            <td>String</td>
+            <td class="badge badge-req">Required</td>
+            <td>City of listing.</td>
+          </tr>
+          <tr>
+            <td class="field-name">State</td>
+            <td>stateVal</td>
+            <td>String</td>
+            <td class="badge badge-req">Required</td>
+            <td>State or union territory.</td>
+          </tr>
+          <tr>
+            <td class="field-name">Country</td>
+            <td>countryVal</td>
+            <td>String</td>
+            <td class="badge badge-req">Required</td>
+            <td>Country.</td>
+          </tr>
+          <tr>
+            <td class="field-name">ZIP Code</td>
+            <td>zipVal</td>
+            <td>String</td>
+            <td class="badge badge-req">Required</td>
+            <td>Postal code.</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <div class="mock-data-title">Step 2 Mock Data (Payload)</div>
+      <pre>{
+  "addressLine1": "Plot 45, Bypass Road, near Pine Lake",
+  "addressLine2": "Kodaikanal Valley",
+  "city": "Kodaikanal",
+  "stateVal": "Tamil Nadu",
+  "countryVal": "India",
+  "zipVal": "624101"
+}</pre>
+    </div>
+
+    <!-- ==================== STEP 3 ==================== -->
+    <div class="step-section">
+      <div class="step-header">
+        <div class="step-number">3</div>
+        <h2 class="step-title">Room Setup</h2>
+      </div>
+      <p class="step-desc">Configures room inventory, quantities, floors, and individual adult/child capacity capacities.</p>
+      <table>
+        <thead>
+          <tr>
+            <th>Field Name</th>
+            <th>State Variable</th>
+            <th>Type</th>
+            <th>Validation</th>
+            <th>Description</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="field-name">Selected Room Types</td>
+            <td>selectedRoomPills</td>
+            <td>Array&lt;String&gt;</td>
+            <td class="badge badge-req">Required</td>
+            <td>E.g. Single, Double, Triple, Suite, 1 BHK, 2 BHK.</td>
+          </tr>
+          <tr>
+            <td class="field-name">Room Configs</td>
+            <td>roomConfigs</td>
+            <td>Object</td>
+            <td class="badge badge-req">Required</td>
+            <td>Maps room type keys to floor and quantity selections.</td>
+          </tr>
+          <tr>
+            <td class="field-name">Room Capacities</td>
+            <td>roomCapacities</td>
+            <td>Object (Array)</td>
+            <td class="badge badge-req">Required</td>
+            <td>Array containing {adults, children} for each room unit.</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <div class="mock-data-title">Step 3 Mock Data (Payload)</div>
+      <pre>{
+  "selectedRoomPills": ["Double", "Suite"],
+  "roomConfigs": {
+    "Double": { "floor": "Ground Floor", "quantity": "5" },
+    "Suite": { "floor": "1st Floor", "quantity": "2" }
+  },
+  "roomCapacities": {
+    "Double": [
+      { "adults": 2, "children": 1 },
+      { "adults": 2, "children": 1 },
+      { "adults": 2, "children": 0 },
+      { "adults": 2, "children": 0 },
+      { "adults": 2, "children": 1 }
+    ],
+    "Suite": [
+      { "adults": 4, "children": 2 },
+      { "adults": 4, "children": 2 }
+    ]
+  }
+}</pre>
+    </div>
+
+    <!-- ==================== STEP 4 ==================== -->
+    <div class="step-section">
+      <div class="step-header">
+        <div class="step-number">4</div>
+        <h2 class="step-title">Pricing & Availability</h2>
+      </div>
+      <p class="step-desc">Defines pricing structures, extra occupant charges, child thresholds, and add-on bedding pricing.</p>
+      <table>
+        <thead>
+          <tr>
+            <th>Field Name</th>
+            <th>State Variable</th>
+            <th>Type</th>
+            <th>Validation</th>
+            <th>Description</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="field-name">Base Room Prices</td>
+            <td>roomPrices</td>
+            <td>Object (Number)</td>
+            <td class="badge badge-req">Required</td>
+            <td>Nightly rate per room type in Indian Rupees (₹).</td>
+          </tr>
+          <tr>
+            <td class="field-name">Occupancy Adjustments</td>
+            <td>occupancyAdjustments</td>
+            <td>Object (Array)</td>
+            <td class="badge badge-opt">Optional</td>
+            <td>Adds dynamic extra guest pricing values.</td>
+          </tr>
+          <tr>
+            <td class="field-name">Child Age Rules</td>
+            <td>childAgeRanges</td>
+            <td>Array&lt;Object&gt;</td>
+            <td class="badge badge-opt">Optional</td>
+            <td>Custom child age brackets and fixed/percentage fee details.</td>
+          </tr>
+          <tr>
+            <td class="field-name">Extra Mattress (Child)</td>
+            <td>extraMattressChild</td>
+            <td>Number</td>
+            <td class="badge badge-opt">Optional</td>
+            <td>Cost per child extra mattress.</td>
+          </tr>
+          <tr>
+            <td class="field-name">Extra Mattress (Adult)</td>
+            <td>extraMattressAdult</td>
+            <td>Number</td>
+            <td class="badge badge-opt">Optional</td>
+            <td>Cost per adult extra mattress.</td>
+          </tr>
+          <tr>
+            <td class="field-name">Extra Cot Cost</td>
+            <td>extraCotCost</td>
+            <td>Number</td>
+            <td class="badge badge-opt">Optional</td>
+            <td>Cost per extra cot / rollaway bed.</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <div class="mock-data-title">Step 4 Mock Data (Payload)</div>
+      <pre>{
+  "roomPrices": {
+    "Double": 4500,
+    "Suite": 9500
+  },
+  "occupancyAdjustments": {
+    "Double": [{ "id": 1, "guests": "3", "extraPrice": "800" }],
+    "Suite": [{ "id": 1, "guests": "5", "extraPrice": "1500" }]
+  },
+  "childAgeRanges": [
+    { "id": 1, "ageFrom": "0", "ageTo": "5", "price": "0", "priceType": "Free" },
+    { "id": 2, "ageFrom": "6", "ageTo": "12", "price": "500", "priceType": "Fixed Amount (₹)" }
+  ],
+  "extraMattressChild": 500,
+  "extraMattressAdult": 1000,
+  "extraCotCost": 1200
+}</pre>
+    </div>
+
+    <!-- ==================== STEP 5 ==================== -->
+    <div class="step-section">
+      <div class="step-header">
+        <div class="step-number">5</div>
+        <h2 class="step-title">Property Rules & Policies</h2>
+      </div>
+      <p class="step-desc">Sets hospitality operational parameters, check-in schedules, pet/couple filters, and refund options.</p>
+      <table>
+        <thead>
+          <tr>
+            <th>Field Name</th>
+            <th>State Variable</th>
+            <th>Type</th>
+            <th>Validation</th>
+            <th>Description</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="field-name">Check-in Time</td>
+            <td>checkInTime</td>
+            <td>String</td>
+            <td class="badge badge-req">Required</td>
+            <td>Standard check-in hour (e.g. "12:00").</td>
+          </tr>
+          <tr>
+            <td class="field-name">Check-out Time</td>
+            <td>checkOutTime</td>
+            <td>String</td>
+            <td class="badge badge-req">Required</td>
+            <td>Standard check-out hour (e.g. "10:00").</td>
+          </tr>
+          <tr>
+            <td class="field-name">Accepted ID Proofs</td>
+            <td>acceptedIds</td>
+            <td>Array&lt;String&gt;</td>
+            <td class="badge badge-req">Required</td>
+            <td>"Passport", "Aadhar", "Govt ID", "Driving License".</td>
+          </tr>
+          <tr>
+            <td class="field-name">Rules Statuses</td>
+            <td>Toggles (multiple)</td>
+            <td>String ("Yes" / "No")</td>
+            <td class="badge badge-req">Required</td>
+            <td>Smoking, Alcohol, Unmarried Couples, Non-veg, Pets.</td>
+          </tr>
+          <tr>
+            <td class="field-name">Refund Policies</td>
+            <td>refundPolicies</td>
+            <td>Array&lt;Object&gt;</td>
+            <td class="badge badge-req">Required</td>
+            <td>List of cancellation refund milestones.</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <div class="mock-data-title">Step 5 Mock Data (Payload)</div>
+      <pre>{
+  "checkInTime": "12:00",
+  "checkOutTime": "10:00",
+  "minAge": "18",
+  "acceptedIds": ["Aadhar", "Passport", "Driving License"],
+  "unmarriedCouplesAllowed": "Yes",
+  "maleOnlyGroupsAllowed": "No",
+  "scantyBaggageAllowed": "No",
+  "smokingAllowedStr": "No",
+  "alcoholAllowed": "Yes",
+  "nonVegAllowed": "Yes",
+  "outsideFoodAllowed": "Yes",
+  "foodDeliveryOptions": ["Zomato", "Swiggy"],
+  "wheelchairAccessible": "Yes",
+  "wheelchairProvided": "No",
+  "petsAllowedStr": "No",
+  "petsOnProperty": "No",
+  "refundPolicies": [
+    { "id": 1.255, "type": "Fully Refundable", "daysBefore": "1" },
+    { "id": 2.887, "type": "Partially Refundable", "daysBefore": "7", "percentage": "50" }
+  ],
+  "additionalRules": "Silent hours from 10:00 PM to 07:00 AM. Please conserve water."
+}</pre>
+    </div>
+
+    <!-- ==================== STEP 6 ==================== -->
+    <div class="step-section">
+      <div class="step-header">
+        <div class="step-number">6</div>
+        <h2 class="step-title">Facilities & Amenities</h2>
+      </div>
+      <p class="step-desc">Hosts select all items present at their property from a catalog of standard amenities.</p>
+      <table>
+        <thead>
+          <tr>
+            <th>Field Name</th>
+            <th>State Variable</th>
+            <th>Type</th>
+            <th>Validation</th>
+            <th>Description</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="field-name">Amenities List</td>
+            <td>selectedAmenities</td>
+            <td>Array&lt;String&gt;</td>
+            <td class="badge badge-req">Required</td>
+            <td>List of items selected (Gym, Pool, Spa, Free Wi-Fi, CCTV, TV, etc.).</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <div class="mock-data-title">Step 6 Mock Data (Payload)</div>
+      <pre>{
+  "selectedAmenities": [
+    "Gym",
+    "Swimming Pool",
+    "Spa",
+    "Restaurant",
+    "Free Parking",
+    "Free Wi-Fi",
+    "Refrigerator",
+    "Air Conditioning",
+    "Power Backup",
+    "CCTV",
+    "TV",
+    "Luggage Storage",
+    "Wake-up Call",
+    "Concierge"
+  ]
+}</pre>
+    </div>
+
+    <!-- ==================== STEP 7 ==================== -->
+    <div class="step-section">
+      <div class="step-header">
+        <div class="step-number">7</div>
+        <h2 class="step-title">Photos</h2>
+      </div>
+      <p class="step-desc">Accepts room/property image assets. Requires a minimum of 1 cover photo (ideal limit: 10).</p>
+      <table>
+        <thead>
+          <tr>
+            <th>Field Name</th>
+            <th>State Variable</th>
+            <th>Type</th>
+            <th>Validation</th>
+            <th>Description</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="field-name">Uploaded Photos</td>
+            <td>uploadedPhotos</td>
+            <td>Array&lt;String&gt;</td>
+            <td class="badge badge-req">Required</td>
+            <td>Array of image URLs. First index acts as the primary cover.</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <div class="mock-data-title">Step 7 Mock Data (Payload)</div>
+      <pre>{
+  "uploadedPhotos": [
+    "https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=800&q=80",
+    "https://images.unsplash.com/photo-1582719508461-905c673771fd?auto=format&fit=crop&w=800&q=80",
+    "https://images.unsplash.com/photo-1590490360182-c33d57733427?auto=format&fit=crop&w=800&q=80",
+    "https://images.unsplash.com/photo-1520250497591-112f2f40a3f4?auto=format&fit=crop&w=800&q=80",
+    "https://images.unsplash.com/photo-1512917774080-9991f1c4c750?auto=format&fit=crop&w=800&q=80"
+  ]
+}</pre>
+    </div>
+
+    <!-- ==================== STEP 8 ==================== -->
+    <div class="step-section">
+      <div class="step-header">
+        <div class="step-number">8</div>
+        <h2 class="step-title">About this property</h2>
+      </div>
+      <p class="step-desc">Stores transit connectivity details, guest filters, approval channels, and a narrative description.</p>
+      <table>
+        <thead>
+          <tr>
+            <th>Field Name</th>
+            <th>State Variable</th>
+            <th>Type</th>
+            <th>Validation</th>
+            <th>Description</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="field-name">Distance - Beach</td>
+            <td>distanceBeach</td>
+            <td>String (Number)</td>
+            <td class="badge badge-req">Required</td>
+            <td>Distance to nearest beach in kilometers.</td>
+          </tr>
+          <tr>
+            <td class="field-name">Distance - Railway</td>
+            <td>distanceRailway</td>
+            <td>String (Number)</td>
+            <td class="badge badge-req">Required</td>
+            <td>Distance to nearest railway station in kilometers.</td>
+          </tr>
+          <tr>
+            <td class="field-name">Distance - Airport</td>
+            <td>distanceAirport</td>
+            <td>String (Number)</td>
+            <td class="badge badge-req">Required</td>
+            <td>Distance to nearest airport in kilometers.</td>
+          </tr>
+          <tr>
+            <td class="field-name">Distance - Bus Stand</td>
+            <td>distanceBus</td>
+            <td>String (Number)</td>
+            <td class="badge badge-req">Required</td>
+            <td>Distance to nearest bus stop in kilometers.</td>
+          </tr>
+          <tr>
+            <td class="field-name">Allowed Guest Types</td>
+            <td>allowedGuestTypes</td>
+            <td>Array&lt;String&gt;</td>
+            <td class="badge badge-req">Required</td>
+            <td>"Married Couples", "Families", "Solo Travelers", "Friends".</td>
+          </tr>
+          <tr>
+            <td class="field-name">Booking Setup</td>
+            <td>instantBooking, manualApproval</td>
+            <td>String ("Yes" / "No")</td>
+            <td class="badge badge-req">Required</td>
+            <td>Determine if requests need approval or book instantly.</td>
+          </tr>
+          <tr>
+            <td class="field-name">Property Description</td>
+            <td>aboutPropertyText</td>
+            <td>String (Rich HTML)</td>
+            <td class="badge badge-req">Required</td>
+            <td>Detailed marketing text about the property.</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <div class="mock-data-title">Step 8 Mock Data (Payload)</div>
+      <pre>{
+  "distanceBeach": "2.5",
+  "distanceRailway": "1.2",
+  "distanceAirport": "120.0",
+  "distanceBus": "0.8",
+  "allowedGuestTypes": ["Married Couples", "Families", "Solo Travelers", "Friends"],
+  "instantBooking": "No",
+  "manualApproval": "Yes",
+  "aboutPropertyText": "<p>Greenwood Whispering Pines is a serene luxury resort nestled in the mist-covered hills of Kodaikanal. Surrounded by lush pine forests and overlooking the sparkling waters of the valley, it offers guests a perfect escape from city life.</p>"
+}</pre>
+    </div>
+
+    <!-- ==================== STEP 9 ==================== -->
+    <div class="step-section">
+      <div class="step-header">
+        <div class="step-number">9</div>
+        <h2 class="step-title">Legal Info</h2>
+      </div>
+      <p class="step-desc">Filing details for owner identity, property ownership, tax registrations, safety NOCs, and bank payouts.</p>
+      <table>
+        <thead>
+          <tr>
+            <th>Field Name</th>
+            <th>State Variable</th>
+            <th>Type</th>
+            <th>Validation</th>
+            <th>Description</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="field-name">Property Owner Name</td>
+            <td>ownerName</td>
+            <td>String</td>
+            <td class="badge badge-req">Required</td>
+            <td>Full name of the property owner.</td>
+          </tr>
+          <tr>
+            <td class="field-name">Aadhaar Number</td>
+            <td>ownerAadhar</td>
+            <td>String</td>
+            <td class="badge badge-req">Required</td>
+            <td>12-digit Aadhaar national identification number.</td>
+          </tr>
+          <tr>
+            <td class="field-name">Owner Photo</td>
+            <td>ownerPhoto</td>
+            <td>Image File</td>
+            <td class="badge badge-req">Required</td>
+            <td>Photo of the property owner for profile authentication.</td>
+          </tr>
+          <tr>
+            <td class="field-name">Ownership Proof</td>
+            <td>ownershipProof</td>
+            <td>Document File</td>
+            <td class="badge badge-req">Required</td>
+            <td>Sale Deed / Lease Agreement / Municipal Tax Receipt.</td>
+          </tr>
+          <tr>
+            <td class="field-name">Business Name</td>
+            <td>businessName</td>
+            <td>String</td>
+            <td class="badge badge-req">Required</td>
+            <td>Registered owner name or corporate entity name.</td>
+          </tr>
+          <tr>
+            <td class="field-name">Business PAN</td>
+            <td>pan</td>
+            <td>String</td>
+            <td class="badge badge-req">Required</td>
+            <td>10-character alphanumeric Permanent Account Number.</td>
+          </tr>
+          <tr>
+            <td class="field-name">GSTIN</td>
+            <td>gstin</td>
+            <td>String</td>
+            <td class="badge badge-opt">Optional</td>
+            <td>15-character Goods and Services Tax Identification Number.</td>
+          </tr>
+          <tr>
+            <td class="field-name">Property License Number</td>
+            <td>licenseNumber</td>
+            <td>String</td>
+            <td class="badge badge-req">Required</td>
+            <td>Tourism commission or local municipal lodging registration.</td>
+          </tr>
+          <tr>
+            <td class="field-name">Trade License</td>
+            <td>tradeLicense</td>
+            <td>String</td>
+            <td class="badge badge-opt">Optional</td>
+            <td>Municipal commercial trade permit code.</td>
+          </tr>
+          <tr>
+            <td class="field-name">Fire Safety NOC</td>
+            <td>fireSafetyNumber</td>
+            <td>String</td>
+            <td class="badge badge-req">Required</td>
+            <td>Fire department clearance NOC certificate ID.</td>
+          </tr>
+          <tr>
+            <td class="field-name">Bank Account Name</td>
+            <td>bankAccountName</td>
+            <td>String</td>
+            <td class="badge badge-req">Required</td>
+            <td>Name of the bank account holder.</td>
+          </tr>
+          <tr>
+            <td class="field-name">Bank Account Number</td>
+            <td>bankAccountNumber</td>
+            <td>String</td>
+            <td class="badge badge-req">Required</td>
+            <td>Bank account number for payouts.</td>
+          </tr>
+          <tr>
+            <td class="field-name">IFSC Code</td>
+            <td>ifscCode</td>
+            <td>String</td>
+            <td class="badge badge-req">Required</td>
+            <td>11-character Indian Financial System Code.</td>
+          </tr>
+          <tr>
+            <td class="field-name">Cancelled Cheque</td>
+            <td>cancelledCheque</td>
+            <td>Document File</td>
+            <td class="badge badge-req">Required</td>
+            <td>Cancelled cheque image or bank passbook page.</td>
+          </tr>
+          <tr>
+            <td class="field-name">Declaration Certified</td>
+            <td>isLegalDeclared</td>
+            <td>Boolean</td>
+            <td class="badge badge-req">Required</td>
+            <td>User must explicitly toggle true to enable submission.</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <div class="mock-data-title">Step 9 Mock Data (Payload)</div>
+      <pre>{
+  "ownerName": "John Doe",
+  "ownerAadhar": "123456789012",
+  "ownerPhoto": "blob:http://localhost:5173/e9a2b55f-8b2b",
+  "ownershipProof": "Greenwood_Sale_Deed_2024.pdf",
+  "businessName": "Greenwood Pines Retreats Private Limited",
+  "pan": "AAACG8892K",
+  "gstin": "33AAACG8892K1Z5",
+  "licenseNumber": "TRN/HOTEL/KOD/2026/4552",
+  "tradeLicense": "TL-KOD-MUNI-9921",
+  "fireSafetyNumber": "FIRE-NOC-KOD-2026-887",
+  "bankAccountName": "Greenwood Pines Retreats Private Limited",
+  "bankAccountNumber": "9988201004552",
+  "ifscCode": "SBIN0001234",
+  "cancelledCheque": "Greenwood_Cancelled_Cheque.jpg",
+  "isLegalDeclared": true
+}</pre>
+    </div>
+
+  </div>
+</body>
+</html>

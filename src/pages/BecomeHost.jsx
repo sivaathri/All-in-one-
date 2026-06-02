@@ -78,8 +78,27 @@ export default function BecomeHost({ onBackToHome }) {
   return (
     <main
       style={{ fontFamily: "'Plus Jakarta Sans', 'Outfit', sans-serif" }}
-      className="min-h-screen bg-[#FDFDFD] pb-10 flex flex-col justify-between"
+      className="min-h-screen bg-[#FDFDFD] pb-10 flex flex-col justify-between overflow-x-hidden"
     >
+      <style>{`
+        @keyframes slideDownFade {
+          from { opacity: 0; transform: translateY(-24px); }
+          to { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes slideUpFade {
+          from { opacity: 0; transform: translateY(32px); }
+          to { opacity: 1; transform: translateY(0); }
+        }
+        .animate-slide-down-fade {
+          opacity: 0;
+          animation: slideDownFade 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
+        .animate-slide-up-fade {
+          opacity: 0;
+          animation: slideUpFade 0.9s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
+      `}</style>
+
       {/* Full-width Header Block with Background Image */}
       <div 
         className="w-full bg-no-repeat bg-right bg-contain min-h-[260px] sm:min-h-[290px] md:min-h-[330px] px-4 sm:px-8 lg:px-16 pt-2"
@@ -96,7 +115,10 @@ export default function BecomeHost({ onBackToHome }) {
           </button> */}
 
           {/* Text Content */}
-          <div className="w-full mt-10 lg:w-[55%] text-left max-w-xl py-6 md:py-10 bg-white/80 lg:bg-transparent backdrop-blur-xs lg:backdrop-blur-none rounded-2xl p-4 lg:p-0">
+          <div 
+            className="w-full mt-10 lg:w-[55%] text-left max-w-xl py-6 md:py-10 bg-white/80 lg:bg-transparent backdrop-blur-xs lg:backdrop-blur-none rounded-2xl p-4 lg:p-0 animate-slide-down-fade"
+            style={{ animationDelay: '100ms' }}
+          >
             <span className="text-[13px] sm:text-[14px] font-extrabold tracking-[0.08em] text-[#16A34A] uppercase block mb-3.5">
               BECOME A HOST
             </span>
@@ -124,7 +146,8 @@ export default function BecomeHost({ onBackToHome }) {
                   setActiveCategory('Stay Property');
                 }
               }}
-              className={`group relative flex flex-col justify-between bg-white rounded-[20px] border ${cat.borderClass} p-7 pb-6 shadow-sm hover:shadow-lg transition-all duration-300 transform hover:-translate-y-1 cursor-pointer ${cat.shadowColor}`}
+              className={`group relative flex flex-col justify-between bg-white rounded-[20px] border ${cat.borderClass} p-7 pb-6 shadow-sm hover:shadow-lg transition-all duration-300 transform hover:-translate-y-1 cursor-pointer ${cat.shadowColor} animate-slide-up-fade`}
+              style={{ animationDelay: `${idx * 100 + 200}ms` }}
             >
               {/* Image Section */}
               <div className="mb-5 flex justify-center items-center overflow-hidden rounded-2xl bg-slate-50/20 w-full h-[135px]">
@@ -159,7 +182,10 @@ export default function BecomeHost({ onBackToHome }) {
         </div>
 
         {/* Bottom Benefits Bar */}
-        <div className="w-full rounded-2xl bg-teal-50/10 border border-[#0F766E]/10 p-6 sm:p-8 mb-4">
+        <div 
+          className="w-full rounded-2xl bg-teal-50/10 border border-[#0F766E]/10 p-6 sm:p-8 mb-4 animate-slide-up-fade"
+          style={{ animationDelay: '600ms' }}
+        >
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 items-center divide-y md:divide-y-0 md:divide-x divide-slate-100">
             {benefits.map((benefit, idx) => (
               <div

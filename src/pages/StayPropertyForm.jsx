@@ -227,6 +227,15 @@ export default function StayPropertyForm({ onBack }) {
   const [tradeLicense, setTradeLicense] = useState('');
   const [fireSafetyNumber, setFireSafetyNumber] = useState('');
   const [isLegalDeclared, setIsLegalDeclared] = useState(false);
+  
+  const [ownerName, setOwnerName] = useState('');
+  const [ownerAadhar, setOwnerAadhar] = useState('');
+  const [ownerPhoto, setOwnerPhoto] = useState(null);
+  const [ownershipProof, setOwnershipProof] = useState(null);
+  const [bankAccountName, setBankAccountName] = useState('');
+  const [bankAccountNumber, setBankAccountNumber] = useState('');
+  const [ifscCode, setIfscCode] = useState('');
+  const [cancelledCheque, setCancelledCheque] = useState(null);
 
   // Step 7 States (Pricing & Availability)
   const [roomPrices, setRoomPrices] = useState({
@@ -2644,7 +2653,106 @@ export default function StayPropertyForm({ onBack }) {
 
                   {/* Form Box Step 9 */}
                   <div className="w-full bg-white rounded-2xl border border-slate-100 p-8 flex flex-col gap-6 text-left">
+                    
+                    {/* Owner details Section */}
                     <h4 className="text-[16px] font-bold text-[#007F55] border-b border-slate-100 pb-2.5">
+                      Property Owner & Identity Details
+                    </h4>
+
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                      {/* Owner Name */}
+                      <div className="flex flex-col gap-1.5">
+                        <label className="text-[13px] font-bold text-slate-700">Property Owner Name</label>
+                        <input
+                          type="text"
+                          placeholder="e.g. John Doe"
+                          value={ownerName}
+                          onChange={(e) => setOwnerName(e.target.value)}
+                          className="w-full rounded-xl border border-slate-200 bg-white px-4 py-2.5 text-[14px] font-bold text-slate-800 outline-none focus:border-[#007F55] focus:ring-1 focus:ring-[#007F55] transition-all"
+                        />
+                      </div>
+
+                      {/* Owner Aadhaar */}
+                      <div className="flex flex-col gap-1.5">
+                        <label className="text-[13px] font-bold text-slate-700">Aadhaar Number (12-Digit)</label>
+                        <input
+                          type="text"
+                          maxLength={12}
+                          placeholder="e.g. 123456789012"
+                          value={ownerAadhar}
+                          onChange={(e) => {
+                            const cleanVal = e.target.value.replace(/\D/g, '');
+                            setOwnerAadhar(cleanVal);
+                          }}
+                          className="w-full rounded-xl border border-slate-200 bg-white px-4 py-2.5 text-[14px] font-bold text-slate-800 outline-none focus:border-[#007F55] focus:ring-1 focus:ring-[#007F55] transition-all"
+                        />
+                      </div>
+                    </div>
+
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                      {/* Owner Photo */}
+                      <div className="flex flex-col gap-1.5">
+                        <label className="text-[13px] font-bold text-slate-700">Owner Photo</label>
+                        <div className="relative border border-dashed border-slate-200 rounded-xl p-4 bg-slate-50/30 hover:border-[#007F55] transition-colors flex items-center gap-4">
+                          <input
+                            type="file"
+                            accept="image/*"
+                            onChange={(e) => {
+                              if (e.target.files && e.target.files[0]) {
+                                setOwnerPhoto(URL.createObjectURL(e.target.files[0]));
+                              }
+                            }}
+                            className="absolute inset-0 opacity-0 cursor-pointer"
+                          />
+                          <div className="h-12 w-12 rounded-full bg-slate-100 flex items-center justify-center border border-slate-200 overflow-hidden shrink-0">
+                            {ownerPhoto ? (
+                              <img src={ownerPhoto} alt="Owner" className="h-full w-full object-cover" />
+                            ) : (
+                              <svg className="w-6 h-6 text-slate-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                              </svg>
+                            )}
+                          </div>
+                          <div className="flex flex-col items-start">
+                            <span className="text-[13px] font-bold text-slate-700">
+                              {ownerPhoto ? 'Change Photo' : 'Upload Photo'}
+                            </span>
+                            <span className="text-[11px] text-slate-400">JPG, PNG, WEBP. Max 2MB.</span>
+                          </div>
+                        </div>
+                      </div>
+
+                      {/* Property Ownership Proof */}
+                      <div className="flex flex-col gap-1.5">
+                        <label className="text-[13px] font-bold text-slate-700">Property Ownership Proof</label>
+                        <div className="relative border border-dashed border-slate-200 rounded-xl p-4 bg-slate-50/30 hover:border-[#007F55] transition-colors flex items-center gap-3">
+                          <input
+                            type="file"
+                            accept=".pdf,image/*"
+                            onChange={(e) => {
+                              if (e.target.files && e.target.files[0]) {
+                                setOwnershipProof(e.target.files[0].name);
+                              }
+                            }}
+                            className="absolute inset-0 opacity-0 cursor-pointer"
+                          />
+                          <div className="h-10 w-10 rounded-xl bg-emerald-50/50 text-[#007F55] flex items-center justify-center border border-emerald-100 shrink-0">
+                            <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                            </svg>
+                          </div>
+                          <div className="flex flex-col items-start truncate pr-4">
+                            <span className="text-[13px] font-bold text-slate-700 truncate w-full">
+                              {ownershipProof || 'Upload Sale Deed / Lease / Tax Receipt'}
+                            </span>
+                            <span className="text-[11px] text-slate-400">PDF, JPG, PNG. Max 5MB.</span>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Tax & Registration details Section */}
+                    <h4 className="text-[16px] font-bold text-[#007F55] border-b border-slate-100 pb-2.5 mt-4">
                       Business & Tax Registrations
                     </h4>
 
@@ -2738,6 +2846,83 @@ export default function StayPropertyForm({ onBack }) {
                       </div>
                     </div>
 
+                    {/* Payout Details Section */}
+                    <h4 className="text-[16px] font-bold text-[#007F55] border-b border-slate-100 pb-2.5 mt-4">
+                      Payout & Bank Account Details
+                    </h4>
+
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                      {/* Bank Account Holder Name */}
+                      <div className="flex flex-col gap-1.5">
+                        <label className="text-[13px] font-bold text-slate-700">Bank Account Holder Name</label>
+                        <input
+                          type="text"
+                          placeholder="e.g. John Doe"
+                          value={bankAccountName}
+                          onChange={(e) => setBankAccountName(e.target.value)}
+                          className="w-full rounded-xl border border-slate-200 bg-white px-4 py-2.5 text-[14px] font-bold text-slate-800 outline-none focus:border-[#007F55] focus:ring-1 focus:ring-[#007F55] transition-all"
+                        />
+                      </div>
+
+                      {/* Bank Account Number */}
+                      <div className="flex flex-col gap-1.5">
+                        <label className="text-[13px] font-bold text-slate-700">Bank Account Number</label>
+                        <input
+                          type="text"
+                          placeholder="e.g. 123456789012"
+                          value={bankAccountNumber}
+                          onChange={(e) => {
+                            const cleanVal = e.target.value.replace(/\D/g, '');
+                            setBankAccountNumber(cleanVal);
+                          }}
+                          className="w-full rounded-xl border border-slate-200 bg-white px-4 py-2.5 text-[14px] font-bold text-slate-800 outline-none focus:border-[#007F55] focus:ring-1 focus:ring-[#007F55] transition-all"
+                        />
+                      </div>
+                    </div>
+
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                      {/* IFSC Code */}
+                      <div className="flex flex-col gap-1.5">
+                        <label className="text-[13px] font-bold text-slate-700">IFSC Code (11-Digit Alphanumeric)</label>
+                        <input
+                          type="text"
+                          maxLength={11}
+                          placeholder="e.g. SBIN0001234"
+                          value={ifscCode}
+                          onChange={(e) => setIfscCode(e.target.value.toUpperCase())}
+                          className="w-full rounded-xl border border-slate-200 bg-white px-4 py-2.5 text-[14px] font-bold text-slate-800 outline-none focus:border-[#007F55] focus:ring-1 focus:ring-[#007F55] transition-all"
+                        />
+                      </div>
+
+                      {/* Cancelled Cheque / Bank Passbook Upload */}
+                      <div className="flex flex-col gap-1.5">
+                        <label className="text-[13px] font-bold text-slate-700">Cancelled Cheque / Bank Passbook</label>
+                        <div className="relative border border-dashed border-slate-200 rounded-xl p-4 bg-slate-50/30 hover:border-[#007F55] transition-colors flex items-center gap-3">
+                          <input
+                            type="file"
+                            accept=".pdf,image/*"
+                            onChange={(e) => {
+                              if (e.target.files && e.target.files[0]) {
+                                setCancelledCheque(e.target.files[0].name);
+                              }
+                            }}
+                            className="absolute inset-0 opacity-0 cursor-pointer"
+                          />
+                          <div className="h-10 w-10 rounded-xl bg-emerald-50/50 text-[#007F55] flex items-center justify-center border border-emerald-100 shrink-0">
+                            <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                            </svg>
+                          </div>
+                          <div className="flex flex-col items-start truncate pr-4">
+                            <span className="text-[13px] font-bold text-slate-700 truncate w-full">
+                              {cancelledCheque || 'Upload Cancelled Cheque / Bank Passbook'}
+                            </span>
+                            <span className="text-[11px] text-slate-400">PDF, JPG, PNG. Max 5MB.</span>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
                     <h4 className="text-[16px] font-bold text-[#007F55] border-b border-slate-100 pb-2.5 mt-4">
                       Declarations & Agreement
                     </h4>
@@ -2757,7 +2942,7 @@ export default function StayPropertyForm({ onBack }) {
                       </div>
                       <div className="flex flex-col text-left">
                         <span className="text-[13.5px] font-bold text-slate-800 leading-snug">
-                          I certify that all licensing, registration, tax numbers, and safety information provided above are valid, legal, and belong to the respective property owner.
+                          I certify that all licensing, registration, tax numbers, bank payout details, ownership files, and identity details provided above are valid, legal, and belong to the respective property owner.
                         </span>
                         <span className="text-[12px] font-semibold text-slate-400 mt-1 leading-normal">
                           Providing false or fabricated details may lead to immediate suspension of your listing and potential legal action under applicable laws.
