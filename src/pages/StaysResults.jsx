@@ -261,7 +261,7 @@ export default function StaysResults({ searchParams, onSearch }) {
   }
 
   return (
-    <div style={{ fontFamily: "'Plus Jakarta Sans', 'Outfit', sans-serif" }} className="bg-[#F8FAFC] min-h-screen">
+    <div style={{ fontFamily: "'Plus Jakarta Sans', 'Outfit', sans-serif" }} className="stays-page-enter bg-[#F8FAFC] min-h-screen">
       <style>{`
         .double-range-input::-webkit-slider-thumb {
           pointer-events: auto;

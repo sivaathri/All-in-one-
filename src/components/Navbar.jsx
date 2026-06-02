@@ -3,6 +3,7 @@ import { Menu, X, ChevronDown, Eye, EyeOff, User, Lock, Mail, Phone, Heart } fro
 import becameBg from '../assets/becameBG.png';
 
 export default function Navbar({ onNavigate = () => {}, currentPage = 'home' }) {
+  const [activeMenu, setActiveMenu] = useState('Stays');
   const [isOpen, setIsOpen] = useState(false);
   const [rentalsDropdown, setRentalsDropdown] = useState(false);
   const [servicesDropdown, setServicesDropdown] = useState(false);
@@ -101,13 +102,13 @@ export default function Navbar({ onNavigate = () => {}, currentPage = 'home' }) 
   };
 
   const menuItems = [
-    { name: 'Home', path: '#', active: true },
-    { name: 'Stays', path: '#stays' },
-    { name: 'Rentals', path: '#rentals', dropdown: true, dropdownItems: ['Car Rental', 'Bike Rental', 'Scooter Rental'] },
+   
+    { name: 'Stays', path: '#stays', active: true },
+    { name: 'Rentals', path: '#rentals' },
     { name: 'Food Spots', path: '#food' },
     { name: 'Adventures', path: '#adventures' },
     { name: 'Taxi Booking', path: '#taxi' },
-    { name: 'Services', path: '#services', dropdown: true, dropdownItems: ['Puncture Service', 'Mechanic Service', 'Tour Packages'] },
+    { name: 'Services', path: '#services' },
     { name: 'Tour Packages', path: '#packages' }
   ];
 
@@ -179,18 +180,17 @@ export default function Navbar({ onNavigate = () => {}, currentPage = 'home' }) 
                 );
               }
 
-              const isActive = (item.name === 'Home' && currentPage === 'home') || 
-                               (item.name === 'Stays' && currentPage === 'stays-results');
+              const isActive = activeMenu === item.name;
               return (
                 <a
                   key={item.name}
                   href={item.path}
                   onClick={(e) => {
+                    e.preventDefault();
+                    setActiveMenu(item.name);
                     if (item.name === 'Home') {
-                      e.preventDefault();
                       onNavigate('home');
                     } else if (item.name === 'Stays') {
-                      e.preventDefault();
                       onNavigate('stays-results');
                     } else {
                       onNavigate('home');
@@ -349,17 +349,22 @@ export default function Navbar({ onNavigate = () => {}, currentPage = 'home' }) 
                 );
               }
 
-              const isActive = item.active && currentPage === 'home';
+              const isActive = activeMenu === item.name;
               return (
                 <a
                   key={item.name}
                   href={item.path}
                   onClick={(e) => {
+                    e.preventDefault();
                     setIsOpen(false);
+                    setActiveMenu(item.name);
                     if (item.name === 'Home') {
-                      e.preventDefault();
+                      onNavigate('home');
+                    } else if (item.name === 'Stays') {
+                      onNavigate('stays-results');
+                    } else {
+                      onNavigate('home');
                     }
-                    onNavigate('home');
                   }}
                   className={`block rounded-lg px-3 py-2 text-base font-semibold transition-colors ${
                     isActive
