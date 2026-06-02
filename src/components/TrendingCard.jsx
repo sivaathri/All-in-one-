@@ -25,7 +25,7 @@ export default function TrendingCard({ item }) {
   const unitText = item.pricePeriod.includes('for') ? item.pricePeriod : `/ ${item.pricePeriod}`;
 
   return (
-    <div className="group relative flex flex-col rounded-2xl border border-slate-200/90 bg-white overflow-hidden shadow-xs hover:shadow-md hover:-translate-y-1 transition-all duration-300 w-[240px] shrink-0">
+    <div className="group  relative flex flex-col rounded-2xl border border-slate-200/90 bg-white overflow-hidden shadow-xs hover:shadow-md hover:-translate-y-1 transition-all duration-300 w-[240px] shrink-0">
       {/* Image Container */}
       <div className="relative h-[155px] w-full overflow-hidden">
         <img

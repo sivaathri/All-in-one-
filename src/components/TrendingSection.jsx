@@ -143,7 +143,7 @@ export default function TrendingSection() {
   };
 
   return (
-    <section className="w-full pt-6 pb-16 bg-white overflow-hidden">
+    <section className="w-full pt-6 pb-4 bg-white overflow-hidden">
       <div className="mx-auto max-w-[1760px] px-4 sm:px-6 lg:px-8">
         {/* Header Row */}
         <div className="flex items-center justify-between mb-8">
