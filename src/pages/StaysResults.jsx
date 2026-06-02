@@ -204,6 +204,29 @@ export default function StaysResults({ searchParams, onSearch }) {
   const [selectedStay, setSelectedStay] = useState(null);
   const [showMobileFilters, setShowMobileFilters] = useState(false);
 
+  // Sync selected stay details view with browser history for back button support
+  useEffect(() => {
+    const handlePopState = (event) => {
+      if (event.state && event.state.selectedStayId === undefined) {
+        setSelectedStay(null);
+      }
+    };
+    window.addEventListener('popstate', handlePopState);
+    return () => window.removeEventListener('popstate', handlePopState);
+  }, []);
+
+  const handleSelectStay = (stay) => {
+    setSelectedStay(stay);
+    window.history.pushState({ page: 'stays-results', selectedStayId: stay.id }, '', `#stay-${stay.id}`);
+  };
+
+  const handleBackToResults = () => {
+    setSelectedStay(null);
+    if (window.history.state && window.history.state.selectedStayId !== undefined) {
+      window.history.back();
+    }
+  };
+
   // ── animation state ──────────────────────────────────
   const [mounted, setMounted] = useState(false);
   useEffect(() => {
@@ -262,7 +285,7 @@ export default function StaysResults({ searchParams, onSearch }) {
       <StayDetail 
         stay={selectedStay} 
         searchParams={searchParams} 
-        onBack={() => setSelectedStay(null)} 
+        onBack={handleBackToResults} 
         isLiked={!!wishlist[selectedStay.id]}
         onToggleLike={toggleWishlist}
       />
@@ -848,7 +871,7 @@ export default function StaysResults({ searchParams, onSearch }) {
                         </span>
 
                         <button 
-                          onClick={() => setSelectedStay(stay)}
+                          onClick={() => handleSelectStay(stay)}
                           className="view-rooms-btn w-full bg-[#0F766E] text-white py-2.5 rounded-xl font-bold text-[12.5px] shadow-sm hover:bg-[#0c625c] active:scale-95 transition-all duration-150 mt-4 cursor-pointer text-center block"
                         >
                           View Rooms

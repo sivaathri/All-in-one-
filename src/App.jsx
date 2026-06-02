@@ -49,6 +49,30 @@ function App() {
   // key to re-trigger StaysResults entry animation on every new search
   const [resultsKey, setResultsKey] = useState(0);
 
+  // Sync browser back/forward buttons
+  useEffect(() => {
+    if (!window.history.state) {
+      window.history.replaceState({ page: 'home' }, '', '');
+    }
+
+    const handlePopState = (event) => {
+      if (event.state && event.state.page) {
+        setCurrentPage(event.state.page);
+      } else {
+        setCurrentPage('home');
+      }
+    };
+
+    window.addEventListener('popstate', handlePopState);
+    return () => window.removeEventListener('popstate', handlePopState);
+  }, []);
+
+  const navigateToPage = (pageName) => {
+    if (pageName === currentPage) return;
+    setCurrentPage(pageName);
+    window.history.pushState({ page: pageName }, '', `#${pageName}`);
+  };
+
   const handleSearch = (params) => {
     setPendingParams(params);
     setIsTransitioning(true);
@@ -59,6 +83,7 @@ function App() {
     setSearchParams(pendingParams);
     setResultsKey(k => k + 1);
     setCurrentPage('stays-results');
+    window.history.pushState({ page: 'stays-results' }, '', '#stays-results');
   };
 
   return (
@@ -66,7 +91,7 @@ function App() {
       <SearchTransitionOverlay visible={isTransitioning} onDone={handleTransitionDone} />
 
       {/* Sticky Top Header */}
-      <Navbar onNavigate={setCurrentPage} currentPage={currentPage} />
+      <Navbar onNavigate={navigateToPage} currentPage={currentPage} />
 
       {/* Main Page Layout */}
       {currentPage === 'home' ? (
@@ -74,13 +99,13 @@ function App() {
       ) : currentPage === 'stays-results' ? (
         <StaysResults key={resultsKey} searchParams={searchParams} onSearch={handleSearch} />
       ) : currentPage === 'my-bookings' ? (
-        <MyBookings onNavigate={setCurrentPage} />
+        <MyBookings onNavigate={navigateToPage} />
       ) : (
-        <BecomeHost onBackToHome={() => setCurrentPage('home')} />
+        <BecomeHost onBackToHome={() => navigateToPage('home')} />
       )}
 
       {/* Footer Details */}
-      <Footer onNavigate={setCurrentPage} />
+      <Footer onNavigate={navigateToPage} />
 
       <style>{`
         /* ── Overlay ─────────────────────────────── */
