@@ -2,6 +2,7 @@ import HeroSection from '../components/HeroSection';
 import Categories from '../components/Categories';
 import TrendingSection from '../components/TrendingSection';
 import RentalServices from '../components/RentalServices';
+import PromoToast from '../components/PromoToast';
 
 export default function Home({ onSearch }) {
   return (
@@ -17,6 +18,9 @@ export default function Home({ onSearch }) {
 
       {/* Rental Services Section */}
       <RentalServices />
+
+      {/* Promo Ad Toast — slides in from bottom-left every 60s */}
+      <PromoToast />
     </main>
   );
 }
