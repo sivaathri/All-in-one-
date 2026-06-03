@@ -198,35 +198,52 @@ export default function RentHome({ onSearch, onSelectVehicle }) {
         <div className="absolute inset-0 z-0" />
 
         {/* Text Area */}
-        <div className="relative z-10 pt-4 max-w-xl">
-         
+        <div className="relative z-10 pt-4 max-w-2xl text-left">
           
-          <h1 className="text-3xl sm:text-4.5xl font-black tracking-tight leading-none text-slate-900">
+          <h1 className="text-4xl sm:text-5xl font-black tracking-tight leading-none text-[#0F172A]">
             Rent Your <span className="text-[#0D9488]">Perfect Ride</span>
           </h1>
-          <p className="text-[14px] font-semibold text-slate-500 mt-2.5">
+          <p className="text-[14.5px] sm:text-[16px] font-semibold text-slate-655 mt-3.5 tracking-wide">
             Bikes, Cars, Scooters & Bicycles – Anytime, Anywhere
           </p>
 
-          {/* Badges row under the header banner */}
-          <div className="flex flex-wrap items-center gap-2 mt-6">
-            <span className="flex items-center gap-1.5 bg-white/80 border border-white/50 backdrop-blur-xs text-[11px] font-bold text-slate-700 px-3.5 py-1.5 rounded-full shadow-2xs">
-              <Star className="h-3.5 w-3.5 fill-[#0D9488] text-[#0D9488]" />
+          {/* Single Badges Pill Capsule */}
+          <div className="mt-7 bg-white/95 border border-slate-200/60 shadow-sm rounded-full py-3 px-8 flex flex-wrap items-center gap-x-6 gap-y-2 w-fit">
+            <div className="flex items-center gap-2 text-[12.5px] font-extrabold text-[#0F172A]">
+              <svg className="h-4.5 w-4.5 text-[#0F172A]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+                <circle cx="12" cy="8" r="7" />
+                <polyline points="8.21 13.89 7 23 12 20 17 23 15.79 13.88" />
+              </svg>
               <span>Best Prices</span>
-            </span>
-            <span className="flex items-center gap-1.5 bg-white/80 border border-white/50 backdrop-blur-xs text-[11px] font-bold text-slate-700 px-3.5 py-1.5 rounded-full shadow-2xs">
-              <ShieldCheck className="h-3.5 w-3.5 text-[#0D9488]" />
+            </div>
+            
+            <div className="flex items-center gap-2 text-[12.5px] font-extrabold text-[#0F172A]">
+              <svg className="h-4.5 w-4.5 text-[#0F172A]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
+                <path d="m9 12 2 2 4-4" />
+              </svg>
               <span>Verified Vehicles</span>
-            </span>
-            <span className="flex items-center gap-1.5 bg-white/80 border border-white/50 backdrop-blur-xs text-[11px] font-bold text-slate-700 px-3.5 py-1.5 rounded-full shadow-2xs">
-              <Phone className="h-3.5 w-3.5 text-[#0D9488]" />
+            </div>
+            
+            <div className="flex items-center gap-2 text-[12.5px] font-extrabold text-[#0F172A]">
+              <svg className="h-4.5 w-4.5 text-[#0F172A]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M3 18v-6a9 9 0 0 1 18 0v6" />
+                <path d="M21 19a2 2 0 0 1-2 2h-1a2 2 0 0 1-2-2v-3a2 2 0 0 1 2-2h3zM3 19a2 2 0 0 0 2 2h1a2 2 0 0 0 2-2v-3a2 2 0 0 0-2-2H3z" />
+              </svg>
               <span>24/7 Support</span>
-            </span>
-            <span className="flex items-center gap-1.5 bg-white/80 border border-white/50 backdrop-blur-xs text-[11px] font-bold text-slate-700 px-3.5 py-1.5 rounded-full shadow-2xs">
-              <Calendar className="h-3.5 w-3.5 text-[#0D9488]" />
+            </div>
+            
+            <div className="flex items-center gap-2 text-[12.5px] font-extrabold text-[#0F172A]">
+              <svg className="h-4.5 w-4.5 text-[#0F172A]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+                <rect x="3" y="4" width="18" height="18" rx="2" ry="2" />
+                <line x1="16" y1="2" x2="16" y2="6" />
+                <line x1="8" y1="2" x2="8" y2="6" />
+                <line x1="3" y1="10" x2="21" y2="10" />
+              </svg>
               <span>Easy Booking</span>
-            </span>
+            </div>
           </div>
+
         </div>
 
         {/* ─── FLOATING CATEGORY TABS ─── */}
@@ -329,11 +346,11 @@ export default function RentHome({ onSearch, onSelectVehicle }) {
 
       </div>
 
-      {/* ─── MAIN 3-COLUMN LAYOUT GRID ─── */}
-      <div className="mx-auto max-w-[1760px] px-4 pt-20 pb-8 grid grid-cols-1 lg:grid-cols-12 gap-6">
+      {/* ─── MAIN 2-COLUMN LAYOUT ─── */}
+      <div className="mx-auto max-w-[1860px] px-4 pt-20 pb-8 flex flex-col lg:flex-row gap-6">
         
         {/* ==================== LEFT FILTER SIDEBAR ==================== */}
-        <aside className="w-full lg:col-span-3 shrink-0 bg-white border border-slate-200/80 rounded-3xl p-5 shadow-2xs text-left h-fit sticky top-[152px]">
+        <aside className="w-full lg:w-[350px] shrink-0 bg-white border border-slate-200/80 rounded-3xl p-5 shadow-2xs text-left h-fit sticky top-[152px]">
           
           {/* Header */}
           <div className="flex items-center justify-between border-b border-slate-100 pb-3.5 mb-4.5">
@@ -576,7 +593,7 @@ export default function RentHome({ onSearch, onSelectVehicle }) {
         </aside>
 
         {/* ==================== CENTER VEHICLE LISTING GRID ==================== */}
-        <main className="w-full lg:col-span-6">
+        <main className="flex-1">
           
           {/* Header Controls */}
           <div className="flex flex-wrap items-center justify-between gap-4 mb-5">
@@ -633,7 +650,7 @@ export default function RentHome({ onSearch, onSelectVehicle }) {
           {/* Cards Grid */}
           {filteredVehicles.length > 0 ? (
             <div className={layoutMode === 'grid' 
-              ? 'grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4'
+              ? 'grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-6 gap-4'
               : 'flex flex-col gap-4'
             }>
               {filteredVehicles.map((vehicle) => (
@@ -650,11 +667,7 @@ export default function RentHome({ onSearch, onSelectVehicle }) {
                     className={`flex items-center justify-center p-3 relative shrink-0 overflow-hidden ${
                       layoutMode === 'list' ? 'w-full sm:w-[190px] h-[135px]' : 'h-[140px]'
                     }`}
-                    style={{
-                      backgroundImage: `linear-gradient(to bottom, rgba(240, 246, 250, 0.72), rgba(240, 246, 250, 0.85)), url(${rentalsBannerImg})`,
-                      backgroundSize: 'cover',
-                      backgroundPosition: 'center 45%'
-                    }}
+                   
                   >
                     
                     {/* Badge */}
@@ -781,113 +794,7 @@ export default function RentHome({ onSearch, onSelectVehicle }) {
 
         </main>
 
-        {/* ==================== RIGHT SIDEBAR INFO PANELS ==================== */}
-        <aside className="w-full lg:col-span-3 space-y-5 text-left">
-          
-          {/* Panel 1: Trust Guarantees */}
-          <div className="bg-white border border-slate-200/80 rounded-3xl p-5 shadow-2xs space-y-4">
-            
-            {/* Item 1 */}
-            <div className="flex items-start gap-3">
-              <div className="h-8.5 w-8.5 rounded-full bg-emerald-50 text-[#0D9488] flex items-center justify-center shrink-0">
-                <DollarSign className="h-4.5 w-4.5" strokeWidth={2.5} />
-              </div>
-              <div>
-                <p className="text-[12.5px] font-black text-slate-800">No Hidden Charges</p>
-                <p className="text-[10px] text-slate-400 font-semibold mt-0.5">Transparent pricing</p>
-              </div>
-            </div>
 
-            {/* Item 2 */}
-            <div className="flex items-start gap-3">
-              <div className="h-8.5 w-8.5 rounded-full bg-emerald-50 text-[#0D9488] flex items-center justify-center shrink-0">
-                <Clock className="h-4.5 w-4.5" strokeWidth={2.5} />
-              </div>
-              <div>
-                <p className="text-[12.5px] font-black text-slate-800">Flexible Booking</p>
-                <p className="text-[10px] text-slate-400 font-semibold mt-0.5">Hourly, Daily, Weekly</p>
-              </div>
-            </div>
-
-            {/* Item 3 */}
-            <div className="flex items-start gap-3">
-              <div className="h-8.5 w-8.5 rounded-full bg-emerald-50 text-[#0D9488] flex items-center justify-center shrink-0">
-                <Phone className="h-4.5 w-4.5" strokeWidth={2.5} />
-              </div>
-              <div>
-                <p className="text-[12.5px] font-black text-slate-800">Roadside Assistance</p>
-                <p className="text-[10px] text-slate-400 font-semibold mt-0.5">24/7 Support</p>
-              </div>
-            </div>
-
-            {/* Item 4 */}
-            <div className="flex items-start gap-3">
-              <div className="h-8.5 w-8.5 rounded-full bg-emerald-50 text-[#0D9488] flex items-center justify-center shrink-0">
-                <ShieldCheck className="h-4.5 w-4.5" strokeWidth={2.5} />
-              </div>
-              <div>
-                <p className="text-[12.5px] font-black text-slate-800">Verified Vehicles</p>
-                <p className="text-[10px] text-slate-400 font-semibold mt-0.5">Quality you can trust</p>
-              </div>
-            </div>
-
-          </div>
-
-          {/* Panel 2: Promo Discount Box */}
-          <div className="bg-gradient-to-br from-[#064E3B] to-[#022C22] text-white rounded-3xl p-5 relative overflow-hidden flex flex-col justify-between min-h-[200px] shadow-sm">
-            <div>
-              <h4 className="text-[16px] font-black tracking-tight leading-snug">
-                Get 10% OFF
-              </h4>
-              <p className="text-[10.5px] text-teal-100/90 font-bold">
-                on First Booking
-              </p>
-              <div className="mt-3 bg-white/10 border border-white/20 border-dashed rounded-lg w-fit text-[11px] font-black tracking-wide px-2.5 py-1">
-                Use Code: <span className="text-emerald-350">TRIP10</span>
-              </div>
-            </div>
-
-            <div className="flex items-center justify-between border-t border-white/10 pt-3 mt-6 z-10">
-              <button 
-                onClick={handleResetFilters}
-                className="bg-white hover:bg-teal-50 text-[#022C22] text-[11px] font-extrabold px-4 py-2 rounded-xl cursor-pointer flex items-center gap-1 shadow-sm"
-              >
-                <span>Book Now</span>
-                <ChevronDown className="h-3.5 w-3.5 text-[#022C22]" />
-              </button>
-
-              {/* Floating scooter representation in the bottom corner */}
-              <img 
-                src={rentActivaImg} 
-                alt="Promo Scooter" 
-                className="absolute right-[-10px] bottom-[-8px] h-24 w-auto object-contain opacity-75 pointer-events-none z-0 transform -rotate-12"
-              />
-            </div>
-          </div>
-
-          {/* Panel 3: Overlapping Avatars (Trusted travelers) */}
-          <div className="bg-white border border-slate-200/80 rounded-3xl p-4.5 shadow-2xs text-center flex flex-col gap-3">
-            <span className="text-[11.5px] font-black text-slate-800 leading-none">
-              Trusted by 10,000+ Travelers
-            </span>
-
-            {/* Avatars Grid cluster and green rating badge */}
-            <div className="flex items-center justify-center gap-3">
-              <div className="flex -space-x-2.5">
-                <img className="h-7 w-7 rounded-full object-cover ring-2 ring-white" src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=80" alt="" />
-                <img className="h-7 w-7 rounded-full object-cover ring-2 ring-white" src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=80" alt="" />
-                <img className="h-7 w-7 rounded-full object-cover ring-2 ring-white" src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=80" alt="" />
-                <img className="h-7 w-7 rounded-full object-cover ring-2 ring-white" src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=80" alt="" />
-              </div>
-              
-              <div className="bg-[#E6FDF4] border border-[#A7F3D0] text-[#047857] px-2 py-0.5 rounded-lg text-[11px] font-black flex items-center gap-1 shadow-3xs">
-                <Star className="h-3 w-3 fill-current" />
-                <span>4.8</span>
-              </div>
-            </div>
-          </div>
-
-        </aside>
 
       </div>
 
