@@ -33,6 +33,10 @@ export default function TrendingCard({ item }) {
           alt={item.title}
           className="h-full w-full object-cover group-hover:scale-103 transition-transform duration-500 ease-out"
           loading="lazy"
+          onError={e => {
+            e.currentTarget.onerror = null;
+            e.currentTarget.src = 'https://images.unsplash.com/photo-1500835556837-99ac94a94552?auto=format&fit=crop&w=600&q=80';
+          }}
         />
         {/* Dark overlay top and bottom for readability */}
         <div className="absolute inset-0 bg-gradient-to-t from-black/10 via-transparent to-black/5" />

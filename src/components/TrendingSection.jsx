@@ -105,7 +105,7 @@ export default function TrendingSection() {
       price: 150,
       pricePeriod: 'person',
       badge: 'Must Try',
-      image: 'https://images.unsplash.com/photo-1566121318576-53b482a0ec2d?auto=format&fit=crop&w=600&q=80'
+      image: 'https://images.unsplash.com/photo-1582555172866-f73bb12a2ab3?auto=format&fit=crop&w=600&q=80'
     }
   ];
 

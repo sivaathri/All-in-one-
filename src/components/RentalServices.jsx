@@ -76,29 +76,30 @@ function RentalPanel({ title, subtitle, ctaText, heroImage, heroAlt, items, bann
         }}
       >
 
-        {/* Icon + Title row */}
+        {/* Title row */}
         <div className="flex items-center gap-3 mb-1 relative z-10">
-          <div className="w-10 h-10 rounded-xl flex items-center justify-center text-xl shrink-0"
-            style={{ background: 'rgba(255,255,255,0.15)' }}>
-            {icon}
-          </div>
           <h3 className="text-[23px] sm:text-[25px] font-black text-white leading-tight tracking-tight">
             {title}
           </h3>
         </div>
 
         {/* Subtitle */}
-        <p className="text-[13px] font-medium text-white/60 mb-4 ml-[52px] relative z-10">
+        <p className="text-[13px] font-medium text-white/60 mb-4 relative z-10">
           {subtitle}
         </p>
 
         {/* CTA Button */}
         <button
-          className="ml-[52px] relative z-10 flex items-center gap-2 text-white text-[12.5px] font-bold px-4 py-1.5 rounded-full border border-white/30 hover:bg-white/20 active:scale-95 transition-all duration-200 cursor-pointer mb-3"
+          className="relative z-10 flex items-center gap-2 text-white text-[12.5px] font-bold px-4 py-1.5 rounded-full border border-white/30 cursor-pointer mb-3 group/btn
+            transition-all duration-300 ease-out
+            hover:scale-105 hover:border-white/60 hover:shadow-[0_0_18px_rgba(255,255,255,0.25)]
+            active:scale-95"
           style={{ background: 'rgba(255,255,255,0.12)' }}
+          onMouseEnter={e => e.currentTarget.style.background = 'rgba(255,255,255,0.22)'}
+          onMouseLeave={e => e.currentTarget.style.background = 'rgba(255,255,255,0.12)'}
         >
           {ctaText}
-          <ArrowRight className="h-3.5 w-3.5" strokeWidth={2.5} />
+          <ArrowRight className="h-3.5 w-3.5 transition-transform duration-300 group-hover/btn:translate-x-0.5" strokeWidth={2.5} />
         </button>
 
         
@@ -131,10 +132,7 @@ function RentalPanel({ title, subtitle, ctaText, heroImage, heroAlt, items, bann
                   <p className="text-[12.5px] font-bold text-slate-800 leading-snug line-clamp-1 mb-2">
                     {item.title}
                   </p>
-                  <div className="flex items-center justify-between">
-                   
-                   
-                  </div>
+                 
                 </div>
               </div>
             ))}
