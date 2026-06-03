@@ -62,7 +62,9 @@ export default function Navbar({ onNavigate = () => {}, currentPage = 'home' }) 
 
   // Sync active menu with current page routing
   useEffect(() => {
-    if (currentPage === 'home' || currentPage === 'stays-results') {
+    if (currentPage === 'home') {
+      setActiveMenu('Home');
+    } else if (currentPage === 'stays-results') {
       setActiveMenu('Stays');
     } else if (currentPage === 'rent-home' || currentPage === 'rent-results' || currentPage === 'rent-detail') {
       setActiveMenu('Rentals');
@@ -111,7 +113,7 @@ export default function Navbar({ onNavigate = () => {}, currentPage = 'home' }) 
   };
 
   const menuItems = [
-   
+    { name: 'Home', path: '#home' },
     { name: 'Stays', path: '#stays', active: true },
     { name: 'Rentals', path: '#rentals' },
     { name: 'Food Spots', path: '#food' },
