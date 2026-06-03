@@ -5,10 +5,13 @@ import BecomeHost from './pages/BecomeHost';
 import Footer from './components/Footer';
 import StaysResults from './pages/StaysResults';
 import MyBookings from './pages/MyBookings';
+import RentHome from './rent/RentHome';
+import RentResults from './rent/RentResults';
+import RentDetail from './rent/RentDetail';
 import './App.css';
 
 // ─── Search transition overlay ──────────────────────────────────────────────
-function SearchTransitionOverlay({ visible, onDone }) {
+function SearchTransitionOverlay({ visible, onDone, transitionType }) {
   useEffect(() => {
     if (!visible) return;
     const t = setTimeout(onDone, 900);
@@ -23,14 +26,23 @@ function SearchTransitionOverlay({ visible, onDone }) {
       <div className="search-ripple search-ripple-2" />
       <div className="search-ripple search-ripple-3" />
       <div className="search-transition-text">
-        <svg className="search-spinner-icon" viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <path d="M7 22C9 28 27 28 29 22" stroke="#fff" strokeWidth="2.5" strokeLinecap="round" />
-          <path d="M9.5 23L5.5 20L5 25" stroke="#fff" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" />
-          <path d="M26.5 23L30.5 20L31 25" stroke="#fff" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" />
-          <path d="M18 5C13.5 5 10 8.5 10 13C10 19.5 18 27 18 27C18 27 26 19.5 26 13C26 8.5 22.5 5 18 5Z" fill="rgba(255,255,255,0.15)" stroke="#fff" strokeWidth="2.5" strokeLinejoin="round" />
-          <circle cx="18" cy="13" r="2.8" fill="#fff" />
-        </svg>
-        <span>Finding the best stays…</span>
+        {transitionType === 'rentals' ? (
+          <svg className="search-spinner-icon" viewBox="0 0 24 24" fill="none" stroke="#fff" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="7.5" cy="12.5" r="4.5" fill="rgba(255,255,255,0.15)" />
+            <path d="M12 12.5h9" />
+            <path d="M16 12.5v3.5" />
+            <path d="M19 12.5v3.5" />
+          </svg>
+        ) : (
+          <svg className="search-spinner-icon" viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M7 22C9 28 27 28 29 22" stroke="#fff" strokeWidth="2.5" strokeLinecap="round" />
+            <path d="M9.5 23L5.5 20L5 25" stroke="#fff" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" />
+            <path d="M26.5 23L30.5 20L31 25" stroke="#fff" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" />
+            <path d="M18 5C13.5 5 10 8.5 10 13C10 19.5 18 27 18 27C18 27 26 19.5 26 13C26 8.5 22.5 5 18 5Z" fill="rgba(255,255,255,0.15)" stroke="#fff" strokeWidth="2.5" strokeLinejoin="round" />
+            <circle cx="18" cy="13" r="2.8" fill="#fff" />
+          </svg>
+        )}
+        <span>{transitionType === 'rentals' ? 'Preparing Pondicherry fleet list…' : 'Finding the best stays…'}</span>
       </div>
     </div>
   );
@@ -48,6 +60,17 @@ function App() {
   const [pendingParams, setPendingParams] = useState(null);
   // key to re-trigger StaysResults entry animation on every new search
   const [resultsKey, setResultsKey] = useState(0);
+
+  // Rental states
+  const [rentalSearchParams, setRentalSearchParams] = useState({
+    location: 'Pondicherry, India',
+    pickUpDate: '2025-06-21',
+    dropOffDate: '2025-06-25',
+    vehicleType: 'All'
+  });
+  const [selectedVehicle, setSelectedVehicle] = useState(null);
+  const [transitionType, setTransitionType] = useState('stays'); // 'stays' | 'rentals'
+  const [pendingRentalParams, setPendingRentalParams] = useState(null);
 
   // Sync browser back/forward buttons
   useEffect(() => {
@@ -67,39 +90,67 @@ function App() {
     return () => window.removeEventListener('popstate', handlePopState);
   }, []);
 
-  const navigateToPage = (pageName) => {
+  const navigateToPage = (pageName, params = null) => {
+    if (pageName === 'rent-home' && params) {
+      setRentalSearchParams(prev => ({ ...prev, ...params }));
+    }
     if (pageName === currentPage) return;
     setCurrentPage(pageName);
     window.history.pushState({ page: pageName }, '', `#${pageName}`);
   };
 
   const handleSearch = (params) => {
+    setTransitionType('stays');
     setPendingParams(params);
     setIsTransitioning(true);
   };
 
   const handleTransitionDone = () => {
     setIsTransitioning(false);
-    setSearchParams(pendingParams);
-    setResultsKey(k => k + 1);
-    setCurrentPage('stays-results');
-    window.history.pushState({ page: 'stays-results' }, '', '#stays-results');
+    if (transitionType === 'stays') {
+      setSearchParams(pendingParams);
+      setResultsKey(k => k + 1);
+      setCurrentPage('stays-results');
+      window.history.pushState({ page: 'stays-results' }, '', '#stays-results');
+    } else {
+      setRentalSearchParams(pendingRentalParams);
+      setCurrentPage('rent-results');
+      window.history.pushState({ page: 'rent-results' }, '', '#rent-results');
+    }
+  };
+
+  // Rental callbacks
+  const handleRentalSearch = (params) => {
+    setTransitionType('rentals');
+    setPendingRentalParams(params);
+    setIsTransitioning(true);
+  };
+
+  const handleRentalSelect = (vehicle) => {
+    setSelectedVehicle(vehicle);
+    navigateToPage('rent-detail');
   };
 
   return (
     <div className="flex flex-col min-h-screen">
-      <SearchTransitionOverlay visible={isTransitioning} onDone={handleTransitionDone} />
+      <SearchTransitionOverlay visible={isTransitioning} onDone={handleTransitionDone} transitionType={transitionType} />
 
       {/* Sticky Top Header */}
       <Navbar onNavigate={navigateToPage} currentPage={currentPage} />
 
       {/* Main Page Layout */}
       {currentPage === 'home' ? (
-        <Home onSearch={handleSearch} />
+        <Home onSearch={handleSearch} onNavigate={navigateToPage} />
       ) : currentPage === 'stays-results' ? (
         <StaysResults key={resultsKey} searchParams={searchParams} onSearch={handleSearch} />
       ) : currentPage === 'my-bookings' ? (
         <MyBookings onNavigate={navigateToPage} />
+      ) : currentPage === 'rent-home' ? (
+        <RentHome onSearch={handleRentalSearch} onSelectVehicle={handleRentalSelect} />
+      ) : currentPage === 'rent-results' ? (
+        <RentResults searchParams={rentalSearchParams} onBack={() => navigateToPage('rent-home')} onSelectVehicle={handleRentalSelect} onSearch={handleRentalSearch} />
+      ) : currentPage === 'rent-detail' ? (
+        <RentDetail vehicle={selectedVehicle} searchParams={rentalSearchParams} onBack={() => navigateToPage('rent-results')} onNavigate={navigateToPage} />
       ) : (
         <BecomeHost onBackToHome={() => navigateToPage('home')} />
       )}
@@ -177,8 +228,8 @@ function App() {
           to   { opacity: 1; transform: scale(1) translateY(0); }
         }
 
-        /* ── StaysResults page entry ─────────────── */
-        .stays-page-enter {
+        /* ── StaysResults & RentResults page entry ─────────────── */
+        .stays-page-enter, .rent-page-enter {
           animation: pageSlideUp 0.52s cubic-bezier(0.22,1,0.36,1) both;
         }
         @keyframes pageSlideUp {

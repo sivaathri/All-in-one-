@@ -60,6 +60,15 @@ export default function Navbar({ onNavigate = () => {}, currentPage = 'home' }) 
     };
   }, [profileDropdownOpen]);
 
+  // Sync active menu with current page routing
+  useEffect(() => {
+    if (currentPage === 'home' || currentPage === 'stays-results') {
+      setActiveMenu('Stays');
+    } else if (currentPage === 'rent-home' || currentPage === 'rent-results' || currentPage === 'rent-detail') {
+      setActiveMenu('Rentals');
+    }
+  }, [currentPage]);
+
   const handleAuthSubmit = (e) => {
     e.preventDefault();
     setIsAuthLoading(true);
@@ -192,6 +201,8 @@ export default function Navbar({ onNavigate = () => {}, currentPage = 'home' }) 
                       onNavigate('home');
                     } else if (item.name === 'Stays') {
                       onNavigate('stays-results');
+                    } else if (item.name === 'Rentals') {
+                      onNavigate('rent-home');
                     } else {
                       onNavigate('home');
                     }
@@ -363,6 +374,8 @@ export default function Navbar({ onNavigate = () => {}, currentPage = 'home' }) 
                       onNavigate('home');
                     } else if (item.name === 'Stays') {
                       onNavigate('stays-results');
+                    } else if (item.name === 'Rentals') {
+                      onNavigate('rent-home');
                     } else {
                       onNavigate('home');
                     }

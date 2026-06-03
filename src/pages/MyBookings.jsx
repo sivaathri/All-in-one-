@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { 
   LayoutDashboard, 
   Calendar, 
@@ -33,72 +33,87 @@ export default function MyBookings({ onNavigate }) {
   const [activeTab, setActiveTab] = useState('My Bookings');
 
   // Interactive booking status state
-  const [bookings, setBookings] = useState([
-    {
-      id: 'TVR-2025-67890',
-      hotelName: 'Sea Breeze Resort',
-      location: 'Pondicherry Beach, Pondicherry',
-      image: 'https://images.unsplash.com/photo-1540541338287-41700207dee6?auto=format&fit=crop&w=600&q=80',
-      rooms: 2,
-      adults: 4,
-      children: 2,
-      dates: '21 Jun 2025 (Sat)  ·  25 Jun 2025 (Wed)',
-      nights: 4,
-      bookedOn: '18 May 2025',
-      status: 'Confirmed',
-      amount: '₹44,080',
-      statusDetail: 'Reservation Confirmed',
-      isUpcoming: true
-    },
-    {
-      id: 'TVR-2025-55621',
-      hotelName: 'Ocean View Hotel',
-      location: 'Calangute Beach, Goa',
-      image: 'https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=600&q=80',
-      rooms: 1,
-      adults: 2,
-      children: 0,
-      dates: '10 Jul 2025 (Thu)  ·  12 Jul 2025 (Sat)',
-      nights: 2,
-      bookedOn: '12 May 2025',
-      status: 'Pending Confirmation',
-      amount: '₹16,500',
-      statusDetail: 'Waiting for property confirmation',
-      isUpcoming: true
-    },
-    {
-      id: 'TVR-2025-44567',
-      hotelName: 'Hilltop Resort',
-      location: 'Manali, Himachal Pradesh',
-      image: 'https://images.unsplash.com/photo-1582719508461-905c673771fd?auto=format&fit=crop&w=600&q=80',
-      rooms: 1,
-      adults: 2,
-      children: 0,
-      dates: '05 Sep 2025 (Fri)  ·  08 Sep 2025 (Mon)',
-      nights: 3,
-      bookedOn: '20 Apr 2025',
-      status: 'Completed',
-      amount: '₹12,000',
-      statusDetail: 'You stayed on 05-08 Sep 2025',
-      isUpcoming: false
-    },
-    {
-      id: 'TVR-2025-33211',
-      hotelName: 'Serenity Villa',
-      location: 'Lonavala, Maharashtra',
-      image: 'https://images.unsplash.com/photo-1512917774080-9991f1c4c750?auto=format&fit=crop&w=600&q=80',
-      rooms: 1,
-      adults: 2,
-      children: 0,
-      dates: '15 May 2025 (Thu)  ·  16 May 2025 (Fri)',
-      nights: 1,
-      bookedOn: '15 Apr 2025',
-      status: 'Cancelled',
-      amount: '₹6,000',
-      statusDetail: 'Cancelled on 16 Apr 2025',
-      isUpcoming: false
+  const [bookings, setBookings] = useState(() => {
+    const defaultBookings = [
+      {
+        id: 'TVR-2025-67890',
+        hotelName: 'Sea Breeze Resort',
+        location: 'Pondicherry Beach, Pondicherry',
+        image: 'https://images.unsplash.com/photo-1540541338287-41700207dee6?auto=format&fit=crop&w=600&q=80',
+        rooms: 2,
+        adults: 4,
+        children: 2,
+        dates: '21 Jun 2025 (Sat)  ·  25 Jun 2025 (Wed)',
+        nights: 4,
+        bookedOn: '18 May 2025',
+        status: 'Confirmed',
+        amount: '₹44,080',
+        statusDetail: 'Reservation Confirmed',
+        isUpcoming: true
+      },
+      {
+        id: 'TVR-2025-55621',
+        hotelName: 'Ocean View Hotel',
+        location: 'Calangute Beach, Goa',
+        image: 'https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=600&q=80',
+        rooms: 1,
+        adults: 2,
+        children: 0,
+        dates: '10 Jul 2025 (Thu)  ·  12 Jul 2025 (Sat)',
+        nights: 2,
+        bookedOn: '12 May 2025',
+        status: 'Pending Confirmation',
+        amount: '₹16,500',
+        statusDetail: 'Waiting for property confirmation',
+        isUpcoming: true
+      },
+      {
+        id: 'TVR-2025-44567',
+        hotelName: 'Hilltop Resort',
+        location: 'Manali, Himachal Pradesh',
+        image: 'https://images.unsplash.com/photo-1582719508461-905c673771fd?auto=format&fit=crop&w=600&q=80',
+        rooms: 1,
+        adults: 2,
+        children: 0,
+        dates: '05 Sep 2025 (Fri)  ·  08 Sep 2025 (Mon)',
+        nights: 3,
+        bookedOn: '20 Apr 2025',
+        status: 'Completed',
+        amount: '₹12,000',
+        statusDetail: 'You stayed on 05-08 Sep 2025',
+        isUpcoming: false
+      },
+      {
+        id: 'TVR-2025-33211',
+        hotelName: 'Serenity Villa',
+        location: 'Lonavala, Maharashtra',
+        image: 'https://images.unsplash.com/photo-1512917774080-9991f1c4c750?auto=format&fit=crop&w=600&q=80',
+        rooms: 1,
+        adults: 2,
+        children: 0,
+        dates: '15 May 2025 (Thu)  ·  16 May 2025 (Fri)',
+        nights: 1,
+        bookedOn: '15 Apr 2025',
+        status: 'Cancelled',
+        amount: '₹6,000',
+        statusDetail: 'Cancelled on 16 Apr 2025',
+        isUpcoming: false
+      }
+    ];
+
+    const savedStr = localStorage.getItem('rental_bookings');
+    if (savedStr) {
+      try {
+        const saved = JSON.parse(savedStr);
+        if (Array.isArray(saved)) {
+          return [...saved, ...defaultBookings];
+        }
+      } catch (e) {
+        console.error(e);
+      }
     }
-  ]);
+    return defaultBookings;
+  });
 
   // Center column booking filter
   const [selectedFilter, setSelectedFilter] = useState('All Bookings');
@@ -128,6 +143,16 @@ export default function MyBookings({ onNavigate }) {
     cancelled: 0,
     pending: 2
   });
+
+  // Update stats dynamically when bookings changes
+  useEffect(() => {
+    const upcoming = bookings.filter(b => b.isUpcoming && b.status !== 'Cancelled').length;
+    const confirmed = bookings.filter(b => b.status === 'Confirmed').length;
+    const completed = bookings.filter(b => b.status === 'Completed').length;
+    const cancelled = bookings.filter(b => b.status === 'Cancelled').length;
+    const pending = bookings.filter(b => b.status === 'Pending Confirmation').length;
+    setSummaryStats({ upcoming, confirmed, completed, cancelled, pending });
+  }, [bookings]);
 
   const totalCount = bookings.length;
 
@@ -161,24 +186,41 @@ export default function MyBookings({ onNavigate }) {
   // Action: Confirm cancellation
   const confirmCancellation = () => {
     if (!bookingToCancel) return;
-    setBookings(prevBookings => 
-      prevBookings.map(b => 
-        b.id === bookingToCancel.id 
-          ? { 
-              ...b, 
-              status: 'Cancelled', 
-              statusDetail: `Cancelled on ${new Date().toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' })}`,
-              isUpcoming: false
-            } 
-          : b
-      )
+    const updatedBookings = bookings.map(b => 
+      b.id === bookingToCancel.id 
+        ? { 
+            ...b, 
+            status: 'Cancelled', 
+            statusDetail: `Cancelled on ${new Date().toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' })}`,
+            isUpcoming: false
+          } 
+        : b
     );
-    setSummaryStats(prev => ({
-      ...prev,
-      confirmed: prev.confirmed - 1,
-      cancelled: prev.cancelled + 1,
-      pending: prev.pending - 1
-    }));
+    setBookings(updatedBookings);
+
+    // Update localStorage if it's a rental booking
+    if (bookingToCancel.id.startsWith('TVR-RENT-')) {
+      const savedStr = localStorage.getItem('rental_bookings');
+      if (savedStr) {
+        try {
+          const saved = JSON.parse(savedStr);
+          const updatedSaved = saved.map(b => 
+            b.id === bookingToCancel.id 
+              ? { 
+                  ...b, 
+                  status: 'Cancelled', 
+                  statusDetail: `Cancelled on ${new Date().toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' })}`,
+                  isUpcoming: false
+                } 
+              : b
+          );
+          localStorage.setItem('rental_bookings', JSON.stringify(updatedSaved));
+        } catch (e) {
+          console.error(e);
+        }
+      }
+    }
+
     setShowCancelModal(false);
     setBookingToCancel(null);
   };
@@ -499,7 +541,12 @@ export default function MyBookings({ onNavigate }) {
                               {/* Rooms and Guests Line */}
                               <div className="flex items-center gap-2 text-xs text-slate-500 font-semibold mt-1">
                                 <User className="h-4 w-4 text-slate-450 shrink-0" strokeWidth={2} />
-                                <span>{booking.rooms} Room{booking.rooms > 1 ? 's' : ''}  •  {booking.adults} Adults{booking.children > 0 ? `, ${booking.children} Children` : ''}</span>
+                                <span>
+                                  {booking.isRental 
+                                    ? `Self-Drive Rental  •  ${booking.adults} Seater` 
+                                    : `${booking.rooms} Room${booking.rooms > 1 ? 's' : ''}  •  ${booking.adults} Adults${booking.children > 0 ? `, ${booking.children} Children` : ''}`
+                                  }
+                                </span>
                               </div>
 
                               {/* Dates and Nights Line */}
@@ -508,7 +555,7 @@ export default function MyBookings({ onNavigate }) {
                                 <span>{booking.dates.replace('·', '  ·  ')}</span>
                                 <span className="mx-1"></span>
                                 <Moon className="h-4 w-4 text-slate-450 shrink-0" strokeWidth={2} />
-                                <span>{booking.nights} Night{booking.nights > 1 ? 's' : ''}</span>
+                                <span>{booking.nights} {booking.isRental ? `Day${booking.nights > 1 ? 's' : ''}` : `Night${booking.nights > 1 ? 's' : ''}`}</span>
                               </div>
                             </div>
 
@@ -937,18 +984,26 @@ export default function MyBookings({ onNavigate }) {
                   <span className="text-slate-800 font-extrabold">{selectedBookingDetails.statusDetail}</span>
                 </div>
                 <div>
-                  <span className="block font-bold uppercase tracking-wider text-[10px] text-slate-400 mb-1">Duration</span>
-                  <span className="text-slate-800 font-extrabold">{selectedBookingDetails.nights} Nights</span>
+                  <span className="block font-bold uppercase tracking-wider text-[10px] text-slate-400 mb-1">
+                    {selectedBookingDetails.isRental ? 'Rental Days' : 'Duration'}
+                  </span>
+                  <span className="text-slate-800 font-extrabold">
+                    {selectedBookingDetails.nights} {selectedBookingDetails.isRental ? 'Days' : 'Nights'}
+                  </span>
                 </div>
                 <div>
                   <span className="block font-bold uppercase tracking-wider text-[10px] text-slate-400 mb-1">Dates</span>
                   <span className="text-slate-800 font-extrabold">{selectedBookingDetails.dates}</span>
                 </div>
                 <div>
-                  <span className="block font-bold uppercase tracking-wider text-[10px] text-slate-400 mb-1">Rooms & Guests</span>
+                  <span className="block font-bold uppercase tracking-wider text-[10px] text-slate-400 mb-1">
+                    {selectedBookingDetails.isRental ? 'Capacity' : 'Rooms & Guests'}
+                  </span>
                   <span className="text-slate-800 font-extrabold">
-                    {selectedBookingDetails.rooms} Room, {selectedBookingDetails.adults} Adults
-                    {selectedBookingDetails.children > 0 ? `, ${selectedBookingDetails.children} Children` : ''}
+                    {selectedBookingDetails.isRental 
+                      ? `${selectedBookingDetails.adults} Seater` 
+                      : `${selectedBookingDetails.rooms} Room, ${selectedBookingDetails.adults} Adults${selectedBookingDetails.children > 0 ? `, ${selectedBookingDetails.children} Children` : ''}`
+                    }
                   </span>
                 </div>
                 <div>

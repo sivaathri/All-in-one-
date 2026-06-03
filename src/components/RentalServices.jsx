@@ -29,7 +29,7 @@ const carItems = [
 ];
 
 /* ─── Panel ─────────────────────────────────────────────────────── */
-function RentalPanel({ title, subtitle, ctaText, heroImage, heroAlt, items, bannerFrom, bannerTo, accentHex, icon, bgImage }) {
+function RentalPanel({ title, subtitle, ctaText, heroImage, heroAlt, items, bannerFrom, bannerTo, accentHex, icon, bgImage, onNavigate }) {
   const scrollRef = useRef(null);
   const [showArrow, setShowArrow] = useState(true);
 
@@ -48,6 +48,11 @@ function RentalPanel({ title, subtitle, ctaText, heroImage, heroAlt, items, bann
 
   const scrollRight = () => {
     if (scrollRef.current) scrollRef.current.scrollBy({ left: 300, behavior: 'smooth' });
+  };
+
+  const handlePanelClick = () => {
+    const vehicleType = title.toLowerCase().includes('bike') ? 'Bike' : 'Car';
+    onNavigate('rent-home', { vehicleType });
   };
 
   return (
@@ -90,6 +95,7 @@ function RentalPanel({ title, subtitle, ctaText, heroImage, heroAlt, items, bann
 
         {/* CTA Button */}
         <button
+          onClick={handlePanelClick}
           className="relative z-10 flex items-center gap-2 text-white text-[12.5px] font-bold px-4 py-1.5 rounded-full border border-white/30 cursor-pointer mb-3 group/btn
             transition-all duration-300 ease-out
             hover:scale-105 hover:border-white/60 hover:shadow-[0_0_18px_rgba(255,255,255,0.25)]
@@ -115,6 +121,7 @@ function RentalPanel({ title, subtitle, ctaText, heroImage, heroAlt, items, bann
             {items.map((item) => (
               <div
                 key={item.id}
+                onClick={handlePanelClick}
                 className="group bg-white rounded-2xl border border-slate-200/90 shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all duration-200 cursor-pointer shrink-0 flex flex-col w-[150px] overflow-hidden"
               >
                 {/* Vehicle image */}
@@ -147,7 +154,7 @@ function RentalPanel({ title, subtitle, ctaText, heroImage, heroAlt, items, bann
 }
 
 /* ─── Main Export ───────────────────────────────────────────────── */
-export default function RentalServices() {
+export default function RentalServices({ onNavigate = () => {} }) {
   return (
     <section className="w-full pb-1 bg-white overflow-hidden">
       <div className="mx-auto max-w-[1760px] px-4 sm:px-6 lg:px-8">
@@ -157,13 +164,13 @@ export default function RentalServices() {
           <h2 className="text-2xl sm:text-[26px] font-black text-slate-900 tracking-tight">
             Rental Services
           </h2>
-          <a
-            href="#all-rentals"
-            className="flex items-center gap-1.5 text-sm font-extrabold text-[#0F766E] hover:underline transition-all duration-200 cursor-pointer"
+          <button
+            onClick={() => onNavigate('rent-home')}
+            className="flex items-center gap-1.5 text-sm font-extrabold text-[#0F766E] hover:underline transition-all duration-200 cursor-pointer bg-transparent border-none"
           >
             <span>View All</span>
             <ArrowRight className="h-4 w-4" strokeWidth={2.5} />
-          </a>
+          </button>
         </div>
 
         {/* Two Panels side by side */}
@@ -178,8 +185,8 @@ export default function RentalServices() {
             bannerFrom="#0C3B2C"
             bannerTo="#1B6644"
             accentHex="#16A97A"
-           
             bgImage={bikerImg}
+            onNavigate={onNavigate}
           />
           <RentalPanel
             title="Car Rental"
@@ -191,8 +198,8 @@ export default function RentalServices() {
             bannerFrom="#0C2B4E"
             bannerTo="#1A4B88"
             accentHex="#2563EB"
-           
             bgImage={carrImg}
+            onNavigate={onNavigate}
           />
         </div>
 

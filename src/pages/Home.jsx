@@ -9,7 +9,7 @@ import DownloadAppBanner from '../components/DownloadAppBanner';
 import PromoToast from '../components/PromoToast';
 import HomeAdModal from '../components/HomeAdModal';
 
-export default function Home({ onSearch }) {
+export default function Home({ onSearch, onNavigate }) {
   return (
     <main className="flex flex-col min-h-screen bg-slate-50">
       {/* Hero Section (holds floating search bar and transparent features) */}
@@ -22,7 +22,7 @@ export default function Home({ onSearch }) {
       <TrendingSection />
 
       {/* Rental Services Section */}
-      <RentalServices />
+      <RentalServices onNavigate={onNavigate} />
 
       {/* Top Food Spots Near You Section */}
       <FoodSpotsSection />
