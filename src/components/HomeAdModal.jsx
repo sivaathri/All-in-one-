@@ -206,10 +206,12 @@ export default function HomeAdModal() {
         {/* Right Side: Visual Image Graphic cropped & Countdown Overlay */}
         <div className="relative w-full md:w-[480px] h-[320px] md:h-auto overflow-hidden bg-[#EFFBF8] shrink-0">
           
+          {/* Wrapper is twice the width of the container, aligned to the right. This completely hides the left 50% of the image (text side). */}
           <img 
             src={homeadImg} 
             alt="Promo Graphic" 
-            className="absolute inset-0 w-full h-full object-cover object-right select-none pointer-events-none"
+            className="absolute inset-0 w-full h-full object-cover select-none pointer-events-none"
+            style={{ objectPosition: '70% center' }}
           />
 
           {/* Real Functional Countdown Timer Box (positioned on the right side over the illustration) */}
