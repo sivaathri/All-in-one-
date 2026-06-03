@@ -1,24 +1,25 @@
 import { useState } from 'react';
 import { Tag, Calendar, Headset, Play, Apple, Search, Landmark, Compass, ShoppingBag, Utensils, Waves } from 'lucide-react';
-import becameBg from '../assets/becameBG.png';
+import downloadAppBg from '../assets/download_app_bg.png';
+import appQrCode from '../assets/app_qr_code.png';
 
 export default function DownloadAppBanner() {
   return (
     <section className="w-full pb-12 pt-4 bg-white overflow-hidden">
       <div className="mx-auto max-w-[1760px] px-4 sm:px-6 lg:px-8">
         
-        {/* Banner Card with becameBg as background */}
+        {/* Banner Card with generated background */}
         <div 
-          className="rounded-[28px] border border-slate-200/50 p-6 md:p-8 flex flex-col lg:flex-row items-center justify-between gap-8 relative overflow-hidden shadow-xs min-h-[280px] bg-no-repeat bg-cover bg-center"
-          style={{ backgroundImage: `url(${becameBg})` }}
+          className="rounded-[28px] border border-slate-200/50 p-5 md:py-5 md:px-8 flex flex-col lg:flex-row items-center justify-between gap-8 relative overflow-hidden shadow-xs min-h-[200px] bg-no-repeat bg-cover bg-center"
+          style={{ backgroundImage: `url(${downloadAppBg})` }}
         >
           
           {/* Left Side: Mock Tilted Smartphone Display (Large, overflowing bottom) */}
-          <div className="w-full lg:w-[28%] flex justify-center shrink-0 relative lg:-mb-24 mt-2 lg:mt-6 z-10">
+          <div className="w-full lg:w-[28%] flex justify-center shrink-0 relative lg:-mb-[120px] mt-2 lg:mt-4 z-10">
             {/* Phone Container with Rotation */}
-            <div className="relative w-[210px] h-[370px] bg-slate-900 rounded-[36px] border-[6px] border-slate-800 shadow-2xl rotate-[-12deg] transform hover:rotate-[-5deg] transition-all duration-500 ease-out overflow-hidden flex flex-col">
+            <div className="relative w-[200px] h-[340px] bg-slate-900 rounded-[32px] border-[5px] border-slate-800 shadow-2xl rotate-[-12deg] transform hover:rotate-[-5deg] transition-all duration-500 ease-out overflow-hidden flex flex-col">
               {/* Notch / Dynamic Island */}
-              <div className="absolute top-1.5 left-1/2 -translate-x-1/2 w-16 h-3.5 bg-black rounded-full z-30" />
+              <div className="absolute top-1.5 left-1/2 -translate-x-1/2 w-14 h-3 bg-black rounded-full z-30" />
               
               {/* Phone Content Screen */}
               <div className="absolute inset-0 bg-slate-50 p-2.5 pt-7 flex flex-col gap-2 overflow-y-auto no-scrollbar">
@@ -158,7 +159,7 @@ export default function DownloadAppBanner() {
           </div>
 
           {/* Vertical Divider (Desktop Only) */}
-          <div className="hidden lg:block h-28 w-px bg-slate-200/80 self-center z-10" />
+          <div className="hidden lg:block h-20 w-px bg-slate-200/80 self-center z-10" />
 
           {/* Right Side: QR Code + OR + App Downloads */}
           <div className="w-full lg:w-auto flex flex-col sm:flex-row items-center justify-center gap-6 md:gap-8 z-10">
@@ -167,32 +168,11 @@ export default function DownloadAppBanner() {
             <div className="flex flex-col items-center gap-2">
               <span className="text-[10.5px] font-black text-[#0F766E] uppercase tracking-wider">Scan QR to Download</span>
               <div className="bg-white p-2.5 rounded-2xl border border-slate-200/80 shadow-md flex items-center justify-center h-28 w-28">
-                {/* SVG QR Code Mock */}
-                <svg viewBox="0 0 100 100" className="w-full h-full fill-slate-800">
-                  {/* Position Finders */}
-                  <rect x="0" y="0" width="30" height="30" />
-                  <rect x="5" y="5" width="20" height="20" fill="white" />
-                  <rect x="10" y="10" width="10" height="10" />
-
-                  <rect x="70" y="0" width="30" height="30" />
-                  <rect x="75" y="5" width="20" height="20" fill="white" />
-                  <rect x="80" y="10" width="10" height="10" />
-
-                  <rect x="0" y="70" width="30" height="30" />
-                  <rect x="5" y="75" width="20" height="20" fill="white" />
-                  <rect x="10" y="80" width="10" height="10" />
-
-                  {/* Alignment & Code Details (Mock patterns) */}
-                  <rect x="40" y="10" width="10" height="10" />
-                  <rect x="50" y="20" width="10" height="10" />
-                  <rect x="35" y="40" width="15" height="15" />
-                  <rect x="75" y="45" width="10" height="15" />
-                  <rect x="55" y="60" width="20" height="10" />
-                  <rect x="40" y="80" width="10" height="10" />
-                  <rect x="85" y="85" width="15" height="15" />
-                  <rect x="45" y="85" width="10" height="10" />
-                  <rect x="80" y="70" width="10" height="10" />
-                </svg>
+                <img 
+                  src={appQrCode} 
+                  alt="Download QR Code" 
+                  className="w-full h-full object-contain select-none pointer-events-none"
+                />
               </div>
             </div>
 
