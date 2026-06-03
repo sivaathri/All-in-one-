@@ -3,6 +3,7 @@ import Categories from '../components/Categories';
 import TrendingSection from '../components/TrendingSection';
 import RentalServices from '../components/RentalServices';
 import PromoToast from '../components/PromoToast';
+import HomeAdModal from '../components/HomeAdModal';
 
 export default function Home({ onSearch }) {
   return (
@@ -21,6 +22,9 @@ export default function Home({ onSearch }) {
 
       {/* Promo Ad Toast — slides in from bottom-left every 60s */}
       <PromoToast />
+
+      {/* Welcome/Promo Banner Modal Pop-up on Open */}
+      <HomeAdModal />
     </main>
   );
 }
