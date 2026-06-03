@@ -259,11 +259,13 @@ export default function RentHome({ onSearch, onSelectVehicle }) {
             }`}
           >
             <div className={`h-10 w-10 rounded-xl flex items-center justify-center shrink-0 ${activeTab === 'Bike' ? 'bg-[#0D9488]/10 text-[#0D9488]' : 'bg-slate-100 text-slate-500'}`}>
-              <svg className="h-5.5 w-5.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
-                <circle cx="6" cy="18" r="3" />
-                <circle cx="18" cy="18" r="3" />
-                <path d="M12 18V12h6" />
-                <path d="M12 12L9 6H4" />
+              <svg className="h-6 w-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+                <circle cx="5.5" cy="17.5" r="3" />
+                <circle cx="18.5" cy="17.5" r="3" />
+                <path d="M5.5 17.5l4-3 5 .5 4 2.5" />
+                <path d="M8.5 11.5c1-1 3.5-2 6-1.5s2.5 1.5 3 2.5l-9 1.5" />
+                <path d="M18.5 17.5L16 9.5h-2.5" />
+                <path d="M6 13c1.5-1.5 3-1.5 4.5-.5" />
               </svg>
             </div>
             <div>
@@ -282,11 +284,11 @@ export default function RentHome({ onSearch, onSelectVehicle }) {
             }`}
           >
             <div className={`h-10 w-10 rounded-xl flex items-center justify-center shrink-0 ${activeTab === 'Car' ? 'bg-[#0D9488]/10 text-[#0D9488]' : 'bg-slate-100 text-slate-500'}`}>
-              <svg className="h-5.5 w-5.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
-                <rect x="2" y="10" width="20" height="8" rx="2" />
-                <path d="M7 10V5a1 1 0 0 1 1-1h8a1 1 0 0 1 1 1v5" />
-                <circle cx="6" cy="14" r="1" fill="currentColor" />
-                <circle cx="18" cy="14" r="1" fill="currentColor" />
+              <svg className="h-6.5 w-6.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+                <circle cx="6.5" cy="17.5" r="2.5" />
+                <circle cx="17.5" cy="17.5" r="2.5" />
+                <path d="M2 14.5h2c.5-2 2.5-2 3 0h6c.5-2 2.5-2 3 0h2.5c.8 0 1.5-.7 1.5-1.5v-3.5L16 6.5H8L4.5 9.5H3.5C2.7 9.5 2 10.2 2 11v3.5z" />
+                <path d="M8 7.5h5.5l1.5 2H6.5l1.5-2z" />
               </svg>
             </div>
             <div>
@@ -305,11 +307,14 @@ export default function RentHome({ onSearch, onSelectVehicle }) {
             }`}
           >
             <div className={`h-10 w-10 rounded-xl flex items-center justify-center shrink-0 ${activeTab === 'Scooter' ? 'bg-[#0D9488]/10 text-[#0D9488]' : 'bg-slate-100 text-slate-500'}`}>
-              <svg className="h-5.5 w-5.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
-                <circle cx="6" cy="18" r="2.5" />
-                <circle cx="18" cy="18" r="2.5" />
-                <path d="M6 15.5h8.5l3.5-7.5h2" />
-                <path d="M12 8h-3" />
+              <svg className="h-6 w-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+                <circle cx="6" cy="17.5" r="2.5" />
+                <circle cx="18" cy="17.5" r="2.5" />
+                <path d="M8.5 17.5h6" />
+                <path d="M14.5 17.5l1.5-7.5h-1" />
+                <path d="M16 10l1-3.5h-2.5" />
+                <path d="M6 17.5C6 14.5 7.5 12 10.5 12h2.5l1 3" />
+                <path d="M8.5 12c1.5-1.5 3.5-1.5 4.5 0" />
               </svg>
             </div>
             <div>
@@ -328,12 +333,14 @@ export default function RentHome({ onSearch, onSelectVehicle }) {
             }`}
           >
             <div className={`h-10 w-10 rounded-xl flex items-center justify-center shrink-0 ${activeTab === 'Bicycle' ? 'bg-[#0D9488]/10 text-[#0D9488]' : 'bg-slate-100 text-slate-500'}`}>
-              <svg className="h-5.5 w-5.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
-                <circle cx="5.5" cy="17.5" r="3.5" />
-                <circle cx="18.5" cy="17.5" r="3.5" />
-                <path d="M15 6a2 2 0 1 0 0-4 2 2 0 0 0 0 4zm-3 11.5L8.5 12H4.5" />
-                <path d="M12 17.5L15 12h3.5" />
-                <path d="M12 7.5L8.5 12H15L12 7.5z" />
+              <svg className="h-6 w-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+                <circle cx="5.5" cy="17.5" r="3" />
+                <circle cx="18.5" cy="17.5" r="3" />
+                <path d="M5.5 17.5L10 12h5.5l3 5.5" />
+                <path d="M10 12l1.5 5.5" />
+                <path d="M11.5 17.5l4-5.5" />
+                <path d="M15.5 12L16.5 7h2" />
+                <path d="M10 12l-.5-2.5h-1.5" />
               </svg>
             </div>
             <div>
