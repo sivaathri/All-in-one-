@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Tag, Calendar, Headset, Play, Apple, Search, Landmark, Compass, ShoppingBag, Utensils, Waves } from 'lucide-react';
-import downloadAppBg from '../assets/download_app_bg.png';
+import downloadAppBg from '../assets/bg.png';
 import appQrCode from '../assets/app_qr_code.png';
 
 export default function DownloadAppBanner() {
@@ -14,101 +14,8 @@ export default function DownloadAppBanner() {
           style={{ backgroundImage: `url(${downloadAppBg})` }}
         >
           
-          {/* Left Side: Mock Tilted Smartphone Display (Large, overflowing bottom) */}
-          <div className="w-full lg:w-[28%] flex justify-center shrink-0 relative lg:-mb-[120px] mt-2 lg:mt-4 z-10">
-            {/* Phone Container with Rotation */}
-            <div className="relative w-[200px] h-[340px] bg-slate-900 rounded-[32px] border-[5px] border-slate-800 shadow-2xl rotate-[-12deg] transform hover:rotate-[-5deg] transition-all duration-500 ease-out overflow-hidden flex flex-col">
-              {/* Notch / Dynamic Island */}
-              <div className="absolute top-1.5 left-1/2 -translate-x-1/2 w-14 h-3 bg-black rounded-full z-30" />
-              
-              {/* Phone Content Screen */}
-              <div className="absolute inset-0 bg-slate-50 p-2.5 pt-7 flex flex-col gap-2 overflow-y-auto no-scrollbar">
-                
-                {/* TripVerse Header */}
-                <div className="flex items-center gap-1.5 mt-0.5">
-                  <div className="h-4.5 w-4.5 bg-[#0F766E] rounded-md flex items-center justify-center text-[10px] text-white font-black">T</div>
-                  <span className="text-[12.5px] font-black text-slate-800 tracking-tight">TripVerse</span>
-                </div>
-                <span className="text-[7.5px] font-bold text-slate-400 -mt-1.5">Explore. Experience. Enjoy.</span>
-
-                {/* Simulated Search Bar */}
-                <div className="flex items-center gap-1.5 bg-white border border-slate-200/80 rounded-lg p-1 px-2 mt-1">
-                  <Search className="h-2.5 w-2.5 text-slate-400" />
-                  <span className="text-[8px] text-slate-400 font-semibold">Search stays, rentals, food...</span>
-                </div>
-
-                {/* Simulated Categories Grid */}
-                <div className="grid grid-cols-4 gap-1.5 mt-1">
-                  <div className="flex flex-col items-center">
-                    <div className="h-5 w-5 bg-teal-50 rounded-full flex items-center justify-center text-[#0F766E] border border-teal-100/50">
-                      <Landmark className="h-2.5 w-2.5" />
-                    </div>
-                    <span className="text-[6px] font-bold text-slate-500 mt-1">Stays</span>
-                  </div>
-                  <div className="flex flex-col items-center">
-                    <div className="h-5 w-5 bg-blue-50 rounded-full flex items-center justify-center text-blue-600 border border-blue-100/50">
-                      <Waves className="h-2.5 w-2.5" />
-                    </div>
-                    <span className="text-[6px] font-bold text-slate-500 mt-1">Rentals</span>
-                  </div>
-                  <div className="flex flex-col items-center">
-                    <div className="h-5 w-5 bg-rose-50 rounded-full flex items-center justify-center text-rose-500 border border-rose-100/50">
-                      <Utensils className="h-2.5 w-2.5" />
-                    </div>
-                    <span className="text-[6px] font-bold text-slate-500 mt-1">Food</span>
-                  </div>
-                  <div className="flex flex-col items-center">
-                    <div className="h-5 w-5 bg-amber-50 rounded-full flex items-center justify-center text-amber-500 border border-amber-100/50">
-                      <Compass className="h-2.5 w-2.5" />
-                    </div>
-                    <span className="text-[6px] font-bold text-slate-500 mt-1">Adventures</span>
-                  </div>
-                </div>
-
-                {/* Section Header */}
-                <div className="flex justify-between items-center mt-2 px-0.5">
-                  <span className="text-[8.5px] font-black text-slate-800">Top Picks for You</span>
-                  <span className="text-[6.5px] font-bold text-[#0F766E] hover:underline cursor-pointer">View All</span>
-                </div>
-
-                {/* Simulated Horizontally Scrollable Cards */}
-                <div className="flex gap-2 overflow-x-auto no-scrollbar pb-1">
-                  
-                  {/* Card 1 */}
-                  <div className="border border-slate-100 rounded-lg p-1 bg-white shrink-0 w-[65px] flex flex-col gap-0.5">
-                    <div className="h-10 w-full rounded-md bg-slate-200 overflow-hidden relative">
-                      <img src="https://images.unsplash.com/photo-1540555700478-4be289fbecef?auto=format&fit=crop&w=80&q=80" className="h-full w-full object-cover" />
-                    </div>
-                    <span className="text-[6.5px] font-extrabold text-slate-800 line-clamp-1">Sea Breeze</span>
-                    <span className="text-[5.5px] text-slate-400">Pondicherry</span>
-                    <span className="text-[6px] font-bold text-[#0F766E]">★ 4.6</span>
-                  </div>
-
-                  {/* Card 2 */}
-                  <div className="border border-slate-100 rounded-lg p-1 bg-white shrink-0 w-[65px] flex flex-col gap-0.5">
-                    <div className="h-10 w-full rounded-md bg-slate-200 overflow-hidden relative">
-                      <img src="https://images.unsplash.com/photo-1513104890138-7c749659a591?auto=format&fit=crop&w=80&q=80" className="h-full w-full object-cover" />
-                    </div>
-                    <span className="text-[6.5px] font-extrabold text-slate-800 line-clamp-1">Cafe Xtasi</span>
-                    <span className="text-[5.5px] text-slate-400">Pondicherry</span>
-                    <span className="text-[6px] font-bold text-[#0F766E]">★ 4.5</span>
-                  </div>
-
-                  {/* Card 3 */}
-                  <div className="border border-slate-100 rounded-lg p-1 bg-white shrink-0 w-[65px] flex flex-col gap-0.5">
-                    <div className="h-10 w-full rounded-md bg-slate-200 overflow-hidden relative">
-                      <img src="https://images.unsplash.com/photo-1544551763-46a013bb70d5?auto=format&fit=crop&w=80&q=80" className="h-full w-full object-cover" />
-                    </div>
-                    <span className="text-[6.5px] font-extrabold text-slate-800 line-clamp-1">Scuba Diving</span>
-                    <span className="text-[5.5px] text-slate-400">Pondicherry</span>
-                    <span className="text-[6px] font-bold text-[#0F766E]">★ 4.8</span>
-                  </div>
-
-                </div>
-
-              </div>
-            </div>
-          </div>
+          {/* Left Side: Spacing placeholder to keep the background traveler fully visible */}
+          <div className="w-full lg:w-[28%] shrink-0 h-6 lg:h-auto pointer-events-none z-10" />
 
           {/* Middle Side: Text Details + Feature Row */}
           <div className="flex-1 text-center lg:text-left z-10 lg:pl-4">
