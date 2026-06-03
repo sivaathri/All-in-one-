@@ -1,7 +1,8 @@
 import { useState, useMemo } from 'react';
 import { 
   Calendar, MapPin, Star, Heart, ArrowRight, Grid, List, 
-  ChevronDown, SlidersHorizontal, ShieldCheck, DollarSign, Clock, Phone, Award 
+  ChevronDown, SlidersHorizontal, ShieldCheck, DollarSign, Clock, Phone, Award,
+  Fuel, Gauge, Zap
 } from 'lucide-react';
 
 // Reusing vehicle images from assets
@@ -20,13 +21,17 @@ const FLEET_DATA = [
   { id: 1, title: 'Yamaha R15 V4', type: 'Bike', category: 'Sports Bike', image: rentYamahaImg, price: 699, rating: 4.7, reviews: 125, spec: '155cc • Petrol', badge: 'Popular' },
   { id: 2, title: 'Royal Enfield Classic 350', type: 'Bike', category: 'Cruiser Bike', image: rentEnfieldImg, price: 899, rating: 4.8, reviews: 210, spec: '349cc • Petrol', badge: 'Best Seller' },
   { id: 3, title: 'KTM Duke 250', type: 'Bike', category: 'Sports Bike', image: rentKtmImg, price: 849, rating: 4.6, reviews: 98, spec: '249cc • Petrol', badge: 'Popular' },
+  
+  // Scooters (integrated under Bike tab for mockup match)
+  { id: 4, title: 'Honda Activa 6G', type: 'Scooter', category: 'Scooter', image: rentActivaImg, price: 399, rating: 4.5, reviews: 163, spec: '110cc • Petrol', badge: 'New' },
+  
   { id: 5, title: 'Bajaj Pulsar NS200', type: 'Bike', category: 'Sports Bike', image: rentYamahaImg, price: 599, rating: 4.6, reviews: 87, spec: '199cc • Petrol', badge: '' },
   { id: 6, title: 'Honda Hornet 2.0', type: 'Bike', category: 'Sports Bike', image: rentKtmImg, price: 549, rating: 4.4, reviews: 64, spec: '184cc • Petrol', badge: '' },
-  { id: 8, title: 'Royal Enfield Meteor 350', type: 'Bike', category: 'Cruiser Bike', image: rentEnfieldImg, price: 999, rating: 4.8, reviews: 142, spec: '349cc • Petrol', badge: '' },
   
-  // Scooters
-  { id: 4, title: 'Honda Activa 6G', type: 'Scooter', category: 'Scooter', image: rentActivaImg, price: 399, rating: 4.5, reviews: 163, spec: '110cc • Petrol', badge: 'New' },
+  // Scooters (integrated under Bike tab for mockup match)
   { id: 7, title: 'TVS Jupiter 125', type: 'Scooter', category: 'Scooter', image: rentActivaImg, price: 449, rating: 4.5, reviews: 103, spec: '125cc • Petrol', badge: '' },
+  
+  { id: 8, title: 'Royal Enfield Meteor 350', type: 'Bike', category: 'Cruiser Bike', image: rentEnfieldImg, price: 999, rating: 4.8, reviews: 142, spec: '349cc • Petrol', badge: '' },
   
   // Cars
   { id: 9, title: 'Toyota Glanza', type: 'Car', category: 'Hatchback', image: rentGlanzaImg, price: 1500, rating: 4.7, reviews: 29, spec: 'Petrol • Automatic', badge: 'Best Seller' },
@@ -36,8 +41,32 @@ const FLEET_DATA = [
 
   // Bicycles
   { id: 13, title: 'Hercules Roadeo hybrid', type: 'Bicycle', category: 'Hybrid', image: rentYamahaImg, price: 199, rating: 4.3, reviews: 31, spec: '21-Speed • Manual', badge: 'Popular' },
-  { id: 14, title: 'Firefox Target MTB', type: 'Bicycle', category: 'Mountain', image: rentKtmImg, price: 299, rating: 4.4, reviews: 18, spec: '24-Speed • Manual', badge: '' }
+  { id: 14, title: 'Firefox Target MTB', type: 'Bicycle', category: 'Mountain', image: rentKtmImg, price: 299, rating: 4.4, reviews: 18, spec: '24-Speed • Manual', badge: '' },
+
+  // Electric (support Electric filter)
+  { id: 15, title: 'Revolt RV400', type: 'Bike', category: 'Electric Bike', image: rentYamahaImg, price: 699, rating: 4.7, reviews: 88, spec: 'Electric • 150km Range', badge: 'New' },
+  { id: 16, title: 'Ather 450X', type: 'Scooter', category: 'Electric Scooter', image: rentActivaImg, price: 549, rating: 4.8, reviews: 112, spec: 'Electric • 110km Range', badge: 'Popular' }
 ];
+
+function formatDateString(dateStr) {
+  if (!dateStr) return '';
+  const parts = dateStr.split('-');
+  if (parts.length !== 3) return dateStr;
+  
+  const year = parseInt(parts[0], 10);
+  const month = parseInt(parts[1], 10) - 1; // 0-based
+  const day = parseInt(parts[2], 10);
+  
+  const d = new Date(year, month, day);
+  if (isNaN(d.getTime())) return dateStr;
+  
+  const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+  const mStr = months[d.getMonth()];
+  const weekdays = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+  const wStr = weekdays[d.getDay()];
+  
+  return `${day} ${mStr} ${year}, ${wStr}`;
+}
 
 export default function RentHome({ onSearch, onSelectVehicle }) {
   const [activeTab, setActiveTab] = useState('Bike'); // 'Bike' | 'Car' | 'Scooter' | 'Bicycle'
@@ -46,7 +75,8 @@ export default function RentHome({ onSearch, onSelectVehicle }) {
   const [pickUpTime, setPickUpTime] = useState('10:00 AM');
   const [dropOffDate, setDropOffDate] = useState('2025-06-25');
   const [dropOffTime, setDropOffTime] = useState('10:00 AM');
-  const [priceRange, setPriceRange] = useState(1500);
+  const [priceMin, setPriceMin] = useState(200);
+  const [priceMax, setPriceMax] = useState(1500);
   const [selectedTypes, setSelectedTypes] = useState(['All']);
   const [sortBy, setSortBy] = useState('popular');
   const [layoutMode, setLayoutMode] = useState('grid'); // 'grid' | 'list'
@@ -79,17 +109,29 @@ export default function RentHome({ onSearch, onSelectVehicle }) {
 
   // Filter & Sort calculation
   const filteredVehicles = useMemo(() => {
-    let list = FLEET_DATA.filter(item => item.type === activeTab);
+    let list = [];
+    // If activeTab is Bike, show both Bikes and Scooters to match the mockup grid exactly
+    if (activeTab === 'Bike') {
+      list = FLEET_DATA.filter(item => item.type === 'Bike' || item.type === 'Scooter');
+    } else {
+      list = FLEET_DATA.filter(item => item.type === activeTab);
+    }
 
-    // Price Filter
-    list = list.filter(item => item.price <= priceRange);
+    // Price Filter (double range slider)
+    list = list.filter(item => {
+      if (priceMax >= 1500) {
+        return item.price >= priceMin;
+      }
+      return item.price >= priceMin && item.price <= priceMax;
+    });
 
-    // Type Filter (only applies to Bike tab categories in screenshot example)
+    // Type Filter (applies to Bike category checkboxes in mockup)
     if (activeTab === 'Bike' && !selectedTypes.includes('All')) {
       list = list.filter(item => {
         if (selectedTypes.includes('Sports') && item.category.includes('Sports')) return true;
         if (selectedTypes.includes('Cruiser') && item.category.includes('Cruiser')) return true;
         if (selectedTypes.includes('Scooter') && item.category.includes('Scooter')) return true;
+        if (selectedTypes.includes('Electric') && item.category.includes('Electric')) return true;
         return false;
       });
     }
@@ -104,7 +146,7 @@ export default function RentHome({ onSearch, onSelectVehicle }) {
     }
 
     return list;
-  }, [activeTab, priceRange, selectedTypes, sortBy]);
+  }, [activeTab, priceMin, priceMax, selectedTypes, sortBy]);
 
   const handleApplyFilters = (e) => {
     e.preventDefault();
@@ -124,7 +166,8 @@ export default function RentHome({ onSearch, onSelectVehicle }) {
     setPickUpTime('10:00 AM');
     setDropOffDate('2025-06-25');
     setDropOffTime('10:00 AM');
-    setPriceRange(1500);
+    setPriceMin(200);
+    setPriceMax(1500);
     setSelectedTypes(['All']);
     setSortBy('popular');
   };
@@ -144,61 +187,61 @@ export default function RentHome({ onSearch, onSelectVehicle }) {
   ];
 
   return (
-    <div className="w-full  min-h-screen pb-16 rent-page-enter">
+    <div className="w-full bg-[#FAFBFD] min-h-screen pb-16 rent-page-enter">
       
       {/* ─── BREADCRUMBS & BANNER HEADER ─── */}
       <div 
-        className="w-full h-[320px] bg-cover bg-center relative flex flex-col justify-between p-6 sm:p-10 text-left border-b border-slate-200/50"
+        className="w-full h-[340px] bg-cover bg-center relative flex flex-col justify-between p-6 sm:p-10 text-left border-b border-slate-200/50"
         style={{ backgroundImage: `url(${rentalsBannerImg})` }}
       >
         {/* Banner Glass Tint Overlay */}
-        <div className="absolute inset-0  z-0" />
+        <div className="absolute inset-0 z-0" />
 
         {/* Text Area */}
         <div className="relative z-10 pt-4 max-w-xl">
-        
+         
           
           <h1 className="text-3xl sm:text-4.5xl font-black tracking-tight leading-none text-slate-900">
-            Rent Your <span className="text-[#10B981]">Perfect Ride</span>
+            Rent Your <span className="text-[#0D9488]">Perfect Ride</span>
           </h1>
-          <p className="text-[13.5px] font-semibold text-slate-500 mt-2.5">
+          <p className="text-[14px] font-semibold text-slate-500 mt-2.5">
             Bikes, Cars, Scooters & Bicycles – Anytime, Anywhere
           </p>
 
           {/* Badges row under the header banner */}
           <div className="flex flex-wrap items-center gap-2 mt-6">
-            <span className="flex items-center gap-1 bg-white/70 border border-white/50 backdrop-blur-xs text-[10.5px] font-bold text-slate-700 px-3 py-1.5 rounded-full shadow-2xs">
-              <Star className="h-3.5 w-3.5 fill-emerald-500 text-emerald-500" />
+            <span className="flex items-center gap-1.5 bg-white/80 border border-white/50 backdrop-blur-xs text-[11px] font-bold text-slate-700 px-3.5 py-1.5 rounded-full shadow-2xs">
+              <Star className="h-3.5 w-3.5 fill-[#0D9488] text-[#0D9488]" />
               <span>Best Prices</span>
             </span>
-            <span className="flex items-center gap-1 bg-white/70 border border-white/50 backdrop-blur-xs text-[10.5px] font-bold text-slate-700 px-3 py-1.5 rounded-full shadow-2xs">
-              <ShieldCheck className="h-3.5 w-3.5 text-emerald-500" />
+            <span className="flex items-center gap-1.5 bg-white/80 border border-white/50 backdrop-blur-xs text-[11px] font-bold text-slate-700 px-3.5 py-1.5 rounded-full shadow-2xs">
+              <ShieldCheck className="h-3.5 w-3.5 text-[#0D9488]" />
               <span>Verified Vehicles</span>
             </span>
-            <span className="flex items-center gap-1 bg-white/70 border border-white/50 backdrop-blur-xs text-[10.5px] font-bold text-slate-700 px-3 py-1.5 rounded-full shadow-2xs">
-              <Phone className="h-3.5 w-3.5 text-emerald-500" />
+            <span className="flex items-center gap-1.5 bg-white/80 border border-white/50 backdrop-blur-xs text-[11px] font-bold text-slate-700 px-3.5 py-1.5 rounded-full shadow-2xs">
+              <Phone className="h-3.5 w-3.5 text-[#0D9488]" />
               <span>24/7 Support</span>
             </span>
-            <span className="flex items-center gap-1 bg-white/70 border border-white/50 backdrop-blur-xs text-[10.5px] font-bold text-slate-700 px-3 py-1.5 rounded-full shadow-2xs">
-              <Calendar className="h-3.5 w-3.5 text-emerald-500" />
+            <span className="flex items-center gap-1.5 bg-white/80 border border-white/50 backdrop-blur-xs text-[11px] font-bold text-slate-700 px-3.5 py-1.5 rounded-full shadow-2xs">
+              <Calendar className="h-3.5 w-3.5 text-[#0D9488]" />
               <span>Easy Booking</span>
             </span>
           </div>
         </div>
 
         {/* ─── FLOATING CATEGORY TABS ─── */}
-        <div className="max-w-[880px] w-full bg-white rounded-2xl sm:rounded-3xl shadow-lg border border-slate-100 flex overflow-hidden translate-y-[44px] z-20 self-start">
+        <div className="absolute bottom-0 left-1/2 -translate-x-1/2 translate-y-1/2 max-w-[920px] w-[calc(100%-2rem)] bg-white rounded-2xl shadow-xl border border-slate-100/80 flex overflow-hidden z-20">
           
           {/* Bike tab */}
           <button 
             onClick={() => { setActiveTab('Bike'); setSelectedTypes(['All']); }}
             className={`flex-1 flex items-center justify-center gap-3 py-4 sm:py-5 text-left border-b-3 cursor-pointer transition-all ${
               activeTab === 'Bike'
-                ? 'border-[#0F766E] bg-teal-50/10'
+                ? 'border-[#0D9488] bg-teal-50/10'
                 : 'border-transparent hover:bg-slate-50/60'
             }`}
           >
-            <div className={`h-10 w-10 rounded-xl flex items-center justify-center shrink-0 ${activeTab === 'Bike' ? 'bg-[#0F766E]/10 text-[#0F766E]' : 'bg-slate-100 text-slate-500'}`}>
+            <div className={`h-10 w-10 rounded-xl flex items-center justify-center shrink-0 ${activeTab === 'Bike' ? 'bg-[#0D9488]/10 text-[#0D9488]' : 'bg-slate-100 text-slate-500'}`}>
               <svg className="h-5.5 w-5.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
                 <circle cx="6" cy="18" r="3" />
                 <circle cx="18" cy="18" r="3" />
@@ -208,7 +251,7 @@ export default function RentHome({ onSearch, onSelectVehicle }) {
             </div>
             <div>
               <span className={`text-[12.5px] font-black block ${activeTab === 'Bike' ? 'text-slate-800' : 'text-slate-500'}`}>Bike Rental</span>
-              <span className={`text-[10px] font-bold block mt-0.5 ${activeTab === 'Bike' ? 'text-[#0F766E]' : 'text-slate-400'}`}>{tabCounts.Bike}+ Bikes</span>
+              <span className={`text-[10px] font-bold block mt-0.5 ${activeTab === 'Bike' ? 'text-[#0D9488]' : 'text-slate-400'}`}>{tabCounts.Bike}+ Bikes</span>
             </div>
           </button>
 
@@ -217,11 +260,11 @@ export default function RentHome({ onSearch, onSelectVehicle }) {
             onClick={() => { setActiveTab('Car'); setSelectedTypes(['All']); }}
             className={`flex-1 flex items-center justify-center gap-3 py-4 sm:py-5 text-left border-b-3 cursor-pointer transition-all ${
               activeTab === 'Car'
-                ? 'border-[#0F766E] bg-teal-50/10'
+                ? 'border-[#0D9488] bg-teal-50/10'
                 : 'border-transparent hover:bg-slate-50/60'
             }`}
           >
-            <div className={`h-10 w-10 rounded-xl flex items-center justify-center shrink-0 ${activeTab === 'Car' ? 'bg-[#0F766E]/10 text-[#0F766E]' : 'bg-slate-100 text-slate-500'}`}>
+            <div className={`h-10 w-10 rounded-xl flex items-center justify-center shrink-0 ${activeTab === 'Car' ? 'bg-[#0D9488]/10 text-[#0D9488]' : 'bg-slate-100 text-slate-500'}`}>
               <svg className="h-5.5 w-5.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
                 <rect x="2" y="10" width="20" height="8" rx="2" />
                 <path d="M7 10V5a1 1 0 0 1 1-1h8a1 1 0 0 1 1 1v5" />
@@ -231,7 +274,7 @@ export default function RentHome({ onSearch, onSelectVehicle }) {
             </div>
             <div>
               <span className={`text-[12.5px] font-black block ${activeTab === 'Car' ? 'text-slate-800' : 'text-slate-500'}`}>Car Rental</span>
-              <span className={`text-[10px] font-bold block mt-0.5 ${activeTab === 'Car' ? 'text-[#0F766E]' : 'text-slate-400'}`}>{tabCounts.Car}+ Cars</span>
+              <span className={`text-[10px] font-bold block mt-0.5 ${activeTab === 'Car' ? 'text-[#0D9488]' : 'text-slate-400'}`}>{tabCounts.Car}+ Cars</span>
             </div>
           </button>
 
@@ -240,11 +283,11 @@ export default function RentHome({ onSearch, onSelectVehicle }) {
             onClick={() => { setActiveTab('Scooter'); setSelectedTypes(['All']); }}
             className={`flex-1 flex items-center justify-center gap-3 py-4 sm:py-5 text-left border-b-3 cursor-pointer transition-all ${
               activeTab === 'Scooter'
-                ? 'border-[#0F766E] bg-teal-50/10'
+                ? 'border-[#0D9488] bg-teal-50/10'
                 : 'border-transparent hover:bg-slate-50/60'
             }`}
           >
-            <div className={`h-10 w-10 rounded-xl flex items-center justify-center shrink-0 ${activeTab === 'Scooter' ? 'bg-[#0F766E]/10 text-[#0F766E]' : 'bg-slate-100 text-slate-500'}`}>
+            <div className={`h-10 w-10 rounded-xl flex items-center justify-center shrink-0 ${activeTab === 'Scooter' ? 'bg-[#0D9488]/10 text-[#0D9488]' : 'bg-slate-100 text-slate-500'}`}>
               <svg className="h-5.5 w-5.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
                 <circle cx="6" cy="18" r="2.5" />
                 <circle cx="18" cy="18" r="2.5" />
@@ -254,7 +297,7 @@ export default function RentHome({ onSearch, onSelectVehicle }) {
             </div>
             <div>
               <span className={`text-[12.5px] font-black block ${activeTab === 'Scooter' ? 'text-slate-800' : 'text-slate-500'}`}>Scooter Rental</span>
-              <span className={`text-[10px] font-bold block mt-0.5 ${activeTab === 'Scooter' ? 'text-[#0F766E]' : 'text-slate-400'}`}>{tabCounts.Scooter}+ Scooters</span>
+              <span className={`text-[10px] font-bold block mt-0.5 ${activeTab === 'Scooter' ? 'text-[#0D9488]' : 'text-slate-400'}`}>{tabCounts.Scooter}+ Scooters</span>
             </div>
           </button>
 
@@ -263,11 +306,11 @@ export default function RentHome({ onSearch, onSelectVehicle }) {
             onClick={() => { setActiveTab('Bicycle'); setSelectedTypes(['All']); }}
             className={`flex-1 flex items-center justify-center gap-3 py-4 sm:py-5 text-left border-b-3 cursor-pointer transition-all ${
               activeTab === 'Bicycle'
-                ? 'border-[#0F766E] bg-teal-50/10'
+                ? 'border-[#0D9488] bg-teal-50/10'
                 : 'border-transparent hover:bg-slate-50/60'
             }`}
           >
-            <div className={`h-10 w-10 rounded-xl flex items-center justify-center shrink-0 ${activeTab === 'Bicycle' ? 'bg-[#0F766E]/10 text-[#0F766E]' : 'bg-slate-100 text-slate-500'}`}>
+            <div className={`h-10 w-10 rounded-xl flex items-center justify-center shrink-0 ${activeTab === 'Bicycle' ? 'bg-[#0D9488]/10 text-[#0D9488]' : 'bg-slate-100 text-slate-500'}`}>
               <svg className="h-5.5 w-5.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
                 <circle cx="5.5" cy="17.5" r="3.5" />
                 <circle cx="18.5" cy="17.5" r="3.5" />
@@ -278,7 +321,7 @@ export default function RentHome({ onSearch, onSelectVehicle }) {
             </div>
             <div>
               <span className={`text-[12.5px] font-black block ${activeTab === 'Bicycle' ? 'text-slate-800' : 'text-slate-500'}`}>Bicycle Rental</span>
-              <span className={`text-[10px] font-bold block mt-0.5 ${activeTab === 'Bicycle' ? 'text-[#0F766E]' : 'text-slate-400'}`}>{tabCounts.Bicycle}+ Bicycles</span>
+              <span className={`text-[10px] font-bold block mt-0.5 ${activeTab === 'Bicycle' ? 'text-[#0D9488]' : 'text-slate-400'}`}>{tabCounts.Bicycle}+ Bicycles</span>
             </div>
           </button>
 
@@ -289,18 +332,18 @@ export default function RentHome({ onSearch, onSelectVehicle }) {
       {/* ─── MAIN 3-COLUMN LAYOUT GRID ─── */}
       <div className="mx-auto max-w-[1760px] px-4 pt-20 pb-8 grid grid-cols-1 lg:grid-cols-12 gap-6">
         
-        {/* ==================== LEFT FILTER SIDEBAR (lg:col-span-2.5) ==================== */}
-        <aside className="w-full lg:col-span-2.5 shrink-0 bg-white border border-slate-200/80 rounded-3xl p-5 shadow-2xs text-left h-fit sticky top-[152px]">
+        {/* ==================== LEFT FILTER SIDEBAR ==================== */}
+        <aside className="w-full lg:col-span-3 shrink-0 bg-white border border-slate-200/80 rounded-3xl p-5 shadow-2xs text-left h-fit sticky top-[152px]">
           
           {/* Header */}
           <div className="flex items-center justify-between border-b border-slate-100 pb-3.5 mb-4.5">
             <h3 className="text-[13.5px] font-black text-slate-850 flex items-center gap-1.5 uppercase tracking-wider">
-              <SlidersHorizontal className="h-4 w-4 text-[#0F766E]" />
+              <SlidersHorizontal className="h-4 w-4 text-[#0D9488]" />
               <span>Filters</span>
             </h3>
             <button 
               onClick={handleResetFilters}
-              className="text-[11.5px] font-black text-[#0F766E] hover:underline cursor-pointer"
+              className="text-[11.5px] font-black text-[#0D9488] hover:underline cursor-pointer"
             >
               Clear All
             </button>
@@ -311,14 +354,14 @@ export default function RentHome({ onSearch, onSelectVehicle }) {
             {/* Location Dropdown */}
             <div className="flex flex-col gap-1.5">
               <label className="text-[10px] font-black text-slate-450 uppercase tracking-wider pl-0.5 flex items-center gap-1">
-                <MapPin className="h-3.5 w-3.5 text-[#0F766E]" />
+                <MapPin className="h-3.5 w-3.5 text-[#0D9488]" />
                 <span>Location</span>
               </label>
               <div className="relative">
                 <select 
                   value={location}
                   onChange={(e) => setLocation(e.target.value)}
-                  className="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2.5 text-[12px] font-semibold text-slate-800 outline-none appearance-none focus:border-[#0F766E] cursor-pointer"
+                  className="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2.5 text-[12px] font-semibold text-slate-800 outline-none appearance-none focus:border-[#0D9488] cursor-pointer"
                 >
                   <option value="Pondicherry, India">Pondicherry, India</option>
                   <option value="Auroville, India">Auroville, India</option>
@@ -331,69 +374,131 @@ export default function RentHome({ onSearch, onSelectVehicle }) {
             {/* Pick up date & Time */}
             <div className="flex flex-col gap-1.5">
               <label className="text-[10px] font-black text-slate-450 uppercase tracking-wider pl-0.5 flex items-center gap-1">
-                <Calendar className="h-3.5 w-3.5 text-[#0F766E]" />
+                <Calendar className="h-3.5 w-3.5 text-[#0D9488]" />
                 <span>Pick-up Date</span>
               </label>
-              <div className="grid grid-cols-5 gap-1.5">
-                <input 
-                  type="date"
-                  value={pickUpDate}
-                  onChange={(e) => setPickUpDate(e.target.value)}
-                  className="col-span-3 w-full bg-slate-50 border border-slate-200 rounded-xl px-2.5 py-2.5 text-[11px] font-semibold text-slate-800 outline-none focus:border-[#0F766E]"
-                />
-                <select
-                  value={pickUpTime}
-                  onChange={(e) => setPickUpTime(e.target.value)}
-                  className="col-span-2 w-full bg-slate-50 border border-slate-200 rounded-xl px-1.5 py-2.5 text-[11px] font-semibold text-slate-800 outline-none focus:border-[#0F766E] cursor-pointer"
-                >
-                  {timeOptions.map((t) => (
-                    <option key={t} value={t}>{t}</option>
-                  ))}
-                </select>
+              
+              <div className="grid grid-cols-5 gap-2">
+                {/* Date Picker Button overlay */}
+                <div className="col-span-3 relative flex items-center justify-between bg-slate-50 border border-slate-200 rounded-xl px-3 py-2.5 cursor-pointer focus-within:border-[#0D9488] shadow-3xs">
+                  <span className="text-[11.5px] font-semibold text-slate-800 whitespace-nowrap">
+                    {formatDateString(pickUpDate)}
+                  </span>
+                  <ChevronDown className="h-4 w-4 text-slate-400 shrink-0 ml-1" />
+                  <input 
+                    type="date"
+                    value={pickUpDate}
+                    onChange={(e) => setPickUpDate(e.target.value)}
+                    className="absolute inset-0 opacity-0 cursor-pointer z-10"
+                  />
+                </div>
+                {/* Time select */}
+                <div className="col-span-2 relative">
+                  <select
+                    value={pickUpTime}
+                    onChange={(e) => setPickUpTime(e.target.value)}
+                    className="w-full bg-slate-50 border border-slate-200 rounded-xl px-2 py-2.5 text-[11.5px] font-semibold text-slate-800 outline-none appearance-none focus:border-[#0D9488] cursor-pointer shadow-3xs"
+                  >
+                    {timeOptions.map((t) => (
+                      <option key={t} value={t}>{t}</option>
+                    ))}
+                  </select>
+                  <ChevronDown className="h-4 w-4 text-slate-400 absolute right-2.5 top-1/2 -translate-y-1/2 pointer-events-none" />
+                </div>
               </div>
             </div>
 
             {/* Return Date & Time */}
             <div className="flex flex-col gap-1.5">
               <label className="text-[10px] font-black text-slate-450 uppercase tracking-wider pl-0.5 flex items-center gap-1">
-                <Calendar className="h-3.5 w-3.5 text-[#0F766E]" />
+                <Calendar className="h-3.5 w-3.5 text-[#0D9488]" />
                 <span>Return Date</span>
               </label>
-              <div className="grid grid-cols-5 gap-1.5">
-                <input 
-                  type="date"
-                  value={dropOffDate}
-                  onChange={(e) => setDropOffDate(e.target.value)}
-                  className="col-span-3 w-full bg-slate-50 border border-slate-200 rounded-xl px-2.5 py-2.5 text-[11px] font-semibold text-slate-800 outline-none focus:border-[#0F766E]"
-                />
-                <select
-                  value={dropOffTime}
-                  onChange={(e) => setDropOffTime(e.target.value)}
-                  className="col-span-2 w-full bg-slate-50 border border-slate-200 rounded-xl px-1.5 py-2.5 text-[11px] font-semibold text-slate-800 outline-none focus:border-[#0F766E] cursor-pointer"
-                >
-                  {timeOptions.map((t) => (
-                    <option key={t} value={t}>{t}</option>
-                  ))}
-                </select>
+              
+              <div className="grid grid-cols-5 gap-2">
+                {/* Date Picker Button overlay */}
+                <div className="col-span-3 relative flex items-center justify-between bg-slate-50 border border-slate-200 rounded-xl px-3 py-2.5 cursor-pointer focus-within:border-[#0D9488] shadow-3xs">
+                  <span className="text-[11.5px] font-semibold text-slate-800 whitespace-nowrap">
+                    {formatDateString(dropOffDate)}
+                  </span>
+                  <ChevronDown className="h-4 w-4 text-slate-400 shrink-0 ml-1" />
+                  <input 
+                    type="date"
+                    value={dropOffDate}
+                    onChange={(e) => setDropOffDate(e.target.value)}
+                    className="absolute inset-0 opacity-0 cursor-pointer z-10"
+                  />
+                </div>
+                {/* Time select */}
+                <div className="col-span-2 relative">
+                  <select
+                    value={dropOffTime}
+                    onChange={(e) => setDropOffTime(e.target.value)}
+                    className="w-full bg-slate-50 border border-slate-200 rounded-xl px-2 py-2.5 text-[11.5px] font-semibold text-slate-800 outline-none appearance-none focus:border-[#0D9488] cursor-pointer shadow-3xs"
+                  >
+                    {timeOptions.map((t) => (
+                      <option key={t} value={t}>{t}</option>
+                    ))}
+                  </select>
+                  <ChevronDown className="h-4 w-4 text-slate-400 absolute right-2.5 top-1/2 -translate-y-1/2 pointer-events-none" />
+                </div>
               </div>
             </div>
 
-            {/* Price Slider */}
+            {/* Price Double Range Slider */}
             <div className="flex flex-col gap-2">
               <div className="flex items-center justify-between text-[10px] font-black text-slate-450 uppercase tracking-wider pl-0.5">
                 <span>Price Range</span>
-                <span className="text-slate-800 text-[11.5px] font-black normal-case">Up to ₹{priceRange}+</span>
+                <span className="text-slate-800 text-[11.5px] font-black normal-case">
+                  ₹{priceMin} - {priceMax >= 1500 ? '₹1500+' : `₹${priceMax}`}
+                </span>
               </div>
-              <input 
-                type="range"
-                min="200"
-                max="3000"
-                step="50"
-                value={priceRange}
-                onChange={(e) => setPriceRange(parseInt(e.target.value))}
-                className="w-full accent-[#0F766E] h-1.5 bg-slate-100 rounded-lg cursor-pointer"
-              />
-              <div className="flex justify-between text-[9px] font-bold text-slate-400">
+              <div className="relative w-full h-6 flex items-center select-none">
+                {/* Base Grey Track */}
+                <div className="absolute left-0 right-0 h-1 bg-slate-100 rounded-lg" />
+                
+                {/* Green Highlighted Range */}
+                <div 
+                  className="absolute h-1 bg-[#0D9488] rounded-lg"
+                  style={{
+                    left: `${((priceMin - 200) / 1300) * 100}%`,
+                    right: `${100 - ((priceMax - 200) / 1300) * 100}%`
+                  }}
+                />
+                
+                {/* Left Slider Input */}
+                <input 
+                  type="range"
+                  min="200"
+                  max="1500"
+                  step="50"
+                  value={priceMin}
+                  onChange={(e) => {
+                    const val = Math.min(parseInt(e.target.value), priceMax - 50);
+                    setPriceMin(val);
+                  }}
+                  className="absolute w-full h-1 bg-transparent pointer-events-none appearance-none z-30 outline-none
+                             [&::-webkit-slider-thumb]:pointer-events-auto [&::-webkit-slider-thumb]:w-4 [&::-webkit-slider-thumb]:h-4 [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:bg-white [&::-webkit-slider-thumb]:border-2 [&::-webkit-slider-thumb]:border-[#0D9488] [&::-webkit-slider-thumb]:shadow-md [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:cursor-pointer
+                             [&::-moz-range-thumb]:pointer-events-auto [&::-moz-range-thumb]:w-4 [&::-moz-range-thumb]:h-4 [&::-moz-range-thumb]:rounded-full [&::-moz-range-thumb]:bg-white [&::-moz-range-thumb]:border-2 [&::-moz-range-thumb]:border-[#0D9488] [&::-moz-range-thumb]:shadow-md [&::-moz-range-thumb]:cursor-pointer"
+                />
+                
+                {/* Right Slider Input */}
+                <input 
+                  type="range"
+                  min="200"
+                  max="1500"
+                  step="50"
+                  value={priceMax}
+                  onChange={(e) => {
+                    const val = Math.max(parseInt(e.target.value), priceMin + 50);
+                    setPriceMax(val);
+                  }}
+                  className="absolute w-full h-1 bg-transparent pointer-events-none appearance-none z-30 outline-none
+                             [&::-webkit-slider-thumb]:pointer-events-auto [&::-webkit-slider-thumb]:w-4 [&::-webkit-slider-thumb]:h-4 [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:bg-white [&::-webkit-slider-thumb]:border-2 [&::-webkit-slider-thumb]:border-[#0D9488] [&::-webkit-slider-thumb]:shadow-md [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:cursor-pointer
+                             [&::-moz-range-thumb]:pointer-events-auto [&::-moz-range-thumb]:w-4 [&::-moz-range-thumb]:h-4 [&::-moz-range-thumb]:rounded-full [&::-moz-range-thumb]:bg-white [&::-moz-range-thumb]:border-2 [&::-moz-range-thumb]:border-[#0D9488] [&::-moz-range-thumb]:shadow-md [&::-moz-range-thumb]:cursor-pointer"
+                />
+              </div>
+              <div className="flex justify-between text-[9px] font-bold text-slate-450 -mt-1">
                 <span>₹200</span>
                 <span>₹1,500+</span>
               </div>
@@ -409,7 +514,7 @@ export default function RentHome({ onSearch, onSelectVehicle }) {
                     type="checkbox"
                     checked={selectedTypes.includes('All')}
                     onChange={() => handleTypeToggle('All')}
-                    className="h-4 w-4 rounded border-slate-350 text-[#0F766E] focus:ring-[#0F766E] cursor-pointer"
+                    className="h-4 w-4 rounded border-slate-300 text-[#0D9488] focus:ring-[#0D9488] cursor-pointer"
                   />
                   <span>All Types</span>
                 </label>
@@ -419,7 +524,7 @@ export default function RentHome({ onSearch, onSelectVehicle }) {
                     type="checkbox"
                     checked={selectedTypes.includes('Sports')}
                     onChange={() => handleTypeToggle('Sports')}
-                    className="h-4 w-4 rounded border-slate-350 text-[#0F766E] focus:ring-[#0F766E] cursor-pointer"
+                    className="h-4 w-4 rounded border-slate-300 text-[#0D9488] focus:ring-[#0D9488] cursor-pointer"
                   />
                   <span>Sports Bikes</span>
                 </label>
@@ -429,7 +534,7 @@ export default function RentHome({ onSearch, onSelectVehicle }) {
                     type="checkbox"
                     checked={selectedTypes.includes('Cruiser')}
                     onChange={() => handleTypeToggle('Cruiser')}
-                    className="h-4 w-4 rounded border-slate-350 text-[#0F766E] focus:ring-[#0F766E] cursor-pointer"
+                    className="h-4 w-4 rounded border-slate-300 text-[#0D9488] focus:ring-[#0D9488] cursor-pointer"
                   />
                   <span>Cruiser Bikes</span>
                 </label>
@@ -439,9 +544,19 @@ export default function RentHome({ onSearch, onSelectVehicle }) {
                     type="checkbox"
                     checked={selectedTypes.includes('Scooter')}
                     onChange={() => handleTypeToggle('Scooter')}
-                    className="h-4 w-4 rounded border-slate-350 text-[#0F766E] focus:ring-[#0F766E] cursor-pointer"
+                    className="h-4 w-4 rounded border-slate-300 text-[#0D9488] focus:ring-[#0D9488] cursor-pointer"
                   />
                   <span>Scooters</span>
+                </label>
+
+                <label className="flex items-center gap-2.5 cursor-pointer text-[12px] font-semibold text-slate-650 hover:text-slate-900">
+                  <input 
+                    type="checkbox"
+                    checked={selectedTypes.includes('Electric')}
+                    onChange={() => handleTypeToggle('Electric')}
+                    className="h-4 w-4 rounded border-slate-300 text-[#0D9488] focus:ring-[#0D9488] cursor-pointer"
+                  />
+                  <span>Electric Bikes</span>
                 </label>
               </div>
             )}
@@ -450,7 +565,7 @@ export default function RentHome({ onSearch, onSelectVehicle }) {
             <div className="pt-2">
               <button
                 type="submit"
-                className="w-full bg-[#0F766E] hover:bg-[#0D665F] text-white text-[12.5px] font-black py-2.5 rounded-xl transition-all cursor-pointer text-center block shadow-md shadow-teal-800/10"
+                className="w-full bg-[#0D9488] hover:bg-[#0b7d73] text-white text-[12.5px] font-black py-2.5 rounded-xl transition-all cursor-pointer text-center block shadow-md shadow-teal-850/10"
               >
                 Apply Filters
               </button>
@@ -460,8 +575,8 @@ export default function RentHome({ onSearch, onSelectVehicle }) {
 
         </aside>
 
-        {/* ==================== CENTER VEHICLE LISTING GRID (lg:col-span-7) ==================== */}
-        <main className="w-full lg:col-span-7">
+        {/* ==================== CENTER VEHICLE LISTING GRID ==================== */}
+        <main className="w-full lg:col-span-6">
           
           {/* Header Controls */}
           <div className="flex flex-wrap items-center justify-between gap-4 mb-5">
@@ -489,16 +604,24 @@ export default function RentHome({ onSearch, onSelectVehicle }) {
               </div>
 
               {/* Layout triggers */}
-              <div className="flex items-center bg-white border border-slate-200 p-1 rounded-xl shadow-3xs">
+              <div className="flex items-center gap-1.5">
                 <button
                   onClick={() => setLayoutMode('grid')}
-                  className={`p-1.5 rounded-lg cursor-pointer transition-all ${layoutMode === 'grid' ? 'bg-[#0F766E] text-white' : 'text-slate-400 hover:text-slate-700'}`}
+                  className={`h-9 w-9 flex items-center justify-center rounded-xl transition-all cursor-pointer border ${
+                    layoutMode === 'grid' 
+                      ? 'bg-[#0D9488] border-[#0D9488] text-white shadow-sm' 
+                      : 'bg-white border-slate-200 text-slate-400 hover:text-slate-650'
+                  }`}
                 >
                   <Grid className="h-4 w-4" />
                 </button>
                 <button
                   onClick={() => setLayoutMode('list')}
-                  className={`p-1.5 rounded-lg cursor-pointer transition-all ${layoutMode === 'list' ? 'bg-[#0F766E] text-white' : 'text-slate-400 hover:text-slate-700'}`}
+                  className={`h-9 w-9 flex items-center justify-center rounded-xl transition-all cursor-pointer border ${
+                    layoutMode === 'list' 
+                      ? 'bg-[#0D9488] border-[#0D9488] text-white shadow-sm' 
+                      : 'bg-white border-slate-200 text-slate-400 hover:text-slate-650'
+                  }`}
                 >
                   <List className="h-4 w-4" />
                 </button>
@@ -523,9 +646,16 @@ export default function RentHome({ onSearch, onSelectVehicle }) {
                 >
                   
                   {/* Image Section */}
-                  <div className={`bg-slate-50/50 flex items-center justify-center p-3 relative shrink-0 ${
-                    layoutMode === 'list' ? 'w-full sm:w-[190px] h-[135px]' : 'h-[140px]'
-                  }`}>
+                  <div 
+                    className={`flex items-center justify-center p-3 relative shrink-0 overflow-hidden ${
+                      layoutMode === 'list' ? 'w-full sm:w-[190px] h-[135px]' : 'h-[140px]'
+                    }`}
+                    style={{
+                      backgroundImage: `linear-gradient(to bottom, rgba(240, 246, 250, 0.72), rgba(240, 246, 250, 0.85)), url(${rentalsBannerImg})`,
+                      backgroundSize: 'cover',
+                      backgroundPosition: 'center 45%'
+                    }}
+                  >
                     
                     {/* Badge */}
                     {vehicle.badge && (
@@ -534,7 +664,7 @@ export default function RentHome({ onSearch, onSelectVehicle }) {
                           ? 'bg-[#FFF3E0] text-[#E65100] border-[#FFE0B2]'
                           : vehicle.badge === 'New'
                             ? 'bg-[#F3E5F5] text-[#7B1FA2] border-[#E1BEE7]'
-                            : 'bg-[#E6F4F1] text-[#0F766E] border-emerald-100/30'
+                            : 'bg-[#E6F4F1] text-[#0D9488] border-emerald-100/30'
                       }`}>
                         {vehicle.badge}
                       </span>
@@ -543,7 +673,7 @@ export default function RentHome({ onSearch, onSelectVehicle }) {
                     {/* Wishlist Heart */}
                     <button
                       onClick={(e) => toggleWishlist(vehicle.id, e)}
-                      className="absolute top-2.5 right-2.5 h-6.5 w-6.5 rounded-full bg-white border border-slate-100 flex items-center justify-center shadow-3xs hover:scale-105 active:scale-95 transition-all cursor-pointer z-10"
+                      className="absolute top-2.5 right-2.5 h-6.5 w-6.5 rounded-full bg-white border border-slate-100/80 flex items-center justify-center shadow-3xs hover:scale-105 active:scale-95 transition-all cursor-pointer z-10"
                     >
                       <Heart 
                         className={`h-3.5 w-3.5 transition-colors ${
@@ -558,7 +688,7 @@ export default function RentHome({ onSearch, onSelectVehicle }) {
                     <img 
                       src={vehicle.image} 
                       alt={vehicle.title} 
-                      className="max-h-full max-w-full object-contain group-hover:scale-103 transition-transform duration-350"
+                      className="max-h-full max-w-full object-contain group-hover:scale-105 transition-transform duration-350 z-0"
                       loading="lazy"
                     />
 
@@ -571,40 +701,62 @@ export default function RentHome({ onSearch, onSelectVehicle }) {
                         {vehicle.title}
                       </h4>
                       
-                      {/* Specs badges inline */}
-                      <div className="flex flex-wrap items-center gap-1 text-[9.5px] font-bold text-slate-400 mt-1.5">
-                        <span className="flex items-center gap-1">
-                          <svg className="h-3 w-3 text-slate-350" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
-                            <circle cx="12" cy="12" r="10" />
-                            <circle cx="12" cy="12" r="1" />
-                          </svg>
-                          <span>{vehicle.category}</span>
-                        </span>
-                        <span>•</span>
-                        <span>{vehicle.spec}</span>
-                      </div>
+                      {/* Specs row */}
+                      {(() => {
+                        const parts = vehicle.spec.split('•').map(p => p.trim());
+                        const spec1 = parts[0];
+                        const spec2 = parts[1];
+                        
+                        let Icon1 = Gauge;
+                        let Icon2 = Fuel;
+                        
+                        if (vehicle.type === 'Car') {
+                          Icon1 = Fuel;
+                          Icon2 = Gauge;
+                        }
+                        
+                        return (
+                          <div className="flex flex-wrap items-center gap-x-2.5 gap-y-1 text-[9.5px] font-bold text-slate-400 mt-1.5">
+                            <span className="flex items-center gap-1">
+                              <Award className="h-3.5 w-3.5 text-slate-350" />
+                              <span>{vehicle.category}</span>
+                            </span>
+                            {spec1 && (
+                              <span className="flex items-center gap-1">
+                                <Icon1 className="h-3.5 w-3.5 text-slate-350" />
+                                <span>{spec1}</span>
+                              </span>
+                            )}
+                            {spec2 && (
+                              <span className="flex items-center gap-1">
+                                <Icon2 className="h-3.5 w-3.5 text-slate-350" />
+                                <span>{spec2}</span>
+                              </span>
+                            )}
+                          </div>
+                        );
+                      })()}
                     </div>
 
-                    {/* Footer Row */}
+                    {/* Footer Price and Rating Row */}
                     <div className="flex items-center justify-between border-t border-slate-100 pt-2.5 mt-3">
                       <div>
-                        <span className="text-[15px] font-black text-[#0F766E]">₹{vehicle.price}</span>
-                        <span className="text-[9.5px] font-semibold text-slate-400"> / day</span>
+                        <span className="text-[16px] font-black text-[#0D9488]">₹{vehicle.price}</span>
+                        <span className="text-[10px] font-bold text-slate-400"> / day</span>
                       </div>
 
                       {/* Rating details */}
-                      <span className="text-[10px] font-bold text-slate-500 flex items-center gap-0.5">
+                      <span className="text-[10.5px] font-bold text-slate-500 flex items-center gap-0.5">
                         <Star className="h-3 w-3 fill-amber-400 text-amber-400" />
                         <strong>{vehicle.rating}</strong>
                         <span className="text-slate-400">({vehicle.reviews})</span>
                       </span>
                     </div>
 
-                    {/* Action button at bottom */}
+                    {/* Action button at bottom of card */}
                     <div className="mt-3.5">
-                      <div className="text-[11px] font-black text-center text-[#0F766E] border border-slate-200 group-hover:border-[#0F766E] group-hover:bg-[#0F766E] group-hover:text-white py-2 rounded-xl transition-all duration-300 flex items-center justify-center gap-1">
+                      <div className="text-[12px] font-bold text-center text-[#0D9488] border border-[#0D9488]/30 rounded-xl group-hover:bg-[#0D9488] group-hover:text-white py-2 transition-all duration-300 flex items-center justify-center">
                         <span>View Details</span>
-                        <ArrowRight className="h-3.5 w-3.5" />
                       </div>
                     </div>
 
@@ -620,7 +772,7 @@ export default function RentHome({ onSearch, onSelectVehicle }) {
               <p className="text-[12px] text-slate-400 font-semibold mt-1">Try resetting filters to show vehicles.</p>
               <button 
                 onClick={handleResetFilters}
-                className="mt-6 bg-[#0F766E] text-white text-[12.5px] font-extrabold px-5 py-2.5 rounded-xl cursor-pointer"
+                className="mt-6 bg-[#0D9488] text-white text-[12.5px] font-extrabold px-5 py-2.5 rounded-xl cursor-pointer"
               >
                 Reset Filters
               </button>
@@ -629,15 +781,15 @@ export default function RentHome({ onSearch, onSelectVehicle }) {
 
         </main>
 
-        {/* ==================== RIGHT SIDEBAR INFO PANELS (lg:col-span-2.5) ==================== */}
-        <aside className="w-full lg:col-span-2.5 space-y-5 text-left">
+        {/* ==================== RIGHT SIDEBAR INFO PANELS ==================== */}
+        <aside className="w-full lg:col-span-3 space-y-5 text-left">
           
           {/* Panel 1: Trust Guarantees */}
           <div className="bg-white border border-slate-200/80 rounded-3xl p-5 shadow-2xs space-y-4">
             
             {/* Item 1 */}
             <div className="flex items-start gap-3">
-              <div className="h-8.5 w-8.5 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center shrink-0">
+              <div className="h-8.5 w-8.5 rounded-full bg-emerald-50 text-[#0D9488] flex items-center justify-center shrink-0">
                 <DollarSign className="h-4.5 w-4.5" strokeWidth={2.5} />
               </div>
               <div>
@@ -648,7 +800,7 @@ export default function RentHome({ onSearch, onSelectVehicle }) {
 
             {/* Item 2 */}
             <div className="flex items-start gap-3">
-              <div className="h-8.5 w-8.5 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center shrink-0">
+              <div className="h-8.5 w-8.5 rounded-full bg-emerald-50 text-[#0D9488] flex items-center justify-center shrink-0">
                 <Clock className="h-4.5 w-4.5" strokeWidth={2.5} />
               </div>
               <div>
@@ -659,7 +811,7 @@ export default function RentHome({ onSearch, onSelectVehicle }) {
 
             {/* Item 3 */}
             <div className="flex items-start gap-3">
-              <div className="h-8.5 w-8.5 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center shrink-0">
+              <div className="h-8.5 w-8.5 rounded-full bg-emerald-50 text-[#0D9488] flex items-center justify-center shrink-0">
                 <Phone className="h-4.5 w-4.5" strokeWidth={2.5} />
               </div>
               <div>
@@ -670,7 +822,7 @@ export default function RentHome({ onSearch, onSelectVehicle }) {
 
             {/* Item 4 */}
             <div className="flex items-start gap-3">
-              <div className="h-8.5 w-8.5 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center shrink-0">
+              <div className="h-8.5 w-8.5 rounded-full bg-emerald-50 text-[#0D9488] flex items-center justify-center shrink-0">
                 <ShieldCheck className="h-4.5 w-4.5" strokeWidth={2.5} />
               </div>
               <div>
@@ -690,7 +842,7 @@ export default function RentHome({ onSearch, onSelectVehicle }) {
               <p className="text-[10.5px] text-teal-100/90 font-bold">
                 on First Booking
               </p>
-              <div className="mt-3 bg-white/10 border border-white/10 px-3 py-1.5 rounded-lg w-fit text-[11px] font-black tracking-wide">
+              <div className="mt-3 bg-white/10 border border-white/20 border-dashed rounded-lg w-fit text-[11px] font-black tracking-wide px-2.5 py-1">
                 Use Code: <span className="text-emerald-350">TRIP10</span>
               </div>
             </div>
@@ -698,21 +850,18 @@ export default function RentHome({ onSearch, onSelectVehicle }) {
             <div className="flex items-center justify-between border-t border-white/10 pt-3 mt-6 z-10">
               <button 
                 onClick={handleResetFilters}
-                className="bg-[#10B981] hover:bg-emerald-500 text-white text-[11px] font-black px-4 py-2 rounded-xl cursor-pointer flex items-center gap-1 shadow-xs"
+                className="bg-white hover:bg-teal-50 text-[#022C22] text-[11px] font-extrabold px-4 py-2 rounded-xl cursor-pointer flex items-center gap-1 shadow-sm"
               >
                 <span>Book Now</span>
-                <ChevronDown className="h-3.5 w-3.5" />
+                <ChevronDown className="h-3.5 w-3.5 text-[#022C22]" />
               </button>
 
-              {/* Decorative rider sketch representation inside the promo banner */}
-              <div className="absolute right-2.5 bottom-2 pointer-events-none opacity-20">
-                <svg className="h-20 w-20 text-teal-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
-                  <circle cx="6" cy="18" r="3" />
-                  <circle cx="18" cy="18" r="3" />
-                  <path d="M12 18V12h6" />
-                  <path d="M12 12L9 6H4" />
-                </svg>
-              </div>
+              {/* Floating scooter representation in the bottom corner */}
+              <img 
+                src={rentActivaImg} 
+                alt="Promo Scooter" 
+                className="absolute right-[-10px] bottom-[-8px] h-24 w-auto object-contain opacity-75 pointer-events-none z-0 transform -rotate-12"
+              />
             </div>
           </div>
 
@@ -731,9 +880,9 @@ export default function RentHome({ onSearch, onSelectVehicle }) {
                 <img className="h-7 w-7 rounded-full object-cover ring-2 ring-white" src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=80" alt="" />
               </div>
               
-              <div className="bg-[#E6FDF4] border border-[#A7F3D0] text-[#047857] px-2 py-0.5 rounded-lg text-[11px] font-black flex items-center gap-0.5 shadow-3xs">
-                <span>4.8</span>
+              <div className="bg-[#E6FDF4] border border-[#A7F3D0] text-[#047857] px-2 py-0.5 rounded-lg text-[11px] font-black flex items-center gap-1 shadow-3xs">
                 <Star className="h-3 w-3 fill-current" />
+                <span>4.8</span>
               </div>
             </div>
           </div>
