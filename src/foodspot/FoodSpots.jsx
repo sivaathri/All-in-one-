@@ -1770,14 +1770,14 @@ export default function FoodSpots() {
                           {selectedRestaurant.menu.map((dish, i) => (
                             <div key={i} className="flex gap-3 border border-slate-100 rounded-xl p-3 bg-slate-50/20 text-left">
                               <div className="flex-grow min-w-0">
-                                <span className="text-[9px] font-bold text-slate-400 uppercase tracking-wider">{dish.category}</span>
+                                 <span className="text-[9px] font-bold text-slate-400 uppercase tracking-wider">{dish.category}</span>
                                 <h5 className="text-[12.5px] font-extrabold text-slate-800 mt-0.5 truncate pr-5">{dish.name}</h5>
-                                <p className="text-[11px] text-slate-455 font-medium mt-1 leading-normal line-clamp-2">{dish.desc}</p>
+                                <p className="text-[11px] text-slate-500 font-medium mt-1 leading-normal line-clamp-2">{dish.desc}</p>
                                 <span className="text-[13px] font-black text-[#0F766E] block mt-2">₹{dish.price}</span>
                               </div>
                               <div className="shrink-0 flex flex-col justify-between items-end">
                                 <div className={`h-4.5 w-4.5 border flex items-center justify-center rounded-sm ${dish.veg ? 'border-emerald-600' : 'border-red-600'}`}>
-                                  <div className={`h-2.5 w-2.5 rounded-full ${dish.veg ? 'bg-emerald-600' : 'bg-red-655'}`}></div>
+                                  <div className={`h-2.5 w-2.5 rounded-full ${dish.veg ? 'bg-emerald-600' : 'bg-red-500'}`}></div>
                                 </div>
                               </div>
                             </div>
@@ -1969,7 +1969,7 @@ export default function FoodSpots() {
                                 <MapPin className="h-3 w-3 text-[#0F766E]" />
                                 {restaurant.location.split(',')[0]}
                               </span>
-                              <span className="text-slate-455 text-[10px] font-bold">{restaurant.distance}</span>
+                              <span className="text-slate-500 text-[10px] font-bold">{restaurant.distance}</span>
                             </div>
 
                             {/* Cuisine */}
@@ -2320,10 +2320,10 @@ export default function FoodSpots() {
                           <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">
                             {dish.category}
                           </span>
-                          <h5 className="text-[14px] font-extrabold text-slate-850 mt-1 block pr-6">
+                          <h5 className="text-[14px] font-extrabold text-slate-800 mt-1 block pr-6">
                             {dish.name}
                           </h5>
-                          <p className="text-[11.5px] text-slate-455 font-medium mt-1 leading-normal">
+                          <p className="text-[11.5px] text-slate-500 font-medium mt-1 leading-normal">
                             {dish.desc}
                           </p>
                           <span className="text-[14px] font-black text-[#0F766E] block mt-3.5">
@@ -2369,7 +2369,7 @@ export default function FoodSpots() {
                         </p>
                         
                         <div className="mt-4 flex items-center gap-2">
-                          <button className="flex items-center gap-1.5 text-[10.5px] font-bold text-slate-455 hover:text-slate-655 cursor-pointer">
+                          <button className="flex items-center gap-1.5 text-[10.5px] font-bold text-slate-500 hover:text-slate-700 cursor-pointer">
                             <ThumbsUp className="h-3.5 w-3.5" />
                             <span>Helpful</span>
                           </button>
