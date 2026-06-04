@@ -40,7 +40,7 @@ export default function Home({ onSearch, onNavigate }) {
       <HeroSection onSearch={onSearch} />
 
       {/* Categories Grid */}
-      <Categories />
+      <Categories onNavigate={onNavigate} />
 
       {/* Trending Section */}
       <TrendingSection />

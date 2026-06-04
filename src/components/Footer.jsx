@@ -65,9 +65,9 @@ export default function Footer({ onNavigate = () => {} }) {
               <span>Explore</span>
             </h4>
             <ul className="space-y-2 text-[12px] font-semibold text-slate-500">
-              <li><a href="#stays" onClick={() => onNavigate('home')} className="hover:text-[#0F766E] transition-colors">Stays</a></li>
-              <li><a href="#bike-rental" onClick={() => onNavigate('home')} className="hover:text-[#0F766E] transition-colors">Rentals</a></li>
-              <li><a href="#food-spots" onClick={() => onNavigate('home')} className="hover:text-[#0F766E] transition-colors">Food Spots</a></li>
+              <li><a href="#stays" onClick={() => onNavigate('stays-results')} className="hover:text-[#0F766E] transition-colors">Stays</a></li>
+              <li><a href="#bike-rental" onClick={() => onNavigate('rent-home')} className="hover:text-[#0F766E] transition-colors">Rentals</a></li>
+              <li><a href="#food-spots" onClick={() => onNavigate('food-spots')} className="hover:text-[#0F766E] transition-colors">Food Spots</a></li>
               <li><a href="#adventures" onClick={() => onNavigate('home')} className="hover:text-[#0F766E] transition-colors">Adventures</a></li>
               <li><a href="#attractions" className="hover:text-[#0F766E] transition-colors">Top Attractions</a></li>
               <li><a href="#guides" className="hover:text-[#0F766E] transition-colors">Travel Guides</a></li>

@@ -8,7 +8,7 @@ import catTireImg from '../assets/cat_tire.png';
 import catMechanicImg from '../assets/cat_mechanic.png';
 import catTourImg from '../assets/cat_tour.png';
 
-export default function Categories() {
+export default function Categories({ onNavigate = () => {} }) {
   const categories = [
     {
       title: 'Stays',
@@ -65,6 +65,18 @@ export default function Categories() {
             <a
               key={idx}
               href={cat.exploreLink}
+              onClick={(e) => {
+                e.preventDefault();
+                if (cat.title === 'Food Spots') {
+                  onNavigate('food-spots');
+                } else if (cat.title === 'Stays') {
+                  onNavigate('stays-results');
+                } else if (cat.title === 'Bike Rental' || cat.title === 'Car Rental') {
+                  onNavigate('rent-home');
+                } else {
+                  onNavigate('home');
+                }
+              }}
               className="group flex flex-col items-center justify-between rounded-2xl border border-slate-200 bg-white py-6 px-3 text-center shadow-xs transition-all duration-300 hover:-translate-y-1.5 hover:shadow-md hover:border-slate-300 cursor-pointer h-[200px]"
             >
               {/* 3D Image Icon Container */}

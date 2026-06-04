@@ -8,6 +8,7 @@ import MyBookings from './pages/MyBookings';
 import RentHome from './rent/RentHome';
 import RentResults from './rent/RentResults';
 import RentDetail from './rent/RentDetail';
+import FoodSpots from './pages/FoodSpots';
 import './App.css';
 
 // ─── Search transition overlay ──────────────────────────────────────────────
@@ -151,6 +152,8 @@ function App() {
         <RentResults searchParams={rentalSearchParams} onBack={() => navigateToPage('rent-home')} onSelectVehicle={handleRentalSelect} onSearch={handleRentalSearch} />
       ) : currentPage === 'rent-detail' ? (
         <RentDetail vehicle={selectedVehicle} searchParams={rentalSearchParams} onBack={() => navigateToPage('rent-results')} onNavigate={navigateToPage} />
+      ) : currentPage === 'food-spots' ? (
+        <FoodSpots />
       ) : (
         <BecomeHost onBackToHome={() => navigateToPage('home')} />
       )}
