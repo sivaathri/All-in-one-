@@ -1,8 +1,8 @@
-import { useState, useMemo, useEffect } from 'react';
+import { useState, useMemo, useEffect, useRef } from 'react';
 import { 
   MapPin, Search, ChevronDown, SlidersHorizontal, Star, Heart, 
   X, Clock, Utensils, ThumbsUp, CheckCircle, Calendar, Users, HeartHandshake, Compass, Plus, Minus,
-  Share2, Phone, Play, ChevronLeft, ChevronRight
+  Share2, Phone, Play, ChevronLeft, ChevronRight, Check
 } from 'lucide-react';
 import foodBannerImg from '../assets/food_spots_banner.png';
 import mapImg from '../assets/puducherry_map.png';
@@ -798,6 +798,67 @@ const RESTAURANT_DATA = [
 
 const CUISINES = ['All', 'Cafe', 'French', 'Indian', 'Seafood', 'Italian', 'Desserts', 'Pizza', 'Burgers'];
 
+// Custom Dropdown Component for a Premium styled Select box
+function CustomDropdown({ label, value, options, onChange, widthClass = "w-[150px]" }) {
+  const [isOpen, setIsOpen] = useState(false);
+  const dropdownRef = useRef(null);
+
+  useEffect(() => {
+    function handleClickOutside(event) {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+        setIsOpen(false);
+      }
+    }
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
+
+  return (
+    <div 
+      ref={dropdownRef} 
+      className={`relative flex flex-col justify-center items-start px-4 lg:px-5 py-1.5 w-full sm:w-[48%] lg:${widthClass} shrink-0 text-left select-none`}
+    >
+      <span className="text-[9px] font-bold text-slate-400 uppercase tracking-wider leading-none">{label}</span>
+      <div 
+        onClick={() => setIsOpen(!isOpen)}
+        className="relative flex items-center justify-between w-full mt-1.5 cursor-pointer h-5"
+      >
+        <span className="text-[13.5px] font-extrabold text-slate-800 truncate pr-4">
+          {value}
+        </span>
+        <ChevronDown className={`h-4 w-4 text-slate-400 absolute right-0 top-1/2 -translate-y-1/2 transition-transform duration-200 pointer-events-none ${isOpen ? 'rotate-180' : ''}`} />
+      </div>
+
+      {isOpen && (
+        <div className="absolute left-0 top-[110%] mt-1 w-full lg:min-w-[185px] bg-white border border-slate-100 rounded-2xl shadow-xl py-1.5 z-50 animate-in fade-in slide-in-from-top-2 duration-150 origin-top text-left">
+          <div className="max-h-[240px] overflow-y-auto no-scrollbar">
+            {options.map((option) => {
+              const isSelected = option === value;
+              return (
+                <div
+                  key={option}
+                  onClick={() => {
+                    onChange(option);
+                    setIsOpen(false);
+                  }}
+                  className={`px-4 py-2 text-[12.5px] font-semibold cursor-pointer transition-colors flex items-center justify-between ${
+                    isSelected 
+                      ? 'bg-slate-50 text-[#0F766E] font-bold' 
+                      : 'text-slate-600 hover:bg-slate-50/70 hover:text-slate-900'
+                  }`}
+                >
+                  <span className="truncate">{option}</span>
+                  {isSelected && <Check className="h-3.5 w-3.5 text-[#0F766E] shrink-0" />}
+                </div>
+              );
+            })}
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}
+
 export default function FoodSpots() {
   // Filter States
   const [selectedLocation, setSelectedLocation] = useState('Pondicherry, India');
@@ -830,6 +891,151 @@ export default function FoodSpots() {
   
   // Map zoom level simulation
   const [zoomLevel, setZoomLevel] = useState(13);
+
+  // Leaflet Map Refs & States
+  const mapContainerRef = useRef(null);
+  const mapRef = useRef(null);
+  const markersRef = useRef([]);
+  const [leafletLoaded, setLeafletLoaded] = useState(false);
+
+  useEffect(() => {
+    let isMounted = true;
+
+    async function initLeaflet() {
+      // Load Leaflet CSS dynamically if not present
+      if (!document.getElementById('leaflet-css')) {
+        const link = document.createElement('link');
+        link.id = 'leaflet-css';
+        link.rel = 'stylesheet';
+        link.href = 'https://unpkg.com/leaflet@1.9.4/dist/leaflet.css';
+        document.head.appendChild(link);
+      }
+
+      // Load Leaflet JS dynamically if not present
+      if (!window.L) {
+        const script = document.createElement('script');
+        script.src = 'https://unpkg.com/leaflet@1.9.4/dist/leaflet.js';
+        script.async = true;
+        document.head.appendChild(script);
+        await new Promise((resolve) => {
+          script.onload = resolve;
+        });
+      }
+
+      if (!isMounted) return;
+      setLeafletLoaded(true);
+
+      // Initialize map once after leaflet is loaded and the container div is mounted
+      setTimeout(() => {
+        if (!isMounted) return;
+        if (mapContainerRef.current && !mapRef.current && window.L) {
+          const mapInstance = window.L.map(mapContainerRef.current, {
+            zoomControl: false,
+            attributionControl: false
+          }).setView([11.9400, 79.8150], 13);
+
+          window.L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            maxZoom: 19
+          }).addTo(mapInstance);
+
+          mapInstance.on('zoomend', () => {
+            if (isMounted) {
+              setZoomLevel(mapInstance.getZoom());
+            }
+          });
+
+          mapRef.current = mapInstance;
+          // Trigger initial markers placement
+          updateMarkers(mapInstance);
+        }
+      }, 50);
+    }
+
+    if (isSearchActive) {
+      initLeaflet();
+    }
+
+    return () => {
+      isMounted = false;
+      if (mapRef.current) {
+        mapRef.current.remove();
+        mapRef.current = null;
+        setLeafletLoaded(false);
+      }
+    };
+  }, [isSearchActive]);
+
+  // Marker updating logic
+  const updateMarkers = (mapInstance = mapRef.current) => {
+    if (!window.L || !mapInstance) return;
+
+    // Clear old markers
+    markersRef.current.forEach(m => m.remove());
+    markersRef.current = [];
+
+    // Coordinates bounding box mapping Puducherry percents to real coordinates
+    const minLat = 11.9180;
+    const maxLat = 11.9620;
+    const minLng = 79.7850;
+    const maxLng = 79.8450;
+
+    filteredRestaurants.forEach((restaurant) => {
+      const x = parseFloat(restaurant.mapX);
+      const y = parseFloat(restaurant.mapY);
+
+      const lng = minLng + (x / 100) * (maxLng - minLng);
+      const lat = maxLat - (y / 100) * (maxLat - minLat);
+
+      const isActive = selectedRestaurant?.id === restaurant.id;
+
+      // Custom icon HTML
+      const iconHtml = `
+        <div class="flex flex-col items-center select-none" style="transform: translate(-50%, -50%);">
+          <!-- Round dish photo pin -->
+          <div class="h-11 w-11 rounded-full border-2 bg-white overflow-hidden shadow-lg transition-transform duration-300 ${
+            isActive 
+              ? 'border-[#EA580C] ring-4 ring-[#EA580C]/25 scale-110 z-30' 
+              : 'border-white hover:border-[#EA580C]/40'
+          }">
+            <img src="${restaurant.image}" alt="" style="width: 100%; height: 100%; object-fit: cover;" />
+          </div>
+          <!-- Rating bubble label below pin -->
+          <div class="mt-0.5 px-1.5 py-0.5 rounded-md text-[9px] font-black text-white shadow-md leading-none transition-colors ${
+            isActive ? 'bg-[#EA580C]' : 'bg-[#0F766E]'
+          }">
+            ${restaurant.rating.toFixed(1)}
+          </div>
+          ${isActive ? '<div class="absolute -top-[10px] h-16 w-16 rounded-full border-2 border-dashed border-[#EA580C]/80 animate-spin shrink-0 pointer-events-none -z-10"></div>' : ''}
+        </div>
+      `;
+
+      const customIcon = window.L.divIcon({
+        html: iconHtml,
+        className: 'custom-leaflet-marker',
+        iconSize: [44, 60],
+        iconAnchor: [22, 30]
+      });
+
+      const marker = window.L.marker([lat, lng], { icon: customIcon })
+        .addTo(mapInstance)
+        .on('click', () => {
+          setSelectedRestaurant(restaurant);
+        });
+
+      markersRef.current.push(marker);
+
+      if (isActive) {
+        mapInstance.panTo([lat, lng]);
+      }
+    });
+  };
+
+  // Keep markers in sync with filter and selection changes
+  useEffect(() => {
+    if (leafletLoaded && mapRef.current) {
+      updateMarkers();
+    }
+  }, [leafletLoaded, filteredRestaurants, selectedRestaurant]);
 
   const toggleWishlist = (id, e) => {
     e.stopPropagation();
@@ -923,8 +1129,21 @@ export default function FoodSpots() {
         <div className="w-full bg-white border-b border-slate-200/90 py-3 px-6 sticky top-0 z-30 shadow-sm select-none">
           <div className="max-w-[1760px] mx-auto flex flex-col lg:flex-row items-stretch lg:items-center gap-3 lg:gap-0">
             
+            {/* Back Button */}
+            <button 
+              onClick={() => setIsSearchActive(false)}
+              className="h-9 w-9 border border-slate-200 hover:border-slate-350 hover:bg-slate-50 flex items-center justify-center rounded-xl cursor-pointer text-slate-500 hover:text-slate-800 transition-colors mr-2.5 shrink-0"
+              title="Go Back"
+            >
+              <ChevronLeft className="h-5 w-5" />
+            </button>
+
             {/* 1. Location Pin & Change */}
-            <div className="flex items-center gap-3 pl-3 pr-4 py-1.5 w-full lg:w-auto shrink-0 justify-between lg:justify-start">
+            <div 
+              onClick={() => setShowLocationModal(true)}
+              className="flex items-center gap-3 pl-3 pr-4 py-1.5 w-full lg:w-auto shrink-0 justify-between lg:justify-start cursor-pointer hover:bg-slate-50 rounded-xl transition-colors"
+              title="Click to change location"
+            >
               <div className="flex items-center gap-2 text-left">
                 <MapPin className="h-5 w-5 text-[#0F766E] shrink-0" />
                 <div>
@@ -934,12 +1153,6 @@ export default function FoodSpots() {
                   </span>
                 </div>
               </div>
-              <button 
-                onClick={() => setShowLocationModal(true)}
-                className="text-[12px] font-black text-[#0F766E] hover:text-[#0c625c] hover:underline cursor-pointer ml-3 shrink-0"
-              >
-                Change
-              </button>
             </div>
 
             {/* Divider */}
@@ -961,63 +1174,37 @@ export default function FoodSpots() {
             <div className="hidden lg:block h-7 w-px bg-slate-200 shrink-0 self-center" />
 
             {/* 3. Cuisine Dropdown */}
-            <div className="relative flex flex-col justify-center items-start px-4 py-1 w-full sm:w-[48%] lg:w-[140px] shrink-0 text-left">
-              <span className="text-[9px] font-bold text-slate-400 uppercase tracking-wider leading-none">Cuisine</span>
-              <div className="relative flex items-center w-full mt-1 cursor-pointer">
-                <select
-                  value={selectedCuisine}
-                  onChange={(e) => setSelectedCuisine(e.target.value)}
-                  className="w-full bg-transparent text-[13px] font-extrabold text-slate-800 outline-none cursor-pointer appearance-none pr-6 z-10"
-                >
-                  {CUISINES.map((c) => (
-                    <option key={c} value={c}>{c}</option>
-                  ))}
-                </select>
-                <ChevronDown className="h-4 w-4 text-slate-400 absolute right-0 top-1/2 -translate-y-1/2 pointer-events-none z-0" />
-              </div>
-            </div>
+            <CustomDropdown 
+              label="Cuisine" 
+              value={selectedCuisine} 
+              options={CUISINES} 
+              onChange={setSelectedCuisine} 
+              widthClass="w-[140px]" 
+            />
 
             {/* Divider */}
             <div className="hidden lg:block h-7 w-px bg-slate-200 shrink-0 self-center" />
 
             {/* 4. Sort By Dropdown */}
-            <div className="relative flex flex-col justify-center items-start px-4 py-1 w-full sm:w-[48%] lg:w-[150px] shrink-0 text-left">
-              <span className="text-[9px] font-bold text-slate-400 uppercase tracking-wider leading-none">Sort By</span>
-              <div className="relative flex items-center w-full mt-1 cursor-pointer">
-                <select
-                  value={sortBy}
-                  onChange={(e) => setSortBy(e.target.value)}
-                  className="w-full bg-transparent text-[13px] font-extrabold text-slate-800 outline-none cursor-pointer appearance-none pr-6 z-10"
-                >
-                  <option value="Popular">Popular</option>
-                  <option value="Price: Low to High">Price: Low to High</option>
-                  <option value="Price: High to Low">Price: High to Low</option>
-                  <option value="Top Rated">Top Rated</option>
-                </select>
-                <ChevronDown className="h-4 w-4 text-slate-400 absolute right-0 top-1/2 -translate-y-1/2 pointer-events-none z-0" />
-              </div>
-            </div>
+            <CustomDropdown 
+              label="Sort By" 
+              value={sortBy} 
+              options={['Popular', 'Price: Low to High', 'Price: High to Low', 'Top Rated']} 
+              onChange={setSortBy} 
+              widthClass="w-[150px]" 
+            />
 
             {/* Divider */}
             <div className="hidden lg:block h-7 w-px bg-slate-200 shrink-0 self-center" />
 
             {/* 5. Rating Dropdown */}
-            <div className="relative flex flex-col justify-center items-start px-4 py-1 w-full sm:w-[48%] lg:w-[140px] shrink-0 text-left">
-              <span className="text-[9px] font-bold text-slate-400 uppercase tracking-wider leading-none">Rating</span>
-              <div className="relative flex items-center w-full mt-1 cursor-pointer">
-                <select
-                  value={selectedRating}
-                  onChange={(e) => setSelectedRating(e.target.value)}
-                  className="w-full bg-transparent text-[13px] font-extrabold text-slate-800 outline-none cursor-pointer appearance-none pr-6 z-10"
-                >
-                  <option value="All Ratings">All Ratings</option>
-                  <option value="4.5+">4.5+ ★</option>
-                  <option value="4.0+">4.0+ ★</option>
-                  <option value="3.5+">3.5+ ★</option>
-                </select>
-                <ChevronDown className="h-4 w-4 text-slate-400 absolute right-0 top-1/2 -translate-y-1/2 pointer-events-none z-0" />
-              </div>
-            </div>
+            <CustomDropdown 
+              label="Rating" 
+              value={selectedRating} 
+              options={['All Ratings', '4.5+', '4.0+', '3.5+']} 
+              onChange={setSelectedRating} 
+              widthClass="w-[140px]" 
+            />
 
             {/* 6. Buttons */}
             <div className="flex items-center gap-2 pl-3 w-full sm:w-[48%] lg:w-auto shrink-0 justify-end ml-auto">
@@ -1070,7 +1257,11 @@ export default function FoodSpots() {
             <div className="flex flex-col lg:flex-row items-stretch gap-3 lg:gap-0">
               
               {/* 1. Location Pin & Change */}
-              <div className="flex items-center gap-3.5 pl-4 pr-5 py-2 w-full lg:w-auto shrink-0 justify-between lg:justify-start">
+              <div 
+                onClick={() => setShowLocationModal(true)}
+                className="flex items-center gap-3.5 pl-4 pr-5 py-2 w-full lg:w-auto shrink-0 justify-between lg:justify-start cursor-pointer hover:bg-slate-50 rounded-2xl transition-colors"
+                title="Click to change location"
+              >
                 <div className="flex items-center gap-2.5 text-left">
                   <MapPin className="h-5.5 w-5.5 text-[#0F766E] shrink-0" />
                   <div>
@@ -1080,12 +1271,6 @@ export default function FoodSpots() {
                     </span>
                   </div>
                 </div>
-                <button 
-                  onClick={() => setShowLocationModal(true)}
-                  className="text-[12px] font-extrabold text-[#0F766E] hover:text-[#0c625c] hover:underline cursor-pointer ml-3 shrink-0 transition-colors"
-                >
-                  Change
-                </button>
               </div>
 
               {/* Divider */}
@@ -1107,63 +1292,37 @@ export default function FoodSpots() {
               <div className="hidden lg:block h-8 w-px bg-slate-200 shrink-0 self-center" />
 
               {/* 3. Cuisine Dropdown */}
-              <div className="relative flex flex-col justify-center items-start px-5 py-1.5 w-full sm:w-[48%] lg:w-[150px] shrink-0 text-left">
-                <span className="text-[9px] font-bold text-slate-400 uppercase tracking-wider leading-none">Cuisine</span>
-                <div className="relative flex items-center w-full mt-1.5 cursor-pointer">
-                  <select
-                    value={selectedCuisine}
-                    onChange={(e) => setSelectedCuisine(e.target.value)}
-                    className="w-full bg-transparent text-[13.5px] font-extrabold text-slate-800 outline-none cursor-pointer appearance-none pr-6 z-10"
-                  >
-                    {CUISINES.map((c) => (
-                      <option key={c} value={c}>{c}</option>
-                    ))}
-                  </select>
-                  <ChevronDown className="h-4 w-4 text-slate-400 absolute right-0 top-1/2 -translate-y-1/2 pointer-events-none z-0" />
-                </div>
-              </div>
+              <CustomDropdown 
+                label="Cuisine" 
+                value={selectedCuisine} 
+                options={CUISINES} 
+                onChange={setSelectedCuisine} 
+                widthClass="w-[150px]" 
+              />
 
               {/* Divider */}
               <div className="hidden lg:block h-8 w-px bg-slate-200 shrink-0 self-center" />
 
               {/* 4. Sort By Dropdown */}
-              <div className="relative flex flex-col justify-center items-start px-5 py-1.5 w-full sm:w-[48%] lg:w-[160px] shrink-0 text-left">
-                <span className="text-[9px] font-bold text-slate-400 uppercase tracking-wider leading-none">Sort By</span>
-                <div className="relative flex items-center w-full mt-1.5 cursor-pointer">
-                  <select
-                    value={sortBy}
-                    onChange={(e) => setSortBy(e.target.value)}
-                    className="w-full bg-transparent text-[13.5px] font-extrabold text-slate-800 outline-none cursor-pointer appearance-none pr-6 z-10"
-                  >
-                    <option value="Popular">Popular</option>
-                    <option value="Price: Low to High">Price: Low to High</option>
-                    <option value="Price: High to Low">Price: High to Low</option>
-                    <option value="Top Rated">Top Rated</option>
-                  </select>
-                  <ChevronDown className="h-4 w-4 text-slate-400 absolute right-0 top-1/2 -translate-y-1/2 pointer-events-none z-0" />
-                </div>
-              </div>
+              <CustomDropdown 
+                label="Sort By" 
+                value={sortBy} 
+                options={['Popular', 'Price: Low to High', 'Price: High to Low', 'Top Rated']} 
+                onChange={setSortBy} 
+                widthClass="w-[160px]" 
+              />
 
               {/* Divider */}
               <div className="hidden lg:block h-8 w-px bg-slate-200 shrink-0 self-center" />
 
               {/* 5. Rating Dropdown */}
-              <div className="relative flex flex-col justify-center items-start px-5 py-1.5 w-full sm:w-[48%] lg:w-[150px] shrink-0 text-left">
-                <span className="text-[9px] font-bold text-slate-400 uppercase tracking-wider leading-none">Rating</span>
-                <div className="relative flex items-center w-full mt-1.5 cursor-pointer">
-                  <select
-                    value={selectedRating}
-                    onChange={(e) => setSelectedRating(e.target.value)}
-                    className="w-full bg-transparent text-[13.5px] font-extrabold text-slate-800 outline-none cursor-pointer appearance-none pr-6 z-10"
-                  >
-                    <option value="All Ratings">All Ratings</option>
-                    <option value="4.5+">4.5+ ★</option>
-                    <option value="4.0+">4.0+ ★</option>
-                    <option value="3.5+">3.5+ ★</option>
-                  </select>
-                  <ChevronDown className="h-4 w-4 text-slate-400 absolute right-0 top-1/2 -translate-y-1/2 pointer-events-none z-0" />
-                </div>
-              </div>
+              <CustomDropdown 
+                label="Rating" 
+                value={selectedRating} 
+                options={['All Ratings', '4.5+', '4.0+', '3.5+']} 
+                onChange={setSelectedRating} 
+                widthClass="w-[150px]" 
+              />
 
               {/* 6. Buttons */}
               <div className="flex items-center gap-2.5 pl-4 pr-2 w-full lg:w-auto shrink-0 justify-end ml-auto">
@@ -1172,9 +1331,6 @@ export default function FoodSpots() {
                   className="bg-[#0F766E] hover:bg-[#0c625c] active:scale-98 text-white px-7 py-3 rounded-2xl font-extrabold text-[14px] transition-all cursor-pointer shadow-md shadow-teal-800/10 flex-grow lg:flex-grow-0 text-center"
                 >
                   Search
-                </button>
-                <button className="h-11 w-11 border border-slate-200 hover:border-slate-350 hover:bg-slate-50 flex items-center justify-center rounded-2xl cursor-pointer text-slate-500 hover:text-slate-800 transition-colors shrink-0">
-                  <SlidersHorizontal className="h-5 w-5" />
                 </button>
               </div>
 
@@ -1207,7 +1363,9 @@ export default function FoodSpots() {
                   return (
                     <div
                       key={restaurant.id}
-                      onClick={() => setSelectedRestaurant(restaurant)}
+                      onClick={() => {
+                        setSelectedRestaurant(restaurant);
+                      }}
                       className={`flex items-center gap-3 p-2.5 rounded-xl border transition-all cursor-pointer ${
                         isActive
                           ? 'border-[#0F766E] bg-teal-50/15 shadow-3xs'
@@ -1320,21 +1478,8 @@ export default function FoodSpots() {
 
             {/* ==================== MIDDLE PANEL: INTERACTIVE MAP (48% width) ==================== */}
             <div className="w-full lg:w-[48%] flex flex-col h-full bg-white border border-slate-200/80 rounded-[24px] overflow-hidden shadow-3xs relative">
-              {/* Map Canvas Background */}
-              <div 
-                className="absolute inset-0 bg-cover bg-center transition-all duration-300"
-                style={{ 
-                  backgroundImage: `url(${mapImg})`,
-                  transform: `scale(${1 + (zoomLevel - 13) * 0.15})`
-                }}
-              />
-              <div className="absolute inset-0 bg-slate-900/5 pointer-events-none" />
-
-              {/* Location Target Pulse */}
-              <div className="absolute top-[39%] left-[43%] z-10 -translate-x-1/2 -translate-y-1/2 flex h-8 w-8 items-center justify-center">
-                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-sky-400 opacity-75"></span>
-                <span className="relative inline-flex rounded-full h-3.5 w-3.5 bg-sky-500 border-2 border-white shadow-md"></span>
-              </div>
+              {/* Leaflet Real Map Container */}
+              <div ref={mapContainerRef} className="absolute inset-0 z-0 bg-slate-100" />
 
               {/* Floating Top Map Actions */}
               <div className="absolute top-4 right-4 z-20 flex gap-2">
@@ -1348,55 +1493,37 @@ export default function FoodSpots() {
                 </button>
               </div>
 
-              {/* Custom Map Restaurant Pins (Dishes + bubble ratings) */}
-              {filteredRestaurants.map((restaurant) => {
-                const isActive = selectedRestaurant?.id === restaurant.id;
-                return (
-                  <div
-                    key={restaurant.id}
-                    onClick={() => setSelectedRestaurant(restaurant)}
-                    className="absolute z-20 -translate-x-1/2 -translate-y-1/2 cursor-pointer transition-all duration-300"
-                    style={{ top: restaurant.mapY, left: restaurant.mapX }}
-                  >
-                    <div className="flex flex-col items-center group">
-                      {/* Round dish photo pin */}
-                      <div className={`h-11 w-11 rounded-full border-2 bg-white overflow-hidden shadow-lg transition-transform duration-300 hover:scale-110 active:scale-95 ${
-                        isActive 
-                          ? 'border-[#EA580C] ring-4 ring-[#EA580C]/25 scale-110 z-30' 
-                          : 'border-white group-hover:border-[#EA580C]/40'
-                      }`}>
-                        <img 
-                          src={restaurant.image} 
-                          alt={restaurant.title} 
-                          className="h-full w-full object-cover" 
-                        />
-                      </div>
-                      {/* Rating bubble label below pin */}
-                      <div className={`mt-0.5 px-1.5 py-0.5 rounded-md text-[9px] font-black text-white shadow-md leading-none transition-colors ${
-                        isActive ? 'bg-[#EA580C]' : 'bg-[#0F766E]'
-                      }`}>
-                        {restaurant.rating.toFixed(1)}
-                      </div>
-                    </div>
-                  </div>
-                );
-              })}
-
               {/* Map Zoom / Controls bottom right */}
               <div className="absolute right-4 bottom-24 z-30 flex flex-col gap-2">
-                <button className="h-9 w-9 bg-white border border-slate-200 hover:bg-slate-50 flex items-center justify-center rounded-xl shadow-md cursor-pointer text-slate-600 active:scale-95 transition-all">
-                  <Compass className="h-4.5 w-4.5 text-slate-655" />
+                <button 
+                  onClick={() => {
+                    if (mapRef.current) {
+                      mapRef.current.setView([11.9400, 79.8150], 13);
+                    }
+                  }}
+                  className="h-9 w-9 bg-white border border-slate-200 hover:bg-slate-50 flex items-center justify-center rounded-xl shadow-md cursor-pointer text-slate-600 active:scale-95 transition-all"
+                  title="Recenter Map"
+                >
+                  <Compass className="h-4.5 w-4.5 text-slate-600" />
                 </button>
                 <div className="flex flex-col bg-white border border-slate-200 rounded-xl shadow-md overflow-hidden">
                   <button 
-                    onClick={() => setZoomLevel(prev => Math.min(prev + 1, 16))}
-                    className="h-9 w-9 hover:bg-slate-50 flex items-center justify-center border-b border-slate-100 cursor-pointer text-slate-655 active:scale-95 transition-all"
+                    onClick={() => {
+                      if (mapRef.current) {
+                        mapRef.current.zoomIn();
+                      }
+                    }}
+                    className="h-9 w-9 hover:bg-slate-50 flex items-center justify-center border-b border-slate-100 cursor-pointer text-slate-600 active:scale-95 transition-all"
                   >
                     <Plus className="h-4 w-4" />
                   </button>
                   <button 
-                    onClick={() => setZoomLevel(prev => Math.max(prev - 1, 11))}
-                    className="h-9 w-9 hover:bg-slate-50 flex items-center justify-center cursor-pointer text-slate-655 active:scale-95 transition-all"
+                    onClick={() => {
+                      if (mapRef.current) {
+                        mapRef.current.zoomOut();
+                      }
+                    }}
+                    className="h-9 w-9 hover:bg-slate-50 flex items-center justify-center cursor-pointer text-slate-600 active:scale-95 transition-all"
                   >
                     <Minus className="h-4 w-4" />
                   </button>
@@ -1464,6 +1591,15 @@ export default function FoodSpots() {
                       className="h-full w-full object-cover"
                     />
                     <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-black/10 to-transparent" />
+                    
+                    {/* Back Button for Mobile Viewports */}
+                    <button 
+                      onClick={() => setSelectedRestaurant(null)}
+                      className="absolute top-3 left-3 z-10 h-7.5 w-7.5 rounded-full bg-white/90 border border-slate-100 flex items-center justify-center shadow-3xs hover:scale-105 active:scale-95 transition-all cursor-pointer lg:hidden"
+                      title="Back to List"
+                    >
+                      <ChevronLeft className="h-4.5 w-4.5 text-slate-700" />
+                    </button>
                     
                     {/* Floating Controls inside Image */}
                     <div className="absolute top-3 right-3 flex items-center gap-1.5 z-10">
@@ -1910,7 +2046,10 @@ export default function FoodSpots() {
                     return (
                       <div
                         key={restaurant.id}
-                        onClick={() => setSelectedRestaurant(restaurant)}
+                        onClick={() => {
+                          setSelectedRestaurant(restaurant);
+                          setIsSearchActive(true);
+                        }}
                         onMouseEnter={() => setSelectedRestaurant(restaurant)}
                         className={`group bg-white rounded-2xl border transition-all duration-300 cursor-pointer flex flex-col relative overflow-hidden shadow-xs hover:shadow-md ${
                           isHovered 
