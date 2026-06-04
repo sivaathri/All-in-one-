@@ -6,7 +6,7 @@ import {
 import foodBannerImg from '../assets/food_spots_banner.png';
 import mapImg from '../assets/puducherry_map.png';
 
-// Exact Restaurant Database from Mockup
+// Expanded Restaurant Database (35 Detailed Food Spots)
 const RESTAURANT_DATA = [
   {
     id: 1,
@@ -308,6 +308,490 @@ const RESTAURANT_DATA = [
     reviewsList: [
       { user: 'Dinesh R.', rating: 5, date: 'May 30, 2026', comment: 'Excellent fish fry. Feet in the sand dining experience!' }
     ]
+  },
+  // Add 23 More Food Spots to reach 35 total spots (> 30 spots)
+  {
+    id: 13,
+    title: 'Hotel Shadab',
+    location: 'Heritage Town, Puducherry',
+    distance: '1.9 km',
+    rating: 4.4,
+    reviews: '420',
+    price: 400,
+    pricePeriod: 'for two',
+    cuisine: 'Indian',
+    badge: '10% OFF',
+    pills: ['Popular'],
+    image: 'https://images.unsplash.com/photo-1544025162-d76694265947?auto=format&fit=crop&w=600&q=80',
+    description: 'Famous local restaurant specializing in authentic Mughlai dishes, mutton biryani, and traditional tandoori delights.',
+    hours: '11:30 AM - 11:00 PM',
+    features: ['AC Dining', 'Mughlai Special'],
+    mapX: '25%',
+    mapY: '45%',
+    menu: [{ name: 'Mutton Biryani', price: 240, category: 'Main Course', veg: false, desc: 'Aromatic basmati rice cooked with tender mutton and select spices.' }],
+    reviewsList: [{ user: 'Kabir S.', rating: 5, date: 'May 10, 2026', comment: 'Outstanding biryani! Best in Pondy.' }]
+  },
+  {
+    id: 14,
+    title: 'Tandoori Nights',
+    location: 'White Town, Puducherry',
+    distance: '0.8 km',
+    rating: 4.3,
+    reviews: '290',
+    price: 600,
+    pricePeriod: 'for two',
+    cuisine: 'Indian',
+    badge: '',
+    pills: ['Popular'],
+    image: 'https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?auto=format&fit=crop&w=600&q=80',
+    description: 'Cozy rooftop garden setup serving sizzling tandoori items, rich paneer butter masalas, and freshly baked butter naans.',
+    hours: '6:00 PM - 11:00 PM',
+    features: ['Outdoor Seating', 'Live Grill'],
+    mapX: '45%',
+    mapY: '52%',
+    menu: [{ name: 'Paneer Tikka Sizzler', price: 280, category: 'Starters', veg: true, desc: 'Spiced cottage cheese cubes grilled in clay oven with bell peppers.' }],
+    reviewsList: [{ user: 'Rakesh P.', rating: 4, date: 'May 14, 2026', comment: 'Tandoori chicken sizzler is a must-try here.' }]
+  },
+  {
+    id: 15,
+    title: 'Surguru Spot',
+    location: 'Heritage Town, Puducherry',
+    distance: '2.1 km',
+    rating: 4.5,
+    reviews: '380',
+    price: 250,
+    pricePeriod: 'for two',
+    cuisine: 'Indian',
+    badge: '',
+    pills: ['Pure Veg'],
+    image: 'https://images.unsplash.com/photo-1668236543090-82eba5ee5976?auto=format&fit=crop&w=600&q=80',
+    description: 'Quick service sibling of Surguru, offering delicious podi dosas, filter coffee, and traditional South Indian thalis.',
+    hours: '7:00 AM - 10:00 PM',
+    features: ['Vegetarian', 'Quick Service'],
+    mapX: '23%',
+    mapY: '62%',
+    menu: [{ name: 'Ghee Podi Idli', price: 95, category: 'Starters', veg: true, desc: 'Steamed rice cakes tossed in spicy lentil powder and hot ghee.' }],
+    reviewsList: [{ user: 'Anand R.', rating: 4.5, date: 'June 02, 2026', comment: 'Filter coffee is robust and excellent.' }]
+  },
+  {
+    id: 16,
+    title: 'Cafe des Arts',
+    location: 'White Town, Puducherry',
+    distance: '0.6 km',
+    rating: 4.5,
+    reviews: '920',
+    price: 800,
+    pricePeriod: 'for two',
+    cuisine: 'Cafe, French, Desserts',
+    badge: '',
+    pills: ['Popular'],
+    image: 'https://images.unsplash.com/photo-1554118811-1e0d58224f24?auto=format&fit=crop&w=600&q=80',
+    description: 'Charming vintage cafe featuring yellow-colonial walls, a library corner, and delicious French toasted baguettes and pastries.',
+    hours: '8:30 AM - 7:00 PM',
+    features: ['Vintage Garden', 'Free Wifi', 'Book Library'],
+    mapX: '52%',
+    mapY: '38%',
+    menu: [{ name: 'Nutella Crepe', price: 210, category: 'Desserts', veg: true, desc: 'Thin French wheat crepe loaded with rich hazelnut spread.' }],
+    reviewsList: [{ user: 'Alice M.', rating: 5, date: 'May 20, 2026', comment: 'Stunning yellow house. Coffee and croissants are perfect.' }]
+  },
+  {
+    id: 17,
+    title: 'Bread & Chocolate',
+    location: 'Auroville, India',
+    distance: '5.2 km',
+    rating: 4.7,
+    reviews: '1.4k',
+    price: 900,
+    pricePeriod: 'for two',
+    cuisine: 'Cafe, Bakeries',
+    badge: 'Best Seller',
+    pills: ['Organic'],
+    image: 'https://images.unsplash.com/photo-1509440159596-0249088772ff?auto=format&fit=crop&w=600&q=80',
+    description: 'Auroville organic bakery cafe serving healthy sourdough bowls, vegan pastries, artisan chocolates, and pour-over coffees.',
+    hours: '8:00 AM - 5:00 PM',
+    features: ['Organic Sourcing', 'Vegan Friendly', 'Garden Dining'],
+    mapX: '78%',
+    mapY: '55%',
+    menu: [{ name: 'Avocado Toast Sourdough', price: 290, category: 'Starters', veg: true, desc: 'Fresh local avocado mash on wood-fired sourdough toast.' }],
+    reviewsList: [{ user: 'Gautam D.', rating: 5, date: 'June 01, 2026', comment: 'Sourdough is outstanding. Absolute favorite in Auroville.' }]
+  },
+  {
+    id: 18,
+    title: 'The Spot',
+    location: 'White Town, Puducherry',
+    distance: '0.9 km',
+    rating: 4.3,
+    reviews: '210',
+    price: 1100,
+    pricePeriod: 'for two',
+    cuisine: 'Multi Cuisine',
+    badge: '15% OFF',
+    pills: ['Free Delivery'],
+    image: 'https://images.unsplash.com/photo-1546069901-ba9599a7e63c?auto=format&fit=crop&w=600&q=80',
+    description: 'Casual multi-cuisine restaurant serving Indian, Chinese, and European fast food classics with nice cocktail choices.',
+    hours: '12:00 PM - 11:00 PM',
+    features: ['AC Dining', 'Alcohol Served'],
+    mapX: '62%',
+    mapY: '32%',
+    menu: [{ name: 'Schezwan Chilli Fish', price: 380, category: 'Main Course', veg: false, desc: 'Wok tossed fish fillets in fiery Schezwan chilli sauce.' }],
+    reviewsList: [{ user: 'Sanya H.', rating: 4, date: 'Apr 25, 2026', comment: 'Great ambience and helpful staff. Chilli fish was spicy!' }]
+  },
+  {
+    id: 19,
+    title: 'Well Cafe',
+    location: 'Auroville, India',
+    distance: '6.0 km',
+    rating: 4.4,
+    reviews: '340',
+    price: 700,
+    pricePeriod: 'for two',
+    cuisine: 'Cafe, Mediterranean',
+    badge: '',
+    pills: ['Vegetarian Friendly'],
+    image: 'https://images.unsplash.com/photo-1513104890138-7c749659a591?auto=format&fit=crop&w=600&q=80',
+    description: 'Tranquil forest cafe in Auroville specializing in organic Mediterranean falafel platters, hummus, and herbal teas.',
+    hours: '9:00 AM - 6:00 PM',
+    features: ['Forest Seating', 'Organic Ingredients'],
+    mapX: '82%',
+    mapY: '63%',
+    menu: [{ name: 'Classic Falafel Hummus Platter', price: 280, category: 'Main Course', veg: true, desc: 'Crispy falafels, fresh hummus, pita bread, and pickled veggies.' }],
+    reviewsList: [{ user: 'Dmitri V.', rating: 4.5, date: 'May 30, 2026', comment: 'Very peaceful setting in the woods. Hummus is authentic.' }]
+  },
+  {
+    id: 20,
+    title: 'Naturellement Garden Cafe',
+    location: 'Auroville, India',
+    distance: '6.3 km',
+    rating: 4.6,
+    reviews: '180',
+    price: 600,
+    pricePeriod: 'for two',
+    cuisine: 'Cafe, Italian',
+    badge: 'Must Try',
+    pills: ['Pure Veg'],
+    image: 'https://images.unsplash.com/photo-1555507036-ab1f4038808a?auto=format&fit=crop&w=600&q=80',
+    description: 'Charming garden eatery run by a local community. Renowned for its homemade pasta, organic salads, jams, and syrups.',
+    hours: '9:00 AM - 5:30 PM',
+    features: ['Garden Dining', 'Organic Jams', 'Pure Veg'],
+    mapX: '79%',
+    mapY: '67%',
+    menu: [{ name: 'Organic Basil Pesto Pasta', price: 290, category: 'Main Course', veg: true, desc: 'Fresh homemade pasta tossed in organic basil, walnuts, and cheese.' }],
+    reviewsList: [{ user: 'Elsa B.', rating: 5, date: 'May 18, 2026', comment: 'The garden setting is gorgeous. Pasta tasted so fresh.' }]
+  },
+  {
+    id: 21,
+    title: 'Gelato Montecatini',
+    location: 'White Town, Puducherry',
+    distance: '0.4 km',
+    rating: 4.8,
+    reviews: '530',
+    price: 300,
+    pricePeriod: 'for two',
+    cuisine: 'Desserts',
+    badge: 'Top Rated',
+    pills: ['Kid Friendly'],
+    image: 'https://images.unsplash.com/photo-1501443762994-82bd5dace89a?auto=format&fit=crop&w=600&q=80',
+    description: 'Premium Italian gelato shop featuring rich, creamy, and traditional gelato cups made with natural fruit pulps.',
+    hours: '11:00 AM - 11:00 PM',
+    features: ['AC Dining', 'Takeaway'],
+    mapX: '53%',
+    mapY: '59%',
+    menu: [{ name: 'Belgian Chocolate Gelato', price: 110, category: 'Desserts', veg: true, desc: 'Rich and smooth Belgian chocolate gelato double scoop.' }],
+    reviewsList: [{ user: 'Vikram J.', rating: 5, date: 'June 01, 2026', comment: 'Creamiest dark chocolate scoop in Pondicherry.' }]
+  },
+  {
+    id: 22,
+    title: 'Zuka Choco-la',
+    location: 'Heritage Town, Puducherry',
+    distance: '1.3 km',
+    rating: 4.7,
+    reviews: '710',
+    price: 400,
+    pricePeriod: 'for two',
+    cuisine: 'Desserts',
+    badge: '',
+    pills: ['Popular'],
+    image: 'https://images.unsplash.com/photo-1555507036-ab1f4038808a?auto=format&fit=crop&w=600&q=80',
+    description: 'A paradise for chocolate lovers. Famous for its delicious hot chocolate spoon, handmade truffles, and chocolate displays.',
+    hours: '9:00 AM - 10:00 PM',
+    features: ['AC Dining', 'Chocolate Art Display'],
+    mapX: '31%',
+    mapY: '53%',
+    menu: [{ name: 'Zuka hot chocolate spoon', price: 160, category: 'Desserts', veg: true, desc: 'Thick hot milk served with a chocolate spoon to melt and sip.' }],
+    reviewsList: [{ user: 'Sarah L.', rating: 4.8, date: 'May 22, 2026', comment: 'The hot chocolate is literally liquid gold!' }]
+  },
+  {
+    id: 23,
+    title: 'Appachi Chettinad',
+    location: 'Heritage Town, Puducherry',
+    distance: '2.5 km',
+    rating: 4.3,
+    reviews: '420',
+    price: 800,
+    pricePeriod: 'for two',
+    cuisine: 'Indian, Seafood',
+    badge: '10% OFF',
+    pills: ['Popular'],
+    image: 'https://images.unsplash.com/photo-1544025162-d76694265947?auto=format&fit=crop&w=600&q=80',
+    description: 'Famous local restaurant located in an old traditional Tamil house serving hot and spicy Chettinad chicken and seafood.',
+    hours: '12:00 PM - 10:30 PM',
+    features: ['Traditional Setup', 'AC Dining'],
+    mapX: '33%',
+    mapY: '67%',
+    menu: [{ name: 'Chettinad Chicken Masala', price: 340, category: 'Main Course', veg: false, desc: 'Spicy chicken cooked in dry roasted coconut and black pepper gravy.' }],
+    reviewsList: [{ user: 'Manish P.', rating: 4, date: 'June 01, 2026', comment: 'Very spicy, authentic Chettinad flavors. Love it.' }]
+  },
+  {
+    id: 24,
+    title: 'Skygarden Rooftop',
+    location: 'Heritage Town, Puducherry',
+    distance: '2.2 km',
+    rating: 4.2,
+    reviews: '190',
+    price: 1200,
+    pricePeriod: 'for two',
+    cuisine: 'Multi Cuisine',
+    badge: '',
+    pills: ['Free Delivery'],
+    image: 'https://images.unsplash.com/photo-1546069901-ba9599a7e63c?auto=format&fit=crop&w=600&q=80',
+    description: 'Ambient rooftop bar and restaurant with views over Pondicherry, serving North Indian curries and Chinese snacks.',
+    hours: '5:00 PM - 11:30 PM',
+    features: ['Rooftop Seating', 'Live DJ', 'Cocktail Bar'],
+    mapX: '27%',
+    mapY: '71%',
+    menu: [{ name: 'Tandoori Malai Broccoli', price: 290, category: 'Starters', veg: true, desc: 'Fresh broccoli florets marinated in cream and spices, baked in tandoor.' }],
+    reviewsList: [{ user: 'Sneha G.', rating: 4, date: 'May 17, 2026', comment: 'Great music and very cooling breeze at night.' }]
+  },
+  {
+    id: 25,
+    title: "L'Aqua Bar",
+    location: 'Rock Beach, Puducherry',
+    distance: '0.9 km',
+    rating: 4.5,
+    reviews: '310',
+    price: 2000,
+    pricePeriod: 'for two',
+    cuisine: 'Seafood, Barbecue',
+    badge: '',
+    pills: ['Sea View'],
+    image: 'https://images.unsplash.com/photo-1534080391025-0979e8304b2b?auto=format&fit=crop&w=600&q=80',
+    description: 'Upscale beachfront rooftop lounge specializing in grilled lobster, prawns, and premium wine cocktails.',
+    hours: '5:00 PM - 11:00 PM',
+    features: ['Sea View', 'Rooftop Bar', 'Valet Parking'],
+    mapX: '85%',
+    mapY: '46%',
+    menu: [{ name: 'Grilled Garlic Lobster', price: 980, category: 'Main Course', veg: false, desc: 'Fresh beach lobster grilled with garlic butter and herbs.' }],
+    reviewsList: [{ user: 'John D.', rating: 5, date: 'June 03, 2026', comment: 'Lobster was cooked beautifully. Stellar coastal sunset.' }]
+  },
+  {
+    id: 26,
+    title: 'Seagulls Restaurant',
+    location: 'Beach Road, Puducherry',
+    distance: '1.4 km',
+    rating: 4.1,
+    reviews: '280',
+    price: 1000,
+    pricePeriod: 'for two',
+    cuisine: 'Seafood, Indian',
+    badge: '',
+    pills: ['Popular'],
+    image: 'https://images.unsplash.com/photo-1544025162-d76694265947?auto=format&fit=crop&w=600&q=80',
+    description: 'Government-run seaside restaurant and bar, offering economical beer and fresh seafood curries with beach wind.',
+    hours: '11:00 AM - 10:30 PM',
+    features: ['Sea View', 'Outdoor Deck', 'Alcohol Served'],
+    mapX: '74%',
+    mapY: '27%',
+    menu: [{ name: 'Pondy Masala Prawn Fry', price: 290, category: 'Starters', veg: false, desc: 'Spicy marinated prawns deep fried with curry leaves.' }],
+    reviewsList: [{ user: 'Selvan T.', rating: 4, date: 'May 28, 2026', comment: 'Very cheap beer and nice views of the harbor.' }]
+  },
+  {
+    id: 27,
+    title: 'Carte Blanche',
+    location: 'White Town, Puducherry',
+    distance: '0.7 km',
+    rating: 4.6,
+    reviews: '450',
+    price: 2200,
+    pricePeriod: 'for two',
+    cuisine: 'French, Fine Dining',
+    badge: 'Top Rated',
+    pills: ['Fine Dining'],
+    image: 'https://images.unsplash.com/photo-1509440159596-0249088772ff?auto=format&fit=crop&w=600&q=80',
+    description: 'Creole and French gastronomy restaurant inside the courtyard of the boutique hotel L’Orient.',
+    hours: '12:00 PM - 10:30 PM',
+    features: ['Heritage Courtyard', 'Boutique Setup', 'AC Dining'],
+    mapX: '49%',
+    mapY: '48%',
+    menu: [{ name: 'Creole Fish Curry', price: 540, category: 'Main Course', veg: false, desc: 'Pondy-French fusion fish curry cooked in spiced coconut milk.' }],
+    reviewsList: [{ user: 'Yasmine L.', rating: 5, date: 'May 11, 2026', comment: 'The fusion Creole curry is fantastic. Courtyard is quiet.' }]
+  },
+  {
+    id: 28,
+    title: 'Escape Rooftop Cafe',
+    location: 'MG Road, Puducherry',
+    distance: '2.2 km',
+    rating: 4.3,
+    reviews: '170',
+    price: 800,
+    pricePeriod: 'for two',
+    cuisine: 'Cafe, Fast Food',
+    badge: '',
+    pills: ['Popular'],
+    image: 'https://images.unsplash.com/photo-1513104890138-7c749659a591?auto=format&fit=crop&w=600&q=80',
+    description: 'Rooftop cafe for students and young travelers, serving hot pastas, shakes, and French fries under nice lights.',
+    hours: '3:00 PM - 11:00 PM',
+    features: ['Rooftop Deck', 'Music', 'Board Games'],
+    mapX: '29%',
+    mapY: '31%',
+    menu: [{ name: 'Alfredo Pasta Chicken', price: 260, category: 'Main Course', veg: false, desc: 'Creamy white cheese sauce pasta cooked with roasted chicken.' }],
+    reviewsList: [{ user: 'Aman N.', rating: 4, date: 'May 05, 2026', comment: 'Very chill vibe. Friendly staff and good fries.' }]
+  },
+  {
+    id: 29,
+    title: "Domino's Pizza",
+    location: 'Anna Salai, Puducherry',
+    distance: '1.6 km',
+    rating: 4.0,
+    reviews: '310',
+    price: 500,
+    pricePeriod: 'for two',
+    cuisine: 'Pizza, Fast Food',
+    badge: '',
+    pills: ['Free Delivery'],
+    image: 'https://images.unsplash.com/photo-1513104890138-7c749659a591?auto=format&fit=crop&w=600&q=80',
+    description: 'Fast food delivery outlet offering classic thin crust pizzas, garlic bread, and chocolate lava cakes.',
+    hours: '11:00 AM - 11:00 PM',
+    features: ['AC Dining', 'Quick Delivery'],
+    mapX: '39%',
+    mapY: '21%',
+    menu: [{ name: 'Peppy Paneer Pizza', price: 280, category: 'Main Course', veg: true, desc: 'Mozzarella cheese, spiced cottage cheese, capsicum, red paprika.' }],
+    reviewsList: [{ user: 'Hitesh K.', rating: 4, date: 'Apr 30, 2026', comment: 'Quick delivery and standard cheese burst taste.' }]
+  },
+  {
+    id: 30,
+    title: 'Burger King',
+    location: 'Mission Street, Puducherry',
+    distance: '1.2 km',
+    rating: 4.1,
+    reviews: '460',
+    price: 400,
+    pricePeriod: 'for two',
+    cuisine: 'Burgers, Fast Food',
+    badge: '20% OFF',
+    pills: ['Quick Bites'],
+    image: 'https://images.unsplash.com/photo-1568901346375-23c9450c58cd?auto=format&fit=crop&w=600&q=80',
+    description: 'Classic global burger chain serving Whoppers, crispy chicken burgers, potato wraps, and cold beverages.',
+    hours: '10:00 AM - 11:00 PM',
+    features: ['AC Dining', 'Kid Friendly'],
+    mapX: '66%',
+    mapY: '52%',
+    menu: [{ name: 'Veg Whopper', price: 160, category: 'Main Course', veg: true, desc: 'Large burger loaded with crispy veg patty, tomatoes, cheese, mayo.' }],
+    reviewsList: [{ user: 'Lara B.', rating: 4, date: 'May 10, 2026', comment: 'Always clean, and kids love the Whopper meals.' }]
+  },
+  {
+    id: 31,
+    title: 'Starbucks Coffee',
+    location: 'Rock Beach, Puducherry',
+    distance: '0.8 km',
+    rating: 4.4,
+    reviews: '610',
+    price: 700,
+    pricePeriod: 'for two',
+    cuisine: 'Cafe, Continental',
+    badge: '',
+    pills: ['Popular'],
+    image: 'https://images.unsplash.com/photo-1554118811-1e0d58224f24?auto=format&fit=crop&w=600&q=80',
+    description: 'Global cafe chain serving hot and cold coffees, croissants, cheesecakes, and quick sandwiches.',
+    hours: '8:00 AM - 11:00 PM',
+    features: ['Sea View Closeby', 'AC Dining', 'Free Wifi'],
+    mapX: '87%',
+    mapY: '40%',
+    menu: [{ name: 'Java Chip Frappuccino', price: 290, category: 'Beverages', veg: true, desc: 'Tall size ice-blended chocolate chip coffee topped with cream.' }],
+    reviewsList: [{ user: 'Nitesh M.', rating: 4, date: 'June 02, 2026', comment: 'Awesome place to sit and work. Standard Starbucks taste.' }]
+  },
+  {
+    id: 32,
+    title: 'Auroville Bakery',
+    location: 'Auroville, India',
+    distance: '4.8 km',
+    rating: 4.6,
+    reviews: '1.1k',
+    price: 400,
+    pricePeriod: 'for two',
+    cuisine: 'French, Bakeries',
+    badge: 'Best Seller',
+    pills: ['Popular'],
+    image: 'https://images.unsplash.com/photo-1509440159596-0249088772ff?auto=format&fit=crop&w=600&q=80',
+    description: 'One of the oldest bakeries in Auroville. Serving wood-fired wheat breads, sweet rolls, cheese baguettes, and fresh fruit tarts.',
+    hours: '7:00 AM - 5:30 PM',
+    features: ['Garden Patio', 'Takeaway Only', 'Organic Flour'],
+    mapX: '77%',
+    mapY: '51%',
+    menu: [{ name: 'Chocolate Worsh Roll', price: 75, category: 'Desserts', veg: true, desc: 'Sweet bread roll stuffed with organic chocolate bits.' }],
+    reviewsList: [{ user: 'Chantal L.', rating: 5, date: 'May 27, 2026', comment: 'Croissants sell out by 9:00 AM! Authentic rustic texture.' }]
+  },
+  {
+    id: 33,
+    title: 'Farm Fresh Pizza',
+    location: 'Auroville, India',
+    distance: '5.6 km',
+    rating: 4.5,
+    reviews: '310',
+    price: 800,
+    pricePeriod: 'for two',
+    cuisine: 'Pizza, Italian',
+    badge: '',
+    pills: ['Pure Veg'],
+    image: 'https://images.unsplash.com/photo-1513104890138-7c749659a591?auto=format&fit=crop&w=600&q=80',
+    description: 'Cozy pizzeria serving organic vegetarian pizzas loaded with farm-fresh tomatoes, zucchini, basil, and locally made mozzarella.',
+    hours: '12:00 PM - 9:30 PM',
+    features: ['Garden Dining', 'Farm Sourced Veggies', 'Vegetarian'],
+    mapX: '83%',
+    mapY: '59%',
+    menu: [{ name: 'Zucchini Bell Pepper Pizza', price: 340, category: 'Main Course', veg: true, desc: 'Fresh farm zucchini, capsicums, red sauce, local farm cheese.' }],
+    reviewsList: [{ user: 'Arjun F.', rating: 5, date: 'June 01, 2026', comment: 'Very fresh veggies! Crust is crispy and thin.' }]
+  },
+  {
+    id: 34,
+    title: 'Pondy Pasta Bar',
+    location: 'White Town, Puducherry',
+    distance: '0.9 km',
+    rating: 4.3,
+    reviews: '210',
+    price: 700,
+    pricePeriod: 'for two',
+    cuisine: 'Italian, Cafe',
+    badge: '',
+    pills: ['Free Delivery'],
+    image: 'https://images.unsplash.com/photo-1546069901-ba9599a7e63c?auto=format&fit=crop&w=600&q=80',
+    description: 'Artisanal pasta cafe where you can choose pasta shapes and match them with creamy alfredo, marinara, or walnut pestos.',
+    hours: '11:00 AM - 10:00 PM',
+    features: ['AC Dining', 'Create Your Own Pasta'],
+    mapX: '54%',
+    mapY: '36%',
+    menu: [{ name: 'Penne Arrabiata', price: 270, category: 'Main Course', veg: true, desc: 'Penne pasta tossed in spicy garlic tomato marinara sauce.' }],
+    reviewsList: [{ user: 'Vijay D.', rating: 4, date: 'May 12, 2026', comment: 'Arrabiata has a nice garlic kick. Highly recommend.' }]
+  },
+  {
+    id: 35,
+    title: 'The Burger Joint',
+    location: 'Beach Road, Puducherry',
+    distance: '1.3 km',
+    rating: 4.2,
+    reviews: '190',
+    price: 500,
+    pricePeriod: 'for two',
+    cuisine: 'Burgers, American',
+    badge: '10% OFF',
+    pills: ['Popular'],
+    image: 'https://images.unsplash.com/photo-1568901346375-23c9450c58cd?auto=format&fit=crop&w=600&q=80',
+    description: 'Lively beachfront diner serving tall beef and chicken burgers, curly fries, onion rings, and chocolate shakes.',
+    hours: '11:30 AM - 10:30 PM',
+    features: ['AC Dining', 'Curly Fries Specialty'],
+    mapX: '70%',
+    mapY: '25%',
+    menu: [{ name: 'Spicy Barbecue Chicken Burger', price: 220, category: 'Main Course', veg: false, desc: 'Double patty, sweet smoky barbecue sauce, cheese, jalapenos.' }],
+    reviewsList: [{ user: 'Karthik N.', rating: 4.2, date: 'June 01, 2026', comment: 'The barbecue burger is juicy, and the curly fries are amazing.' }]
   }
 ];
 
@@ -418,26 +902,26 @@ export default function FoodSpots() {
       
       {/* ─── HERO BANNER SECTION ─── */}
       <div 
-        className="w-full h-[320px] sm:h-[350px] relative bg-cover bg-center flex flex-col justify-center px-6 sm:px-16 md:px-24 text-left shadow-inner border-b border-slate-200"
+        className="w-full h-[220px] sm:h-[240px] relative bg-cover bg-center flex flex-col justify-center px-6 sm:px-16 md:px-24 text-left shadow-inner border-b border-slate-200"
         style={{ backgroundImage: `url(${foodBannerImg})` }}
       >
         {/* Dark overlay for text readability */}
         <div className="absolute inset-0 bg-slate-950/40 z-0 pointer-events-none" />
 
         <div className="relative z-10 max-w-3xl text-left select-none">
-          <span className="text-white text-base md:text-lg font-semibold tracking-wide uppercase">
+          <span className="text-white text-xs sm:text-sm font-semibold tracking-wide uppercase">
             Discover the Best
           </span>
-          <h1 className="text-4xl sm:text-5xl md:text-6xl font-black text-white mt-1.5 tracking-tight leading-none">
+          <h1 className="text-3xl sm:text-4xl md:text-5xl font-black text-white mt-1 tracking-tight leading-none">
             Food Spots
             <span className="inline-block relative text-[#EA580C] italic font-serif ml-3 select-none">
               Near You!
-              <svg className="absolute bottom-[-8px] left-0 w-full h-[6px]" viewBox="0 0 100 10" preserveAspectRatio="none" fill="none">
+              <svg className="absolute bottom-[-6px] left-0 w-full h-[5px]" viewBox="0 0 100 10" preserveAspectRatio="none" fill="none">
                 <path d="M0,5 Q50,0 100,5" stroke="#EA580C" strokeWidth="4.5" strokeLinecap="round" />
               </svg>
             </span>
           </h1>
-          <p className="text-slate-200 text-xs sm:text-sm md:text-base font-medium mt-4 max-w-xl leading-relaxed">
+          <p className="text-slate-200 text-xs sm:text-sm font-medium mt-2 max-w-xl leading-relaxed">
             Explore top restaurants, cafes, and hidden gems around you.
           </p>
         </div>
@@ -578,7 +1062,7 @@ export default function FoodSpots() {
 
             {/* Restaurant Cards Grid (Exact Design from Mockup) */}
             {filteredRestaurants.length > 0 ? (
-              <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-3.5 pb-16">
+              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-3 pb-16">
                 {filteredRestaurants.map((restaurant) => {
                   const isHovered = selectedRestaurant?.id === restaurant.id;
                   return (
@@ -593,7 +1077,7 @@ export default function FoodSpots() {
                       }`}
                     >
                       {/* Photo Container */}
-                      <div className="relative h-[155px] w-full overflow-hidden bg-slate-100">
+                      <div className="relative h-[115px] w-full overflow-hidden bg-slate-100">
                         <img 
                           src={restaurant.image} 
                           alt={restaurant.title} 
@@ -603,7 +1087,7 @@ export default function FoodSpots() {
                         
                         {/* Discount Tag */}
                         {restaurant.badge && (
-                          <span className="absolute top-3 left-3 text-[10px] font-black uppercase bg-red-655 text-white px-2 py-0.5 rounded-md shadow-xs tracking-wider animate-pulse">
+                          <span className="absolute top-2 left-2 text-[9px] font-black uppercase bg-red-655 text-white px-1.5 py-0.5 rounded-md shadow-xs tracking-wider animate-pulse">
                             {restaurant.badge}
                           </span>
                         )}
@@ -625,41 +1109,41 @@ export default function FoodSpots() {
                       </div>
 
                       {/* Content Section */}
-                      <div className="p-4 flex flex-col flex-grow text-left justify-between">
+                      <div className="p-3 flex flex-col flex-grow text-left justify-between">
                         <div>
                           {/* Title & Rating */}
-                          <div className="flex items-start justify-between gap-2">
-                            <h4 className="text-[14.5px] font-black text-slate-850 tracking-tight leading-snug group-hover:text-[#0F766E] transition-colors line-clamp-1">
+                          <div className="flex items-start justify-between gap-1.5">
+                            <h4 className="text-[13px] font-black text-slate-850 tracking-tight leading-snug group-hover:text-[#0F766E] transition-colors line-clamp-1">
                               {restaurant.title}
                             </h4>
-                            <span className="text-[11.5px] font-extrabold text-white flex items-center gap-0.5 shrink-0 bg-emerald-600 px-1.5 py-0.5 rounded-md leading-none shadow-3xs">
+                            <span className="text-[10px] font-extrabold text-white flex items-center gap-0.5 shrink-0 bg-emerald-600 px-1 py-0.5 rounded-md leading-none shadow-3xs">
                               {restaurant.rating.toFixed(1)} ★
                             </span>
                           </div>
                           
                           {/* Location & Distance */}
-                          <div className="flex items-center justify-between text-[12px] font-semibold text-slate-400 mt-1">
+                          <div className="flex items-center justify-between text-[11px] font-semibold text-slate-400 mt-1">
                             <span className="flex items-center gap-1 leading-none">
-                              <MapPin className="h-3.5 w-3.5 text-[#0F766E]" />
+                              <MapPin className="h-3 w-3 text-[#0F766E]" />
                               {restaurant.location.split(',')[0]}
                             </span>
-                            <span className="text-slate-450 text-[11px] font-bold">{restaurant.distance}</span>
+                            <span className="text-slate-455 text-[10px] font-bold">{restaurant.distance}</span>
                           </div>
 
                           {/* Cuisine */}
-                          <p className="text-[11.5px] text-slate-400 font-semibold mt-1.5 line-clamp-1 leading-relaxed">
+                          <p className="text-[10.5px] text-slate-400 font-semibold mt-1.5 line-clamp-1 leading-relaxed">
                             {restaurant.cuisine}
                           </p>
 
                           {/* Badge pills */}
-                          <div className="flex flex-wrap gap-1.5 mt-2.5">
+                          <div className="flex flex-wrap gap-1 mt-2">
                             {restaurant.pills.map((p) => {
                               const isVeg = p === 'Pure Veg';
                               const isPop = p === 'Popular' || p === 'Fine Dining';
                               return (
                                 <span 
                                   key={p} 
-                                  className={`text-[9.5px] font-extrabold px-2 py-0.5 rounded-md ${
+                                  className={`text-[8.5px] font-extrabold px-1.5 py-0.5 rounded-md ${
                                     isVeg 
                                       ? 'bg-emerald-50 text-emerald-650' 
                                       : isPop 
@@ -675,7 +1159,7 @@ export default function FoodSpots() {
                         </div>
 
                         {/* Price Details at bottom */}
-                        <div className="flex items-center justify-between border-t border-slate-100 pt-3 mt-4 text-[12px] font-bold text-slate-500">
+                        <div className="flex items-center justify-between border-t border-slate-100 pt-2 mt-3.5 text-[11px] font-bold text-slate-500">
                           <span>₹₹₹ • ₹{restaurant.price} {restaurant.pricePeriod}</span>
                           
                           <span 
@@ -683,7 +1167,7 @@ export default function FoodSpots() {
                               e.stopPropagation();
                               setDetailModalRestaurant(restaurant);
                             }}
-                            className="text-[11px] font-black text-[#0F766E] hover:underline cursor-pointer"
+                            className="text-[10.5px] font-black text-[#0F766E] hover:underline cursor-pointer"
                           >
                             Book Table &rarr;
                           </span>
