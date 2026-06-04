@@ -4,7 +4,7 @@ import HeroSection from '../components/HeroSection';
 import Categories from '../components/Categories';
 import TrendingSection from '../components/TrendingSection';
 import RentalServices from '../components/RentalServices';
-import FoodSpotsSection from '../components/FoodSpotsSection';
+import FoodSpotsSection from '../foodspot/FoodSpotsSection';
 import ExperienceBanner from '../components/ExperienceBanner';
 import UnmissableExperiences from '../components/UnmissableExperiences';
 import DownloadAppBanner from '../components/DownloadAppBanner';
