@@ -4,7 +4,7 @@ import {
   X, Clock, Utensils, ThumbsUp, CheckCircle, Calendar, Users, HeartHandshake, Compass, Plus, Minus,
   Share2, Phone, Play, ChevronLeft, ChevronRight, Check
 } from 'lucide-react';
-import foodBannerImg from '../assets/food_spots_banner.png';
+import foodBannerImg from '../assets/foodbg2.png';
 import mapImg from '../assets/puducherry_map.png';
 
 // Expanded Restaurant Database (35 Detailed Food Spots)
