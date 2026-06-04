@@ -8,7 +8,7 @@ import MyBookings from './pages/MyBookings';
 import RentHome from './rent/RentHome';
 import RentResults from './rent/RentResults';
 import RentDetail from './rent/RentDetail';
-import FoodSpots from './pages/FoodSpots';
+import FoodSpots from './foodspot/FoodSpots';
 import './App.css';
 
 // ─── Search transition overlay ──────────────────────────────────────────────
