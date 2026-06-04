@@ -1155,7 +1155,11 @@ export default function FoodSpots() {
               </div>
 
             </div>
-         {/* ─── MAIN CONTENT VIEW: 3-PANEL SPLIT OR ORIGINAL GRID/MAP ─── */}
+          </div>
+        </div>
+      )}
+
+          {/* ─── MAIN CONTENT VIEW: 3-PANEL SPLIT OR ORIGINAL GRID/MAP ─── */}
       {isSearchActive ? (
         <div className="mx-auto max-w-[1850px] px-4 pt-4 pb-4 select-none">
           <div className="flex flex-col lg:flex-row items-stretch gap-4 h-[calc(100vh-170px)] min-h-[600px] overflow-hidden">
