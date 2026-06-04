@@ -920,16 +920,16 @@ export default function FoodSpots() {
       
       {/* ─── CONDITIONAL HEADER: DOCKED SEARCH BAR OR HERO BANNER ─── */}
       {isSearchActive ? (
-        <div className="w-full bg-white border-b border-slate-200/90 py-3.5 px-6 sticky top-0 z-30 shadow-sm select-none">
-          <div className="max-w-[1760px] mx-auto flex flex-col lg:flex-row items-center gap-3 lg:gap-2.5">
+        <div className="w-full bg-white border-b border-slate-200/90 py-3 px-6 sticky top-0 z-30 shadow-sm select-none">
+          <div className="max-w-[1760px] mx-auto flex flex-col lg:flex-row items-stretch lg:items-center gap-3 lg:gap-0">
             
             {/* 1. Location Pin & Change */}
-            <div className="flex items-center gap-3 pl-3 pr-4 py-1.5 border-r border-slate-200/80 w-full lg:w-auto shrink-0 justify-between lg:justify-start">
+            <div className="flex items-center gap-3 pl-3 pr-4 py-1.5 w-full lg:w-auto shrink-0 justify-between lg:justify-start">
               <div className="flex items-center gap-2 text-left">
                 <MapPin className="h-5 w-5 text-[#0F766E] shrink-0" />
                 <div>
                   <span className="text-[9px] font-bold text-slate-400 block uppercase tracking-wider leading-none">Location</span>
-                  <span className="text-[13px] font-black text-slate-805 mt-1 block truncate leading-none">
+                  <span className="text-[13px] font-black text-slate-900 mt-1 block truncate leading-none">
                     {selectedLocation.split(',')[0]}
                   </span>
                 </div>
@@ -942,8 +942,11 @@ export default function FoodSpots() {
               </button>
             </div>
 
+            {/* Divider */}
+            <div className="hidden lg:block h-7 w-px bg-slate-200 shrink-0 self-center" />
+
             {/* 2. Text Search Input */}
-            <div className="flex items-center gap-2.5 px-3 py-1.5 border-r border-slate-200/80 flex-grow w-full lg:w-auto">
+            <div className="flex items-center gap-2.5 px-4 py-1.5 flex-grow w-full lg:w-auto">
               <Search className="h-4.5 w-4.5 text-slate-400 shrink-0" />
               <input 
                 type="text" 
@@ -954,74 +957,83 @@ export default function FoodSpots() {
               />
             </div>
 
+            {/* Divider */}
+            <div className="hidden lg:block h-7 w-px bg-slate-200 shrink-0 self-center" />
+
             {/* 3. Cuisine Dropdown */}
-            <div className="relative flex flex-col items-start px-4 py-1 border-r border-slate-200/80 w-full sm:w-[48%] lg:w-[145px] shrink-0 text-left">
+            <div className="relative flex flex-col justify-center items-start px-4 py-1 w-full sm:w-[48%] lg:w-[140px] shrink-0 text-left">
               <span className="text-[9px] font-bold text-slate-400 uppercase tracking-wider leading-none">Cuisine</span>
-              <div className="flex items-center justify-between w-full mt-1 cursor-pointer">
+              <div className="relative flex items-center w-full mt-1 cursor-pointer">
                 <select
                   value={selectedCuisine}
                   onChange={(e) => setSelectedCuisine(e.target.value)}
-                  className="w-full bg-transparent text-[13px] font-extrabold text-slate-800 outline-none cursor-pointer appearance-none pr-5 z-10"
+                  className="w-full bg-transparent text-[13px] font-extrabold text-slate-800 outline-none cursor-pointer appearance-none pr-6 z-10"
                 >
                   {CUISINES.map((c) => (
                     <option key={c} value={c}>{c}</option>
                   ))}
                 </select>
-                <ChevronDown className="h-4 w-4 text-slate-400 absolute right-3 pointer-events-none z-0" />
+                <ChevronDown className="h-4 w-4 text-slate-400 absolute right-0 top-1/2 -translate-y-1/2 pointer-events-none z-0" />
               </div>
             </div>
 
+            {/* Divider */}
+            <div className="hidden lg:block h-7 w-px bg-slate-200 shrink-0 self-center" />
+
             {/* 4. Sort By Dropdown */}
-            <div className="relative flex flex-col items-start px-4 py-1 border-r border-slate-200/80 w-full sm:w-[48%] lg:w-[155px] shrink-0 text-left">
+            <div className="relative flex flex-col justify-center items-start px-4 py-1 w-full sm:w-[48%] lg:w-[150px] shrink-0 text-left">
               <span className="text-[9px] font-bold text-slate-400 uppercase tracking-wider leading-none">Sort By</span>
-              <div className="flex items-center justify-between w-full mt-1 cursor-pointer">
+              <div className="relative flex items-center w-full mt-1 cursor-pointer">
                 <select
                   value={sortBy}
                   onChange={(e) => setSortBy(e.target.value)}
-                  className="w-full bg-transparent text-[13px] font-extrabold text-slate-800 outline-none cursor-pointer appearance-none pr-5 z-10"
+                  className="w-full bg-transparent text-[13px] font-extrabold text-slate-800 outline-none cursor-pointer appearance-none pr-6 z-10"
                 >
                   <option value="Popular">Popular</option>
                   <option value="Price: Low to High">Price: Low to High</option>
                   <option value="Price: High to Low">Price: High to Low</option>
                   <option value="Top Rated">Top Rated</option>
                 </select>
-                <ChevronDown className="h-4 w-4 text-slate-400 absolute right-3 pointer-events-none z-0" />
+                <ChevronDown className="h-4 w-4 text-slate-400 absolute right-0 top-1/2 -translate-y-1/2 pointer-events-none z-0" />
               </div>
             </div>
 
+            {/* Divider */}
+            <div className="hidden lg:block h-7 w-px bg-slate-200 shrink-0 self-center" />
+
             {/* 5. Rating Dropdown */}
-            <div className="relative flex flex-col items-start px-4 py-1 w-full sm:w-[48%] lg:w-[145px] shrink-0 text-left">
+            <div className="relative flex flex-col justify-center items-start px-4 py-1 w-full sm:w-[48%] lg:w-[140px] shrink-0 text-left">
               <span className="text-[9px] font-bold text-slate-400 uppercase tracking-wider leading-none">Rating</span>
-              <div className="flex items-center justify-between w-full mt-1 cursor-pointer">
+              <div className="relative flex items-center w-full mt-1 cursor-pointer">
                 <select
                   value={selectedRating}
                   onChange={(e) => setSelectedRating(e.target.value)}
-                  className="w-full bg-transparent text-[13px] font-extrabold text-slate-800 outline-none cursor-pointer appearance-none pr-5 z-10"
+                  className="w-full bg-transparent text-[13px] font-extrabold text-slate-800 outline-none cursor-pointer appearance-none pr-6 z-10"
                 >
                   <option value="All Ratings">All Ratings</option>
                   <option value="4.5+">4.5+ ★</option>
                   <option value="4.0+">4.0+ ★</option>
                   <option value="3.5+">3.5+ ★</option>
                 </select>
-                <ChevronDown className="h-4 w-4 text-slate-455 absolute right-3 pointer-events-none z-0" />
+                <ChevronDown className="h-4 w-4 text-slate-400 absolute right-0 top-1/2 -translate-y-1/2 pointer-events-none z-0" />
               </div>
             </div>
 
             {/* 6. Buttons */}
-            <div className="flex items-center gap-2 w-full sm:w-[48%] lg:w-auto shrink-0 justify-end ml-auto">
+            <div className="flex items-center gap-2 pl-3 w-full sm:w-[48%] lg:w-auto shrink-0 justify-end ml-auto">
               <button 
                 onClick={() => setIsSearchActive(true)}
-                className="bg-[#0F766E] hover:bg-[#0c625c] active:scale-98 text-white px-5 py-2.5 rounded-xl font-extrabold text-[13px] transition-all cursor-pointer shadow-md flex items-center gap-1.5 shrink-0"
+                className="bg-[#0F766E] hover:bg-[#0c625c] active:scale-98 text-white px-5 py-2 rounded-xl font-extrabold text-[13px] transition-all cursor-pointer shadow-md flex items-center gap-1.5 shrink-0"
               >
                 <span>Filters</span>
                 <SlidersHorizontal className="h-4 w-4" />
               </button>
               <button 
                 onClick={() => setIsSearchActive(false)}
-                className="h-10 w-10 border border-slate-200 hover:border-slate-350 hover:bg-slate-50 flex items-center justify-center rounded-xl cursor-pointer text-slate-500 hover:text-slate-800 transition-colors shrink-0"
+                className="h-9 w-9 border border-slate-200 hover:border-slate-350 hover:bg-slate-50 flex items-center justify-center rounded-xl cursor-pointer text-slate-500 hover:text-slate-800 transition-colors shrink-0"
                 title="Exit Search Layout"
               >
-                <X className="h-5 w-5" />
+                <X className="h-4.5 w-4.5" />
               </button>
             </div>
 
@@ -1054,30 +1066,33 @@ export default function FoodSpots() {
           </div>
 
           {/* ─── FLOATING SEARCH/FILTER BAR ─── */}
-          <div className="absolute bottom-[-32px] left-1/2 -translate-x-1/2 w-[calc(100%-2rem)] max-w-[1360px] bg-white rounded-3xl shadow-xl border border-slate-100/90 p-2 md:p-3 z-20">
-            <div className="flex flex-col lg:flex-row items-center gap-3 lg:gap-2">
+          <div className="absolute bottom-[-32px] left-1/2 -translate-x-1/2 w-[calc(100%-2rem)] max-w-[1360px] bg-white rounded-[28px] shadow-[0_15px_40px_-15px_rgba(15,118,110,0.08),0_10px_20px_-10px_rgba(0,0,0,0.04)] border border-slate-100 p-2 md:p-2.5 z-20">
+            <div className="flex flex-col lg:flex-row items-stretch gap-3 lg:gap-0">
               
               {/* 1. Location Pin & Change */}
-              <div className="flex items-center gap-3.5 pl-3 pr-4 py-2 border-r border-slate-150/80 w-full lg:w-auto shrink-0 justify-between lg:justify-start">
-                <div className="flex items-center gap-2 text-left">
+              <div className="flex items-center gap-3.5 pl-4 pr-5 py-2 w-full lg:w-auto shrink-0 justify-between lg:justify-start">
+                <div className="flex items-center gap-2.5 text-left">
                   <MapPin className="h-5.5 w-5.5 text-[#0F766E] shrink-0" />
                   <div>
-                    <span className="text-[10px] font-bold text-slate-400 block uppercase tracking-wider leading-none">Location</span>
-                    <span className="text-[13.5px] font-black text-slate-800 mt-1 block truncate leading-none">
+                    <span className="text-[9px] font-bold text-slate-400 block uppercase tracking-wider leading-none">Location</span>
+                    <span className="text-[13.5px] font-black text-slate-900 mt-1 block truncate leading-none">
                       {selectedLocation.split(',')[0]}
                     </span>
                   </div>
                 </div>
                 <button 
                   onClick={() => setShowLocationModal(true)}
-                  className="text-[12.5px] font-extrabold text-[#0F766E] hover:text-[#0c625c] hover:underline cursor-pointer ml-3 shrink-0"
+                  className="text-[12px] font-extrabold text-[#0F766E] hover:text-[#0c625c] hover:underline cursor-pointer ml-3 shrink-0 transition-colors"
                 >
                   Change
                 </button>
               </div>
 
+              {/* Divider */}
+              <div className="hidden lg:block h-8 w-px bg-slate-200 shrink-0 self-center" />
+
               {/* 2. Text Search Input */}
-              <div className="flex items-center gap-2.5 px-3 py-2 border-r border-slate-150/80 flex-grow w-full lg:w-auto">
+              <div className="flex items-center gap-2.5 px-5 py-2 flex-grow w-full lg:w-auto">
                 <Search className="h-5 w-5 text-slate-400 shrink-0" />
                 <input 
                   type="text" 
@@ -1088,68 +1103,77 @@ export default function FoodSpots() {
                 />
               </div>
 
+              {/* Divider */}
+              <div className="hidden lg:block h-8 w-px bg-slate-200 shrink-0 self-center" />
+
               {/* 3. Cuisine Dropdown */}
-              <div className="relative flex flex-col items-start px-4 py-1.5 border-r border-slate-150/80 w-full sm:w-[48%] lg:w-[155px] shrink-0 text-left">
-                <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider leading-none">Cuisine</span>
-                <div className="flex items-center justify-between w-full mt-1.5 cursor-pointer">
+              <div className="relative flex flex-col justify-center items-start px-5 py-1.5 w-full sm:w-[48%] lg:w-[150px] shrink-0 text-left">
+                <span className="text-[9px] font-bold text-slate-400 uppercase tracking-wider leading-none">Cuisine</span>
+                <div className="relative flex items-center w-full mt-1.5 cursor-pointer">
                   <select
                     value={selectedCuisine}
                     onChange={(e) => setSelectedCuisine(e.target.value)}
-                    className="w-full bg-transparent text-[13.5px] font-extrabold text-slate-800 outline-none cursor-pointer appearance-none pr-5 z-10"
+                    className="w-full bg-transparent text-[13.5px] font-extrabold text-slate-800 outline-none cursor-pointer appearance-none pr-6 z-10"
                   >
                     {CUISINES.map((c) => (
                       <option key={c} value={c}>{c}</option>
                     ))}
                   </select>
-                  <ChevronDown className="h-4.5 w-4.5 text-slate-455 absolute right-3 pointer-events-none z-0" />
+                  <ChevronDown className="h-4 w-4 text-slate-400 absolute right-0 top-1/2 -translate-y-1/2 pointer-events-none z-0" />
                 </div>
               </div>
 
+              {/* Divider */}
+              <div className="hidden lg:block h-8 w-px bg-slate-200 shrink-0 self-center" />
+
               {/* 4. Sort By Dropdown */}
-              <div className="relative flex flex-col items-start px-4 py-1.5 border-r border-slate-150/80 w-full sm:w-[48%] lg:w-[165px] shrink-0 text-left">
-                <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider leading-none">Sort By</span>
-                <div className="flex items-center justify-between w-full mt-1.5 cursor-pointer">
+              <div className="relative flex flex-col justify-center items-start px-5 py-1.5 w-full sm:w-[48%] lg:w-[160px] shrink-0 text-left">
+                <span className="text-[9px] font-bold text-slate-400 uppercase tracking-wider leading-none">Sort By</span>
+                <div className="relative flex items-center w-full mt-1.5 cursor-pointer">
                   <select
                     value={sortBy}
                     onChange={(e) => setSortBy(e.target.value)}
-                    className="w-full bg-transparent text-[13.5px] font-extrabold text-slate-800 outline-none cursor-pointer appearance-none pr-5 z-10"
+                    className="w-full bg-transparent text-[13.5px] font-extrabold text-slate-800 outline-none cursor-pointer appearance-none pr-6 z-10"
                   >
                     <option value="Popular">Popular</option>
                     <option value="Price: Low to High">Price: Low to High</option>
                     <option value="Price: High to Low">Price: High to Low</option>
                     <option value="Top Rated">Top Rated</option>
                   </select>
-                  <ChevronDown className="h-4.5 w-4.5 text-slate-455 absolute right-3 pointer-events-none z-0" />
+                  <ChevronDown className="h-4 w-4 text-slate-400 absolute right-0 top-1/2 -translate-y-1/2 pointer-events-none z-0" />
                 </div>
               </div>
 
+              {/* Divider */}
+              <div className="hidden lg:block h-8 w-px bg-slate-200 shrink-0 self-center" />
+
               {/* 5. Rating Dropdown */}
-              <div className="relative flex flex-col items-start px-4 py-1.5 w-full sm:w-[48%] lg:w-[155px] shrink-0 text-left">
-                <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider leading-none">Rating</span>
-                <div className="flex items-center justify-between w-full mt-1.5 cursor-pointer">
+              <div className="relative flex flex-col justify-center items-start px-5 py-1.5 w-full sm:w-[48%] lg:w-[150px] shrink-0 text-left">
+                <span className="text-[9px] font-bold text-slate-400 uppercase tracking-wider leading-none">Rating</span>
+                <div className="relative flex items-center w-full mt-1.5 cursor-pointer">
                   <select
                     value={selectedRating}
                     onChange={(e) => setSelectedRating(e.target.value)}
-                    className="w-full bg-transparent text-[13.5px] font-extrabold text-slate-800 outline-none cursor-pointer appearance-none pr-5 z-10"
+                    className="w-full bg-transparent text-[13.5px] font-extrabold text-slate-800 outline-none cursor-pointer appearance-none pr-6 z-10"
                   >
                     <option value="All Ratings">All Ratings</option>
                     <option value="4.5+">4.5+ ★</option>
                     <option value="4.0+">4.0+ ★</option>
                     <option value="3.5+">3.5+ ★</option>
                   </select>
-                  <ChevronDown className="h-4.5 w-4.5 text-slate-455 absolute right-3 pointer-events-none z-0" />
+                  <ChevronDown className="h-4 w-4 text-slate-400 absolute right-0 top-1/2 -translate-y-1/2 pointer-events-none z-0" />
                 </div>
               </div>
 
               {/* 6. Buttons */}
-              <div className="flex items-center gap-2.5 w-full sm:w-[48%] lg:w-auto shrink-0 justify-end ml-auto">
+              <div className="flex items-center gap-2.5 pl-4 pr-2 w-full lg:w-auto shrink-0 justify-end ml-auto">
                 <button 
                   onClick={() => setIsSearchActive(true)}
-                  className="bg-[#0F766E] hover:bg-[#0c625c] active:scale-98 text-white px-7 py-3.5 rounded-2xl font-extrabold text-[14px] transition-all cursor-pointer shadow-md shadow-teal-800/10 flex-grow lg:flex-grow-0 text-center"
+                  className="bg-[#0F766E] hover:bg-[#0c625c] active:scale-98 text-white px-7 py-3 rounded-2xl font-extrabold text-[14px] transition-all cursor-pointer shadow-md shadow-teal-800/10 flex-grow lg:flex-grow-0 text-center"
                 >
                   Search
                 </button>
-                <button className="h-12 w-12 border border-slate-200 hover:border-slate-350 hover:bg-slate-50 flex items-center justify-center rounded-2xl cursor-pointer text-slate-500 hover:text-slate-800 transition-colors shrink-0">
+                <button className="h-11 w-11 border border-slate-200 hover:border-slate-350 hover:bg-slate-50 flex items-center justify-center rounded-2xl cursor-pointer text-slate-500 hover:text-slate-800 transition-colors shrink-0">
                   <SlidersHorizontal className="h-5 w-5" />
                 </button>
               </div>
