@@ -892,6 +892,56 @@ export default function FoodSpots() {
   // Map zoom level simulation
   const [zoomLevel, setZoomLevel] = useState(13);
 
+  const toggleWishlist = (id, e) => {
+    e.stopPropagation();
+    setWishlist(prev => 
+      prev.includes(id) ? prev.filter(wId => wId !== id) : [...prev, id]
+    );
+  };
+
+  // Filter and Sort Calculations
+  const filteredRestaurants = useMemo(() => {
+    let list = [...RESTAURANT_DATA];
+
+    // Filter by location
+    if (selectedLocation) {
+      const locKey = selectedLocation.toLowerCase().split(',')[0].trim();
+      list = list.filter(r => r.location.toLowerCase().includes(locKey) || r.location.toLowerCase().includes('puducherry'));
+    }
+
+    // Filter by search query (title, description, cuisine)
+    if (searchQuery.trim() !== '') {
+      const query = searchQuery.toLowerCase();
+      list = list.filter(r => 
+        r.title.toLowerCase().includes(query) ||
+        r.cuisine.toLowerCase().includes(query) ||
+        r.location.toLowerCase().includes(query)
+      );
+    }
+
+    // Filter by cuisine dropdown
+    if (selectedCuisine !== 'All') {
+      list = list.filter(r => r.cuisine.toLowerCase().includes(selectedCuisine.toLowerCase()));
+    }
+
+    // Filter by rating dropdown
+    if (selectedRating !== 'All Ratings') {
+      const minRating = parseFloat(selectedRating.split('+')[0]);
+      list = list.filter(r => r.rating >= minRating);
+    }
+
+    // Sorting
+    if (sortBy === 'Price: Low to High') {
+      list.sort((a, b) => a.price - b.price);
+    } else if (sortBy === 'Price: High to Low') {
+      list.sort((a, b) => b.price - a.price);
+    } else if (sortBy === 'Top Rated') {
+      list.sort((a, b) => b.rating - a.rating);
+    } // 'Popular' maintains default ranking order
+
+    return list;
+  }, [selectedLocation, searchQuery, selectedCuisine, selectedRating, sortBy]);
+
   // Leaflet Map Refs & States
   const mapContainerRef = useRef(null);
   const mapRef = useRef(null);
@@ -979,6 +1029,9 @@ export default function FoodSpots() {
     const minLng = 79.7850;
     const maxLng = 79.8450;
 
+    let activeLat = null;
+    let activeLng = null;
+
     filteredRestaurants.forEach((restaurant) => {
       const x = parseFloat(restaurant.mapX);
       const y = parseFloat(restaurant.mapY);
@@ -987,6 +1040,11 @@ export default function FoodSpots() {
       const lat = maxLat - (y / 100) * (maxLat - minLat);
 
       const isActive = selectedRestaurant?.id === restaurant.id;
+
+      if (isActive) {
+        activeLat = lat;
+        activeLng = lng;
+      }
 
       // Custom icon HTML
       const iconHtml = `
@@ -1023,11 +1081,13 @@ export default function FoodSpots() {
         });
 
       markersRef.current.push(marker);
-
-      if (isActive) {
-        mapInstance.panTo([lat, lng]);
-      }
     });
+
+    if (activeLat !== null && activeLng !== null) {
+      mapInstance.setView([activeLat, activeLng], 16, { animate: true });
+    } else {
+      mapInstance.setView([11.9400, 79.8150], 13, { animate: true });
+    }
   };
 
   // Keep markers in sync with filter and selection changes
@@ -1036,56 +1096,6 @@ export default function FoodSpots() {
       updateMarkers();
     }
   }, [leafletLoaded, filteredRestaurants, selectedRestaurant]);
-
-  const toggleWishlist = (id, e) => {
-    e.stopPropagation();
-    setWishlist(prev => 
-      prev.includes(id) ? prev.filter(wId => wId !== id) : [...prev, id]
-    );
-  };
-
-  // Filter and Sort Calculations
-  const filteredRestaurants = useMemo(() => {
-    let list = [...RESTAURANT_DATA];
-
-    // Filter by location
-    if (selectedLocation) {
-      const locKey = selectedLocation.toLowerCase().split(',')[0].trim();
-      list = list.filter(r => r.location.toLowerCase().includes(locKey) || r.location.toLowerCase().includes('puducherry'));
-    }
-
-    // Filter by search query (title, description, cuisine)
-    if (searchQuery.trim() !== '') {
-      const query = searchQuery.toLowerCase();
-      list = list.filter(r => 
-        r.title.toLowerCase().includes(query) ||
-        r.cuisine.toLowerCase().includes(query) ||
-        r.location.toLowerCase().includes(query)
-      );
-    }
-
-    // Filter by cuisine dropdown
-    if (selectedCuisine !== 'All') {
-      list = list.filter(r => r.cuisine.toLowerCase().includes(selectedCuisine.toLowerCase()));
-    }
-
-    // Filter by rating dropdown
-    if (selectedRating !== 'All Ratings') {
-      const minRating = parseFloat(selectedRating.split('+')[0]);
-      list = list.filter(r => r.rating >= minRating);
-    }
-
-    // Sorting
-    if (sortBy === 'Price: Low to High') {
-      list.sort((a, b) => a.price - b.price);
-    } else if (sortBy === 'Price: High to Low') {
-      list.sort((a, b) => b.price - a.price);
-    } else if (sortBy === 'Top Rated') {
-      list.sort((a, b) => b.rating - a.rating);
-    } // 'Popular' maintains default ranking order
-
-    return list;
-  }, [selectedLocation, searchQuery, selectedCuisine, selectedRating, sortBy]);
 
   // Handle booking form submission
   const handleBookingSubmit = (e) => {
@@ -1497,8 +1507,9 @@ export default function FoodSpots() {
               <div className="absolute right-4 bottom-24 z-30 flex flex-col gap-2">
                 <button 
                   onClick={() => {
+                    setSelectedRestaurant(null);
                     if (mapRef.current) {
-                      mapRef.current.setView([11.9400, 79.8150], 13);
+                      mapRef.current.setView([11.9400, 79.8150], 13, { animate: true });
                     }
                   }}
                   className="h-9 w-9 bg-white border border-slate-200 hover:bg-slate-50 flex items-center justify-center rounded-xl shadow-md cursor-pointer text-slate-600 active:scale-95 transition-all"
