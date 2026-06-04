@@ -197,7 +197,7 @@ const RESTAURANT_DATA = [
     cuisine: 'Asian, Tibetan, Thai',
     badge: '',
     pills: ['Popular'],
-    image: 'https://images.unsplash.com/photo-1534080391025-0979e8304b2b?auto=format&fit=crop&w=600&q=80',
+    image: 'https://images.unsplash.com/photo-1563245372-f21724e3856d?auto=format&fit=crop&w=600&q=80',
     description: 'Rooftop pan-Asian restaurant offering dramatic sea views and authentic dim sums, sushis, and Thai curries.',
     hours: '6:30 PM - 11:00 PM',
     features: ['Rooftop Seating', 'Sea View', 'Bar'],
@@ -575,7 +575,7 @@ const RESTAURANT_DATA = [
     cuisine: 'Seafood, Barbecue',
     badge: '',
     pills: ['Sea View'],
-    image: 'https://images.unsplash.com/photo-1534080391025-0979e8304b2b?auto=format&fit=crop&w=600&q=80',
+    image: 'https://images.unsplash.com/photo-1574936145840-28808d77a0b6?auto=format&fit=crop&w=600&q=80',
     description: 'Upscale beachfront rooftop lounge specializing in grilled lobster, prawns, and premium wine cocktails.',
     hours: '5:00 PM - 11:00 PM',
     features: ['Sea View', 'Rooftop Bar', 'Valet Parking'],
@@ -1851,12 +1851,11 @@ export default function FoodSpots() {
           </div>
         </div>
       ) : (
-        <div className="mx-auto max-w-[1760px] px-4 pt-16 pb-4">
-          
-          <div className="flex flex-col lg:flex-row items-stretch gap-6 mt-8 h-[calc(100vh-220px)] min-h-[650px]">
+        <div className="mx-auto max-w-[1760px] px-4 pt-8 pb-4">
+          <div className="mt-3">
             
-            {/* ==================== LEFT COLUMN: LISTING GRID ==================== */}
-            <section className="w-full lg:w-[58%] xl:w-[60%] flex flex-col h-full overflow-y-auto no-scrollbar pr-1 text-left">
+            {/* ==================== LISTING GRID (Full Width) ==================== */}
+            <section className="w-full text-left">
               
               {/* Header controls inside list */}
               <div className="flex items-center justify-between border-b border-slate-100 pb-3.5 mb-5 shrink-0">
@@ -1881,7 +1880,7 @@ export default function FoodSpots() {
 
               {/* Restaurant Cards Grid (Exact Design from Mockup) */}
               {filteredRestaurants.length > 0 ? (
-                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-3 pb-16">
+                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-7 gap-3 pb-16">
                   {filteredRestaurants.map((restaurant) => {
                     const isHovered = selectedRestaurant?.id === restaurant.id;
                     return (
@@ -2017,173 +2016,7 @@ export default function FoodSpots() {
 
             </section>
 
-            {/* ==================== RIGHT COLUMN: MAP PANEL ==================== */}
-            <section className="hidden lg:block lg:w-[42%] xl:w-[40%] h-full rounded-[28px] overflow-hidden border border-slate-200/80 shadow-2xs relative bg-slate-100">
-              
-              {/* Map Canvas with puducherry_map.png */}
-              <div 
-                className="absolute inset-0 bg-cover bg-center transition-all duration-300"
-                style={{ 
-                  backgroundImage: `url(${mapImg})`,
-                  transform: `scale(${1 + (zoomLevel - 13) * 0.15})`
-                }}
-              />
-
-              {/* Overlay Map Tint for soft look */}
-              <div className="absolute inset-0 bg-slate-900/5 pointer-events-none" />
-
-              {/* Custom Interactive Pins Layer */}
-              {filteredRestaurants.map((restaurant) => {
-                const isSelected = selectedRestaurant?.id === restaurant.id;
-                return (
-                  <div
-                    key={restaurant.id}
-                    onClick={() => setSelectedRestaurant(restaurant)}
-                    className="absolute z-20 -translate-x-1/2 -translate-y-1/2 cursor-pointer transition-all duration-300"
-                    style={{ top: restaurant.mapY, left: restaurant.mapX }}
-                  >
-                    <div className="flex flex-col items-center group">
-                      {/* Circle Image Pin */}
-                      <div className={`h-11 w-11 rounded-full border-2 bg-white overflow-hidden shadow-lg transition-transform hover:scale-110 active:scale-95 ${
-                        isSelected 
-                          ? 'border-[#EA580C] ring-4 ring-[#EA580C]/20 scale-105' 
-                          : 'border-white group-hover:border-[#EA580C]/50'
-                      }`}>
-                        <img 
-                          src={restaurant.image} 
-                          alt={restaurant.title} 
-                          className="h-full w-full object-cover" 
-                        />
-                      </div>
-                      {/* Rating Bubble Below circle */}
-                      <div className={`mt-0.5 px-2 py-0.5 rounded-md text-[9px] font-black text-white shadow-md leading-none ${
-                        isSelected ? 'bg-[#EA580C]' : 'bg-slate-900/90'
-                      }`}>
-                        {restaurant.rating.toFixed(1)}
-                      </div>
-                    </div>
-                  </div>
-                );
-              })}
-
-              {/* Circular Green Clusters (Simulated pins) */}
-              <div className="absolute top-[18%] left-[80%] z-10 h-7.5 w-7.5 rounded-full bg-emerald-700/90 text-white flex items-center justify-center font-black border-2 border-white shadow-md text-[10.5px]">
-                8
-              </div>
-              <div className="absolute top-[48%] left-[25%] z-10 h-7.5 w-7.5 rounded-full bg-emerald-700/90 text-white flex items-center justify-center font-black border-2 border-white shadow-md text-[10.5px]">
-                13
-              </div>
-              <div className="absolute top-[17%] left-[64%] z-10 h-7.5 w-7.5 rounded-full bg-emerald-700/90 text-white flex items-center justify-center font-black border-2 border-white shadow-md text-[10.5px]">
-                12
-              </div>
-              <div className="absolute top-[31%] left-[78%] z-10 h-7.5 w-7.5 rounded-full bg-emerald-700/90 text-white flex items-center justify-center font-black border-2 border-white shadow-md text-[10.5px]">
-                10
-              </div>
-              <div className="absolute top-[47%] left-[65%] z-10 h-7.5 w-7.5 rounded-full bg-emerald-700/90 text-white flex items-center justify-center font-black border-2 border-white shadow-md text-[10.5px]">
-                6
-              </div>
-              <div className="absolute top-[75%] left-[34%] z-10 h-7.5 w-7.5 rounded-full bg-emerald-700/90 text-white flex items-center justify-center font-black border-2 border-white shadow-md text-[10.5px]">
-                9
-              </div>
-
-              {/* Zoom Controls & Location Pointer */}
-              <div className="absolute right-4 top-[50%] -translate-y-1/2 z-30 flex flex-col gap-2">
-                <button 
-                  className="h-10 w-10 bg-white border border-slate-200 hover:bg-slate-50 flex items-center justify-center rounded-xl shadow-md cursor-pointer text-slate-655 active:scale-95 transition-all"
-                  aria-label="Target Location"
-                >
-                  <Compass className="h-5 w-5 text-slate-600" />
-                </button>
-                
-                <div className="flex flex-col bg-white border border-slate-200 rounded-xl shadow-md overflow-hidden">
-                  <button 
-                    onClick={() => setZoomLevel(prev => Math.min(prev + 1, 16))}
-                    className="h-10 w-10 hover:bg-slate-50 flex items-center justify-center border-b border-slate-100 cursor-pointer text-slate-655 active:scale-95 transition-all"
-                    aria-label="Zoom In"
-                  >
-                    <Plus className="h-4.5 w-4.5" />
-                  </button>
-                  <button 
-                    onClick={() => setZoomLevel(prev => Math.max(prev - 1, 11))}
-                    className="h-10 w-10 hover:bg-slate-50 flex items-center justify-center cursor-pointer text-slate-655 active:scale-95 transition-all"
-                    aria-label="Zoom Out"
-                  >
-                    <Minus className="h-4.5 w-4.5" />
-                  </button>
-                </div>
-              </div>
-
-              {/* Floating Selection Card on Map (Bottom Center/Right) */}
-              {selectedRestaurant && (
-                <div className="absolute bottom-5 left-5 right-5 z-30 bg-white rounded-2xl border border-slate-150 shadow-2xl p-3 text-left flex gap-3 animate-modal-box">
-                  {/* Image */}
-                  <div className="relative h-24 w-28 shrink-0 rounded-xl overflow-hidden bg-slate-100">
-                    <img 
-                      src={selectedRestaurant.image} 
-                      alt={selectedRestaurant.title} 
-                      className="h-full w-full object-cover" 
-                    />
-                    {/* Heart */}
-                    <button 
-                      onClick={(e) => toggleWishlist(selectedRestaurant.id, e)}
-                      className="absolute top-1.5 right-1.5 h-6.5 w-6.5 rounded-full bg-white/90 border border-slate-100 flex items-center justify-center shadow-xs cursor-pointer z-10"
-                    >
-                      <Heart 
-                        className={`h-3.5 w-3.5 transition-colors ${
-                          wishlist.includes(selectedRestaurant.id) 
-                            ? 'fill-red-500 text-red-500 stroke-red-500' 
-                            : 'text-slate-500'
-                        }`} 
-                      />
-                    </button>
-                  </div>
-
-                  {/* Details */}
-                  <div className="flex-grow flex flex-col justify-between text-left pr-4 relative">
-                    {/* Close */}
-                    <button 
-                      onClick={() => setSelectedRestaurant(null)}
-                      className="absolute top-0 right-0 text-slate-400 hover:text-slate-700 cursor-pointer"
-                    >
-                      <X className="h-4.5 w-4.5" />
-                    </button>
-
-                    <div>
-                      <h5 className="text-[13.5px] font-black text-slate-800 pr-4 truncate leading-snug">
-                        {selectedRestaurant.title}
-                      </h5>
-                      <div className="flex items-center gap-1.5 text-[11px] font-bold text-slate-500 mt-0.5">
-                        <span className="text-emerald-600 flex items-center gap-0.5">
-                          <Star className="h-3 w-3 fill-emerald-600 text-emerald-600" />
-                          {selectedRestaurant.rating.toFixed(1)}
-                        </span>
-                        <span>({selectedRestaurant.reviews} reviews)</span>
-                      </div>
-                      <div className="text-[10.5px] font-semibold text-slate-400 mt-0.5 truncate">
-                        {selectedRestaurant.location.split(',')[0]} • {selectedRestaurant.distance}
-                      </div>
-                      {/* Discount */}
-                      {selectedRestaurant.badge && (
-                        <span className="text-[10px] font-extrabold text-red-655 bg-red-50 px-2 py-0.5 rounded-md mt-1.5 inline-block">
-                          {selectedRestaurant.badge} up to ₹100
-                        </span>
-                      )}
-                    </div>
-
-                    <button 
-                      onClick={() => setDetailModalRestaurant(selectedRestaurant)}
-                      className="bg-[#0F766E] hover:bg-[#0c625c] text-white py-1.5 px-3 rounded-lg text-[11.5px] font-black mt-2 text-center w-full shadow-xs active:scale-98 transition-all cursor-pointer"
-                    >
-                      View Details
-                    </button>
-                  </div>
-                </div>
-              )}
-
-            </section>
-
           </div>
-
         </div>
       )}
 
