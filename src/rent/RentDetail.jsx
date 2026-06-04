@@ -2,7 +2,7 @@ import React, { useState, useEffect, useMemo } from 'react';
 import { 
   ArrowLeft, Star, Calendar, MapPin, ShieldCheck, Clock, User, 
   Fuel, Cpu, Users, Shield, Info, Gauge, Check, CreditCard, X, ChevronRight,
-  MessageSquare, Phone, Mail, Award
+  MessageSquare, Phone, Mail, Award, Heart
 } from 'lucide-react';
 
 const VEHICLE_SPECS_DB = {
@@ -915,45 +915,8 @@ export default function RentDetail({ vehicle, searchParams, onBack, onNavigate }
 
           </div>
 
-          {/* Need Help Card */}
-          <div className="bg-white border border-slate-200/80 rounded-2xl p-6 shadow-3xs text-left space-y-4">
-            <div>
-              <h3 className="text-sm font-black text-slate-850">Need Help?</h3>
-              <p className="text-[11.5px] font-semibold text-slate-400 mt-1">Our support team is here to help you 24/7.</p>
-            </div>
-
-            <div className="space-y-2 text-[12px] font-semibold text-slate-700">
-              <a href="https://wa.me/919876543210" target="_blank" rel="noreferrer" className="flex items-center gap-3 p-3 bg-slate-50 hover:bg-slate-100/80 border border-slate-150 rounded-xl transition-all cursor-pointer">
-                <div className="h-8 w-8 rounded-full bg-emerald-50 text-emerald-600 flex items-center justify-center shrink-0">
-                  <MessageSquare className="h-4 w-4" />
-                </div>
-                <div>
-                  <p className="font-extrabold text-slate-850 leading-none">Chat with Us</p>
-                  <p className="text-[10px] text-slate-400 mt-1 font-bold">We reply instantly</p>
-                </div>
-              </a>
-
-              <a href="tel:+919876543210" className="flex items-center gap-3 p-3 bg-slate-50 hover:bg-slate-100/80 border border-slate-150 rounded-xl transition-all cursor-pointer">
-                <div className="h-8 w-8 rounded-full bg-teal-50 text-[#0D9488] flex items-center justify-center shrink-0">
-                  <Phone className="h-4 w-4" />
-                </div>
-                <div>
-                  <p className="font-extrabold text-slate-850 leading-none">Call Us</p>
-                  <p className="text-[10px] text-slate-400 mt-1 font-bold">+91 98765 43210</p>
-                </div>
-              </a>
-
-              <a href="mailto:support@tripverse.com" className="flex items-center gap-3 p-3 bg-slate-50 hover:bg-slate-100/80 border border-slate-150 rounded-xl transition-all cursor-pointer">
-                <div className="h-8 w-8 rounded-full bg-blue-50 text-blue-650 flex items-center justify-center shrink-0">
-                  <Mail className="h-4 w-4" />
-                </div>
-                <div>
-                  <p className="font-extrabold text-slate-850 leading-none">Email Us</p>
-                  <p className="text-[10px] text-slate-400 mt-1 font-bold">support@tripverse.com</p>
-                </div>
-              </a>
-            </div>
-          </div>
+        
+        
 
         </div>
 
@@ -1113,7 +1076,7 @@ export default function RentDetail({ vehicle, searchParams, onBack, onNavigate }
                           <rect x="35" y="85" width="15" height="10" fill="currentColor" />
                         </svg>
                       </div>
-                      <span className="text-[10px] font-bold text-slate-500">Scan QR Code using any UPI App to pay ₹{pricing.total.toLocaleString('en-IN')}</span>
+                      <span className="text-[10px] font-bold text-slate-500">Scan QR Code using any UPI App to pay ₹{totalAmount.toLocaleString('en-IN')}</span>
                     </div>
                   )}
 
@@ -1197,9 +1160,9 @@ export default function RentDetail({ vehicle, searchParams, onBack, onNavigate }
 }
 
 // Simple Helper Icon component for Select elements
-function ChevronDownIcon({ className = "h-4 w-4 text-slate-400" }) {
+function ChevronDownIcon({ className = "" }) {
   return (
-    <svg className={`${className} shrink-0`} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+    <svg className={`h-4 w-4 text-slate-400 shrink-0 ${className}`} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
       <polyline points="6 9 12 15 18 9" />
     </svg>
   );
