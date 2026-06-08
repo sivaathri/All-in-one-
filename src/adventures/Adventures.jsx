@@ -355,6 +355,7 @@ export default function Adventures() {
   const [searchDuration, setSearchDuration] = useState('Any Duration');
   const [searchPrice, setSearchPrice] = useState('Any Price');
   const [searchLocation, setSearchLocation] = useState('Puducherry, India');
+  const [activeDropdown, setActiveDropdown] = useState(null);
   const scrollRef = useRef(null);
 
   // Sidebar filter states
@@ -541,7 +542,7 @@ export default function Adventures() {
             className="w-full h-full object-cover object-center select-none"
           />
           {/* Subtle light overlay for contrast against dark text */}
-          <div className="absolute inset-0 bg-gradient-to-r from-white/70 via-white/25 to-transparent"></div>
+          <div className="absolute inset-0 "></div>
         </div>
 
         {/* Hero Content */}
@@ -565,7 +566,16 @@ export default function Adventures() {
 
         {/* FLOATING SEARCH BAR OVERLAY CARD */}
         <div className="absolute bottom-[12px] left-1/2 -translate-x-1/2 w-full max-w-[1760px] px-4 sm:px-8 lg:px-12 z-20">
-          <div className="bg-white rounded-3xl border border-slate-200/90 pl-6 pr-4 py-2 shadow-xl shadow-slate-200/35 flex flex-col lg:flex-row items-stretch lg:items-center justify-between gap-2 lg:gap-0 h-auto lg:h-[76px]">
+          {activeDropdown && (
+            <div 
+              className="fixed inset-0 z-30 cursor-default" 
+              onClick={(e) => {
+                e.stopPropagation();
+                setActiveDropdown(null);
+              }}
+            />
+          )}
+          <div className="bg-white rounded-2xl border border-slate-200/90 pl-6 pr-4 py-2 shadow-xl shadow-slate-200/35 flex flex-col lg:flex-row items-stretch lg:items-center justify-between gap-2 lg:gap-0 h-auto lg:h-[76px] relative z-40">
             
             {/* Location selector */}
             <div className="flex items-center gap-3 px-4 py-1.5 rounded-2xl hover:bg-slate-50/80 transition-colors cursor-pointer text-left shrink-0">
@@ -592,7 +602,7 @@ export default function Adventures() {
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
                   placeholder="Search adventures, activities..."
-                  className="text-[12px] font-medium text-slate-500 bg-transparent outline-none w-full placeholder-slate-400/80 mt-0.5"
+                  className="text-[12px] font-medium text-slate-505 bg-transparent outline-none w-full placeholder-slate-400/80 mt-0.5"
                 />
               </div>
             </div>
@@ -601,83 +611,153 @@ export default function Adventures() {
             <div className="hidden lg:block h-8 w-[1px] bg-slate-200/70"></div>
 
             {/* Dropdown 1: Activity Type */}
-            <div className="flex items-center gap-3 px-4 py-1.5 rounded-2xl hover:bg-slate-50/80 transition-colors flex-1 min-w-[130px] relative text-left group">
+            <div 
+              onClick={() => setActiveDropdown(activeDropdown === 'activity' ? null : 'activity')}
+              className="flex items-center gap-3 px-4 py-1.5 rounded-2xl hover:bg-slate-50/80 transition-colors flex-1 min-w-[130px] relative text-left group cursor-pointer"
+            >
               <Compass className="h-5 w-5 text-slate-700 shrink-0 stroke-[1.8]" />
               <div className="flex flex-col w-full relative">
                 <span className="text-[13px] font-bold text-slate-800 leading-tight">Activity Type</span>
                 <div className="flex items-center w-full mt-0.5">
-                  <select
-                    value={selectedActivityFilter}
-                    onChange={(e) => setSelectedActivityFilter(e.target.value)}
-                    className="text-[12px] font-medium text-slate-500 bg-transparent outline-none appearance-none cursor-pointer pr-4 w-full"
-                  >
-                    <option value="All Adventures">All</option>
-                    <option value="Water Sports">Water Sports</option>
-                    <option value="Trekking">Trekking</option>
-                    <option value="Paragliding">Paragliding</option>
-                    <option value="Camping">Camping</option>
-                    <option value="Wildlife Safari">Wildlife Safari</option>
-                    <option value="Biking">Biking</option>
-                    <option value="Boating">Boating</option>
-                    <option value="Scuba Diving">Scuba Diving</option>
-                  </select>
-                  <ChevronDown className="h-3 w-3 text-slate-400 stroke-[2.5] pointer-events-none absolute right-0 top-1/2 -translate-y-1/2 mt-1.5" />
+                  <span className="text-[12px] font-medium text-slate-505 truncate pr-4">
+                    {selectedActivityFilter === 'All Adventures' ? 'All' : selectedActivityFilter}
+                  </span>
+                  <ChevronDown className="h-3 w-3 text-slate-400 stroke-[2.5] pointer-events-none absolute right-0 top-1/2 -translate-y-1/2 mt-0.5" />
                 </div>
               </div>
+
+              {activeDropdown === 'activity' && (
+                <div className="absolute top-[105%] left-0 w-full min-w-[220px] bg-white border border-slate-100 rounded-2xl shadow-xl py-2 z-45 mt-1 animate-fade-in text-left">
+                  {[
+                    { value: "All Adventures", label: "All" },
+                    { value: "Water Sports", label: "Water Sports" },
+                    { value: "Trekking", label: "Trekking" },
+                    { value: "Paragliding", label: "Paragliding" },
+                    { value: "Camping", label: "Camping" },
+                    { value: "Wildlife Safari", label: "Wildlife Safari" },
+                    { value: "Biking", label: "Biking" },
+                    { value: "Boating", label: "Boating" },
+                    { value: "Scuba Diving", label: "Scuba Diving" }
+                  ].map((opt) => {
+                    const isSelected = selectedActivityFilter === opt.value;
+                    return (
+                      <div
+                        key={opt.value}
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          setSelectedActivityFilter(opt.value);
+                          setActiveDropdown(null);
+                        }}
+                        className={`px-4 py-2 text-[12.5px] transition-colors cursor-pointer hover:bg-slate-50 hover:text-[#0e9488] font-bold ${
+                          isSelected ? 'text-[#0e9488] bg-[#0e9488]/5 font-extrabold' : 'text-slate-750'
+                        }`}
+                      >
+                        {opt.label}
+                      </div>
+                    );
+                  })}
+                </div>
+              )}
             </div>
 
             {/* Vertical Divider */}
             <div className="hidden lg:block h-8 w-[1px] bg-slate-200/70"></div>
 
             {/* Dropdown 2: Duration */}
-            <div className="flex items-center gap-3 px-4 py-1.5 rounded-2xl hover:bg-slate-50/80 transition-colors flex-1 min-w-[135px] relative text-left group">
+            <div 
+              onClick={() => setActiveDropdown(activeDropdown === 'duration' ? null : 'duration')}
+              className="flex items-center gap-3 px-4 py-1.5 rounded-2xl hover:bg-slate-50/80 transition-colors flex-1 min-w-[135px] relative text-left group cursor-pointer"
+            >
               <Clock className="h-5 w-5 text-slate-700 shrink-0 stroke-[1.8]" />
               <div className="flex flex-col w-full relative">
                 <span className="text-[13px] font-bold text-slate-800 leading-tight">Duration</span>
                 <div className="flex items-center w-full mt-0.5">
-                  <select
-                    value={durationFilter}
-                    onChange={(e) => setDurationFilter(e.target.value)}
-                    className="text-[12px] font-medium text-slate-500 bg-transparent outline-none appearance-none cursor-pointer pr-4 w-full"
-                  >
-                    <option value="Any Duration">Any Duration</option>
-                    <option value="< 2 Hours">&lt; 2 Hours</option>
-                    <option value="2-5 Hours">2 - 5 Hours</option>
-                    <option value="Overnight">Overnight</option>
-                  </select>
-                  <ChevronDown className="h-3 w-3 text-slate-400 stroke-[2.5] pointer-events-none absolute right-0 top-1/2 -translate-y-1/2 mt-1.5" />
+                  <span className="text-[12px] font-medium text-slate-550 truncate pr-4">
+                    {durationFilter}
+                  </span>
+                  <ChevronDown className="h-3 w-3 text-slate-400 stroke-[2.5] pointer-events-none absolute right-0 top-1/2 -translate-y-1/2 mt-0.5" />
                 </div>
               </div>
+
+              {activeDropdown === 'duration' && (
+                <div className="absolute top-[105%] left-0 w-full min-w-[180px] bg-white border border-slate-100 rounded-2xl shadow-xl py-2 z-45 mt-1 animate-fade-in text-left">
+                  {[
+                    "Any Duration",
+                    "< 2 Hours",
+                    "2-5 Hours",
+                    "Overnight"
+                  ].map((opt) => {
+                    const isSelected = durationFilter === opt;
+                    return (
+                      <div
+                        key={opt}
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          setDurationFilter(opt);
+                          setActiveDropdown(null);
+                        }}
+                        className={`px-4 py-2 text-[12.5px] transition-colors cursor-pointer hover:bg-slate-50 hover:text-[#0e9488] font-bold ${
+                          isSelected ? 'text-[#0e9488] bg-[#0e9488]/5 font-extrabold' : 'text-slate-750'
+                        }`}
+                      >
+                        {opt}
+                      </div>
+                    );
+                  })}
+                </div>
+              )}
             </div>
 
             {/* Vertical Divider */}
             <div className="hidden lg:block h-8 w-[1px] bg-slate-200/70"></div>
 
             {/* Dropdown 3: Price Range */}
-            <div className="flex items-center gap-3 px-4 py-1.5 rounded-2xl hover:bg-slate-50/80 transition-colors flex-1 min-w-[130px] relative text-left group">
+            <div 
+              onClick={() => setActiveDropdown(activeDropdown === 'price' ? null : 'price')}
+              className="flex items-center gap-3 px-4 py-1.5 rounded-2xl hover:bg-slate-50/80 transition-colors flex-1 min-w-[130px] relative text-left group cursor-pointer"
+            >
               <Tag className="h-5 w-5 text-slate-700 shrink-0 stroke-[1.8]" />
               <div className="flex flex-col w-full relative">
                 <span className="text-[13px] font-bold text-slate-800 leading-tight">Price Range</span>
                 <div className="flex items-center w-full mt-0.5">
-                  <select
-                    value={searchPrice}
-                    onChange={(e) => {
-                      setSearchPrice(e.target.value);
-                      if (e.target.value === 'Any Price') setPriceRange(20000);
-                      else if (e.target.value === 'Under ₹1,000') setPriceRange(1000);
-                      else if (e.target.value === '₹1,000 - ₹3,000') setPriceRange(3000);
-                      else if (e.target.value === '₹3,000+') setPriceRange(20000);
-                    }}
-                    className="text-[12px] font-medium text-slate-500 bg-transparent outline-none appearance-none cursor-pointer pr-4 w-full"
-                  >
-                    <option value="Any Price">Any Price</option>
-                    <option value="Under ₹1,000">Under ₹1,000</option>
-                    <option value="₹1,000 - ₹3,000">₹1,000 - ₹3,000</option>
-                    <option value="₹3,000+">₹3,000+</option>
-                  </select>
-                  <ChevronDown className="h-3 w-3 text-slate-400 stroke-[2.5] pointer-events-none absolute right-0 top-1/2 -translate-y-1/2 mt-1.5" />
+                  <span className="text-[12px] font-medium text-slate-550 truncate pr-4">
+                    {searchPrice}
+                  </span>
+                  <ChevronDown className="h-3 w-3 text-slate-400 stroke-[2.5] pointer-events-none absolute right-0 top-1/2 -translate-y-1/2 mt-0.5" />
                 </div>
               </div>
+
+              {activeDropdown === 'price' && (
+                <div className="absolute top-[105%] left-0 w-full min-w-[200px] bg-white border border-slate-100 rounded-2xl shadow-xl py-2 z-45 mt-1 animate-fade-in text-left">
+                  {[
+                    "Any Price",
+                    "Under ₹1,000",
+                    "₹1,000 - ₹3,000",
+                    "₹3,000+"
+                  ].map((opt) => {
+                    const isSelected = searchPrice === opt;
+                    return (
+                      <div
+                        key={opt}
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          setSearchPrice(opt);
+                          if (opt === 'Any Price') setPriceRange(20000);
+                          else if (opt === 'Under ₹1,000') setPriceRange(1000);
+                          else if (opt === '₹1,000 - ₹3,000') setPriceRange(3000);
+                          else if (opt === '₹3,000+') setPriceRange(20000);
+                          setActiveDropdown(null);
+                        }}
+                        className={`px-4 py-2 text-[12.5px] transition-colors cursor-pointer hover:bg-slate-50 hover:text-[#0e9488] font-bold ${
+                          isSelected ? 'text-[#0e9488] bg-[#0e9488]/5 font-extrabold' : 'text-slate-750'
+                        }`}
+                      >
+                        {opt}
+                      </div>
+                    );
+                  })}
+                </div>
+              )}
             </div>
 
             {/* Vertical Divider */}
@@ -735,7 +815,7 @@ export default function Adventures() {
                   }}
                   className={`flex flex-col items-center justify-center gap-2.5 w-[125px] h-[92px] rounded-2xl border transition-all shrink-0 cursor-pointer ${
                     isSelected 
-                      ? 'bg-[#0e9488]/[0.04] border-[#0e9488] text-[#0e9488] shadow-sm' 
+                      ? 'border-[#0e9488] text-[#0e9488] bg-white shadow-sm' 
                       : 'border-slate-200 bg-white text-[#0D233A] hover:border-slate-350 hover:bg-slate-50/50'
                   }`}
                 >
@@ -764,7 +844,7 @@ export default function Adventures() {
           <aside className={`fixed inset-0 z-50 bg-slate-950/45 backdrop-blur-xs p-4 flex justify-end lg:static lg:z-0 lg:bg-transparent lg:backdrop-blur-none lg:p-0 transition-opacity duration-200 ${
             showMobileFilters ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none lg:opacity-100 lg:pointer-events-auto lg:block'
           } lg:col-span-3 xl:col-span-2.5`}>
-            <div className={`bg-white rounded-3xl border border-slate-200 p-5 shadow-xl lg:shadow-xs w-full max-w-[340px] lg:max-w-none h-[92vh] lg:h-auto overflow-y-auto hide-scrollbar lg:overflow-visible transition-transform duration-300 transform ${
+            <div className={`bg-white lg:bg-transparent rounded-3xl lg:rounded-none border border-slate-200 lg:border-none p-5 lg:p-0 shadow-xl lg:shadow-none w-full max-w-[340px] lg:max-w-none h-[92vh] lg:h-auto overflow-y-auto hide-scrollbar lg:overflow-visible transition-transform duration-300 transform ${
               showMobileFilters ? 'translate-x-0' : 'translate-x-8 lg:translate-x-0'
             } lg:transform-none`}>
               
@@ -951,7 +1031,7 @@ export default function Adventures() {
           <main className="lg:col-span-6 xl:col-span-6.5 space-y-6">
             
             {/* Header controls count / sort */}
-            <div className="flex flex-col sm:flex-row justify-between sm:items-center gap-4 bg-white rounded-3xl border border-slate-200/90 p-5 shadow-xs">
+            <div className="flex flex-col sm:flex-row justify-between sm:items-center gap-4 bg-transparent p-0 mb-5">
               <div>
                 <h2 className="text-xl font-extrabold text-slate-900 tracking-tight">
                   {searchQuery || selectedActivityFilter !== 'All Adventures' ? `${sortedAdventures.length} Adventures Found` : "128+ Adventures Found"}
