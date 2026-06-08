@@ -2,7 +2,8 @@ import React, { useState, useEffect, useRef } from 'react';
 import { 
   Star, MapPin, Heart, ChevronLeft, ChevronRight, ChevronDown, 
   Check, ShieldCheck, Waves, Wind, Tent, PawPrint, Bike, Ship, 
-  SlidersHorizontal, X, Search, Compass, Map, CheckCircle2, RotateCcw
+  SlidersHorizontal, X, Search, Compass, Map, CheckCircle2, RotateCcw,
+  Clock, Tag, Locate
 } from 'lucide-react';
 import adventureBg from '../assets/adventurebg.png';
 
@@ -563,120 +564,137 @@ export default function Adventures() {
         </div>
 
         {/* FLOATING SEARCH BAR OVERLAY CARD */}
-        <div className="absolute bottom-[-36px] left-1/2 -translate-x-1/2 w-full max-w-[1760px] px-4 sm:px-8 lg:px-12 z-20">
-          <div className="bg-white rounded-3xl border border-slate-200/85 pl-8 pr-3.5 py-3 shadow-lg shadow-slate-200/40 flex flex-col lg:flex-row items-stretch lg:items-center gap-2 lg:gap-0">
+        <div className="absolute bottom-[12px] left-1/2 -translate-x-1/2 w-full max-w-[1760px] px-4 sm:px-8 lg:px-12 z-20">
+          <div className="bg-white rounded-3xl border border-slate-200/90 pl-6 pr-4 py-2 shadow-xl shadow-slate-200/35 flex flex-col lg:flex-row items-stretch lg:items-center justify-between gap-2 lg:gap-0 h-auto lg:h-[76px]">
             
             {/* Location selector */}
-            <div className="flex items-center gap-2 pl-2 pr-6 py-1 shrink-0 text-left">
-              <MapPin className="h-5 w-5 text-slate-400 shrink-0 stroke-[2.2]" />
-              <span className="text-[14.5px] font-black text-slate-800 tracking-tight">{searchLocation}</span>
-              <button className="text-[13.5px] font-bold text-[#0e9488] hover:underline cursor-pointer ml-3 shrink-0">Change</button>
+            <div className="flex items-center gap-3 px-4 py-1.5 rounded-2xl hover:bg-slate-50/80 transition-colors cursor-pointer text-left shrink-0">
+              <MapPin className="h-5 w-5 text-slate-700 shrink-0 stroke-[1.8]" />
+              <div className="flex flex-col">
+                <span className="text-[13px] font-bold text-slate-800 leading-tight">Where Are You Going?</span>
+                <div className="flex items-center gap-2 mt-0.5">
+                  <span className="text-[12px] font-semibold text-slate-500">{searchLocation}</span>
+                  <button className="text-[11.5px] font-bold text-[#0e9488] hover:underline cursor-pointer">Change</button>
+                </div>
+              </div>
             </div>
 
             {/* Vertical Divider */}
-            <div className="hidden lg:block h-8 w-[1px] bg-slate-200/80"></div>
+            <div className="hidden lg:block h-8 w-[1px] bg-slate-200/70"></div>
 
             {/* Keyword Search Input */}
-            <div className="flex items-center gap-2.5 px-6 py-1 flex-1 min-w-[220px] text-left">
-              <Search className="h-5 w-5 text-slate-400 shrink-0 stroke-[2.2]" />
-              <input 
-                type="text" 
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                placeholder="Search adventures, activities..."
-                className="text-[13.5px] font-semibold text-slate-800 bg-transparent outline-none w-full placeholder-slate-400"
-              />
+            <div className="flex items-center gap-3 px-4 py-1.5 rounded-2xl hover:bg-slate-50/80 transition-colors flex-1 min-w-[200px] text-left">
+              <Search className="h-5 w-5 text-slate-700 shrink-0 stroke-[1.8]" />
+              <div className="flex flex-col w-full">
+                <span className="text-[13px] font-bold text-slate-800 leading-tight">Search Activities</span>
+                <input 
+                  type="text" 
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  placeholder="Search adventures, activities..."
+                  className="text-[12px] font-medium text-slate-500 bg-transparent outline-none w-full placeholder-slate-400/80 mt-0.5"
+                />
+              </div>
             </div>
 
             {/* Vertical Divider */}
-            <div className="hidden lg:block h-8 w-[1px] bg-slate-200/80"></div>
+            <div className="hidden lg:block h-8 w-[1px] bg-slate-200/70"></div>
 
             {/* Dropdown 1: Activity Type */}
-            <div className="flex items-center justify-between gap-3 px-6 py-0.5 flex-1 min-w-[130px] relative cursor-pointer text-left">
-              <div className="flex flex-col">
-                <span className="text-[10.5px] font-bold text-slate-400 uppercase tracking-wide leading-none">Activity Type</span>
-                <select
-                  value={selectedActivityFilter}
-                  onChange={(e) => setSelectedActivityFilter(e.target.value)}
-                  className="text-[13.5px] font-black text-[#0D233A] bg-transparent outline-none mt-1.5 appearance-none cursor-pointer pr-5"
-                >
-                  <option value="All Adventures">All</option>
-                  <option value="Water Sports">Water Sports</option>
-                  <option value="Trekking">Trekking</option>
-                  <option value="Paragliding">Paragliding</option>
-                  <option value="Camping">Camping</option>
-                  <option value="Wildlife Safari">Wildlife Safari</option>
-                  <option value="Biking">Biking</option>
-                  <option value="Boating">Boating</option>
-                  <option value="Scuba Diving">Scuba Diving</option>
-                </select>
+            <div className="flex items-center gap-3 px-4 py-1.5 rounded-2xl hover:bg-slate-50/80 transition-colors flex-1 min-w-[130px] relative text-left group">
+              <Compass className="h-5 w-5 text-slate-700 shrink-0 stroke-[1.8]" />
+              <div className="flex flex-col w-full relative">
+                <span className="text-[13px] font-bold text-slate-800 leading-tight">Activity Type</span>
+                <div className="flex items-center w-full mt-0.5">
+                  <select
+                    value={selectedActivityFilter}
+                    onChange={(e) => setSelectedActivityFilter(e.target.value)}
+                    className="text-[12px] font-medium text-slate-500 bg-transparent outline-none appearance-none cursor-pointer pr-4 w-full"
+                  >
+                    <option value="All Adventures">All</option>
+                    <option value="Water Sports">Water Sports</option>
+                    <option value="Trekking">Trekking</option>
+                    <option value="Paragliding">Paragliding</option>
+                    <option value="Camping">Camping</option>
+                    <option value="Wildlife Safari">Wildlife Safari</option>
+                    <option value="Biking">Biking</option>
+                    <option value="Boating">Boating</option>
+                    <option value="Scuba Diving">Scuba Diving</option>
+                  </select>
+                  <ChevronDown className="h-3 w-3 text-slate-400 stroke-[2.5] pointer-events-none absolute right-0 top-1/2 -translate-y-1/2 mt-1.5" />
+                </div>
               </div>
-              <ChevronDown className="h-3.5 w-3.5 text-slate-400 stroke-[2.5] pointer-events-none absolute right-4 top-1/2 -translate-y-1/2 mt-1.5" />
             </div>
 
             {/* Vertical Divider */}
-            <div className="hidden lg:block h-8 w-[1px] bg-slate-200/80"></div>
+            <div className="hidden lg:block h-8 w-[1px] bg-slate-200/70"></div>
 
             {/* Dropdown 2: Duration */}
-            <div className="flex items-center justify-between gap-3 px-6 py-0.5 flex-1 min-w-[135px] relative cursor-pointer text-left">
-              <div className="flex flex-col">
-                <span className="text-[10.5px] font-bold text-slate-400 uppercase tracking-wide leading-none">Duration</span>
-                <select
-                  value={durationFilter}
-                  onChange={(e) => setDurationFilter(e.target.value)}
-                  className="text-[13.5px] font-black text-[#0D233A] bg-transparent outline-none mt-1.5 appearance-none cursor-pointer pr-5"
-                >
-                  <option value="Any Duration">Any Duration</option>
-                  <option value="< 2 Hours">&lt; 2 Hours</option>
-                  <option value="2-5 Hours">2 - 5 Hours</option>
-                  <option value="Overnight">Any Duration</option>
-                </select>
+            <div className="flex items-center gap-3 px-4 py-1.5 rounded-2xl hover:bg-slate-50/80 transition-colors flex-1 min-w-[135px] relative text-left group">
+              <Clock className="h-5 w-5 text-slate-700 shrink-0 stroke-[1.8]" />
+              <div className="flex flex-col w-full relative">
+                <span className="text-[13px] font-bold text-slate-800 leading-tight">Duration</span>
+                <div className="flex items-center w-full mt-0.5">
+                  <select
+                    value={durationFilter}
+                    onChange={(e) => setDurationFilter(e.target.value)}
+                    className="text-[12px] font-medium text-slate-500 bg-transparent outline-none appearance-none cursor-pointer pr-4 w-full"
+                  >
+                    <option value="Any Duration">Any Duration</option>
+                    <option value="< 2 Hours">&lt; 2 Hours</option>
+                    <option value="2-5 Hours">2 - 5 Hours</option>
+                    <option value="Overnight">Overnight</option>
+                  </select>
+                  <ChevronDown className="h-3 w-3 text-slate-400 stroke-[2.5] pointer-events-none absolute right-0 top-1/2 -translate-y-1/2 mt-1.5" />
+                </div>
               </div>
-              <ChevronDown className="h-3.5 w-3.5 text-slate-400 stroke-[2.5] pointer-events-none absolute right-4 top-1/2 -translate-y-1/2 mt-1.5" />
             </div>
 
             {/* Vertical Divider */}
-            <div className="hidden lg:block h-8 w-[1px] bg-slate-200/80"></div>
+            <div className="hidden lg:block h-8 w-[1px] bg-slate-200/70"></div>
 
             {/* Dropdown 3: Price Range */}
-            <div className="flex items-center justify-between gap-3 px-6 py-0.5 flex-1 min-w-[130px] relative cursor-pointer text-left">
-              <div className="flex flex-col">
-                <span className="text-[10.5px] font-bold text-slate-400 uppercase tracking-wide leading-none">Price Range</span>
-                <select
-                  value={searchPrice}
-                  onChange={(e) => {
-                    setSearchPrice(e.target.value);
-                    if (e.target.value === 'Any Price') setPriceRange(20000);
-                    else if (e.target.value === 'Under ₹1,000') setPriceRange(1000);
-                    else if (e.target.value === '₹1,000 - ₹3,000') setPriceRange(3000);
-                    else if (e.target.value === '₹3,000+') setPriceRange(20000);
-                  }}
-                  className="text-[13.5px] font-black text-[#0D233A] bg-transparent outline-none mt-1.5 appearance-none cursor-pointer pr-5"
-                >
-                  <option value="Any Price">Any Price</option>
-                  <option value="Under ₹1,000">Under ₹1,000</option>
-                  <option value="₹1,000 - ₹3,000">₹1,000 - ₹3,000</option>
-                  <option value="₹3,000+">₹3,000+</option>
-                </select>
+            <div className="flex items-center gap-3 px-4 py-1.5 rounded-2xl hover:bg-slate-50/80 transition-colors flex-1 min-w-[130px] relative text-left group">
+              <Tag className="h-5 w-5 text-slate-700 shrink-0 stroke-[1.8]" />
+              <div className="flex flex-col w-full relative">
+                <span className="text-[13px] font-bold text-slate-800 leading-tight">Price Range</span>
+                <div className="flex items-center w-full mt-0.5">
+                  <select
+                    value={searchPrice}
+                    onChange={(e) => {
+                      setSearchPrice(e.target.value);
+                      if (e.target.value === 'Any Price') setPriceRange(20000);
+                      else if (e.target.value === 'Under ₹1,000') setPriceRange(1000);
+                      else if (e.target.value === '₹1,000 - ₹3,000') setPriceRange(3000);
+                      else if (e.target.value === '₹3,000+') setPriceRange(20000);
+                    }}
+                    className="text-[12px] font-medium text-slate-500 bg-transparent outline-none appearance-none cursor-pointer pr-4 w-full"
+                  >
+                    <option value="Any Price">Any Price</option>
+                    <option value="Under ₹1,000">Under ₹1,000</option>
+                    <option value="₹1,000 - ₹3,000">₹1,000 - ₹3,000</option>
+                    <option value="₹3,000+">₹3,000+</option>
+                  </select>
+                  <ChevronDown className="h-3 w-3 text-slate-400 stroke-[2.5] pointer-events-none absolute right-0 top-1/2 -translate-y-1/2 mt-1.5" />
+                </div>
               </div>
-              <ChevronDown className="h-3.5 w-3.5 text-slate-400 stroke-[2.5] pointer-events-none absolute right-4 top-1/2 -translate-y-1/2 mt-1.5" />
             </div>
 
             {/* Vertical Divider */}
-            <div className="hidden lg:block h-8 w-[1px] bg-slate-200/80"></div>
+            <div className="hidden lg:block h-8 w-[1px] bg-slate-200/70"></div>
 
             {/* Action Buttons */}
             <div className="flex items-center gap-3 pl-3 pr-2 lg:pr-0 shrink-0">
-              <button className="bg-[#0F766E] hover:bg-[#0c625c] text-white px-7 py-3 rounded-2xl font-bold text-[14.5px] transition-all cursor-pointer flex items-center justify-center gap-2 shadow-md shadow-teal-700/5 hover:scale-102">
+              <button className="bg-[#0B756B] hover:bg-[#095f57] text-white px-8 py-3 rounded-2xl font-bold text-[14px] transition-all cursor-pointer flex items-center justify-center gap-2 shadow-md shadow-teal-700/5 hover:scale-102 h-[46px]">
                 Search
               </button>
               
               {/* Sliders settings button next to search */}
               <button 
                 onClick={() => setShowMobileFilters(true)}
-                className="p-3 bg-white border border-slate-200 hover:bg-slate-50 text-slate-700 rounded-2xl cursor-pointer h-[46px] w-[46px] flex items-center justify-center transition-colors shadow-xs"
+                className="p-3 bg-white border border-slate-200 hover:bg-slate-50 text-slate-700 rounded-2xl cursor-pointer h-[46px] w-[46px] flex items-center justify-center transition-colors shadow-md"
               >
-                <SlidersHorizontal className="h-4.5 w-4.5 text-slate-500 stroke-[2.2]" />
+                <SlidersHorizontal className="h-4 w-4 text-slate-500 stroke-[2.2]" />
               </button>
             </div>
 
@@ -921,7 +939,7 @@ export default function Adventures() {
               {/* Apply Filters Button */}
               <button 
                 onClick={() => setShowMobileFilters(false)}
-                className="w-full bg-[#0e9488] hover:bg-[#0c7a6e] text-white py-3.5 rounded-2xl font-bold text-[14px] shadow-sm hover:shadow transition-all mt-4 cursor-pointer text-center block"
+                className="w-full bg-[#0e9488] hover:bg-[#0c7a6e] text-white py-3.5 rounded-2xl font-bold text-[14px] shadow-sm hover:shadow transition-all mt-4 cursor-pointer text-center block lg:hidden"
               >
                 Apply Filters
               </button>
@@ -996,7 +1014,7 @@ export default function Adventures() {
                 </button>
               </div>
             ) : (
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5">
                 {sortedAdventures.slice(0, visibleCount).map((adventure) => {
                   const isHovered = hoveredAdventure === adventure.id;
                   const isLiked = !!wishlist[adventure.id];
@@ -1052,84 +1070,63 @@ export default function Adventures() {
                       </div>
 
                       {/* Info Details */}
-                      <div className="p-5 flex flex-col justify-between items-stretch text-left">
-                        <div>
-                          {/* Title and Rating */}
-                          <div className="flex justify-between items-start gap-3">
-                            <h3 className="text-[16px] font-extrabold text-slate-900 group-hover:text-[#0e9488] transition-colors leading-tight">
-                              {adventure.name}
-                            </h3>
-                            <div className="flex items-center gap-1 shrink-0">
-                              <Star className="h-3.8 w-3.8 fill-amber-400 text-amber-400 stroke-none" />
-                              <span className="text-[13px] font-extrabold text-slate-800">{adventure.rating}</span>
-                              <span className="text-[11.5px] font-bold text-slate-450">({adventure.reviewsCount})</span>
-                            </div>
-                          </div>
+                      <div className="p-4.5 flex flex-col text-left">
+                        {/* Title */}
+                        <h3 className="text-[15.5px] font-bold text-slate-850 group-hover:text-[#0e9488] transition-colors leading-snug truncate">
+                          {adventure.name}
+                        </h3>
 
-                          {/* Location */}
-                          <div className="flex items-center gap-1.5 text-[12.5px] font-semibold text-slate-500 mt-2">
-                            <MapPin className="h-4 w-4 text-slate-400 shrink-0 stroke-[2]" />
-                            <span className="truncate">{adventure.location}</span>
-                          </div>
+                        {/* Location */}
+                        <div className="flex items-center gap-1 text-[12px] font-medium text-slate-500 mt-1.5">
+                          <MapPin className="h-3.5 w-3.5 text-slate-400 shrink-0 stroke-[1.8]" />
+                          <span className="truncate">{adventure.location}</span>
+                        </div>
 
-                          {/* Duration & Cancellation tags */}
-                          <div className="flex flex-wrap items-center gap-2 mt-4">
-                            <span className="bg-slate-50 text-slate-600 border border-slate-100 rounded-lg px-2.5 py-1 text-[11px] font-bold flex items-center gap-1">
-                              <svg className="w-3.5 h-3.5 text-slate-450" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24">
-                                <circle cx="12" cy="12" r="10" />
-                                <polyline points="12 6 12 12 16 14" />
-                              </svg>
-                              {adventure.duration}
-                            </span>
-                            <span className="bg-emerald-50 text-emerald-700 rounded-lg px-2.5 py-1 text-[11px] font-bold flex items-center gap-1">
-                              <svg className="w-3.5 h-3.5 text-emerald-600" fill="none" stroke="currentColor" strokeWidth="3" viewBox="0 0 24 24">
-                                <polyline points="20 6 9 17 4 12" />
-                              </svg>
-                              Free Cancellation
-                            </span>
+                        {/* Duration & Rating Row */}
+                        <div className="flex justify-between items-center mt-3">
+                          {/* Duration */}
+                          <span className="text-[12px] font-semibold text-slate-500 flex items-center gap-1">
+                            <Clock className="h-3.5 w-3.5 text-slate-400 stroke-[1.8]" />
+                            {adventure.duration}
+                          </span>
+                          {/* Rating */}
+                          <div className="flex items-center gap-0.5 shrink-0">
+                            <Star className="h-3.5 w-3.5 fill-amber-400 text-amber-400 stroke-none" />
+                            <span className="text-[12px] font-bold text-slate-800">{adventure.rating}</span>
+                            <span className="text-[11px] font-medium text-slate-450">({adventure.reviewsCount})</span>
                           </div>
                         </div>
 
-                        {/* Price Details + Action Button */}
-                        <div className="border-t border-slate-100 mt-5 pt-4.5 flex flex-col gap-3">
-                          <div className="flex justify-between items-center">
-                            <div className="flex flex-col text-left">
-                              <div className="flex items-baseline gap-1.5">
-                                <span className="text-[19px] font-black text-slate-900">
-                                  ₹{adventure.price.toLocaleString()}
-                                </span>
-                                {adventure.originalPrice > adventure.price && (
-                                  <span className="text-[12.5px] font-bold text-slate-400 line-through">
-                                    ₹{adventure.originalPrice.toLocaleString()}
-                                  </span>
-                                )}
-                              </div>
-                              <span className="text-[10px] text-slate-400 font-bold uppercase tracking-wider mt-0.5">/person</span>
-                            </div>
-
-                            <button className="bg-[#0e9488] hover:bg-[#0c7a6e] text-white px-5 py-2.5 rounded-xl font-bold text-[13px] shadow-sm hover:shadow transition-all cursor-pointer active:scale-96">
-                              Book Now
-                            </button>
-                          </div>
-
-                          {/* Category Badge placed at the bottom, matching exact screenshot position */}
-                          <div className="flex justify-start pt-2 border-t border-slate-100/60">
-                            <span className={`text-[10px] font-extrabold px-2.5 py-0.5 rounded-md uppercase tracking-wider ${
-                              adventure.category === 'Water Sports'
-                                ? 'text-blue-600 bg-blue-50/70'
-                                : adventure.category === 'Paragliding' || adventure.category === 'Adventure'
-                                ? 'text-indigo-600 bg-indigo-50/70'
-                                : adventure.category === 'Camping'
-                                ? 'text-emerald-600 bg-emerald-50/70'
-                                : adventure.category === 'Wildlife Safari'
-                                ? 'text-amber-700 bg-amber-50/70'
-                                : adventure.category === 'Biking'
-                                ? 'text-teal-600 bg-teal-50/70'
-                                : 'text-slate-650 bg-slate-50/70'
-                            }`}>
-                              {adventure.category}
+                        {/* Price Details */}
+                        <div className="flex items-baseline gap-1.5 mt-3 pt-3 border-t border-slate-100">
+                          <span className="text-[16px] font-extrabold text-[#0e9488]">
+                            ₹{adventure.price.toLocaleString()}
+                          </span>
+                          {adventure.originalPrice > adventure.price && (
+                            <span className="text-[12px] font-bold text-slate-400 line-through">
+                              ₹{adventure.originalPrice.toLocaleString()}
                             </span>
-                          </div>
+                          )}
+                          <span className="text-[11px] text-slate-400 font-semibold">/ person</span>
+                        </div>
+
+                        {/* Category Tag Badge */}
+                        <div className="flex justify-start mt-3">
+                          <span className={`text-[10px] font-bold px-2.5 py-0.5 rounded-md uppercase tracking-wider ${
+                            adventure.category === 'Water Sports'
+                              ? 'text-blue-600 bg-blue-50/70'
+                              : adventure.category === 'Paragliding' || adventure.category === 'Adventure'
+                              ? 'text-indigo-600 bg-indigo-50/70'
+                              : adventure.category === 'Camping'
+                              ? 'text-emerald-600 bg-emerald-50/70'
+                              : adventure.category === 'Wildlife Safari'
+                              ? 'text-amber-700 bg-amber-50/70'
+                              : adventure.category === 'Biking'
+                              ? 'text-teal-600 bg-teal-50/70'
+                              : 'text-slate-650 bg-slate-50/70'
+                          }`}>
+                            {adventure.category}
+                          </span>
                         </div>
                       </div>
 
@@ -1156,86 +1153,86 @@ export default function Adventures() {
           <aside className="lg:col-span-3 xl:col-span-3.5 space-y-7 lg:sticky lg:top-24 self-start">
             
             {/* Map Frame Card */}
-            <div className="bg-white rounded-3xl border border-slate-200 shadow-xs p-4 flex flex-col items-stretch gap-4">
-              
-              {/* Checkbox "Search as I move the map" */}
-              <div className="flex items-center gap-2.5 cursor-pointer select-none group px-1 text-left">
-                <div className="w-5 h-5 rounded-md border flex items-center justify-center shrink-0 transition-all bg-[#0e9488] border-[#0e9488] text-white">
+            <div className="bg-white rounded-3xl border border-slate-200 shadow-xs overflow-hidden relative h-[360px] sm:h-[400px]">
+              <iframe
+                src="https://maps.google.com/maps?q=Pondicherry,India&t=&z=13&ie=UTF8&iwloc=&output=embed"
+                className="w-full h-full border-0"
+                allowFullScreen=""
+                loading="lazy"
+                title="Puducherry Map"
+              ></iframe>
+
+              {/* Floating Checkbox "Search as I move the map" */}
+              <div className="absolute top-3.5 left-3.5 z-10 flex items-center gap-2.5 bg-white/95 backdrop-blur-xs border border-slate-200/80 px-3 py-2 rounded-xl shadow-md cursor-pointer select-none group text-left">
+                <div className="w-4.5 h-4.5 rounded-md border flex items-center justify-center shrink-0 transition-all bg-[#0e9488] border-[#0e9488] text-white">
                   <Check className="w-3.5 h-3.5 stroke-[3.5]" />
                 </div>
-                <span className="text-[13px] font-bold text-slate-750">
+                <span className="text-[12.5px] font-bold text-slate-750">
                   Search as I move the map
                 </span>
               </div>
 
-              {/* Map Holder */}
-              <div className="w-full h-[320px] sm:h-[360px] rounded-2xl bg-slate-100 overflow-hidden relative border border-slate-200">
-                <iframe
-                  src="https://maps.google.com/maps?q=Pondicherry,India&t=&z=13&ie=UTF8&iwloc=&output=embed"
-                  className="w-full h-full rounded-2xl border-0"
-                  allowFullScreen=""
-                  loading="lazy"
-                  title="Puducherry Map"
-                ></iframe>
-
-                {/* Markers with adventure location overlays matching Puducherry */}
-                {/* Marker 1: Top Zone (12 Adventures) */}
-                <div className="absolute top-[28%] left-[55%] -translate-x-1/2 -translate-y-1/2">
-                  <div className="bg-[#0e9488] hover:bg-[#0c7a6e] border border-white text-white rounded-full font-extrabold text-[12px] px-2.5 py-1.5 shadow-md flex items-center justify-center cursor-pointer select-none transition-all hover:scale-108">
-                    12
-                  </div>
+              {/* Markers with adventure location overlays matching Puducherry */}
+              {/* Marker 1: Top Zone (12 Adventures) */}
+              <div className="absolute top-[28%] left-[55%] -translate-x-1/2 -translate-y-1/2">
+                <div className="bg-[#0e9488] hover:bg-[#0c7a6e] border border-white text-white rounded-full font-extrabold text-[12px] px-2.5 py-1.5 shadow-md flex items-center justify-center cursor-pointer select-none transition-all hover:scale-108">
+                  12
                 </div>
+              </div>
 
-                {/* Marker 2: Outer Zone (8 Adventures) */}
-                <div className="absolute top-[38%] left-[78%] -translate-x-1/2 -translate-y-1/2">
-                  <div className="bg-[#0e9488] hover:bg-[#0c7a6e] border border-white text-white rounded-full font-extrabold text-[12px] px-2.5 py-1.5 shadow-md flex items-center justify-center cursor-pointer select-none transition-all hover:scale-108">
-                    8
-                  </div>
+              {/* Marker 2: Outer Zone (8 Adventures) */}
+              <div className="absolute top-[38%] left-[78%] -translate-x-1/2 -translate-y-1/2">
+                <div className="bg-[#0e9488] hover:bg-[#0c7a6e] border border-white text-white rounded-full font-extrabold text-[12px] px-2.5 py-1.5 shadow-md flex items-center justify-center cursor-pointer select-none transition-all hover:scale-108">
+                  8
                 </div>
+              </div>
 
-                {/* Marker 3: Middle Zone (10 Adventures) */}
-                <div className="absolute top-[58%] left-[64%] -translate-x-1/2 -translate-y-1/2">
-                  <div className="bg-[#0e9488] hover:bg-[#0c7a6e] border border-white text-white rounded-full font-extrabold text-[12px] px-2.5 py-1.5 shadow-md flex items-center justify-center cursor-pointer select-none transition-all hover:scale-108">
-                    10
-                  </div>
+              {/* Marker 3: Middle Zone (10 Adventures) */}
+              <div className="absolute top-[58%] left-[64%] -translate-x-1/2 -translate-y-1/2">
+                <div className="bg-[#0e9488] hover:bg-[#0c7a6e] border border-white text-white rounded-full font-extrabold text-[12px] px-2.5 py-1.5 shadow-md flex items-center justify-center cursor-pointer select-none transition-all hover:scale-108">
+                  10
                 </div>
+              </div>
 
-                {/* Marker 4: Bottom Zone (7 Adventures) */}
-                <div className="absolute top-[75%] left-[48%] -translate-x-1/2 -translate-y-1/2">
-                  <div className="bg-[#0e9488] hover:bg-[#0c7a6e] border border-white text-white rounded-full font-extrabold text-[12px] px-2.5 py-1.5 shadow-md flex items-center justify-center cursor-pointer select-none transition-all hover:scale-108">
-                    7
-                  </div>
+              {/* Marker 4: Bottom Zone (7 Adventures) */}
+              <div className="absolute top-[75%] left-[48%] -translate-x-1/2 -translate-y-1/2">
+                <div className="bg-[#0e9488] hover:bg-[#0c7a6e] border border-white text-white rounded-full font-extrabold text-[12px] px-2.5 py-1.5 shadow-md flex items-center justify-center cursor-pointer select-none transition-all hover:scale-108">
+                  7
                 </div>
+              </div>
 
-                {/* Small Hover Image Markers for visual flair */}
-                {/* Paraglider card snippet */}
-                <div className="absolute top-[44%] left-[45%] -translate-x-1/2 -translate-y-1/2">
-                  <div className="bg-white p-1 rounded-full shadow-md border border-slate-100 flex items-center justify-center hover:scale-110 transition-transform">
-                    <img 
-                      src="https://images.unsplash.com/photo-1599422315629-f43c131a6c72?auto=format&fit=crop&w=40&h=40&q=80" 
-                      className="w-7 h-7 rounded-full object-cover" 
-                      alt="paragliding thumb" 
-                    />
-                  </div>
+              {/* Small Hover Image Markers for visual flair */}
+              {/* Paraglider card snippet */}
+              <div className="absolute top-[44%] left-[45%] -translate-x-1/2 -translate-y-1/2">
+                <div className="bg-white p-1 rounded-full shadow-md border border-slate-100 flex items-center justify-center hover:scale-110 transition-transform">
+                  <img 
+                    src="https://images.unsplash.com/photo-1599422315629-f43c131a6c72?auto=format&fit=crop&w=40&h=40&q=80" 
+                    className="w-7 h-7 rounded-full object-cover" 
+                    alt="paragliding thumb" 
+                  />
                 </div>
+              </div>
 
-                {/* Scuba snip */}
-                <div className="absolute top-[65%] left-[82%] -translate-x-1/2 -translate-y-1/2">
-                  <div className="bg-white p-1 rounded-full shadow-md border border-slate-100 flex items-center justify-center hover:scale-110 transition-transform">
-                    <img 
-                      src="https://images.unsplash.com/photo-1544551763-46a013bb70d5?auto=format&fit=crop&w=40&h=40&q=80" 
-                      className="w-7 h-7 rounded-full object-cover" 
-                      alt="scuba thumb" 
-                    />
-                  </div>
+              {/* Scuba snip */}
+              <div className="absolute top-[65%] left-[82%] -translate-x-1/2 -translate-y-1/2">
+                <div className="bg-white p-1 rounded-full shadow-md border border-slate-100 flex items-center justify-center hover:scale-110 transition-transform">
+                  <img 
+                    src="https://images.unsplash.com/photo-1544551763-46a013bb70d5?auto=format&fit=crop&w=40&h=40&q=80" 
+                    className="w-7 h-7 rounded-full object-cover" 
+                    alt="scuba thumb" 
+                  />
                 </div>
+              </div>
 
-                {/* Zoom overlay buttons */}
-                <div className="absolute right-3.5 bottom-3.5 flex flex-col gap-1.5">
-                  <button className="h-8.5 w-8.5 bg-white rounded-lg shadow-md border border-slate-100 flex items-center justify-center font-black text-slate-700 hover:bg-slate-50 cursor-pointer text-[17px] leading-none">+</button>
-                  <button className="h-8.5 w-8.5 bg-white rounded-lg shadow-md border border-slate-100 flex items-center justify-center font-black text-slate-700 hover:bg-slate-50 cursor-pointer text-[17px] leading-none">-</button>
-                </div>
+              {/* GPS Locate Button */}
+              <button className="absolute right-3.5 top-1/2 -translate-y-[60px] h-9 w-9 bg-white rounded-lg shadow-md border border-slate-200/80 flex items-center justify-center text-slate-700 hover:bg-slate-50 cursor-pointer z-10">
+                <Locate className="h-4.5 w-4.5 stroke-[2]" />
+              </button>
 
+              {/* Zoom overlay buttons */}
+              <div className="absolute right-3.5 top-1/2 translate-y-[10px] flex flex-col bg-white rounded-lg shadow-md border border-slate-200/80 overflow-hidden z-10">
+                <button className="h-9 w-9 flex items-center justify-center font-black text-slate-700 hover:bg-slate-50 border-b border-slate-100 cursor-pointer text-[16px] leading-none">+</button>
+                <button className="h-9 w-9 flex items-center justify-center font-black text-slate-700 hover:bg-slate-50 cursor-pointer text-[16px] leading-none">-</button>
               </div>
             </div>
 
