@@ -115,16 +115,230 @@ const INITIAL_ADVENTURES = [
 ];
 
 const CATEGORIES = [
-  { name: "All Adventures", icon: Compass },
-  { name: "Water Sports", icon: Waves },
-  { name: "Trekking", icon: Compass }, // reused for trekking
-  { name: "Paragliding", icon: Wind },
-  { name: "Camping", icon: Tent },
-  { name: "Wildlife Safari", icon: PawPrint },
-  { name: "Biking", icon: Bike },
-  { name: "Boating", icon: Ship },
-  { name: "Scuba Diving", icon: Waves }
+  { name: "All Adventures" },
+  { name: "Water Sports" },
+  { name: "Trekking" },
+  { name: "Paragliding" },
+  { name: "Camping" },
+  { name: "Wildlife Safari" },
+  { name: "Biking" },
+  { name: "Boating" },
+  { name: "Scuba Diving" }
 ];
+
+const getCategoryIcon = (name, isSelected) => {
+  const color = isSelected ? "#0e9488" : "#475569";
+  
+  switch (name) {
+    case "All Adventures":
+      return (
+        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="4" y="4" width="7" height="7" rx="2.5" stroke={color} strokeWidth="2.5" />
+          <rect x="13" y="4" width="7" height="7" rx="2.5" stroke={color} strokeWidth="2.5" />
+          <rect x="4" y="13" width="7" height="7" rx="2.5" stroke={color} strokeWidth="2.5" />
+          <rect x="13" y="13" width="7" height="7" rx="2.5" stroke={color} strokeWidth="2.5" />
+        </svg>
+      );
+    case "Water Sports":
+      return isSelected ? (
+        <svg width="28" height="28" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M4 22C8 22 10 25 16 25C22 25 24 22 28 22" stroke={color} strokeWidth="2.5" strokeLinecap="round"/>
+          <path d="M10 20C12 20 18 20 22 20C24 20 24 18 22 17C20 16 12 16 10 16" fill={color} />
+          <path d="M16 6V16" stroke={color} strokeWidth="2"/>
+          <path d="M16 6C18 9 21 11 21 14H16V6Z" fill={color} />
+          <path d="M16 8C14 10 12 11 12 14H16V8Z" fill={color} />
+          <path d="M2 25C6 25 8 28 14 28C20 28 22 25 28 25C30 25 32 27 32 27" stroke={color} strokeWidth="3" strokeLinecap="round"/>
+        </svg>
+      ) : (
+        <svg width="28" height="28" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M4 22C8 22 10 25 16 25C22 25 24 22 28 22" stroke="#38bdf8" strokeWidth="2.5" strokeLinecap="round"/>
+          <path d="M10 20C12 20 18 20 22 20C24 20 24 18 22 17C20 16 12 16 10 16" fill="#f59e0b" />
+          <path d="M16 6V16" stroke="#475569" strokeWidth="1.5"/>
+          <path d="M16 6C18 9 21 11 21 14H16V6Z" fill="#3b82f6" />
+          <path d="M16 8C14 10 12 11 12 14H16V8Z" fill="#ef4444" />
+          <path d="M2 25C6 25 8 28 14 28C20 28 22 25 28 25C30 25 32 27 32 27" stroke="#0284c7" strokeWidth="3" strokeLinecap="round"/>
+        </svg>
+      );
+    case "Trekking":
+      return isSelected ? (
+        <svg width="28" height="28" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <circle cx="24" cy="9" r="4" fill={color} />
+          <path d="M2 26L12 12L22 26H2Z" fill={color} />
+          <path d="M14 26L21 17L28 26H14Z" fill={color} opacity="0.8" />
+          <path d="M4 28C10 28 14 24 18 24C22 24 26 27 30 27" stroke={color} strokeWidth="2.5" strokeLinecap="round" />
+          <circle cx="11" cy="11" r="1.5" fill={color} />
+          <path d="M11 13L10 18L7 21" stroke={color} strokeWidth="1.5" strokeLinecap="round" />
+          <path d="M10 15H13" stroke={color} strokeWidth="1.5" />
+          <rect x="8" y="13" width="2" height="3.5" rx="0.5" fill={color} />
+        </svg>
+      ) : (
+        <svg width="28" height="28" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <circle cx="24" cy="9" r="4" fill="#f59e0b" />
+          <path d="M2 26L12 12L22 26H2Z" fill="#15803d" />
+          <path d="M14 26L21 17L28 26H14Z" fill="#22c55e" opacity="0.8" />
+          <path d="M4 28C10 28 14 24 18 24C22 24 26 27 30 27" stroke="#854d0e" strokeWidth="2.5" strokeLinecap="round" />
+          <circle cx="11" cy="11" r="1.5" fill="#f97316" />
+          <path d="M11 13L10 18L7 21" stroke="#f97316" strokeWidth="1.5" strokeLinecap="round" />
+          <path d="M10 15H13" stroke="#f97316" strokeWidth="1.5" />
+          <rect x="8" y="13" width="2" height="3.5" rx="0.5" fill="#ef4444" />
+        </svg>
+      );
+    case "Paragliding":
+      return isSelected ? (
+        <svg width="28" height="28" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M6 12C6 6 26 6 26 12C23 11 9 11 6 12Z" fill={color} />
+          <path d="M8 11.8C11 9.5 21 9.5 24 11.8C21 10.5 11 10.5 8 11.8Z" fill={color} />
+          <line x1="6" y1="12" x2="16" y2="24" stroke={color} strokeWidth="1.5" />
+          <line x1="11" y1="12.2" x2="16" y2="24" stroke={color} strokeWidth="1" />
+          <line x1="16" y1="12.3" x2="16" y2="24" stroke={color} strokeWidth="1" />
+          <line x1="21" y1="12.2" x2="16" y2="24" stroke={color} strokeWidth="1" />
+          <line x1="26" y1="12" x2="16" y2="24" stroke={color} strokeWidth="1.5" />
+          <rect x="14.5" y="23.5" width="3" height="3" rx="1" fill={color} />
+          <circle cx="16" cy="22" r="1.2" fill={color} />
+        </svg>
+      ) : (
+        <svg width="28" height="28" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M6 12C6 6 26 6 26 12C23 11 9 11 6 12Z" fill="#ec4899" />
+          <path d="M8 11.8C11 9.5 21 9.5 24 11.8C21 10.5 11 10.5 8 11.8Z" fill="#f43f5e" />
+          <line x1="6" y1="12" x2="16" y2="24" stroke="#0ea5e9" strokeWidth="1.5" />
+          <line x1="11" y1="12.2" x2="16" y2="24" stroke="#0ea5e9" strokeWidth="1" />
+          <line x1="16" y1="12.3" x2="16" y2="24" stroke="#0ea5e9" strokeWidth="1" />
+          <line x1="21" y1="12.2" x2="16" y2="24" stroke="#0ea5e9" strokeWidth="1" />
+          <line x1="26" y1="12" x2="16" y2="24" stroke="#0ea5e9" strokeWidth="1.5" />
+          <rect x="14.5" y="23.5" width="3" height="3" rx="1" fill="#0284c7" />
+          <circle cx="16" cy="22" r="1.2" fill="#f97316" />
+        </svg>
+      );
+    case "Camping":
+      return isSelected ? (
+        <svg width="28" height="28" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M22 26L26 21H24L27 17H25L27.5 13H24.5L25.5 10H22.5L22 26Z" fill={color} />
+          <polygon points="6,26 16,12 21,26" fill={color} />
+          <polygon points="11,26 16,18 21,26" fill={color} />
+          <line x1="16" y1="12" x2="16" y2="26" stroke={color} strokeWidth="1.5" />
+          <path d="M2 27H30" stroke={color} strokeWidth="2.5" />
+        </svg>
+      ) : (
+        <svg width="28" height="28" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M22 26L26 21H24L27 17H25L27.5 13H24.5L25.5 10H22.5L22 26Z" fill="#16a34a" />
+          <polygon points="6,26 16,12 21,26" fill="#f97316" />
+          <polygon points="11,26 16,18 21,26" fill="#fbbf24" />
+          <line x1="16" y1="12" x2="16" y2="26" stroke="#78350f" strokeWidth="1.5" />
+          <path d="M2 27H30" stroke="#475569" strokeWidth="2.5" strokeLinecap="round" />
+        </svg>
+      );
+    case "Wildlife Safari":
+      return isSelected ? (
+        <svg width="28" height="28" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <circle cx="16" cy="14" r="9" fill={color} />
+          <circle cx="11" cy="9" r="3" fill={color} />
+          <circle cx="21" cy="9" r="3" fill={color} />
+          <circle cx="9" cy="15" r="3" fill={color} />
+          <circle cx="23" cy="15" r="3" fill={color} />
+          <circle cx="12" cy="20" r="3" fill={color} />
+          <circle cx="20" cy="20" r="3" fill={color} />
+          <circle cx="16" cy="15" r="6.5" fill={color} />
+          <circle cx="11.5" cy="9.5" r="2.2" fill={color} />
+          <circle cx="20.5" cy="9.5" r="2.2" fill={color} />
+          <circle cx="14" cy="14" r="1.2" fill={color} />
+          <circle cx="18" cy="14" r="1.2" fill={color} />
+          <polygon points="15,16.5 17,16.5 16,17.5" fill={color} />
+          <path d="M15.2 18.5C15.5 19 16 19 16 19C16 19 16.5 19 16.8 18.5" stroke={color} strokeWidth="1.2" strokeLinecap="round" />
+        </svg>
+      ) : (
+        <svg width="28" height="28" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <circle cx="16" cy="14" r="9" fill="#ea580c" />
+          <circle cx="11" cy="9" r="3" fill="#ea580c" />
+          <circle cx="21" cy="9" r="3" fill="#ea580c" />
+          <circle cx="9" cy="15" r="3" fill="#ea580c" />
+          <circle cx="23" cy="15" r="3" fill="#ea580c" />
+          <circle cx="12" cy="20" r="3" fill="#ea580c" />
+          <circle cx="20" cy="20" r="3" fill="#ea580c" />
+          <circle cx="16" cy="15" r="6.5" fill="#facc15" />
+          <circle cx="11.5" cy="9.5" r="2.2" fill="#facc15" />
+          <circle cx="20.5" cy="9.5" r="2.2" fill="#facc15" />
+          <circle cx="14" cy="14" r="1.2" fill="#1e293b" />
+          <circle cx="18" cy="14" r="1.2" fill="#1e293b" />
+          <polygon points="15,16.5 17,16.5 16,17.5" fill="#ea580c" />
+          <path d="M15.2 18.5C15.5 19 16 19 16 19C16 19 16.5 19 16.8 18.5" stroke="#1e293b" strokeWidth="1.2" strokeLinecap="round" />
+        </svg>
+      );
+    case "Biking":
+      return isSelected ? (
+        <svg width="28" height="28" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <circle cx="9" cy="21" r="5" stroke={color} strokeWidth="2.5" fill="none" />
+          <circle cx="9" cy="21" r="1.5" fill={color} />
+          <circle cx="23" cy="21" r="5" stroke={color} strokeWidth="2.5" fill="none" />
+          <circle cx="23" cy="21" r="1.5" fill={color} />
+          <path d="M9 21L15 13H22L23 21" stroke={color} strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" />
+          <path d="M15 21L15 13" stroke={color} strokeWidth="2.5" />
+          <path d="M9 21L14 16" stroke={color} strokeWidth="2.5" />
+          <path d="M22 13L21 9H23" stroke={color} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+          <path d="M13.5 11.5H16.5" stroke={color} strokeWidth="2.5" strokeLinecap="round" />
+        </svg>
+      ) : (
+        <svg width="28" height="28" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <circle cx="9" cy="21" r="5" stroke="#475569" strokeWidth="2.5" fill="none" />
+          <circle cx="9" cy="21" r="1.5" fill="#475569" />
+          <circle cx="23" cy="21" r="5" stroke="#475569" strokeWidth="2.5" fill="none" />
+          <circle cx="23" cy="21" r="1.5" fill="#475569" />
+          <path d="M9 21L15 13H22L23 21" stroke="#10b981" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" />
+          <path d="M15 21L15 13" stroke="#10b981" strokeWidth="2.5" />
+          <path d="M9 21L14 16" stroke="#10b981" strokeWidth="2.5" />
+          <path d="M22 13L21 9H23" stroke="#475569" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+          <path d="M13.5 11.5H16.5" stroke="#475569" strokeWidth="2.5" strokeLinecap="round" />
+        </svg>
+      );
+    case "Boating":
+      return isSelected ? (
+        <svg width="28" height="28" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M6 19C10 19 22 19 26 19L24 23H8L6 19Z" fill={color} />
+          <line x1="16" y1="6" x2="16" y2="19" stroke={color} strokeWidth="2" />
+          <path d="M16 6C18 9 22 11 22 16H16V6Z" fill={color} />
+          <path d="M16 8C14 10 11 12 11 16H16V8Z" fill={color} />
+          <path d="M2 24.5C6 24.5 8 26.5 12 26.5C16 26.5 18 24.5 22 24.5C26 24.5 28 26.5 32 26.5" stroke={color} strokeWidth="2.5" strokeLinecap="round" />
+          <path d="M4 27.5C8 27.5 10 29.5 14 29.5C18 29.5 20 27.5 24 27.5C28 27.5 30 29.5 32 29.5" stroke={color} strokeWidth="2" strokeLinecap="round" />
+        </svg>
+      ) : (
+        <svg width="28" height="28" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M6 19C10 19 22 19 26 19L24 23H8L6 19Z" fill="#b45309" />
+          <line x1="16" y1="6" x2="16" y2="19" stroke="#78350f" strokeWidth="2" />
+          <path d="M16 6C18 9 22 11 22 16H16V6Z" fill="#0ea5e9" />
+          <path d="M16 8C14 10 11 12 11 16H16V8Z" fill="#38bdf8" />
+          <path d="M2 24.5C6 24.5 8 26.5 12 26.5C16 26.5 18 24.5 22 24.5C26 24.5 28 26.5 32 26.5" stroke="#0284c7" strokeWidth="2.5" strokeLinecap="round" />
+          <path d="M4 27.5C8 27.5 10 29.5 14 29.5C18 29.5 20 27.5 24 27.5C28 27.5 30 29.5 32 29.5" stroke="#0369a1" strokeWidth="2" strokeLinecap="round" />
+        </svg>
+      );
+    case "Scuba Diving":
+      return isSelected ? (
+        <svg width="28" height="28" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M22 8V23C22 25.5 20 27 17.5 27C15 27 14.5 25.5 14.5 25" stroke={color} strokeWidth="3.5" fill="none" />
+          <path d="M22 8C22 8 23 6 25 6" stroke={color} strokeWidth="3" />
+          <rect x="12.5" y="23.5" width="3" height="2" rx="0.5" fill={color} />
+          <rect x="6" y="10" width="12" height="7" rx="3.5" stroke={color} strokeWidth="3" fill={color} opacity="0.3" />
+          <path d="M11 15.5L12 17.5L13 15.5" stroke={color} strokeWidth="2" fill={color} />
+          <path d="M6 13.5H3" stroke={color} strokeWidth="2" />
+        </svg>
+      ) : (
+        <svg width="28" height="28" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M22 8V23C22 25.5 20 27 17.5 27C15 27 14.5 25.5 14.5 25" stroke="#a855f7" strokeWidth="3.5" strokeLinecap="round" strokeLinejoin="round" fill="none" />
+          <path d="M22 8C22 8 23 6 25 6" stroke="#a855f7" strokeWidth="3" strokeLinecap="round" />
+          <rect x="12.5" y="23.5" width="3" height="2" rx="0.5" fill="#a855f7" />
+          <rect x="6" y="10" width="12" height="7" rx="3.5" stroke="#ec4899" strokeWidth="3" fill="#93c5fd" />
+          <path d="M11 15.5L12 17.5L13 15.5" stroke="#ec4899" strokeWidth="2" strokeLinejoin="round" fill="#ec4899" />
+          <path d="M6 13.5H3" stroke="#ec4899" strokeWidth="2" />
+        </svg>
+      );
+    default:
+      return (
+        <svg width="28" height="28" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <circle cx="8" cy="16" r="3.2" fill={color} />
+          <circle cx="16" cy="16" r="3.2" fill={color} />
+          <circle cx="24" cy="16" r="3.2" fill={color} />
+        </svg>
+      );
+  }
+};
 
 export default function Adventures() {
   const [mounted, setMounted] = useState(false);
@@ -471,11 +685,10 @@ export default function Adventures() {
       </section>
 
       {/* 2. ACTIVITY QUICK LINK CATEGORIES BAR */}
-      <section className="w-full bg-white pt-20 pb-6 border-b border-slate-100">
+      <section className="w-full bg-white pt-20 pb-8 border-b border-slate-100/85">
         <div className="max-w-[1760px] mx-auto px-4 sm:px-8 lg:px-12">
-          <div className="flex items-center justify-start gap-3 overflow-x-auto hide-scrollbar pb-2 select-none">
+          <div className="flex items-center justify-start gap-4 overflow-x-auto hide-scrollbar pb-2 select-none">
             {CATEGORIES.map((cat, idx) => {
-              const IconComp = cat.icon;
               const isSelected = selectedActivityFilter === cat.name;
               return (
                 <button
@@ -499,22 +712,24 @@ export default function Adventures() {
                       });
                     }
                   }}
-                  className={`flex items-center gap-2 px-5 py-3 rounded-2xl border transition-all text-[13px] font-bold shrink-0 cursor-pointer ${
+                  className={`flex flex-col items-center justify-center gap-2.5 w-[125px] h-[92px] rounded-2xl border transition-all shrink-0 cursor-pointer ${
                     isSelected 
-                      ? 'bg-teal-50 border-[#0F766E] text-[#0F766E] shadow-sm shadow-teal-700/5' 
-                      : 'border-slate-200/80 bg-white text-slate-650 hover:border-slate-350 hover:bg-slate-50/50'
+                      ? 'bg-[#0e9488]/[0.04] border-[#0e9488] text-[#0e9488] shadow-sm' 
+                      : 'border-slate-200 bg-white text-[#0D233A] hover:border-slate-350 hover:bg-slate-50/50'
                   }`}
                 >
-                  <IconComp className={`h-4.5 w-4.5 shrink-0 stroke-[2.2] ${isSelected ? 'text-[#0F766E]' : 'text-slate-450'}`} />
-                  <span>{cat.name}</span>
+                  <div className="flex items-center justify-center h-[32px] w-[32px] shrink-0">
+                    {getCategoryIcon(cat.name, isSelected)}
+                  </div>
+                  <span className="text-[12px] font-extrabold tracking-tight text-center px-1 leading-none">{cat.name}</span>
                 </button>
               );
             })}
-            <button className="flex items-center gap-2 px-5 py-3 rounded-2xl border border-slate-200 bg-white text-slate-650 hover:border-slate-350 hover:bg-slate-50/50 transition-all text-[13px] font-bold shrink-0 cursor-pointer">
-              <span className="w-1.5 h-1.5 rounded-full bg-slate-400"></span>
-              <span className="w-1.5 h-1.5 rounded-full bg-slate-400"></span>
-              <span className="w-1.5 h-1.5 rounded-full bg-slate-400"></span>
-              <span className="ml-1">More</span>
+            <button className="flex flex-col items-center justify-center gap-2.5 w-[125px] h-[92px] rounded-2xl border border-slate-200 bg-white text-[#0D233A] hover:border-slate-350 hover:bg-slate-50/50 transition-all shrink-0 cursor-pointer">
+              <div className="flex items-center justify-center h-[32px] w-[32px] shrink-0">
+                {getCategoryIcon("More", false)}
+              </div>
+              <span className="text-[12px] font-extrabold tracking-tight text-center px-1 leading-none">More</span>
             </button>
           </div>
         </div>
