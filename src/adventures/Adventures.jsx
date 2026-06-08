@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { 
   Star, MapPin, Heart, ChevronLeft, ChevronRight, ChevronDown, 
   Check, ShieldCheck, Waves, Wind, Tent, PawPrint, Bike, Ship, 
@@ -347,12 +347,14 @@ export default function Adventures() {
   const [wishlist, setWishlist] = useState({});
   const [hoveredAdventure, setHoveredAdventure] = useState(null);
   const [sortBy, setSortBy] = useState('Popular');
+  const [showAllActivitiesInSidebar, setShowAllActivitiesInSidebar] = useState(false);
   
   // Floating Search bar states
   const [searchType, setSearchType] = useState('All');
   const [searchDuration, setSearchDuration] = useState('Any Duration');
   const [searchPrice, setSearchPrice] = useState('Any Price');
   const [searchLocation, setSearchLocation] = useState('Puducherry, India');
+  const scrollRef = useRef(null);
 
   // Sidebar filter states
   const [activitiesFilter, setActivitiesFilter] = useState({
@@ -565,12 +567,10 @@ export default function Adventures() {
           <div className="bg-white rounded-3xl border border-slate-200/85 pl-8 pr-3.5 py-3 shadow-lg shadow-slate-200/40 flex flex-col lg:flex-row items-stretch lg:items-center gap-2 lg:gap-0">
             
             {/* Location selector */}
-            <div className="flex items-center gap-2.5 pl-2 pr-6 py-1 min-w-[200px] text-left shrink-0">
+            <div className="flex items-center gap-2 pl-2 pr-6 py-1 shrink-0 text-left">
               <MapPin className="h-5 w-5 text-slate-400 shrink-0 stroke-[2.2]" />
-              <div className="flex items-center justify-between w-full text-left">
-                <span className="text-[14px] font-black text-slate-800 tracking-tight">{searchLocation}</span>
-                <button className="text-[13px] font-black text-[#0e9488] hover:underline cursor-pointer ml-4">Change</button>
-              </div>
+              <span className="text-[14.5px] font-black text-slate-800 tracking-tight">{searchLocation}</span>
+              <button className="text-[13.5px] font-bold text-[#0e9488] hover:underline cursor-pointer ml-3 shrink-0">Change</button>
             </div>
 
             {/* Vertical Divider */}
@@ -685,9 +685,24 @@ export default function Adventures() {
       </section>
 
       {/* 2. ACTIVITY QUICK LINK CATEGORIES BAR */}
-      <section className="w-full bg-white pt-20 pb-8 border-b border-slate-100/85">
-        <div className="max-w-[1760px] mx-auto px-4 sm:px-8 lg:px-12">
-          <div className="flex items-center justify-start gap-4 overflow-x-auto hide-scrollbar pb-2 select-none">
+      <section className="w-full bg-white pt-20 pb-8 border-b border-slate-100/85 relative">
+        <div className="max-w-[1760px] mx-auto px-4 sm:px-8 lg:px-12 relative group/nav">
+          {/* Scroll Left Button */}
+          <button 
+            onClick={() => {
+              if (scrollRef.current) {
+                scrollRef.current.scrollBy({ left: -260, behavior: 'smooth' });
+              }
+            }}
+            className="absolute left-1 sm:left-4 lg:left-6 top-[42%] -translate-y-1/2 z-10 bg-slate-900 hover:bg-black text-white w-5 h-11 rounded-lg flex items-center justify-center cursor-pointer shadow-md transition-all active:scale-95"
+          >
+            <ChevronLeft className="w-4 h-4 stroke-[3.5]" />
+          </button>
+
+          <div 
+            ref={scrollRef}
+            className="flex items-center justify-start gap-4 overflow-x-auto hide-scrollbar pb-2 select-none"
+          >
             {CATEGORIES.map((cat, idx) => {
               const isSelected = selectedActivityFilter === cat.name;
               return (
@@ -732,6 +747,18 @@ export default function Adventures() {
               <span className="text-[12px] font-extrabold tracking-tight text-center px-1 leading-none">More</span>
             </button>
           </div>
+
+          {/* Scroll Right Button */}
+          <button 
+            onClick={() => {
+              if (scrollRef.current) {
+                scrollRef.current.scrollBy({ left: 260, behavior: 'smooth' });
+              }
+            }}
+            className="absolute right-1 sm:right-4 lg:right-6 top-[42%] -translate-y-1/2 z-10 bg-slate-900 hover:bg-black text-white w-5 h-11 rounded-lg flex items-center justify-center cursor-pointer shadow-md transition-all active:scale-95"
+          >
+            <ChevronRight className="w-4 h-4 stroke-[3.5]" />
+          </button>
         </div>
       </section>
 
@@ -755,9 +782,8 @@ export default function Adventures() {
                 <div className="flex items-center gap-3">
                   <button 
                     onClick={handleResetFilters}
-                    className="text-[12.5px] font-extrabold text-[#0F766E] hover:underline cursor-pointer flex items-center gap-1"
+                    className="text-[13px] font-bold text-[#0e9488] hover:underline cursor-pointer"
                   >
-                    <RotateCcw className="w-3 h-3" />
                     Clear All
                   </button>
                   <button 
@@ -773,33 +799,48 @@ export default function Adventures() {
               <div className="py-5 border-b border-slate-100">
                 <h4 className="text-[12.5px] font-black text-slate-400 uppercase tracking-wider mb-4">Activity Type</h4>
                 <div className="space-y-3.5">
-                  {Object.keys(activitiesFilter).map((key) => (
-                    <div 
-                      key={key} 
-                      onClick={() => handleActivityCheckbox(key)}
-                      className="flex items-center gap-3 cursor-pointer group select-none"
-                    >
+                  {Object.keys(activitiesFilter)
+                    .filter((key) => showAllActivitiesInSidebar || (key !== 'Biking' && key !== 'Boating' && key !== 'Scuba Diving'))
+                    .map((key) => (
                       <div 
-                        className={`w-5 h-5 rounded-md border flex items-center justify-center shrink-0 transition-all ${
-                          activitiesFilter[key] 
-                            ? 'bg-[#0F766E] border-[#0F766E] text-white shadow-sm' 
-                            : 'border-slate-350 group-hover:border-slate-400 bg-white'
-                        }`}
+                        key={key} 
+                        onClick={() => handleActivityCheckbox(key)}
+                        className="flex items-center gap-3 cursor-pointer group select-none"
                       >
-                        {activitiesFilter[key] && (
-                          <Check className="w-3.5 h-3.5 stroke-[3.5]" />
-                        )}
+                        <div 
+                          className={`w-5 h-5 rounded-md border flex items-center justify-center shrink-0 transition-all ${
+                            activitiesFilter[key] 
+                              ? 'bg-[#0e9488] border-[#0e9488] text-white shadow-sm' 
+                              : 'border-slate-350 group-hover:border-slate-400 bg-white'
+                          }`}
+                        >
+                          {activitiesFilter[key] && (
+                            <Check className="w-3.5 h-3.5 stroke-[3.5]" />
+                          )}
+                        </div>
+                        <span className={`text-[13.5px] font-semibold transition-colors leading-none ${
+                          activitiesFilter[key] ? 'text-slate-900 font-extrabold' : 'text-slate-650 group-hover:text-slate-900'
+                        }`}>
+                          {key}
+                        </span>
                       </div>
-                      <span className={`text-[13.5px] font-bold transition-colors leading-none ${
-                        activitiesFilter[key] ? 'text-slate-900 font-extrabold' : 'text-slate-600 group-hover:text-slate-900'
-                      }`}>
-                        {key}
-                      </span>
-                    </div>
-                  ))}
-                  <button className="text-xs font-extrabold text-[#0F766E] hover:underline cursor-pointer flex items-center gap-1 pt-1.5">
-                    + More
-                  </button>
+                    ))}
+                  {!showAllActivitiesInSidebar && (
+                    <button 
+                      onClick={() => setShowAllActivitiesInSidebar(true)}
+                      className="text-xs font-bold text-[#0e9488] hover:underline cursor-pointer flex items-center gap-1 pt-1.5"
+                    >
+                      + More
+                    </button>
+                  )}
+                  {showAllActivitiesInSidebar && (
+                    <button 
+                      onClick={() => setShowAllActivitiesInSidebar(false)}
+                      className="text-xs font-bold text-[#0e9488] hover:underline cursor-pointer flex items-center gap-1 pt-1.5"
+                    >
+                      - Show Less
+                    </button>
+                  )}
                 </div>
               </div>
 
@@ -810,28 +851,28 @@ export default function Adventures() {
                   <select
                     value={durationFilter}
                     onChange={(e) => setDurationFilter(e.target.value)}
-                    className="appearance-none w-full bg-white border border-slate-200/80 hover:border-slate-350 text-slate-700 text-[13px] font-bold px-3.5 pr-9 py-2.5 rounded-xl outline-none focus:border-[#0F766E] cursor-pointer transition-colors"
+                    className="appearance-none w-full bg-white border border-slate-200/80 hover:border-slate-350 text-slate-700 text-[13px] font-bold px-3.5 pr-9 py-2.5 rounded-xl outline-none focus:border-[#0e9488] cursor-pointer transition-colors"
                   >
                     <option value="Any Duration">Any Duration</option>
                     <option value="< 2 Hours">&lt; 2 Hours</option>
                     <option value="2-5 Hours">2 - 5 Hours</option>
                     <option value="Overnight">Overnight</option>
                   </select>
-                  <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-450 pointer-events-none stroke-[2.2]" />
+                  <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-455 pointer-events-none stroke-[2.2]" />
                 </div>
               </div>
 
               {/* Price Range Slider */}
               <div className="py-5 border-b border-slate-100">
                 <h4 className="text-[12.5px] font-black text-slate-400 uppercase tracking-wider mb-4">Price Range</h4>
-                <div className="flex justify-between items-center text-[12.5px] font-extrabold text-slate-750 mb-2">
+                <div className="flex justify-between items-center text-[13px] font-bold text-slate-800 mb-2.5">
                   <span>₹0</span>
-                  <span className="text-[#0F766E] bg-teal-50 px-2 py-0.5 rounded-md">₹{priceRange === 20000 ? '20,000+' : priceRange.toLocaleString()}</span>
+                  <span>₹{priceRange === 20000 ? '20,000+' : priceRange.toLocaleString()}</span>
                 </div>
                 <div className="relative w-full h-5 flex items-center mb-1">
-                  <div className="absolute left-0 right-0 h-1.5 bg-slate-100 rounded-full"></div>
+                  <div className="absolute left-0 right-0 h-1.5 bg-slate-150 rounded-full"></div>
                   <div 
-                    className="absolute h-1.5 bg-[#0F766E] rounded-full"
+                    className="absolute h-1.5 bg-[#0e9488] rounded-full"
                     style={{ left: '0%', right: `${100 - (priceRange / 20000) * 100}%` }}
                   ></div>
                   <input
@@ -866,12 +907,12 @@ export default function Adventures() {
                         <div 
                           className={`w-5 h-5 rounded-full border flex items-center justify-center shrink-0 transition-all ${
                             isSelected 
-                              ? 'bg-[#0F766E] border-[#0F766E] text-white' 
+                              ? 'bg-[#0e9488] border-[#0e9488] text-white' 
                               : 'border-slate-350 group-hover:border-slate-450 bg-white'
                           }`}
                         >
                           {isSelected && (
-                            <div className="w-1.8 h-1.8 rounded-full bg-white"></div>
+                            <Check className="w-3.5 h-3.5 stroke-[3.5]" />
                           )}
                         </div>
                         {rate.rating ? (
@@ -904,7 +945,7 @@ export default function Adventures() {
               {/* Apply Filters Button */}
               <button 
                 onClick={() => setShowMobileFilters(false)}
-                className="w-full bg-[#0F766E] text-white py-3.5 rounded-2xl font-bold text-[13.5px] shadow-sm hover:bg-[#0c625c] active:scale-97 transition-all mt-4 cursor-pointer text-center block"
+                className="w-full bg-[#0e9488] hover:bg-[#0c7a6e] text-white py-3.5 rounded-2xl font-bold text-[14px] shadow-sm hover:shadow transition-all mt-4 cursor-pointer text-center block"
               >
                 Apply Filters
               </button>
@@ -919,7 +960,7 @@ export default function Adventures() {
             <div className="flex flex-col sm:flex-row justify-between sm:items-center gap-4 bg-white rounded-3xl border border-slate-200/90 p-5 shadow-xs">
               <div>
                 <h2 className="text-xl font-extrabold text-slate-900 tracking-tight">
-                  {sortedAdventures.length}+ Adventures Found
+                  {searchQuery || selectedActivityFilter !== 'All Adventures' ? `${sortedAdventures.length} Adventures Found` : "128+ Adventures Found"}
                 </h2>
                 <p className="text-[11.5px] font-bold text-slate-450 mt-1 uppercase tracking-wide">
                   Explore activities around Puducherry, India
@@ -927,24 +968,24 @@ export default function Adventures() {
               </div>
 
               <div className="flex items-center gap-3 shrink-0 justify-between sm:justify-end">
-                <span className="text-[12px] font-bold text-slate-450 whitespace-nowrap">Sort by:</span>
+                <span className="text-[12px] font-bold text-slate-400 whitespace-nowrap">Sort by:</span>
                 <div className="relative">
                   <select
                     value={sortBy}
                     onChange={(e) => setSortBy(e.target.value)}
-                    className="appearance-none bg-white border border-slate-200 hover:border-slate-350 text-slate-700 text-[12px] font-bold px-3.5 pr-8 py-2 rounded-xl outline-none focus:border-[#0F766E] cursor-pointer transition-colors"
+                    className="appearance-none bg-white border border-slate-200 hover:border-slate-350 text-slate-700 text-[12px] font-bold px-3.5 pr-8 py-2 rounded-xl outline-none focus:border-[#0e9488] cursor-pointer transition-colors"
                   >
                     <option value="Popular">Popular</option>
                     <option value="Rating">Rating: High to Low</option>
                     <option value="Price: Low to High">Price: Low to High</option>
                     <option value="Price: High to Low">Price: High to Low</option>
                   </select>
-                  <ChevronDown className="absolute right-2.5 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-slate-500 pointer-events-none stroke-[2.2]" />
+                  <ChevronDown className="absolute right-2.5 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-slate-550 pointer-events-none stroke-[2.2]" />
                 </div>
                 
                 {/* View switches */}
                 <div className="flex items-center gap-1 bg-slate-50 rounded-xl p-1 border border-slate-200">
-                  <button className="p-1.5 rounded-lg bg-white shadow-xs text-[#0F766E] cursor-pointer">
+                  <button className="p-1.5 rounded-lg bg-[#0e9488] shadow-xs text-white cursor-pointer">
                     <svg className="w-4.5 h-4.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
                       <rect x="3" y="3" width="7" height="7" rx="1.5" />
                       <rect x="14" y="3" width="7" height="7" rx="1.5" />
@@ -952,7 +993,7 @@ export default function Adventures() {
                       <rect x="14" y="14" width="7" height="7" rx="1.5" />
                     </svg>
                   </button>
-                  <button className="p-1.5 rounded-lg text-slate-400 hover:text-slate-700 cursor-pointer">
+                  <button className="p-1.5 rounded-lg text-slate-400 hover:text-slate-650 cursor-pointer">
                     <svg className="w-4.5 h-4.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
                       <line x1="3" y1="6" x2="21" y2="6" />
                       <line x1="3" y1="12" x2="21" y2="12" />
@@ -990,7 +1031,7 @@ export default function Adventures() {
                       onMouseLeave={() => setHoveredAdventure(null)}
                       className={`group bg-white rounded-3xl border overflow-hidden transition-all duration-300 ${
                         isHovered 
-                          ? 'border-[#0F766E]/40 shadow-lg shadow-teal-700/5 -translate-y-1' 
+                          ? 'border-[#0e9488]/40 shadow-lg shadow-teal-700/5 -translate-y-1' 
                           : 'border-slate-200/90 shadow-xs'
                       }`}
                     >
@@ -1004,12 +1045,14 @@ export default function Adventures() {
 
                         {/* Top left badge */}
                         {adventure.tag && (
-                          <div className={`absolute top-3.5 left-3.5 text-white text-[10px] font-black px-2.5 py-1.5 rounded-lg uppercase tracking-wider shadow-sm z-10 ${
+                          <div className={`absolute top-3.5 left-3.5 text-white text-[10px] font-extrabold px-2.5 py-1.5 rounded-lg uppercase tracking-wider shadow-sm z-10 ${
                             adventure.tag.includes('%') 
-                              ? 'bg-amber-500' 
+                              ? 'bg-orange-500' 
                               : adventure.tag === 'Best Seller' 
-                              ? 'bg-blue-650' 
-                              : 'bg-emerald-600'
+                              ? 'bg-blue-600' 
+                              : adventure.tag === 'New'
+                              ? 'bg-indigo-500'
+                              : 'bg-emerald-500'
                           }`}>
                             {adventure.tag}
                           </div>
@@ -1030,11 +1073,6 @@ export default function Adventures() {
                             strokeWidth={2.5}
                           />
                         </button>
-
-                        {/* Category badge bottom left */}
-                        <span className="absolute bottom-3.5 left-3.5 bg-[#0F766E] text-white text-[10px] font-bold px-2.5 py-1 rounded-md shadow-sm">
-                          {adventure.category}
-                        </span>
                       </div>
 
                       {/* Info Details */}
@@ -1042,13 +1080,13 @@ export default function Adventures() {
                         <div>
                           {/* Title and Rating */}
                           <div className="flex justify-between items-start gap-3">
-                            <h3 className="text-[16px] font-extrabold text-slate-900 group-hover:text-[#0F766E] transition-colors leading-tight">
+                            <h3 className="text-[16px] font-extrabold text-slate-900 group-hover:text-[#0e9488] transition-colors leading-tight">
                               {adventure.name}
                             </h3>
                             <div className="flex items-center gap-1 shrink-0">
                               <Star className="h-3.8 w-3.8 fill-amber-400 text-amber-400 stroke-none" />
                               <span className="text-[13px] font-extrabold text-slate-800">{adventure.rating}</span>
-                              <span className="text-[11.5px] font-bold text-slate-400">({adventure.reviewsCount})</span>
+                              <span className="text-[11.5px] font-bold text-slate-450">({adventure.reviewsCount})</span>
                             </div>
                           </div>
 
@@ -1060,34 +1098,62 @@ export default function Adventures() {
 
                           {/* Duration & Cancellation tags */}
                           <div className="flex flex-wrap items-center gap-2 mt-4">
-                            <span className="bg-slate-50 text-slate-550 border border-slate-100 rounded-lg px-2.5 py-1 text-[11.5px] font-bold">
-                              ⏱️ {adventure.duration}
+                            <span className="bg-slate-50 text-slate-600 border border-slate-100 rounded-lg px-2.5 py-1 text-[11px] font-bold flex items-center gap-1">
+                              <svg className="w-3.5 h-3.5 text-slate-450" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24">
+                                <circle cx="12" cy="12" r="10" />
+                                <polyline points="12 6 12 12 16 14" />
+                              </svg>
+                              {adventure.duration}
                             </span>
-                            <span className="bg-emerald-50 text-emerald-700 rounded-lg px-2.5 py-1 text-[11.5px] font-bold">
-                              ✓ Free Cancellation
+                            <span className="bg-emerald-50 text-emerald-700 rounded-lg px-2.5 py-1 text-[11px] font-bold flex items-center gap-1">
+                              <svg className="w-3.5 h-3.5 text-emerald-600" fill="none" stroke="currentColor" strokeWidth="3" viewBox="0 0 24 24">
+                                <polyline points="20 6 9 17 4 12" />
+                              </svg>
+                              Free Cancellation
                             </span>
                           </div>
                         </div>
 
                         {/* Price Details + Action Button */}
-                        <div className="border-t border-slate-100 mt-5 pt-4.5 flex justify-between items-center">
-                          <div className="flex flex-col text-left">
-                            <div className="flex items-baseline gap-1.5">
-                              {adventure.originalPrice > adventure.price && (
-                                <span className="text-[12.5px] font-semibold text-slate-400 line-through">
-                                  ₹{adventure.originalPrice.toLocaleString()}
+                        <div className="border-t border-slate-100 mt-5 pt-4.5 flex flex-col gap-3">
+                          <div className="flex justify-between items-center">
+                            <div className="flex flex-col text-left">
+                              <div className="flex items-baseline gap-1.5">
+                                <span className="text-[19px] font-black text-slate-900">
+                                  ₹{adventure.price.toLocaleString()}
                                 </span>
-                              )}
-                              <span className="text-[20px] font-black text-slate-900">
-                                ₹{adventure.price.toLocaleString()}
-                              </span>
+                                {adventure.originalPrice > adventure.price && (
+                                  <span className="text-[12.5px] font-bold text-slate-400 line-through">
+                                    ₹{adventure.originalPrice.toLocaleString()}
+                                  </span>
+                                )}
+                              </div>
+                              <span className="text-[10px] text-slate-400 font-bold uppercase tracking-wider mt-0.5">/person</span>
                             </div>
-                            <span className="text-[10px] text-slate-400 font-bold uppercase tracking-wider mt-0.5">/person</span>
+
+                            <button className="bg-[#0e9488] hover:bg-[#0c7a6e] text-white px-5 py-2.5 rounded-xl font-bold text-[13px] shadow-sm hover:shadow transition-all cursor-pointer active:scale-96">
+                              Book Now
+                            </button>
                           </div>
 
-                          <button className="bg-[#0F766E] hover:bg-[#0c625c] text-white px-4.5 py-2.5 rounded-xl font-bold text-[12.5px] shadow-sm hover:shadow transition-all cursor-pointer active:scale-96">
-                            Book Now
-                          </button>
+                          {/* Category Badge placed at the bottom, matching exact screenshot position */}
+                          <div className="flex justify-start pt-2 border-t border-slate-100/60">
+                            <span className={`text-[10px] font-extrabold px-2.5 py-0.5 rounded-md uppercase tracking-wider ${
+                              adventure.category === 'Water Sports'
+                                ? 'text-blue-600 bg-blue-50/70'
+                                : adventure.category === 'Paragliding' || adventure.category === 'Adventure'
+                                ? 'text-indigo-600 bg-indigo-50/70'
+                                : adventure.category === 'Camping'
+                                ? 'text-emerald-600 bg-emerald-50/70'
+                                : adventure.category === 'Wildlife Safari'
+                                ? 'text-amber-700 bg-amber-50/70'
+                                : adventure.category === 'Biking'
+                                ? 'text-teal-600 bg-teal-50/70'
+                                : 'text-slate-650 bg-slate-50/70'
+                            }`}>
+                              {adventure.category}
+                            </span>
+                          </div>
                         </div>
                       </div>
 
@@ -1118,7 +1184,7 @@ export default function Adventures() {
               
               {/* Checkbox "Search as I move the map" */}
               <div className="flex items-center gap-2.5 cursor-pointer select-none group px-1 text-left">
-                <div className="w-5 h-5 rounded-md border flex items-center justify-center shrink-0 transition-all bg-[#0F766E] border-[#0F766E] text-white">
+                <div className="w-5 h-5 rounded-md border flex items-center justify-center shrink-0 transition-all bg-[#0e9488] border-[#0e9488] text-white">
                   <Check className="w-3.5 h-3.5 stroke-[3.5]" />
                 </div>
                 <span className="text-[13px] font-bold text-slate-750">
@@ -1139,28 +1205,28 @@ export default function Adventures() {
                 {/* Markers with adventure location overlays matching Puducherry */}
                 {/* Marker 1: Top Zone (12 Adventures) */}
                 <div className="absolute top-[28%] left-[55%] -translate-x-1/2 -translate-y-1/2">
-                  <div className="bg-[#0F766E] hover:bg-[#0c625c] border border-white text-white rounded-full font-extrabold text-[12px] px-2.5 py-1.5 shadow-md flex items-center justify-center cursor-pointer select-none transition-all hover:scale-108">
+                  <div className="bg-[#0e9488] hover:bg-[#0c7a6e] border border-white text-white rounded-full font-extrabold text-[12px] px-2.5 py-1.5 shadow-md flex items-center justify-center cursor-pointer select-none transition-all hover:scale-108">
                     12
                   </div>
                 </div>
 
                 {/* Marker 2: Outer Zone (8 Adventures) */}
                 <div className="absolute top-[38%] left-[78%] -translate-x-1/2 -translate-y-1/2">
-                  <div className="bg-[#0F766E] hover:bg-[#0c625c] border border-white text-white rounded-full font-extrabold text-[12px] px-2.5 py-1.5 shadow-md flex items-center justify-center cursor-pointer select-none transition-all hover:scale-108">
+                  <div className="bg-[#0e9488] hover:bg-[#0c7a6e] border border-white text-white rounded-full font-extrabold text-[12px] px-2.5 py-1.5 shadow-md flex items-center justify-center cursor-pointer select-none transition-all hover:scale-108">
                     8
                   </div>
                 </div>
 
                 {/* Marker 3: Middle Zone (10 Adventures) */}
                 <div className="absolute top-[58%] left-[64%] -translate-x-1/2 -translate-y-1/2">
-                  <div className="bg-[#0F766E] hover:bg-[#0c625c] border border-white text-white rounded-full font-extrabold text-[12px] px-2.5 py-1.5 shadow-md flex items-center justify-center cursor-pointer select-none transition-all hover:scale-108">
+                  <div className="bg-[#0e9488] hover:bg-[#0c7a6e] border border-white text-white rounded-full font-extrabold text-[12px] px-2.5 py-1.5 shadow-md flex items-center justify-center cursor-pointer select-none transition-all hover:scale-108">
                     10
                   </div>
                 </div>
 
                 {/* Marker 4: Bottom Zone (7 Adventures) */}
                 <div className="absolute top-[75%] left-[48%] -translate-x-1/2 -translate-y-1/2">
-                  <div className="bg-[#0F766E] hover:bg-[#0c625c] border border-white text-white rounded-full font-extrabold text-[12px] px-2.5 py-1.5 shadow-md flex items-center justify-center cursor-pointer select-none transition-all hover:scale-108">
+                  <div className="bg-[#0e9488] hover:bg-[#0c7a6e] border border-white text-white rounded-full font-extrabold text-[12px] px-2.5 py-1.5 shadow-md flex items-center justify-center cursor-pointer select-none transition-all hover:scale-108">
                     7
                   </div>
                 </div>
@@ -1205,9 +1271,9 @@ export default function Adventures() {
                 </h3>
                 <button 
                   onClick={() => setSelectedActivityFilter('All Adventures')}
-                  className="text-[11.5px] font-bold text-[#0F766E] hover:underline cursor-pointer"
+                  className="text-[12px] font-bold text-[#0e9488] hover:underline cursor-pointer flex items-center gap-0.5"
                 >
-                  View All
+                  View All →
                 </button>
               </div>
 
@@ -1296,7 +1362,7 @@ export default function Adventures() {
               }
             ].map((feature, idx) => (
               <div key={idx} className="flex items-start gap-3.5">
-                <div className="h-10 w-10 shrink-0 bg-[#0F766E]/10 rounded-full flex items-center justify-center text-[#0F766E]">
+                <div className="h-10 w-10 shrink-0 bg-[#0e9488]/10 rounded-full flex items-center justify-center text-[#0e9488]">
                   <CheckCircle2 className="w-5.5 h-5.5 stroke-[2.2]" />
                 </div>
                 <div className="flex flex-col">
