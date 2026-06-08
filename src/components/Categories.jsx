@@ -79,7 +79,7 @@ export default function Categories({ onNavigate = () => {} }) {
                   onNavigate('home');
                 }
               }}
-              className="group flex flex-col items-center justify-between rounded-2xl border border-slate-200 bg-white py-6 px-3 text-center shadow-xs transition-all duration-300 hover:-translate-y-1.5 hover:shadow-md hover:border-slate-300 cursor-pointer h-[200px]"
+              className="group flex flex-col items-center justify-between rounded-2xl border border-slate-200 bg-white py-6 px-3 text-center shadow-xs transition-all duration-300 hover:-translate-y-1.5 hover:shadow-md hover:border-slate-300 cursor-pointer h-[200px] outline-none"
             >
               {/* 3D Image Icon Container */}
               <div className="flex-grow flex items-center justify-center mb-3 min-h-[90px]">

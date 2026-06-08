@@ -172,7 +172,7 @@ export default function Navbar({ onNavigate = () => {}, currentPage = 'home' }) 
                     onMouseEnter={() => setDropdown(true)}
                     onMouseLeave={() => setDropdown(false)}
                   >
-                    <button className="flex items-center gap-1 text-[15px] font-semibold text-slate-800 hover:text-[#0F766E] transition-colors duration-200 cursor-pointer">
+                    <button className="flex items-center gap-1 text-[15px] font-semibold text-slate-800 hover:text-[#0F766E] transition-colors duration-200 cursor-pointer outline-none">
                       {item.name}
                       <ChevronDown className="h-3.5 w-3.5 text-slate-800 shrink-0 stroke-[2.5]" />
                     </button>
@@ -184,7 +184,7 @@ export default function Navbar({ onNavigate = () => {}, currentPage = 'home' }) 
                           <a
                             key={subItem}
                             href={`#${subItem.toLowerCase().replace(/\s+/g, '-')}`}
-                            className="block rounded-lg px-3 py-2 text-xs font-semibold text-slate-700 hover:bg-teal-50 hover:text-[#0F766E] transition-colors"
+                            className="block rounded-lg px-3 py-2 text-xs font-semibold text-slate-700 hover:bg-teal-50 hover:text-[#0F766E] transition-colors outline-none"
                           >
                             {subItem}
                           </a>
@@ -217,7 +217,7 @@ export default function Navbar({ onNavigate = () => {}, currentPage = 'home' }) 
                       onNavigate('home');
                     }
                   }}
-                  className={`relative py-2 text-[15px] font-semibold transition-colors duration-200 ${
+                  className={`relative py-2 text-[15px] font-semibold transition-colors duration-200 outline-none ${
                     isActive
                       ? 'text-[#0F766E]'
                       : 'text-slate-800 hover:text-[#0F766E]'
@@ -238,7 +238,7 @@ export default function Navbar({ onNavigate = () => {}, currentPage = 'home' }) 
             {currentPage !== 'become-host' && (
               <button
                 onClick={() => onNavigate('become-host')}
-                className="rounded-lg border border-[#0F766E] px-4.5 py-2 text-[14px] font-semibold text-[#0F766E] hover:bg-[#0F766E] hover:text-white transition-all duration-200 cursor-pointer"
+                className="rounded-lg border border-[#0F766E] px-4.5 py-2 text-[14px] font-semibold text-[#0F766E] hover:bg-[#0F766E] hover:text-white transition-all duration-200 cursor-pointer outline-none"
               >
                 Become a Host
               </button>
@@ -249,14 +249,14 @@ export default function Navbar({ onNavigate = () => {}, currentPage = 'home' }) 
                 {/* Wishlist Button */}
                 <button 
                   onClick={() => onNavigate('stays-results')}
-                  className="flex items-center gap-2 text-slate-700 hover:text-[#0F766E] font-semibold text-[14px] px-3 py-2 cursor-pointer transition-colors mr-1 shrink-0"
+                  className="flex items-center gap-2 text-slate-700 hover:text-[#0F766E] font-semibold text-[14px] px-3 py-2 cursor-pointer transition-colors mr-1 shrink-0 outline-none"
                 >
                   <Heart className="h-[18px] w-[18px] text-slate-700 stroke-[2.2]" />
                   <span>Wishlist</span>
                 </button>
 
                 {/* Bell Icon */}
-                <button className="relative p-2 text-slate-700 hover:text-[#0F766E] cursor-pointer transition-colors mr-2 shrink-0">
+                <button className="relative p-2 text-slate-700 hover:text-[#0F766E] cursor-pointer transition-colors mr-2 shrink-0 outline-none">
                   <svg className="h-[20px] w-[20px]" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
                     <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9" />
                     <path d="M13.73 21a2 2 0 0 1-3.46 0" />
@@ -269,7 +269,7 @@ export default function Navbar({ onNavigate = () => {}, currentPage = 'home' }) 
                 <div ref={profileDropdownRef} className="relative">
                   <button
                     onClick={() => setProfileDropdownOpen(!profileDropdownOpen)}
-                    className="flex items-center gap-2 rounded-xl bg-slate-50 border border-slate-200/60 p-1.5 pr-3 hover:bg-slate-100 transition-colors cursor-pointer select-none"
+                    className="flex items-center gap-2 rounded-xl bg-slate-50 border border-slate-200/60 p-1.5 pr-3 hover:bg-slate-100 transition-colors cursor-pointer select-none outline-none"
                   >
                     <div className="h-8 w-8 rounded-lg bg-[#0F766E] text-white flex items-center justify-center font-extrabold text-[13px] shadow-sm shadow-teal-700/10">
                       RK
@@ -316,13 +316,13 @@ export default function Navbar({ onNavigate = () => {}, currentPage = 'home' }) 
               <>
                 <button
                   onClick={() => { setIsAuthOpen(true); setAuthTab('login'); }}
-                  className="rounded-lg border border-[#0F766E] px-5 py-2 text-[14px] font-semibold text-[#0F766E] hover:bg-[#0F766E] hover:text-white transition-all duration-200 cursor-pointer"
+                  className="rounded-lg border border-[#0F766E] px-5 py-2 text-[14px] font-semibold text-[#0F766E] hover:bg-[#0F766E] hover:text-white transition-all duration-200 cursor-pointer outline-none"
                 >
                   Login
                 </button>
                 <button
                   onClick={() => { setIsAuthOpen(true); setAuthTab('register'); }}
-                  className="rounded-lg bg-[#0F766E] border border-transparent px-5 py-2 text-[14px] font-semibold text-white shadow-sm hover:bg-[#0c625c] transition-all duration-200 cursor-pointer"
+                  className="rounded-lg bg-[#0F766E] border border-transparent px-5 py-2 text-[14px] font-semibold text-white shadow-sm hover:bg-[#0c625c] transition-all duration-200 cursor-pointer outline-none"
                 >
                   Register
                 </button>
@@ -361,7 +361,7 @@ export default function Navbar({ onNavigate = () => {}, currentPage = 'home' }) 
                           key={subItem}
                           href={`#${subItem.toLowerCase().replace(/\s+/g, '-')}`}
                           onClick={() => setIsOpen(false)}
-                          className="block rounded-lg px-3 py-2 text-sm font-medium text-slate-600 hover:bg-slate-50 hover:text-[#0F766E] transition-colors"
+                          className="block rounded-lg px-3 py-2 text-sm font-medium text-slate-600 hover:bg-slate-50 hover:text-[#0F766E] transition-colors outline-none"
                         >
                           {subItem}
                         </a>
@@ -394,7 +394,7 @@ export default function Navbar({ onNavigate = () => {}, currentPage = 'home' }) 
                       onNavigate('home');
                     }
                   }}
-                  className={`block rounded-lg px-3 py-2 text-base font-semibold transition-colors ${
+                  className={`block rounded-lg px-3 py-2 text-base font-semibold transition-colors outline-none ${
                     isActive
                       ? 'bg-teal-50 text-[#0F766E]'
                       : 'text-slate-800 hover:bg-slate-50 hover:text-[#0F766E]'
@@ -415,7 +415,7 @@ export default function Navbar({ onNavigate = () => {}, currentPage = 'home' }) 
                   onNavigate('become-host');
                   setIsOpen(false);
                 }}
-                className="w-full rounded-xl border border-[#0F766E] py-3 text-center text-sm font-semibold text-[#0F766E] hover:bg-[#0F766E] hover:text-white transition-all duration-200 cursor-pointer"
+                className="w-full rounded-xl border border-[#0F766E] py-3 text-center text-sm font-semibold text-[#0F766E] hover:bg-[#0F766E] hover:text-white transition-all duration-200 cursor-pointer outline-none"
               >
                 Become a Host
               </button>
@@ -437,7 +437,7 @@ export default function Navbar({ onNavigate = () => {}, currentPage = 'home' }) 
                     setIsOpen(false);
                     onNavigate('my-bookings');
                   }}
-                  className="w-full rounded-xl border border-slate-200 py-3 text-center text-sm font-semibold text-slate-700 hover:bg-slate-50 transition-colors"
+                  className="w-full rounded-xl border border-slate-200 py-3 text-center text-sm font-semibold text-slate-700 hover:bg-slate-50 transition-colors outline-none"
                 >
                   My Bookings
                 </button>
@@ -446,7 +446,7 @@ export default function Navbar({ onNavigate = () => {}, currentPage = 'home' }) 
                     setIsOpen(false);
                     onNavigate('become-host');
                   }}
-                  className="w-full rounded-xl border border-slate-200 py-3 text-center text-sm font-semibold text-slate-700 hover:bg-slate-50 transition-colors"
+                  className="w-full rounded-xl border border-slate-200 py-3 text-center text-sm font-semibold text-slate-700 hover:bg-slate-50 transition-colors outline-none"
                 >
                   Host Dashboard
                 </button>
@@ -455,7 +455,7 @@ export default function Navbar({ onNavigate = () => {}, currentPage = 'home' }) 
                     setIsLoggedIn(false);
                     setIsOpen(false);
                   }}
-                  className="w-full rounded-xl border border-red-250 hover:bg-red-50/50 py-3 text-center text-sm font-semibold text-red-600 transition-colors"
+                  className="w-full rounded-xl border border-red-250 hover:bg-red-50/50 py-3 text-center text-sm font-semibold text-red-600 transition-colors outline-none"
                 >
                   Logout
                 </button>
@@ -464,13 +464,13 @@ export default function Navbar({ onNavigate = () => {}, currentPage = 'home' }) 
               <>
                 <button
                   onClick={() => { setIsAuthOpen(true); setAuthTab('login'); setIsOpen(false); }}
-                  className="w-full rounded-xl border border-[#0F766E] py-3 text-center text-sm font-semibold text-[#0F766E] hover:bg-[#0F766E] hover:text-white transition-all duration-200 cursor-pointer"
+                  className="w-full rounded-xl border border-[#0F766E] py-3 text-center text-sm font-semibold text-[#0F766E] hover:bg-[#0F766E] hover:text-white transition-all duration-200 cursor-pointer outline-none"
                 >
                   Login
                 </button>
                 <button
                   onClick={() => { setIsAuthOpen(true); setAuthTab('register'); setIsOpen(false); }}
-                  className="w-full rounded-xl bg-[#0F766E] py-3 text-center text-sm font-semibold text-white shadow-md hover:bg-[#0c625c] transition-all cursor-pointer"
+                  className="w-full rounded-xl bg-[#0F766E] py-3 text-center text-sm font-semibold text-white shadow-md hover:bg-[#0c625c] transition-all cursor-pointer outline-none"
                 >
                   Register
                 </button>

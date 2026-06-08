@@ -531,7 +531,7 @@ export default function Adventures() {
       `}</style>
 
       {/* 1. HERO SECTION WITH ACCENT HEADER */}
-      <section className="relative w-full h-[360px] sm:h-[380px] lg:h-[420px] flex items-center bg-[#F1F5F9]/30">
+      <section className="relative w-full h-[360px] sm:h-[380px] lg:h-[420px] flex items-center ">
         {/* Background Image and clean container crop */}
         <div className="absolute inset-0 z-0 overflow-hidden">
           <img 
@@ -685,20 +685,8 @@ export default function Adventures() {
       </section>
 
       {/* 2. ACTIVITY QUICK LINK CATEGORIES BAR */}
-      <section className="w-full bg-white pt-20 pb-8 border-b border-slate-100/85 relative">
-        <div className="max-w-[1760px] mx-auto px-4 sm:px-8 lg:px-12 relative group/nav">
-          {/* Scroll Left Button */}
-          <button 
-            onClick={() => {
-              if (scrollRef.current) {
-                scrollRef.current.scrollBy({ left: -260, behavior: 'smooth' });
-              }
-            }}
-            className="absolute left-1 sm:left-4 lg:left-6 top-[42%] -translate-y-1/2 z-10 bg-slate-900 hover:bg-black text-white w-5 h-11 rounded-lg flex items-center justify-center cursor-pointer shadow-md transition-all active:scale-95"
-          >
-            <ChevronLeft className="w-4 h-4 stroke-[3.5]" />
-          </button>
-
+      <section className="w-full bg-white pt-20 pb-8 border-b border-slate-100/85">
+        <div className="max-w-[1760px] mx-auto px-4 sm:px-8 lg:px-12">
           <div 
             ref={scrollRef}
             className="flex items-center justify-start gap-4 overflow-x-auto hide-scrollbar pb-2 select-none"
@@ -747,18 +735,6 @@ export default function Adventures() {
               <span className="text-[12px] font-extrabold tracking-tight text-center px-1 leading-none">More</span>
             </button>
           </div>
-
-          {/* Scroll Right Button */}
-          <button 
-            onClick={() => {
-              if (scrollRef.current) {
-                scrollRef.current.scrollBy({ left: 260, behavior: 'smooth' });
-              }
-            }}
-            className="absolute right-1 sm:right-4 lg:right-6 top-[42%] -translate-y-1/2 z-10 bg-slate-900 hover:bg-black text-white w-5 h-11 rounded-lg flex items-center justify-center cursor-pointer shadow-md transition-all active:scale-95"
-          >
-            <ChevronRight className="w-4 h-4 stroke-[3.5]" />
-          </button>
         </div>
       </section>
 
