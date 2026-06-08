@@ -9,6 +9,7 @@ import RentHome from './rent/RentHome';
 import RentResults from './rent/RentResults';
 import RentDetail from './rent/RentDetail';
 import FoodSpots from './foodspot/FoodSpots';
+import Adventures from './adventures/Adventures';
 import './App.css';
 
 // ─── Search transition overlay ──────────────────────────────────────────────
@@ -154,6 +155,8 @@ function App() {
         <RentDetail vehicle={selectedVehicle} searchParams={rentalSearchParams} onBack={() => navigateToPage('rent-results')} onNavigate={navigateToPage} />
       ) : currentPage === 'food-spots' ? (
         <FoodSpots />
+      ) : currentPage === 'adventures' ? (
+        <Adventures />
       ) : (
         <BecomeHost onBackToHome={() => navigateToPage('home')} />
       )}

@@ -70,6 +70,8 @@ export default function Navbar({ onNavigate = () => {}, currentPage = 'home' }) 
       setActiveMenu('Rentals');
     } else if (currentPage === 'food-spots') {
       setActiveMenu('Food Spots');
+    } else if (currentPage === 'adventures') {
+      setActiveMenu('Adventures');
     }
   }, [currentPage]);
 
@@ -209,6 +211,8 @@ export default function Navbar({ onNavigate = () => {}, currentPage = 'home' }) 
                       onNavigate('rent-home');
                     } else if (item.name === 'Food Spots') {
                       onNavigate('food-spots');
+                    } else if (item.name === 'Adventures') {
+                      onNavigate('adventures');
                     } else {
                       onNavigate('home');
                     }
@@ -384,6 +388,8 @@ export default function Navbar({ onNavigate = () => {}, currentPage = 'home' }) 
                       onNavigate('rent-home');
                     } else if (item.name === 'Food Spots') {
                       onNavigate('food-spots');
+                    } else if (item.name === 'Adventures') {
+                      onNavigate('adventures');
                     } else {
                       onNavigate('home');
                     }

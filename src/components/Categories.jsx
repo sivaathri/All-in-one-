@@ -73,6 +73,8 @@ export default function Categories({ onNavigate = () => {} }) {
                   onNavigate('stays-results');
                 } else if (cat.title === 'Bike Rental' || cat.title === 'Car Rental') {
                   onNavigate('rent-home');
+                } else if (cat.title === 'Adventures') {
+                  onNavigate('adventures');
                 } else {
                   onNavigate('home');
                 }
