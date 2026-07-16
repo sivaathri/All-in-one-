@@ -25,6 +25,11 @@ body {
   padding: 0;
 }
 
+/* Force standard elements to inherit font family */
+input, select, textarea, button {
+  font-family: inherit;
+}
+
 /* Custom scrollbar hiding utilities */
 .no-scrollbar::-webkit-scrollbar {
   display: none;

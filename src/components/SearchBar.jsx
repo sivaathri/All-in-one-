@@ -155,13 +155,13 @@ export default function SearchBar({ onSearch, isModifySearch }) {
     <div className={isModifySearch ? "w-full" : "w-full max-w-6xl"}>
       <form
         onSubmit={handleSearch}
-        className="w-full rounded-2xl bg-white py-4 pl-4 pr-4 shadow-xl border border-slate-100/80 flex flex-col lg:flex-row items-center gap-4 lg:gap-0 lg:divide-x lg:divide-slate-200/50"
+        className="w-full rounded-2xl bg-white py-4 pl-4 pr-4 border border-slate-100/80 flex flex-col lg:flex-row items-center gap-4 lg:gap-0 lg:divide-x lg:divide-slate-200/50"
       >
         {/* Search Input */}
         <div ref={locationRef} className="w-full lg:w-[35%] pl-1.5 pr-5 py-1.5 flex items-center gap-3 relative">
-          <Search className="h-5 w-5 text-slate-800 shrink-0 stroke-[2.2]" />
+          <Search className="h-5 w-5 text-slate-400 shrink-0 stroke-[2.2]" />
           <div className="flex flex-col w-full text-left">
-            <span className="text-[13px] font-bold text-slate-855 leading-none">Where Are You Going?</span>
+            <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider leading-none">Where Are You Going?</span>
             <input
               type="text"
               placeholder="Pondicherry.."
@@ -171,7 +171,7 @@ export default function SearchBar({ onSearch, isModifySearch }) {
                 setIsLocationOpen(true);
               }}
               onFocus={() => setIsLocationOpen(true)}
-              className="text-[13px] font-semibold text-slate-700 placeholder-slate-400 outline-none w-full bg-transparent mt-1.5 leading-none"
+              className="text-[14px] font-semibold text-slate-800 placeholder-slate-400 outline-none w-full bg-transparent mt-1 leading-none"
             />
           </div>
 
@@ -212,11 +212,11 @@ export default function SearchBar({ onSearch, isModifySearch }) {
           onClick={() => setIsCalendarOpen(true)}
           className="check-in-trigger w-full lg:w-[20%] px-5 py-1.5 flex items-center gap-3.5 relative cursor-pointer hover:bg-slate-50/50 rounded-xl transition-colors"
         >
-          <Calendar className="h-5 w-5 text-slate-855 shrink-0 stroke-[2.2]" />
+          <Calendar className="h-5 w-5 text-slate-400 shrink-0 stroke-[2.2]" />
           <div className="flex flex-col w-full text-left">
-            <span className="text-[13px] font-bold text-slate-855 leading-none">Check-in</span>
-            <div className="mt-1.5 leading-none">
-              <span className="text-[13px] font-semibold text-slate-700 block">
+            <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider leading-none">Check-in</span>
+            <div className="mt-1 leading-none">
+              <span className="text-[14px] font-semibold text-slate-800 block">
                 {formatDateDisplay(checkIn)}
               </span>
             </div>
@@ -307,11 +307,11 @@ export default function SearchBar({ onSearch, isModifySearch }) {
           onClick={() => setIsCalendarOpen(true)}
           className="check-out-trigger w-full lg:w-[20%] px-5 py-1.5 flex items-center gap-3.5 relative cursor-pointer hover:bg-slate-50/50 rounded-xl transition-colors"
         >
-          <Calendar className="h-5 w-5 text-slate-855 shrink-0 stroke-[2.2]" />
+          <Calendar className="h-5 w-5 text-slate-400 shrink-0 stroke-[2.2]" />
           <div className="flex flex-col w-full text-left">
-            <span className="text-[13px] font-bold text-slate-855 leading-none">Check-out</span>
-            <div className="mt-1.5 leading-none">
-              <span className="text-[13px] font-semibold text-slate-700 block">
+            <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider leading-none">Check-out</span>
+            <div className="mt-1 leading-none">
+              <span className="text-[14px] font-semibold text-slate-800 block">
                 {formatDateDisplay(checkOut)}
               </span>
             </div>
@@ -320,14 +320,14 @@ export default function SearchBar({ onSearch, isModifySearch }) {
 
         {/* Guests and Rooms Selection */}
         <div ref={dropdownRef} className="w-full lg:w-[25%] px-5 py-1.5 flex items-center gap-3.5 relative">
-          <User className="h-5 w-5 text-slate-855 shrink-0 stroke-[2.2]" />
+          <User className="h-5 w-5 text-slate-400 shrink-0 stroke-[2.2]" />
           <div className="flex flex-col w-full text-left cursor-pointer" onClick={() => setIsGuestsOpen(!isGuestsOpen)}>
-            <span className="text-[13px] font-bold text-slate-855 leading-none">Guests & Rooms</span>
-            <div className="flex items-center justify-between mt-1.5 leading-none">
-              <span className="text-[13px] font-semibold text-slate-700 truncate pr-2">
+            <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider leading-none">Guests & Rooms</span>
+            <div className="flex items-center justify-between mt-1 leading-none">
+              <span className="text-[14px] font-semibold text-slate-800 truncate pr-2">
                 {guests}
               </span>
-              <ChevronDown className="h-3.5 w-3.5 text-slate-800 shrink-0 stroke-[2.5]" />
+              <ChevronDown className="h-3.5 w-3.5 text-slate-500 shrink-0 stroke-[2.5]" />
             </div>
           </div>
 
@@ -441,11 +441,11 @@ export default function SearchBar({ onSearch, isModifySearch }) {
         <div className="w-full lg:w-auto p-1.5 shrink-0 pl-4 lg:pl-3">
           <button
             type="submit"
-            className="w-full lg:w-auto rounded-xl bg-[#0F766E] px-8 py-3 text-sm font-semibold text-white shadow-sm hover:bg-[#0c625c] active:scale-95 transition-all duration-200 cursor-pointer flex items-center justify-center gap-2"
+            className="w-full lg:w-auto rounded-xl bg-[#0F766E] px-8 py-3.5 text-xs font-bold text-white shadow-sm hover:bg-[#0c625c] active:scale-95 transition-all duration-200 cursor-pointer flex items-center justify-center gap-2 uppercase tracking-wider"
           >
             {isModifySearch ? (
               <>
-                <Search className="h-4 w-4 text-white stroke-[2.5]" />
+                <Search className="h-3.5 w-3.5 text-white stroke-[2.5]" />
                 <span>Modify Search</span>
               </>
             ) : (

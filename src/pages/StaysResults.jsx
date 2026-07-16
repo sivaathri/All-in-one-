@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Star, MapPin, Heart, ChevronLeft, ChevronRight, ChevronDown, Check, ShieldCheck, Headphones, Wifi, Waves, Coffee, Car, Wind, Sprout, X, SlidersHorizontal } from 'lucide-react';
 import SearchBar from '../components/SearchBar';
 import puducherryMap from '../assets/puducherry_map.png';
@@ -154,20 +154,20 @@ const INITIAL_STAYS = [
 const getAmenityIcon = (name) => {
   switch (name) {
     case 'Free Wi-Fi':
-      return <Wifi className="h-3.5 w-3.5 text-slate-450 shrink-0 stroke-[2.2]" />;
+      return <Wifi className="h-3.5 w-3.5 text-slate-400 shrink-0 stroke-[2.2]" />;
     case 'Pool':
-      return <Waves className="h-3.5 w-3.5 text-slate-450 shrink-0 stroke-[2.2]" />;
+      return <Waves className="h-3.5 w-3.5 text-slate-400 shrink-0 stroke-[2.2]" />;
     case 'Breakfast':
     case 'Breakfast Included':
-      return <Coffee className="h-3.5 w-3.5 text-slate-450 shrink-0 stroke-[2.2]" />;
+      return <Coffee className="h-3.5 w-3.5 text-slate-400 shrink-0 stroke-[2.2]" />;
     case 'Parking':
     case 'Free Parking':
-      return <Car className="h-3.5 w-3.5 text-slate-450 shrink-0 stroke-[2.2]" />;
+      return <Car className="h-3.5 w-3.5 text-slate-400 shrink-0 stroke-[2.2]" />;
     case 'AC':
     case 'Air Conditioning':
-      return <Wind className="h-3.5 w-3.5 text-slate-450 shrink-0 stroke-[2.2]" />;
+      return <Wind className="h-3.5 w-3.5 text-slate-400 shrink-0 stroke-[2.2]" />;
     case 'Garden':
-      return <Sprout className="h-3.5 w-3.5 text-slate-450 shrink-0 stroke-[2.2]" />;
+      return <Sprout className="h-3.5 w-3.5 text-slate-400 shrink-0 stroke-[2.2]" />;
     default:
       return null;
   }
@@ -203,6 +203,18 @@ export default function StaysResults({ searchParams, onSearch }) {
   const [sortBy, setSortBy] = useState("Recommended");
   const [selectedStay, setSelectedStay] = useState(null);
   const [showMobileFilters, setShowMobileFilters] = useState(false);
+  const [isSortOpen, setIsSortOpen] = useState(false);
+  const sortRef = useRef(null);
+
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (sortRef.current && !sortRef.current.contains(event.target)) {
+        setIsSortOpen(false);
+      }
+    };
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, []);
 
   // Sync selected stay details view with browser history for back button support
   useEffect(() => {
@@ -427,7 +439,7 @@ export default function StaysResults({ searchParams, onSearch }) {
       `}</style>
       
       {/* Top Banner containing Modify Search bar */}
-      <div className={`w-full bg-[#F1F5F9]/60 py-6 border-b border-slate-200/50 px-4 sm:px-6 lg:px-6 sr-anim sr-fade-up sr-d0${mounted ? ' sr-in' : ''}`}>
+      <div className={`relative z-30 w-full bg-[#F1F5F9]/60 py-6 border-b border-slate-200/50 px-4 sm:px-6 lg:px-6 sr-anim sr-fade-up sr-d0${mounted ? ' sr-in' : ''}`}>
         <div className="max-w-[1760px] mx-auto w-full">
           <SearchBar onSearch={onSearch} isModifySearch={true} />
         </div>
@@ -542,7 +554,7 @@ export default function StaysResults({ searchParams, onSearch }) {
                           </svg>
                         )}
                       </div>
-                      <span className="text-[13.5px] font-semibold text-slate-650 group-hover:text-slate-900 leading-none">
+                      <span className="text-[13.5px] font-semibold text-slate-600 group-hover:text-slate-900 leading-none">
                         {type.label}
                       </span>
                     </div>
@@ -580,7 +592,7 @@ export default function StaysResults({ searchParams, onSearch }) {
                       </div>
 
                       {/* Custom Gold Stars */}
-                      <div className="flex items-center gap-0.5 text-amber-555 shrink-0">
+                      <div className="flex items-center gap-0.5 text-amber-500 shrink-0">
                         {[...Array(5)].map((_, i) => {
                           const starsCount = Math.floor(rating.stars);
                           const hasHalf = rating.stars % 1 !== 0;
@@ -601,7 +613,7 @@ export default function StaysResults({ searchParams, onSearch }) {
                         })}
                       </div>
 
-                      <span className="text-[13.5px] font-semibold text-slate-650 group-hover:text-slate-900 leading-none">
+                      <span className="text-[13.5px] font-semibold text-slate-600 group-hover:text-slate-900 leading-none">
                         {rating.label}
                       </span>
                     </div>
@@ -638,7 +650,7 @@ export default function StaysResults({ searchParams, onSearch }) {
                           </svg>
                         )}
                       </div>
-                      <span className="text-[13.5px] font-semibold text-slate-650 group-hover:text-slate-900 leading-none">
+                      <span className="text-[13.5px] font-semibold text-slate-600 group-hover:text-slate-900 leading-none">
                         {amenity.label}
                       </span>
                     </div>
@@ -656,12 +668,12 @@ export default function StaysResults({ searchParams, onSearch }) {
           <main className="md:col-span-9 lg:col-span-6 xl:col-span-7 space-y-6">
             
             {/* Header Result Counts */}
-            <div className={`flex flex-col sm:flex-row justify-between sm:items-center gap-4 bg-white rounded-2xl border border-slate-200 p-5 shadow-xs sr-anim sr-fade-up sr-d2${mounted ? ' sr-in' : ''}`}>
+            <div className={`relative z-20 flex flex-col sm:flex-row justify-between sm:items-center gap-4 bg-white rounded-2xl border border-slate-200 p-5 shadow-xs sr-anim sr-fade-up sr-d2${mounted ? ' sr-in' : ''}`}>
               <div className="text-left">
-                <h2 className="text-xl font-extrabold text-slate-900 tracking-tight">
+                <h2 className="text-xl font-bold text-slate-900 tracking-tight">
                   120 Stays found in Pondicherry
                 </h2>
-                <p className="text-[11.5px] font-bold text-slate-450 mt-1">
+                <p className="text-[13px] font-medium text-slate-500 mt-1.5">
                   {formatDateString(searchParams?.checkIn)} - {formatDateString(searchParams?.checkOut)} (4 Nights) • {searchParams?.guests || '3 Adults, 1 Child, 1 Room'}
                 </p>
               </div>
@@ -678,19 +690,44 @@ export default function StaysResults({ searchParams, onSearch }) {
                   <span>Filters</span>
                 </button>
 
-                <span className="text-[12px] font-bold text-slate-450 whitespace-nowrap">Sort by:</span>
-                <div className="relative">
-                  <select
-                    value={sortBy}
-                    onChange={(e) => setSortBy(e.target.value)}
-                    className="appearance-none bg-white border border-slate-200 text-slate-700 text-[12px] font-bold px-3 pr-8 py-1.5 rounded-xl outline-none focus:border-[#0F766E] cursor-pointer"
+                <span className="text-[13px] font-medium text-slate-500 whitespace-nowrap">Sort by:</span>
+                <div ref={sortRef} className="relative">
+                  <button
+                    type="button"
+                    onClick={() => setIsSortOpen(!isSortOpen)}
+                    className="flex items-center gap-2 bg-white border border-slate-200 text-slate-800 text-[13px] font-semibold px-4 py-2 rounded-xl outline-none focus:border-[#0F766E] hover:bg-slate-50/50 transition-colors cursor-pointer shadow-2xs min-w-[175px] justify-between"
                   >
-                    <option>Recommended</option>
-                    <option>Price: Low to High</option>
-                    <option>Price: High to Low</option>
-                    <option>Rating: High to Low</option>
-                  </select>
-                  <ChevronDown className="absolute right-2.5 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-slate-500 pointer-events-none stroke-[2.5]" />
+                    <span>{sortBy}</span>
+                    <ChevronDown className={`h-3.5 w-3.5 text-slate-500 transition-transform duration-200 stroke-[2.5] ${isSortOpen ? 'rotate-180' : ''}`} />
+                  </button>
+                  
+                  {isSortOpen && (
+                    <div className="absolute right-0 top-full mt-1.5 w-[190px] rounded-xl border border-slate-200/80 bg-white py-1.5 shadow-lg z-50 overflow-hidden text-left">
+                      {[
+                        "Recommended",
+                        "Price: Low to High",
+                        "Price: High to Low",
+                        "Rating: High to Low"
+                      ].map((option) => (
+                        <button
+                          key={option}
+                          type="button"
+                          onClick={() => {
+                            setSortBy(option);
+                            setIsSortOpen(false);
+                          }}
+                          className={`w-full px-4 py-2.5 text-[13px] font-semibold transition-colors text-left flex items-center justify-between hover:bg-slate-50 cursor-pointer ${
+                            sortBy === option ? 'text-[#0F766E] bg-teal-50/30' : 'text-slate-700'
+                          }`}
+                        >
+                          <span>{option}</span>
+                          {sortBy === option && (
+                            <Check className="h-3.5 w-3.5 text-[#0F766E] stroke-[3.5]" />
+                          )}
+                        </button>
+                      ))}
+                    </div>
+                  )}
                 </div>
               </div>
             </div>
@@ -793,18 +830,18 @@ export default function StaysResults({ searchParams, onSearch }) {
 
                         {/* Rating Badges (Order: Number first, then Star icon) */}
                         <div className="flex items-center gap-2 mt-1.5">
-                          <span className="flex items-center gap-1 bg-[#15803D] text-white text-[11px] font-black px-1.5 py-0.5 rounded-md">
+                          <span className="flex items-center gap-1 bg-[#15803D] text-white text-[11px] font-bold px-1.5 py-0.5 rounded-md">
                             {stay.rating}
                             <Star className="h-3 w-3 fill-current text-white" />
                           </span>
-                          <span className="text-[12px] font-semibold text-slate-450">
+                          <span className="text-[12.5px] font-medium text-slate-400">
                             ({stay.reviewsCount} reviews)
                           </span>
                         </div>
 
                         {/* Location */}
                         <div className="flex items-center gap-1.5 text-[12.5px] font-medium text-slate-500 mt-2.5">
-                          <MapPin className="h-4 w-4 text-slate-450 shrink-0 stroke-[2.2]" />
+                          <MapPin className="h-4 w-4 text-slate-400 shrink-0 stroke-[2.2]" />
                           <span>{stay.location}</span>
                         </div>
 
@@ -866,7 +903,7 @@ export default function StaysResults({ searchParams, onSearch }) {
                         <span className="text-[11px] font-bold text-slate-600 block">
                           ₹{stay.totalPrice.toLocaleString()} for 4 nights
                         </span>
-                        <span className="text-[10.5px] font-semibold text-slate-450 block mt-0.5">
+                        <span className="text-[11px] font-medium text-slate-400 block mt-0.5">
                           + ₹{stay.taxes.toLocaleString()} taxes & fees
                         </span>
 

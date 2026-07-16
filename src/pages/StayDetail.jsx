@@ -1615,10 +1615,10 @@ export default function StayDetail({ stay, searchParams, onBack, isLiked, onTogg
                 )}
 
                 {/* Price Details */}
-                <div className="space-y-3 text-[13px] font-semibold text-slate-650">
+                <div className="space-y-3 text-[13px] font-semibold text-slate-500">
                   <div className="flex justify-between">
                     <span>Price ({hasSelectedRooms ? '3 nights' : '0 nights'})</span>
-                    <span className="text-slate-850 font-bold">
+                    <span className="text-slate-800 font-bold">
                       ₹{hasSelectedRooms ? totalSelectedBase.toLocaleString() : '0'}
                     </span>
                   </div>
@@ -1627,7 +1627,7 @@ export default function StayDetail({ stay, searchParams, onBack, isLiked, onTogg
                       Taxes & Fees
                       <Info className="h-3.5 w-3.5 text-slate-400 cursor-help" title="Government GST and local resort surcharges" />
                     </span>
-                    <span className="text-slate-855 font-bold">
+                    <span className="text-slate-800 font-bold">
                       ₹{hasSelectedRooms ? totalSelectedTaxes.toLocaleString() : '0'}
                     </span>
                   </div>
@@ -1638,7 +1638,7 @@ export default function StayDetail({ stay, searchParams, onBack, isLiked, onTogg
                       ₹{hasSelectedRooms ? totalSelectedGrand.toLocaleString() : '0'}
                     </span>
                   </div>
-                  <span className="text-[10.5px] text-slate-455 font-semibold block -mt-1 leading-none text-right">
+                  <span className="text-[10.5px] text-slate-400 font-semibold block -mt-1 leading-none text-right">
                     Inclusive of all taxes
                   </span>
                 </div>
