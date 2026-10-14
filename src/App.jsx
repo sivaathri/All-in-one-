@@ -155,7 +155,7 @@ function App() {
         <RentDetail vehicle={selectedVehicle} searchParams={rentalSearchParams} onBack={() => navigateToPage('rent-results')} onNavigate={navigateToPage} />
       ) : currentPage === 'food-spots' ? (
         <FoodSpots />
-      ) : currentPage === 'adventures' ? (
+      ) : currentPage === 'adventures' || currentPage === 'activities' ? (
         <Adventures />
       ) : (
         <BecomeHost onBackToHome={() => navigateToPage('home')} />

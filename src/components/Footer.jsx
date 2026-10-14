@@ -25,7 +25,7 @@ export default function Footer({ onNavigate = () => {} }) {
               </div>
             </div>
             <p className="text-[11.5px] font-semibold text-slate-500 leading-relaxed pt-1">
-              Your ultimate travel companion for stays, rentals, food, adventures and more - all in one place.
+              Your ultimate travel companion for stays, rentals, food, activities and more - all in one place.
             </p>
             
             {/* Social Icons */}
@@ -68,7 +68,7 @@ export default function Footer({ onNavigate = () => {} }) {
               <li><a href="#stays" onClick={() => onNavigate('stays-results')} className="hover:text-[#0F766E] transition-colors">Stays</a></li>
               <li><a href="#bike-rental" onClick={() => onNavigate('rent-home')} className="hover:text-[#0F766E] transition-colors">Rentals</a></li>
               <li><a href="#food-spots" onClick={() => onNavigate('food-spots')} className="hover:text-[#0F766E] transition-colors">Food Spots</a></li>
-              <li><a href="#adventures" onClick={() => onNavigate('home')} className="hover:text-[#0F766E] transition-colors">Adventures</a></li>
+              <li><a href="#activities" onClick={() => onNavigate('activities')} className="hover:text-[#0F766E] transition-colors">Activities</a></li>
               <li><a href="#attractions" className="hover:text-[#0F766E] transition-colors">Top Attractions</a></li>
               <li><a href="#guides" className="hover:text-[#0F766E] transition-colors">Travel Guides</a></li>
             </ul>

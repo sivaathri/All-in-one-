@@ -114,7 +114,7 @@ const INITIAL_ADVENTURES = [
 ];
 
 const CATEGORIES = [
-  { name: "All Adventures" },
+  { name: "All Activities" },
   { name: "Water Sports" },
   { name: "Trekking" },
   { name: "Paragliding" },
@@ -129,7 +129,7 @@ const getCategoryIcon = (name, isSelected) => {
   const color = isSelected ? "#0B756B" : "#475569";
   
   switch (name) {
-    case "All Adventures":
+    case "All Activities":
       return (
         <svg width="28" height="28" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
           <rect x="4" y="4" width="7" height="7" rx="2.5" stroke={color} strokeWidth="2.5" />
@@ -341,7 +341,7 @@ const getCategoryIcon = (name, isSelected) => {
 
 export default function Adventures() {
   // State variables for filter categories and values
-  const [selectedCategory, setSelectedCategory] = useState('All Adventures');
+  const [selectedCategory, setSelectedCategory] = useState('All Activities');
   const [searchQuery, setSearchQuery] = useState('');
   const [mapSearch, setMapSearch] = useState('');
   const [searchAsMove, setSearchAsMove] = useState(true);
@@ -418,7 +418,7 @@ export default function Adventures() {
     setRatingFilter('All Ratings');
     setSearchQuery('');
     setMapSearch('');
-    setSelectedCategory('All Adventures');
+    setSelectedCategory('All Activities');
   };
 
   const toggleWishlist = (id) => {
@@ -436,7 +436,7 @@ export default function Adventures() {
     }
 
     // 2. Categories Pill Selection
-    if (selectedCategory !== 'All Adventures') {
+    if (selectedCategory !== 'All Activities') {
       if (item.category !== selectedCategory) {
         // loose match if category differs
         if (selectedCategory === 'Water Sports' && item.category !== 'Water Sports' && item.category !== 'Scuba Diving') return false;
@@ -577,7 +577,7 @@ export default function Adventures() {
           <h1 className="text-4xl sm:text-5xl lg:text-[54px] font-black tracking-tight leading-[1.12] text-[#0D233A] max-w-xl">
             Find Your Next <br />
             <span style={{ fontFamily: "'Caveat', 'Playball', cursive" }} className="text-[#0B756B] text-5xl sm:text-6xl lg:text-[72px] relative inline-block mt-1.5 font-normal tracking-wide">
-              Adventure
+              Activities
               {/* Highlight sparkles rays doodle */}
               <svg className="absolute right-[-32px] top-[14px] w-6 h-6 text-[#0B756B]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.8" strokeLinecap="round">
                 <line x1="4" y1="12" x2="10" y2="12" />
@@ -587,7 +587,7 @@ export default function Adventures() {
             </span>
           </h1>
           <p className="mt-4 text-[14px] sm:text-[15.5px] font-bold text-slate-650 max-w-md leading-relaxed">
-            Discover thrilling experiences and unforgettable adventures around you.
+            Discover thrilling experiences and unforgettable activities around you.
           </p>
         </div>
 
@@ -628,7 +628,7 @@ export default function Adventures() {
                   type="text" 
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
-                  placeholder="Search adventures, activities..."
+                  placeholder="Search activities, experiences..."
                   className="text-[12px] font-medium text-slate-650 bg-transparent outline-none w-full placeholder-slate-400/80 mt-0.5"
                 />
               </div>
@@ -838,7 +838,7 @@ export default function Adventures() {
               
               {/* Extra "More" Pill */}
               <button
-                onClick={() => setSelectedCategory('All Adventures')}
+                onClick={() => setSelectedCategory('All Activities')}
                 className="flex flex-col items-center justify-center min-w-[108px] h-[92px] px-3 rounded-2xl border border-slate-200 bg-white text-slate-700 hover:border-slate-350 hover:bg-slate-50/50 transition-all duration-300"
               >
                 <span className="mb-2">
@@ -1097,8 +1097,8 @@ export default function Adventures() {
                 <div className="flex flex-wrap items-center justify-between gap-4">
                   <h3 className="text-[17px] font-extrabold text-slate-800">
                     {sortedAdventures.length === INITIAL_ADVENTURES.length 
-                      ? '128+ Adventures Found' 
-                      : `${sortedAdventures.length} Adventure${sortedAdventures.length === 1 ? '' : 's'} Found`}
+                      ? '128+ Activities Found' 
+                      : `${sortedAdventures.length} Activit${sortedAdventures.length === 1 ? 'y' : 'ies'} Found`}
                   </h3>
                   
                   <div className="flex items-center gap-3">
@@ -1167,7 +1167,7 @@ export default function Adventures() {
                 {sortedAdventures.length === 0 ? (
                   <div className="bg-white rounded-3xl border border-slate-200 border-dashed py-16 px-6 text-center flex flex-col items-center justify-center">
                     <Compass className="h-12 w-12 text-slate-350 stroke-[1.5] mb-3" />
-                    <h4 className="text-base font-bold text-slate-800">No Adventures Match Filters</h4>
+                    <h4 className="text-base font-bold text-slate-800">No Activities Match Filters</h4>
                     <p className="text-xs text-slate-500 mt-1 max-w-[280px]">Try resetting filters or adjusting search keyword queries.</p>
                     <button 
                       onClick={handleResetFilters}
@@ -1511,9 +1511,9 @@ export default function Adventures() {
               
               {/* Header row */}
               <div className="flex items-center justify-between">
-                <h4 className="text-[15px] font-black text-slate-800 tracking-tight">Popular Adventures This Week</h4>
+                <h4 className="text-[15px] font-black text-slate-800 tracking-tight">Popular Activities This Week</h4>
                 <button 
-                  onClick={() => setSelectedCategory('All Adventures')}
+                  onClick={() => setSelectedCategory('All Activities')}
                   className="text-[12px] font-black text-[#0B756B] hover:text-[#095f57] hover:underline flex items-center gap-1.5 transition-colors cursor-pointer"
                 >
                   <span>View All</span>

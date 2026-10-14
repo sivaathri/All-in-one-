@@ -70,8 +70,8 @@ export default function Navbar({ onNavigate = () => {}, currentPage = 'home' }) 
       setActiveMenu('Rentals');
     } else if (currentPage === 'food-spots') {
       setActiveMenu('Food Spots');
-    } else if (currentPage === 'adventures') {
-      setActiveMenu('Adventures');
+    } else if (currentPage === 'adventures' || currentPage === 'activities') {
+      setActiveMenu('Activities');
     }
   }, [currentPage]);
 
@@ -121,7 +121,7 @@ export default function Navbar({ onNavigate = () => {}, currentPage = 'home' }) 
     { name: 'Stays', path: '#stays', active: true },
     { name: 'Rentals', path: '#rentals' },
     { name: 'Food Spots', path: '#food' },
-    { name: 'Adventures', path: '#adventures' },
+    { name: 'Activities', path: '#activities' },
     { name: 'Taxi Booking', path: '#taxi' },
     { name: 'Services', path: '#services' },
     { name: 'Tour Packages', path: '#packages' }
@@ -211,8 +211,8 @@ export default function Navbar({ onNavigate = () => {}, currentPage = 'home' }) 
                       onNavigate('rent-home');
                     } else if (item.name === 'Food Spots') {
                       onNavigate('food-spots');
-                    } else if (item.name === 'Adventures') {
-                      onNavigate('adventures');
+                    } else if (item.name === 'Activities' || item.name === 'Adventures') {
+                      onNavigate('activities');
                     } else {
                       onNavigate('home');
                     }
@@ -388,8 +388,8 @@ export default function Navbar({ onNavigate = () => {}, currentPage = 'home' }) 
                       onNavigate('rent-home');
                     } else if (item.name === 'Food Spots') {
                       onNavigate('food-spots');
-                    } else if (item.name === 'Adventures') {
-                      onNavigate('adventures');
+                    } else if (item.name === 'Activities' || item.name === 'Adventures') {
+                      onNavigate('activities');
                     } else {
                       onNavigate('home');
                     }

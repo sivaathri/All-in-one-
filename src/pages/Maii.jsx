@@ -67,7 +67,7 @@ export default function Maii() {
     { name: 'Stays', href: '#stays' },
     { name: 'Rentals', href: '#rentals', },
     { name: 'Food Spots', href: '#food-spots' },
-    { name: 'Adventures', href: '#adventures' },
+    { name: 'Activities', href: '#activities' },
     { name: 'Taxi Booking', href: '#taxi-booking' },
     { name: 'Services', href: '#services', },
     { name: 'Tour Packages', href: '#tour-packages' }
@@ -79,7 +79,7 @@ export default function Maii() {
     { name: 'Bike Rental', icon: 'https://img.icons8.com/color/96/000000/bicycle.png', href: '#bike-rental' },
     { name: 'Car Rental', icon: 'https://img.icons8.com/color/96/000000/car--v1.png', href: '#car-rental' },
     { name: 'Food Spots', icon: 'https://img.icons8.com/color/96/000000/hamburger.png', href: '#food-spots' },
-    { name: 'Adventures', icon: 'https://img.icons8.com/color/96/000000/parachute.png', href: '#adventures' },
+    { name: 'Activities', icon: 'https://img.icons8.com/color/96/000000/parachute.png', href: '#activities' },
     { name: 'Taxi Booking', icon: 'https://img.icons8.com/color/96/000000/taxi.png', href: '#taxi-booking' },
     { name: 'Puncture Service', icon: 'https://img.icons8.com/color/96/000000/wheel.png', href: '#puncture-service' },
     { name: 'Mechanic Service', icon: 'https://img.icons8.com/color/96/000000/maintenance.png', href: '#mechanic-service' },
@@ -125,8 +125,8 @@ export default function Maii() {
       unit: 'for two'
     },
     {
-      id: 'adventure',
-      badge: 'Adventure',
+      id: 'activity',
+      badge: 'Activities',
       badgeClass: 'badge-blue',
       img: 'https://images.unsplash.com/photo-1520638515082-fdb9bc8259db?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=60',
       title: 'Paragliding Experience',
@@ -202,7 +202,7 @@ export default function Maii() {
       <section className="hero">
         <div className="hero-content">
           <h1 className="hero-title">Your Journey<br /><span className="highlight">Starts Here</span></h1>
-          <p className="hero-subtitle">Find the best stays, rentals, food, adventures<br />and more in one place.</p>
+          <p className="hero-subtitle">Find the best stays, rentals, food, activities<br />and more in one place.</p>
         </div>
 
         {/* Search Wrapper */}
@@ -215,7 +215,7 @@ export default function Maii() {
                 <strong>Search for anything</strong>
                 <input
                   type="text"
-                  placeholder="Rooms, Bikes, Food, Adventures..."
+                  placeholder="Rooms, Bikes, Food, Activities..."
                   className="search-input"
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}

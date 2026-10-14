@@ -28,7 +28,7 @@ export default function HeroSection({ onSearch }) {
             </span>
           </h1>
           <p className="text-sm sm:text-base font-medium text-slate-200/90 leading-relaxed max-w-md">
-            Find the best stays, rentals, food, adventures and more in one place.
+            Find the best stays, rentals, food, activities and more in one place.
           </p>
         </div>
 

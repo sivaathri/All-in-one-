@@ -49,7 +49,7 @@ export default function TrendingSection() {
       reviews: 75,
       price: 2999,
       pricePeriod: 'person',
-      badge: 'Adventure',
+      badge: 'Activities',
       image: 'https://images.unsplash.com/photo-1596838132731-3301c3fd4317?auto=format&fit=crop&w=600&q=80'
     },
     {
@@ -71,7 +71,7 @@ export default function TrendingSection() {
       reviews: 142,
       price: 3499,
       pricePeriod: 'person',
-      badge: 'Adventure',
+      badge: 'Activities',
       image: 'https://images.unsplash.com/photo-1544551763-46a013bb70d5?auto=format&fit=crop&w=600&q=80'
     },
     {
@@ -93,7 +93,7 @@ export default function TrendingSection() {
       reviews: 115,
       price: 1200,
       pricePeriod: 'session',
-      badge: 'Adventure',
+      badge: 'Activities',
       image: 'https://images.unsplash.com/photo-1502680390469-be75c86b636f?auto=format&fit=crop&w=600&q=80'
     },
     {

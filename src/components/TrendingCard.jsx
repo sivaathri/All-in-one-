@@ -14,6 +14,8 @@ export default function TrendingCard({ item }) {
       case 'must try':
         return 'bg-[#8B5CF6] text-white';
       case 'adventure':
+      case 'activity':
+      case 'activities':
         return 'bg-[#0066FF] text-white';
       case 'best seller':
         return 'bg-[#15803D] text-white';

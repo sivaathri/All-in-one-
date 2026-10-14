@@ -121,7 +121,7 @@ export default function HomeAdModal() {
                 </div>
                 <div className="text-right flex-1 max-w-[190px]">
                   <p className="text-[12.5px] font-extrabold text-slate-800 leading-snug">On Your First Booking</p>
-                  <p className="text-[10px] font-semibold text-slate-400 leading-snug mt-0.5">Across Stays, Rentals, Adventures & More</p>
+                  <p className="text-[10px] font-semibold text-slate-400 leading-snug mt-0.5">Across Stays, Rentals, Activities & More</p>
                 </div>
               </div>
 

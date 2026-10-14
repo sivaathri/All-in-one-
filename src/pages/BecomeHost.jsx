@@ -38,8 +38,8 @@ export default function BecomeHost({ onBackToHome }) {
       shadowColor: 'hover:shadow-[#EA580C]/5',
     },
     {
-      title: 'Adventure',
-      desc: 'List your adventure activities and experiences.',
+      title: 'Activities',
+      desc: 'List your activities, outdoor experiences and tours.',
       image: adventureImg,
       color: 'text-[#1D4ED8]',
       btnBg: 'bg-[#1D4ED8] hover:bg-[#1e40af]',

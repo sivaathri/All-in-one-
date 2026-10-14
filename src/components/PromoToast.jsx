@@ -5,7 +5,7 @@ const PROMOS = [
   {
     id: 1,
     emoji: '🔥',
-    title: 'Adventure Alert!',
+    title: 'Activity Alert!',
     desc: 'River Rafting in Coorg\nStarting at ₹1,499',
     cta: 'Book Now',
     image: 'https://images.unsplash.com/photo-1530866495561-507c9faab2ed?auto=format&fit=crop&w=120&q=80',

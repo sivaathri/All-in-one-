@@ -31,8 +31,8 @@ export default function Categories({ onNavigate = () => {} }) {
       image: catFoodImg
     },
     {
-      title: 'Adventures',
-      exploreLink: '#adventures',
+      title: 'Activities',
+      exploreLink: '#activities',
       image: catAdventureImg
     },
     {
@@ -73,8 +73,8 @@ export default function Categories({ onNavigate = () => {} }) {
                   onNavigate('stays-results');
                 } else if (cat.title === 'Bike Rental' || cat.title === 'Car Rental') {
                   onNavigate('rent-home');
-                } else if (cat.title === 'Adventures') {
-                  onNavigate('adventures');
+                } else if (cat.title === 'Activities' || cat.title === 'Adventures') {
+                  onNavigate('activities');
                 } else {
                   onNavigate('home');
                 }
