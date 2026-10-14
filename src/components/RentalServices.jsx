@@ -1,9 +1,19 @@
-import { ArrowRight } from 'lucide-react';
+import { ArrowRight, Check } from 'lucide-react';
 import bikerImg from '../assets/biker.png';
 import carrImg from '../assets/carr.png';
 
 /* ─── Panel ─────────────────────────────────────────────────────── */
-function RentalPanel({ title, subtitle, ctaText, bannerFrom, bannerTo, bgImage, onNavigate }) {
+function RentalPanel({ 
+  title, 
+  subtitle, 
+  description,
+  features = [],
+  ctaText, 
+  bannerFrom, 
+  bannerTo, 
+  bgImage, 
+  onNavigate 
+}) {
   const handlePanelClick = () => {
     const vehicleType = title.toLowerCase().includes('bike') ? 'Bike' : 'Car';
     onNavigate('rent-home', { vehicleType });
@@ -23,31 +33,59 @@ function RentalPanel({ title, subtitle, ctaText, bannerFrom, bannerTo, bgImage, 
         />
       )}
 
+      {/* Subtle overlay gradient on left for crystal-clear readability */}
+      {bgImage && (
+        <div 
+          className="absolute inset-0 z-[1] pointer-events-none"
+          style={{
+            background: 'linear-gradient(90deg, rgba(15, 23, 42, 0.72) 0%, rgba(15, 23, 42, 0.42) 50%, rgba(15, 23, 42, 0.08) 85%, transparent 100%)'
+          }}
+        />
+      )}
+
       {/* ── Banner Content ── */}
       <div
-        className="relative overflow-hidden px-7 py-8 sm:px-9 sm:py-10 flex flex-col justify-between h-full z-10"
+        className="relative overflow-hidden px-7 py-7 sm:px-9 sm:py-8 flex flex-col justify-between h-full z-10"
         style={{
           background: bgImage
             ? 'transparent'
             : `linear-gradient(135deg, ${bannerFrom} 0%, ${bannerTo} 100%)`,
         }}
       >
-        <div className="max-w-[320px]">
-          {/* Title row */}
-          <div className="flex items-center gap-3 mb-2">
-            <h3 className="text-[26px] sm:text-[30px] font-black text-white leading-tight tracking-tight drop-shadow-sm">
-              {title}
-            </h3>
-          </div>
-
-          {/* Subtitle */}
-          <p className="text-[14px] sm:text-[15px] font-medium text-white/90 leading-relaxed drop-shadow-sm">
+        {/* Top Header */}
+        <div className="max-w-[340px]">
+          <h3 className="text-[26px] sm:text-[30px] font-black text-white leading-tight tracking-tight drop-shadow-sm">
+            {title}
+          </h3>
+          <p className="text-[14px] sm:text-[15px] font-semibold text-white/90 drop-shadow-sm mt-1">
             {subtitle}
           </p>
         </div>
 
+        {/* ── In-between gap text and feature points ── */}
+        <div className="my-3 max-w-[320px] flex flex-col gap-2.5">
+          {description && (
+            <p className="text-[13px] sm:text-[13.5px] text-white/85 leading-relaxed font-medium drop-shadow-sm">
+              {description}
+            </p>
+          )}
+
+          {features.length > 0 && (
+            <div className="flex flex-col gap-2 pt-1">
+              {features.map((feat, idx) => (
+                <div key={idx} className="flex items-center gap-2 text-white text-[12.5px] sm:text-[13px] font-semibold drop-shadow-sm">
+                  <span className="flex h-4 w-4 shrink-0 items-center justify-center rounded-full bg-emerald-500/30 border border-emerald-400/50 text-emerald-300">
+                    <Check className="h-2.5 w-2.5 stroke-[3]" />
+                  </span>
+                  <span>{feat}</span>
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
+
         {/* CTA Button */}
-        <div className="mt-8">
+        <div>
           <button
             onClick={(e) => {
               e.stopPropagation();
@@ -95,6 +133,12 @@ export default function RentalServices({ onNavigate = () => {} }) {
           <RentalPanel
             title="Bike Rental"
             subtitle="Hit the road with perfect bikes"
+            description="Explore city lanes and scenic coastal routes on top scooters and cruisers."
+            features={[
+              'Starting from ₹399 / day',
+              'Zero security deposit & instant booking',
+              'Complimentary helmets included'
+            ]}
             ctaText="Explore Bikes"
             bannerFrom="#0C3B2C"
             bannerTo="#1B6644"
@@ -104,6 +148,12 @@ export default function RentalServices({ onNavigate = () => {} }) {
           <RentalPanel
             title="Car Rental"
             subtitle="Drive comfort, drive class"
+            description="Premium self-drive hatchbacks, sedans, and 4x4 SUVs for any road trip."
+            features={[
+              'Starting from ₹1,299 / day',
+              'Unlimited kilometers & 24/7 support',
+              'Clean, sanitized & verified fleet'
+            ]}
             ctaText="Explore Cars"
             bannerFrom="#0C2B4E"
             bannerTo="#1A4B88"
