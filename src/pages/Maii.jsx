@@ -428,10 +428,6 @@ export default function Maii() {
                 <div className="card-content">
                   <h3 className="card-title">{item.title}</h3>
                   <p className="card-location">{item.location}</p>
-                  <div className="card-rating">
-                    <i className="fa-solid fa-star"></i> {item.rating} ({item.reviews})
-                  </div>
-                  <p className="card-price"><strong>{item.price}</strong> {item.unit}</p>
                 </div>
               </div>
             ))}
