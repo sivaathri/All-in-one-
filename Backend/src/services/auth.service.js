@@ -111,7 +111,11 @@ export class AuthService {
     return {
       verificationRequired: true,
       email: normalizedEmail,
-      mobileNumber: normalizedMobile
+      mobileNumber: normalizedMobile,
+      ...(env.NODE_ENV === 'development' && {
+        devEmailOtp: emailOtp.plainOtp,
+        devMobileOtp: mobileOtp.plainOtp
+      })
     };
   }
 
@@ -320,7 +324,10 @@ export class AuthService {
     return {
       safeResponse: true,
       deliveryMethod: verificationType,
-      maskedIdentifier: maskIdentifier(trimmedIdentifier)
+      maskedIdentifier: maskIdentifier(trimmedIdentifier),
+      ...(env.NODE_ENV === 'development' && {
+        devOtp: otpData.plainOtp
+      })
     };
   }
 

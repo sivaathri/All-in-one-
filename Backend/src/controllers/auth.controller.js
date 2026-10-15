@@ -16,7 +16,9 @@ export class AuthController {
       {
         verificationRequired: true,
         email: result.email,
-        mobileNumber: result.mobileNumber
+        mobileNumber: result.mobileNumber,
+        ...(result.devMobileOtp && { devMobileOtp: result.devMobileOtp }),
+        ...(result.devEmailOtp && { devEmailOtp: result.devEmailOtp })
       },
       201
     );
@@ -65,7 +67,8 @@ export class AuthController {
       result.message || 'If an active account exists with the provided details, an OTP has been sent.',
       result.deliveryMethod ? {
         deliveryMethod: result.deliveryMethod,
-        identifier: result.maskedIdentifier
+        identifier: result.maskedIdentifier,
+        ...(result.devOtp && { devOtp: result.devOtp })
       } : { verificationRequired: true },
       200
     );

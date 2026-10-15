@@ -1,5 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { Phone, ArrowRight, ArrowLeft, ShieldCheck, RefreshCw, Mail, Lock, Eye, EyeOff, ChevronDown } from 'lucide-react';
+import authApi from '../services/authApi';
 
 // Circular Indian Flag Component matching the user's exact design
 export function RoundIndiaFlag({ className = "w-5.5 h-5.5" }) {
@@ -119,8 +120,8 @@ export default function SignIn({
     if (error) setError('');
   };
 
-  // Step 1: Send OTP
-  const handleSendOtp = (e) => {
+  // Step 1: Request Sign-in OTP via Backend API
+  const handleSendOtp = async (e) => {
     e.preventDefault();
     if (phoneNumber.length !== 10) {
       setError('Please enter a valid 10-digit mobile number');
@@ -129,27 +130,36 @@ export default function SignIn({
     setError('');
     setLoading(true);
 
-    const newOtpCode = Math.floor(100000 + Math.random() * 900000).toString();
-    setGeneratedOtp(newOtpCode);
+    try {
+      const fullIdentifier = `${countryCode}${phoneNumber}`;
+      const res = await authApi.requestSignInOtp({ identifier: fullIdentifier });
 
-    // Console the generated OTP prominently
-    console.log('--------------------------------------------------');
-    console.log('%c🔑 TRIPVERSE AUTHENTICATION OTP', 'color: #0F766E; font-size: 14px; font-weight: bold;');
-    console.log(`📱 Mobile: ${countryCode} ${phoneNumber}`);
-    console.log(`🔢 Generated OTP: %c${newOtpCode}`, 'color: #EA580C; font-size: 18px; font-weight: bold; background: #FFF7ED; padding: 2px 8px; border-radius: 4px; border: 1px solid #FDBA74;');
-    console.log('--------------------------------------------------');
+      const serverOtp = res.data?.devOtp || '';
+      if (serverOtp) {
+        setGeneratedOtp(serverOtp);
+      }
 
-    setTimeout(() => {
+      console.log('--------------------------------------------------');
+      console.log('%c🔑 TRIPVERSE SIGN IN: OTP REQUESTED', 'color: #0F766E; font-size: 14px; font-weight: bold;');
+      console.log(`📱 Mobile: ${fullIdentifier}`);
+      if (serverOtp) {
+        console.log(`🔢 Sign-In OTP: %c${serverOtp}`, 'color: #EA580C; font-size: 18px; font-weight: bold;');
+      }
+      console.log('--------------------------------------------------');
+
       setLoading(false);
       setStep('otp');
       setTimer(30);
       setCanResend(false);
       setOtp(['', '', '', '', '', '']);
-      // Focus first OTP input on next tick
+
       setTimeout(() => {
         otpRefs.current[0]?.focus();
       }, 100);
-    }, 700);
+    } catch (apiErr) {
+      setLoading(false);
+      setError(apiErr.message || 'Failed to request sign-in code.');
+    }
   };
 
   // Step 2: Handle OTP input typing
@@ -190,33 +200,31 @@ export default function SignIn({
     }
   };
 
-  // Resend OTP
-  const handleResendOtp = () => {
+  // Resend OTP via Backend API
+  const handleResendOtp = async () => {
     if (!canResend) return;
     setLoading(true);
+    setError('');
 
-    const newOtpCode = Math.floor(100000 + Math.random() * 900000).toString();
-    setGeneratedOtp(newOtpCode);
+    try {
+      const fullIdentifier = `${countryCode}${phoneNumber}`;
+      const res = await authApi.resendOtp({ identifier: fullIdentifier, type: 'mobile' });
+      const newOtp = res.data?.devOtp || '';
+      if (newOtp) setGeneratedOtp(newOtp);
 
-    // Console the resent OTP
-    console.log('--------------------------------------------------');
-    console.log('%c🔄 RESENT TRIPVERSE AUTHENTICATION OTP', 'color: #0F766E; font-size: 14px; font-weight: bold;');
-    console.log(`📱 Mobile: ${countryCode} ${phoneNumber}`);
-    console.log(`🔢 New Generated OTP: %c${newOtpCode}`, 'color: #EA580C; font-size: 18px; font-weight: bold; background: #FFF7ED; padding: 2px 8px; border-radius: 4px; border: 1px solid #FDBA74;');
-    console.log('--------------------------------------------------');
-
-    setTimeout(() => {
       setLoading(false);
       setTimer(30);
       setCanResend(false);
       setOtp(['', '', '', '', '', '']);
-      setError('');
       otpRefs.current[0]?.focus();
-    }, 600);
+    } catch (err) {
+      setLoading(false);
+      setError(err.message || 'Failed to resend code.');
+    }
   };
 
-  // Step 2: Verify OTP and Sign in
-  const handleVerifyOtp = (e) => {
+  // Step 2: Verify OTP and Sign in via Backend API
+  const handleVerifyOtp = async (e) => {
     e.preventDefault();
     const enteredOtp = otp.join('');
     if (enteredOtp.length !== 6) {
@@ -224,21 +232,35 @@ export default function SignIn({
       return;
     }
 
-    if (generatedOtp && enteredOtp !== generatedOtp && enteredOtp !== '123456') {
-      setError(`Invalid OTP code. Please check your browser console (F12) for the code: ${generatedOtp}`);
-      return;
-    }
-
     setError('');
     setLoading(true);
 
-    setTimeout(() => {
+    try {
+      const fullIdentifier = `${countryCode}${phoneNumber}`;
+      const res = await authApi.verifySignInOtp({
+        identifier: fullIdentifier,
+        otp: enteredOtp
+      });
+
+      // Persist session token and user profile
+      if (res.data?.token) {
+        localStorage.setItem('tripverse_token', res.data.token);
+      }
+      if (res.data?.user) {
+        localStorage.setItem('tripverse_user', JSON.stringify(res.data.user));
+      }
+
       setLoading(false);
       onSuccess({ 
-        phone: `${countryCode} ${phoneNumber}`,
+        token: res.data?.token,
+        user: res.data?.user,
+        phone: fullIdentifier,
         authType: 'mobile-otp'
       });
-    }, 900);
+    } catch (apiErr) {
+      setLoading(false);
+      setError(apiErr.message || 'Verification failed. Please check the code.');
+    }
   };
 
   // Password login fallback

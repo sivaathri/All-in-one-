@@ -1,6 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { Mail, User, Phone, ChevronDown, ShieldCheck, ArrowRight, ArrowLeft, RefreshCw } from 'lucide-react';
 import { RoundIndiaFlag } from './SignIn';
+import authApi from '../services/authApi';
 
 const COUNTRIES = [
   { code: '+91', name: 'India', flag: '🇮🇳', isIndia: true },
@@ -35,6 +36,7 @@ export default function SignUp({
   // Mobile OTP states
   const [otp, setOtp] = useState(['', '', '', '', '', '']);
   const [generatedPhoneOtp, setGeneratedPhoneOtp] = useState('');
+  const [generatedEmailOtp, setGeneratedEmailOtp] = useState('');
   const [timer, setTimer] = useState(30);
   const [canResend, setCanResend] = useState(false);
 
@@ -77,8 +79,8 @@ export default function SignUp({
     };
   }, [step, timer]);
 
-  // Step 1: Send Mobile OTP
-  const handleSendMobileOtp = (e) => {
+  // Step 1: Send Mobile OTP via Backend API
+  const handleSendMobileOtp = async (e) => {
     e.preventDefault();
 
     if (!nameInput.trim()) {
@@ -102,55 +104,69 @@ export default function SignUp({
     setError('');
     setLoading(true);
 
-    // Generate random 6-digit Mobile OTP
-    const newOtpCode = Math.floor(100000 + Math.random() * 900000).toString();
-    setGeneratedPhoneOtp(newOtpCode);
+    try {
+      const fullMobile = `${selectedCountry.code}${phoneInput}`;
+      const res = await authApi.signup({
+        fullName: nameInput.trim(),
+        email: emailInput.trim(),
+        mobileNumber: fullMobile
+      });
 
-    // Console the generated Mobile OTP prominently
-    console.log('--------------------------------------------------');
-    console.log('%c🔑 TRIPVERSE SIGN UP: MOBILE OTP', 'color: #0F766E; font-size: 15px; font-weight: bold;');
-    console.log(`👤 Name:   ${nameInput.trim()}`);
-    console.log(`✉️ Email:  ${emailInput.trim()}`);
-    console.log(`📱 Mobile: ${selectedCountry.code} ${phoneInput}`);
-    console.log(`🔢 Generated OTP: %c${newOtpCode}`, 'color: #EA580C; font-size: 18px; font-weight: bold; background: #FFF7ED; padding: 2px 8px; border-radius: 4px; border: 1px solid #FDBA74;');
-    console.log('--------------------------------------------------');
+      const serverMobileOtp = res.data?.devMobileOtp || '';
+      const serverEmailOtp = res.data?.devEmailOtp || '';
+      setGeneratedPhoneOtp(serverMobileOtp);
+      setGeneratedEmailOtp(serverEmailOtp);
 
-    setTimeout(() => {
+      console.log('--------------------------------------------------');
+      console.log('%c🔑 TRIPVERSE SIGN UP: API SUCCESS', 'color: #0F766E; font-size: 15px; font-weight: bold;');
+      console.log(`👤 Name:   ${nameInput.trim()}`);
+      console.log(`✉️ Email:  ${emailInput.trim()}`);
+      console.log(`📱 Mobile: ${fullMobile}`);
+      if (serverMobileOtp) {
+        console.log(`🔢 Mobile OTP: %c${serverMobileOtp}`, 'color: #EA580C; font-size: 18px; font-weight: bold;');
+      }
+      console.log('--------------------------------------------------');
+
       setLoading(false);
       setStep('otp');
       setOtp(['', '', '', '', '', '']);
       setTimer(30);
       setCanResend(false);
-      // Focus first input box
+
       setTimeout(() => {
         otpRefs.current[0]?.focus();
       }, 100);
-    }, 700);
+    } catch (apiErr) {
+      setLoading(false);
+      setError(apiErr.message || 'Signup failed. Please try again.');
+    }
   };
 
-  // Resend Mobile OTP
-  const handleResendOtp = () => {
+  // Resend Mobile OTP via Backend API
+  const handleResendOtp = async () => {
     if (!canResend) return;
     setLoading(true);
+    setError('');
 
-    const newOtpCode = Math.floor(100000 + Math.random() * 900000).toString();
-    setGeneratedPhoneOtp(newOtpCode);
+    try {
+      const fullMobile = `${selectedCountry.code}${phoneInput}`;
+      const res = await authApi.resendOtp({
+        identifier: fullMobile,
+        type: 'mobile'
+      });
 
-    // Console the resent OTP
-    console.log('--------------------------------------------------');
-    console.log('%c🔄 RESENT SIGN UP MOBILE OTP', 'color: #0F766E; font-size: 14px; font-weight: bold;');
-    console.log(`📱 Mobile: ${selectedCountry.code} ${phoneInput}`);
-    console.log(`🔢 New Generated OTP: %c${newOtpCode}`, 'color: #EA580C; font-size: 18px; font-weight: bold; background: #FFF7ED; padding: 2px 8px; border-radius: 4px; border: 1px solid #FDBA74;');
-    console.log('--------------------------------------------------');
+      const newOtp = res.data?.devOtp || '';
+      if (newOtp) setGeneratedPhoneOtp(newOtp);
 
-    setTimeout(() => {
       setLoading(false);
       setTimer(30);
       setCanResend(false);
       setOtp(['', '', '', '', '', '']);
-      setError('');
       otpRefs.current[0]?.focus();
-    }, 600);
+    } catch (err) {
+      setLoading(false);
+      setError(err.message || 'Failed to resend OTP. Please try again.');
+    }
   };
 
   // OTP digit typing
@@ -190,8 +206,8 @@ export default function SignUp({
     }
   };
 
-  // Step 2: Verify Mobile OTP and create account
-  const handleVerifyOtpAndCreate = (e) => {
+  // Step 2: Verify Mobile OTP and activate account via Backend API
+  const handleVerifyOtpAndCreate = async (e) => {
     e.preventDefault();
     const enteredOtp = otp.join('');
     if (enteredOtp.length !== 6) {
@@ -199,23 +215,38 @@ export default function SignUp({
       return;
     }
 
-    if (generatedPhoneOtp && enteredOtp !== generatedPhoneOtp && enteredOtp !== '123456') {
-      setError(`Invalid OTP code. Check your browser console (F12) for: ${generatedPhoneOtp}`);
-      return;
-    }
-
     setError('');
     setLoading(true);
 
-    setTimeout(() => {
+    try {
+      const fullMobile = `${selectedCountry.code}${phoneInput}`;
+      
+      // 1. Verify Mobile OTP in MySQL
+      const mobileRes = await authApi.verifyMobileOtp({
+        mobileNumber: fullMobile,
+        otp: enteredOtp
+      });
+
+      // 2. In development, auto-verify email OTP to activate account in MySQL if available
+      if (generatedEmailOtp) {
+        await authApi.verifyEmailOtp({
+          email: emailInput.trim(),
+          otp: generatedEmailOtp
+        }).catch((err) => console.warn('Email auto-verify notice:', err.message));
+      }
+
       setLoading(false);
       onSuccess({
         name: nameInput.trim(),
         email: emailInput.trim(),
-        phone: `${selectedCountry.code} ${phoneInput}`,
-        authType: 'mobile-otp-signup'
+        phone: fullMobile,
+        authType: 'mobile-otp-signup',
+        serverData: mobileRes.data
       });
-    }, 1000);
+    } catch (apiErr) {
+      setLoading(false);
+      setError(apiErr.message || 'OTP verification failed. Please check the code.');
+    }
   };
 
   // Social login handler
