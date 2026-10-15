@@ -92,7 +92,7 @@ export class PropertyModel {
           
           -- Step 7: Photos
           photos JSON NOT NULL,
-          cover_photo VARCHAR(500) NULL,
+          cover_photo LONGTEXT NULL,
           
           -- Step 8: About this property
           about_property_text TEXT NULL,
@@ -113,12 +113,12 @@ export class PropertyModel {
           fire_safety_number VARCHAR(100) NULL,
           owner_name VARCHAR(150) NULL,
           owner_aadhar VARCHAR(50) NULL,
-          owner_photo VARCHAR(500) NULL,
-          ownership_proof VARCHAR(500) NULL,
+          owner_photo LONGTEXT NULL,
+          ownership_proof LONGTEXT NULL,
           bank_account_name VARCHAR(150) NULL,
           bank_account_number VARCHAR(50) NULL,
           ifsc_code VARCHAR(50) NULL,
-          cancelled_cheque VARCHAR(500) NULL,
+          cancelled_cheque LONGTEXT NULL,
           is_legal_declared BOOLEAN NOT NULL DEFAULT TRUE,
           
           -- Listing Status & Approval Tracking
@@ -351,7 +351,7 @@ export class PropertyModel {
    */
   static async findByHostId(hostId, connection = null) {
     const sql = `
-      SELECT p.*, u.full_name as host_name, u.email as host_email
+      SELECT p.*, u.full_name as host_name, u.email as host_email, u.mobile_number as host_mobile
       FROM properties p
       LEFT JOIN users u ON p.host_id = u.user_id
       WHERE p.host_id = ?

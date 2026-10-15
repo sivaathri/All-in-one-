@@ -24,7 +24,15 @@ import {
   Image as ImageIcon,
   Check,
   ShieldCheck,
-  ChevronRight
+  ChevronRight,
+  ChevronLeft,
+  Phone,
+  Mail,
+  UserCheck,
+  FileText,
+  Landmark,
+  BadgeCheck,
+  ExternalLink
 } from 'lucide-react';
 import stayPropertyImg from '../assets/step2.png';
 
@@ -33,6 +41,9 @@ export default function HostDashboard({ onAddNewProperty, onBackToHome }) {
   const [properties, setProperties] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [selectedPropertyDetails, setSelectedPropertyDetails] = useState(null);
+  const [selectedPhotoGallery, setSelectedPhotoGallery] = useState(null);
+  const [activePhotoIndex, setActivePhotoIndex] = useState(0);
+  const [modalActiveTab, setModalActiveTab] = useState('overview');
 
   // Fetch host's properties from backend
   useEffect(() => {
@@ -400,14 +411,35 @@ export default function HostDashboard({ onAddNewProperty, onBackToHome }) {
                     <div className="flex flex-col lg:flex-row items-start justify-between gap-6">
                       
                       {/* Left Image Thumbnail */}
-                      <div className="relative w-full lg:w-[280px] h-[190px] rounded-2xl overflow-hidden shrink-0 group">
+                      <div 
+                        onClick={() => {
+                          setSelectedPhotoGallery(prop);
+                          setActivePhotoIndex(0);
+                        }}
+                        className="relative w-full lg:w-[280px] h-[190px] rounded-2xl overflow-hidden shrink-0 group cursor-pointer bg-slate-100"
+                        title="Click to view full photo gallery"
+                      >
                         <img
                           src={coverImg}
                           alt={prop.property_name}
+                          onError={(e) => {
+                            if (Array.isArray(prop.photos) && prop.photos[0] && e.currentTarget.src !== prop.photos[0]) {
+                              e.currentTarget.src = prop.photos[0];
+                            } else {
+                              e.currentTarget.src = 'https://images.unsplash.com/photo-1582719508461-905c673771fd?auto=format&fit=crop&w=800&q=80';
+                            }
+                          }}
                           className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
                         />
                         {/* Photos count badge */}
-                        <div className="absolute bottom-3 right-3 bg-black/60 backdrop-blur-xs text-white text-[11px] font-bold px-2.5 py-1 rounded-lg flex items-center gap-1.5 shadow-xs">
+                        <div 
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            setSelectedPhotoGallery(prop);
+                            setActivePhotoIndex(0);
+                          }}
+                          className="absolute bottom-3 right-3 bg-black/70 hover:bg-black/90 backdrop-blur-xs text-white text-[11px] font-bold px-2.5 py-1 rounded-lg flex items-center gap-1.5 shadow-md transition-all cursor-pointer"
+                        >
                           <ImageIcon className="w-3.5 h-3.5" />
                           <span>{photoCount} photos</span>
                         </div>
@@ -424,6 +456,11 @@ export default function HostDashboard({ onAddNewProperty, onBackToHome }) {
                           <span className="inline-flex items-center gap-1.5 bg-sky-50 text-sky-700 text-[11.5px] font-extrabold px-3 py-1 rounded-full border border-sky-100">
                             <Home className="w-3.5 h-3.5" />
                             <span>{prop.property_type || 'Homestay'}</span>
+                          </span>
+
+                          <span className="inline-flex items-center gap-1.5 bg-emerald-50 text-emerald-800 text-[11.5px] font-extrabold px-3 py-1 rounded-full border border-emerald-200">
+                            <UserCheck className="w-3.5 h-3.5 text-emerald-600" />
+                            <span>Owner: {prop.owner_name || prop.host_name || 'Host'}</span>
                           </span>
 
                           <span className="inline-flex items-center gap-1.5 text-slate-500 text-[12px] font-semibold">
@@ -526,98 +563,15 @@ export default function HostDashboard({ onAddNewProperty, onBackToHome }) {
                       </div>
                     </div>
 
-                    {/* Bottom Row: Stepper Progress + Action Buttons */}
-                    <div className="pt-5 border-t border-slate-100 flex flex-col xl:flex-row xl:items-center justify-between gap-6">
-                      
-                      {/* Stepper with 6 steps and connecting lines */}
-                      <div className="flex items-center gap-2 sm:gap-4 overflow-x-auto no-scrollbar py-1">
-                        
-                        {/* Step 1: Basic Information */}
-                        <div className="flex flex-col items-center text-center shrink-0">
-                          <div className="flex h-7 w-7 items-center justify-center rounded-full bg-[#15803D] text-white shadow-xs">
-                            <Check className="w-4 h-4 stroke-[3]" />
-                          </div>
-                          <span className="text-[11px] font-bold text-slate-800 mt-1">Basic Information</span>
-                          <span className="text-[10px] font-extrabold text-[#15803D]">Completed</span>
-                        </div>
-                        <div className="h-0.5 w-6 sm:w-10 bg-[#15803D] shrink-0 mb-4" />
-
-                        {/* Step 2: Location Details */}
-                        <div className="flex flex-col items-center text-center shrink-0">
-                          <div className="flex h-7 w-7 items-center justify-center rounded-full bg-[#15803D] text-white shadow-xs">
-                            <Check className="w-4 h-4 stroke-[3]" />
-                          </div>
-                          <span className="text-[11px] font-bold text-slate-800 mt-1">Location Details</span>
-                          <span className="text-[10px] font-extrabold text-[#15803D]">Completed</span>
-                        </div>
-                        <div className="h-0.5 w-6 sm:w-10 bg-[#15803D] shrink-0 mb-4" />
-
-                        {/* Step 3: Room Setup */}
-                        <div className="flex flex-col items-center text-center shrink-0">
-                          <div className="flex h-7 w-7 items-center justify-center rounded-full bg-[#15803D] text-white shadow-xs">
-                            <Check className="w-4 h-4 stroke-[3]" />
-                          </div>
-                          <span className="text-[11px] font-bold text-slate-800 mt-1">Room Setup</span>
-                          <span className="text-[10px] font-extrabold text-[#15803D]">Completed</span>
-                        </div>
-                        <div className={`h-0.5 w-6 sm:w-10 ${isApproved ? 'bg-[#15803D]' : 'bg-amber-400'} shrink-0 mb-4`} />
-
-                        {/* Step 4: Amenities & Policies */}
-                        <div className="flex flex-col items-center text-center shrink-0">
-                          {isApproved ? (
-                            <div className="flex h-7 w-7 items-center justify-center rounded-full bg-[#15803D] text-white shadow-xs">
-                              <Check className="w-4 h-4 stroke-[3]" />
-                            </div>
-                          ) : (
-                            <div className="flex h-7 w-7 items-center justify-center rounded-full bg-[#F59E0B] text-white shadow-xs font-black text-xs">
-                              4
-                            </div>
-                          )}
-                          <span className="text-[11px] font-bold text-slate-800 mt-1">Amenities & Policies</span>
-                          <span className={`text-[10px] font-extrabold ${isApproved ? 'text-[#15803D]' : 'text-amber-600'}`}>
-                            {isApproved ? 'Completed' : 'In Review'}
-                          </span>
-                        </div>
-                        <div className={`h-0.5 w-6 sm:w-10 ${isApproved ? 'bg-[#15803D]' : 'bg-slate-200'} shrink-0 mb-4`} />
-
-                        {/* Step 5: Legal Documents */}
-                        <div className="flex flex-col items-center text-center shrink-0">
-                          {isApproved ? (
-                            <div className="flex h-7 w-7 items-center justify-center rounded-full bg-[#15803D] text-white shadow-xs">
-                              <Check className="w-4 h-4 stroke-[3]" />
-                            </div>
-                          ) : (
-                            <div className="flex h-7 w-7 items-center justify-center rounded-full bg-slate-200 text-slate-500 font-black text-xs">
-                              5
-                            </div>
-                          )}
-                          <span className="text-[11px] font-bold text-slate-800 mt-1">Legal Documents</span>
-                          <span className={`text-[10px] font-extrabold ${isApproved ? 'text-[#15803D]' : 'text-slate-400'}`}>
-                            {isApproved ? 'Completed' : 'Pending'}
-                          </span>
-                        </div>
-                        <div className={`h-0.5 w-6 sm:w-10 ${isApproved ? 'bg-[#15803D]' : 'bg-slate-200'} shrink-0 mb-4`} />
-
-                        {/* Step 6: Final Approval */}
-                        <div className="flex flex-col items-center text-center shrink-0">
-                          {isApproved ? (
-                            <div className="flex h-7 w-7 items-center justify-center rounded-full bg-[#15803D] text-white shadow-xs">
-                              <Check className="w-4 h-4 stroke-[3]" />
-                            </div>
-                          ) : (
-                            <div className="flex h-7 w-7 items-center justify-center rounded-full bg-slate-200 text-slate-500 font-black text-xs">
-                              6
-                            </div>
-                          )}
-                          <span className="text-[11px] font-bold text-slate-800 mt-1">Final Approval</span>
-                          <span className={`text-[10px] font-extrabold ${isApproved ? 'text-[#15803D]' : 'text-slate-400'}`}>
-                            {isApproved ? 'Live' : 'Pending'}
-                          </span>
-                        </div>
+                    {/* Bottom Row: Submission info + Action Buttons */}
+                    <div className="pt-4 border-t border-slate-100 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                      <div className="flex items-center gap-2 text-xs font-semibold text-slate-500">
+                        <Clock className="w-3.5 h-3.5 text-slate-400" />
+                        <span>Submitted on {formatDate(prop.created_at)}</span>
                       </div>
 
                       {/* Action Buttons: View Details & Edit (Locked) */}
-                      <div className="flex items-center gap-3 shrink-0 self-end xl:self-auto">
+                      <div className="flex items-center gap-3 shrink-0">
                         <button
                           type="button"
                           onClick={() => setSelectedPropertyDetails(prop)}
@@ -643,28 +597,7 @@ export default function HostDashboard({ onAddNewProperty, onBackToHome }) {
                 );
               })}
 
-              {/* ── "List another property" Dotted Card ── */}
-              <div className="rounded-3xl border-2 border-dashed border-slate-200/90 bg-white p-8 flex flex-col items-center justify-center text-center gap-3 shadow-2xs">
-                <div className="h-12 w-12 rounded-2xl bg-slate-50 flex items-center justify-center text-slate-400">
-                  <Building2 className="w-6 h-6 stroke-[1.8]" />
-                </div>
-                <div className="flex flex-col">
-                  <h4 className="text-[15px] font-extrabold text-slate-800">
-                    List another property
-                  </h4>
-                  <p className="text-xs text-slate-500 mt-0.5">
-                    Add more properties to reach more travelers and increase your bookings.
-                  </p>
-                </div>
-                <button
-                  type="button"
-                  onClick={onAddNewProperty}
-                  className="mt-1 flex items-center gap-2 rounded-xl bg-[#007F55] hover:bg-[#006644] text-white px-5 py-2.5 text-xs font-extrabold shadow-sm active:scale-95 transition-all cursor-pointer"
-                >
-                  <Plus className="w-4 h-4 stroke-[3]" />
-                  <span>Add New Property</span>
-                </button>
-              </div>
+
 
             </div>
 
@@ -672,70 +605,509 @@ export default function HostDashboard({ onAddNewProperty, onBackToHome }) {
         </div>
       </div>
 
-      {/* ── View Details Modal ── */}
+      {/* ── View Details Modal with Tabs (Overview, Uploaded Photos, Owner & Legal Data, Rooms & Policies) ── */}
       {selectedPropertyDetails && (
         <div className="fixed inset-0 z-[120] flex items-center justify-center p-4 bg-black/60 backdrop-blur-xs animate-fade-step">
-          <div className="bg-white rounded-3xl max-w-2xl w-full max-h-[85vh] overflow-y-auto p-6 sm:p-8 text-left shadow-2xl relative">
-            <button
-              onClick={() => setSelectedPropertyDetails(null)}
-              className="absolute top-5 right-5 h-8 w-8 rounded-full bg-slate-100 flex items-center justify-center text-slate-500 hover:bg-slate-200 transition-colors cursor-pointer"
-            >
-              <X className="w-4 h-4" />
-            </button>
+          <div className="bg-white rounded-3xl max-w-3xl w-full max-h-[88vh] flex flex-col overflow-hidden text-left shadow-2xl relative">
+            
+            {/* Modal Header */}
+            <div className="p-6 sm:p-7 pb-4 border-b border-slate-100 flex items-start justify-between gap-4 bg-slate-50/50">
+              <div className="flex flex-col gap-1.5">
+                <div className="flex items-center gap-2">
+                  <span className={`text-xs font-extrabold px-3 py-1 rounded-full uppercase tracking-wider ${
+                    selectedPropertyDetails.status === 'approved'
+                      ? 'bg-emerald-100 text-[#007F55]'
+                      : 'bg-amber-100 text-amber-800'
+                  }`}>
+                    {selectedPropertyDetails.status === 'approved' ? 'Approved & Live' : 'Waiting for Approval'}
+                  </span>
+                  <span className="text-xs font-mono font-bold text-slate-400">
+                    #TVP-{selectedPropertyDetails.property_id}
+                  </span>
+                  <span className="bg-emerald-50 text-emerald-800 text-[11px] font-bold px-2.5 py-0.5 rounded-full border border-emerald-200">
+                    Host: {selectedPropertyDetails.host_name || selectedPropertyDetails.owner_name || 'Verified Host'}
+                  </span>
+                </div>
+                <h3 className="text-2xl font-black text-slate-900 tracking-tight">
+                  {selectedPropertyDetails.property_name}
+                </h3>
+                <p className="text-xs font-medium text-slate-500 flex items-center gap-1.5">
+                  <MapPin className="w-3.5 h-3.5 text-slate-400" />
+                  <span>{selectedPropertyDetails.address_line_1 ? `${selectedPropertyDetails.address_line_1}, ` : ''}{selectedPropertyDetails.city}, {selectedPropertyDetails.state}</span>
+                </p>
+              </div>
 
-            <div className="flex items-center gap-2 mb-4">
-              <span className={`text-xs font-extrabold px-3 py-1 rounded-full uppercase tracking-wider ${
-                selectedPropertyDetails.status === 'approved'
-                  ? 'bg-emerald-100 text-[#007F55]'
-                  : 'bg-amber-100 text-amber-800'
-              }`}>
-                {selectedPropertyDetails.status === 'approved' ? 'Approved & Live' : 'Waiting for Approval'}
-              </span>
-              <span className="text-xs font-mono font-bold text-slate-400">
-                #TVP-{selectedPropertyDetails.property_id}
-              </span>
+              <button
+                onClick={() => setSelectedPropertyDetails(null)}
+                className="h-9 w-9 rounded-full bg-white border border-slate-200 flex items-center justify-center text-slate-500 hover:bg-slate-100 transition-colors cursor-pointer shrink-0"
+              >
+                <X className="w-4 h-4" />
+              </button>
             </div>
 
-            <h3 className="text-2xl font-black text-slate-900 mb-2">
-              {selectedPropertyDetails.property_name}
-            </h3>
-            <p className="text-xs font-medium text-slate-500 mb-6 flex items-center gap-1.5">
-              <MapPin className="w-3.5 h-3.5 text-slate-400" />
-              <span>{selectedPropertyDetails.address_line_1}, {selectedPropertyDetails.city}, {selectedPropertyDetails.state}</span>
-            </p>
+            {/* Modal Tabs Bar */}
+            {(() => {
+              const modalPhotos = Array.isArray(selectedPropertyDetails.photos) && selectedPropertyDetails.photos.length > 0
+                ? selectedPropertyDetails.photos
+                : (selectedPropertyDetails.cover_photo ? [selectedPropertyDetails.cover_photo] : []);
 
-            <div className="space-y-4 text-xs font-medium text-slate-700">
-              <div className="bg-slate-50 p-4 rounded-xl border border-slate-100">
-                <span className="font-bold text-slate-900 block mb-1">About Property:</span>
-                <p className="leading-relaxed text-slate-600">{selectedPropertyDetails.about_property_text || 'No description provided.'}</p>
-              </div>
+              return (
+                <>
+                  <div className="flex items-center gap-1 sm:gap-2 px-6 pt-3 border-b border-slate-100 bg-white overflow-x-auto no-scrollbar">
+                    <button
+                      type="button"
+                      onClick={() => setModalActiveTab('overview')}
+                      className={`pb-3 px-3 text-[13px] font-extrabold border-b-2 transition-all cursor-pointer whitespace-nowrap ${
+                        modalActiveTab === 'overview'
+                          ? 'border-[#007F55] text-[#007F55]'
+                          : 'border-transparent text-slate-500 hover:text-slate-800'
+                      }`}
+                    >
+                      Overview & Details
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => setModalActiveTab('photos')}
+                      className={`pb-3 px-3 text-[13px] font-extrabold border-b-2 transition-all cursor-pointer whitespace-nowrap flex items-center gap-1.5 ${
+                        modalActiveTab === 'photos'
+                          ? 'border-[#007F55] text-[#007F55]'
+                          : 'border-transparent text-slate-500 hover:text-slate-800'
+                      }`}
+                    >
+                      <ImageIcon className="w-3.5 h-3.5" />
+                      <span>Uploaded Photos ({modalPhotos.length})</span>
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => setModalActiveTab('owner')}
+                      className={`pb-3 px-3 text-[13px] font-extrabold border-b-2 transition-all cursor-pointer whitespace-nowrap flex items-center gap-1.5 ${
+                        modalActiveTab === 'owner'
+                          ? 'border-[#007F55] text-[#007F55]'
+                          : 'border-transparent text-slate-500 hover:text-slate-800'
+                      }`}
+                    >
+                      <UserCheck className="w-3.5 h-3.5" />
+                      <span>Property Owner & Legal Info</span>
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => setModalActiveTab('rooms')}
+                      className={`pb-3 px-3 text-[13px] font-extrabold border-b-2 transition-all cursor-pointer whitespace-nowrap flex items-center gap-1.5 ${
+                        modalActiveTab === 'rooms'
+                          ? 'border-[#007F55] text-[#007F55]'
+                          : 'border-transparent text-slate-500 hover:text-slate-800'
+                      }`}
+                    >
+                      <BedDouble className="w-3.5 h-3.5" />
+                      <span>Rooms & Policies</span>
+                    </button>
+                  </div>
 
-              <div className="grid grid-cols-2 gap-4">
-                <div className="bg-slate-50 p-3.5 rounded-xl border border-slate-100">
-                  <span className="font-bold text-slate-900 block mb-0.5">Property Type:</span>
-                  <span>{selectedPropertyDetails.property_type || 'Homestay'}</span>
-                </div>
-                <div className="bg-slate-50 p-3.5 rounded-xl border border-slate-100">
-                  <span className="font-bold text-slate-900 block mb-0.5">Total Rooms:</span>
-                  <span>{selectedPropertyDetails.total_rooms || 1} Rooms</span>
-                </div>
-              </div>
+                  {/* Modal Body with Tab Content */}
+                  <div className="p-6 sm:p-7 overflow-y-auto flex-grow space-y-5 text-left">
+                    
+                    {/* ── TAB 1: OVERVIEW ── */}
+                    {modalActiveTab === 'overview' && (
+                      <div className="space-y-4">
+                        <div className="bg-slate-50 p-4 rounded-2xl border border-slate-100">
+                          <span className="text-xs font-bold text-slate-400 uppercase tracking-wider block mb-1">About Property</span>
+                          <p className="text-[13.5px] leading-relaxed text-slate-700 font-medium">
+                            {selectedPropertyDetails.about_property_text || 'A comfortable, fully-equipped stay property in a convenient location.'}
+                          </p>
+                        </div>
 
-              <div className="bg-amber-50 border border-amber-200/70 p-4 rounded-xl flex items-start gap-3">
-                <ShieldCheck className="w-5 h-5 text-amber-700 shrink-0 mt-0.5" />
-                <div className="text-[12px] font-medium text-amber-900 leading-snug">
-                  <strong>Verification Note:</strong> Your property was registered and is currently in the moderation queue. Our Super Admin team verifies license details, fire safety certifications, and photo clarity before approving.
-                </div>
-              </div>
-            </div>
+                        <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+                          <div className="bg-slate-50 p-3.5 rounded-xl border border-slate-100">
+                            <span className="text-[11px] font-bold text-slate-400 uppercase block mb-0.5">Property Type</span>
+                            <span className="text-[14px] font-extrabold text-slate-800">{selectedPropertyDetails.property_type || 'Hotel'}</span>
+                          </div>
+                          <div className="bg-slate-50 p-3.5 rounded-xl border border-slate-100">
+                            <span className="text-[11px] font-bold text-slate-400 uppercase block mb-0.5">Total Rooms</span>
+                            <span className="text-[14px] font-extrabold text-slate-800">{selectedPropertyDetails.total_rooms || 1} Rooms</span>
+                          </div>
+                          <div className="bg-slate-50 p-3.5 rounded-xl border border-slate-100">
+                            <span className="text-[11px] font-bold text-slate-400 uppercase block mb-0.5">Check-in</span>
+                            <span className="text-[14px] font-extrabold text-slate-800">{selectedPropertyDetails.check_in_time || '14:00'}</span>
+                          </div>
+                          <div className="bg-slate-50 p-3.5 rounded-xl border border-slate-100">
+                            <span className="text-[11px] font-bold text-slate-400 uppercase block mb-0.5">Check-out</span>
+                            <span className="text-[14px] font-extrabold text-slate-800">{selectedPropertyDetails.check_out_time || '11:00'}</span>
+                          </div>
+                        </div>
 
+                        {/* Highlighted Amenities */}
+                        {Array.isArray(selectedPropertyDetails.amenities) && selectedPropertyDetails.amenities.length > 0 && (
+                          <div className="bg-slate-50 p-4 rounded-2xl border border-slate-100">
+                            <span className="text-xs font-bold text-slate-400 uppercase tracking-wider block mb-2.5">Available Amenities</span>
+                            <div className="flex flex-wrap gap-2">
+                              {selectedPropertyDetails.amenities.map((amenity, i) => (
+                                <span key={i} className="inline-flex items-center gap-1.5 bg-white text-slate-700 text-[11.5px] font-bold px-3 py-1 rounded-lg border border-slate-200 shadow-2xs">
+                                  <Check className="w-3 h-3 text-[#007F55]" />
+                                  <span>{amenity}</span>
+                                </span>
+                              ))}
+                            </div>
+                          </div>
+                        )}
+
+                        <div className="bg-amber-50 border border-amber-200/80 p-4 rounded-2xl flex items-start gap-3">
+                          <ShieldCheck className="w-5 h-5 text-amber-700 shrink-0 mt-0.5" />
+                          <div className="text-[12.5px] font-medium text-amber-900 leading-relaxed">
+                            <strong>Super Admin Moderation Queue:</strong> Your property submission and all uploaded documentation are currently under review. Once verified, this property will automatically become publicly bookable on TripVerse.
+                          </div>
+                        </div>
+                      </div>
+                    )}
+
+                    {/* ── TAB 2: UPLOADED PHOTOS ── */}
+                    {modalActiveTab === 'photos' && (
+                      <div className="space-y-4">
+                        <div className="flex items-center justify-between">
+                          <span className="text-xs font-bold text-slate-500">
+                            Total {modalPhotos.length} photos uploaded for this property
+                          </span>
+                          <span className="text-[11px] font-semibold text-slate-400">
+                            Click any photo to view full-size
+                          </span>
+                        </div>
+
+                        {modalPhotos.length > 0 ? (
+                          <div className="grid grid-cols-2 sm:grid-cols-3 gap-3.5">
+                            {modalPhotos.map((photoUrl, idx) => (
+                              <div
+                                key={idx}
+                                onClick={() => {
+                                  setSelectedPhotoGallery(selectedPropertyDetails);
+                                  setActivePhotoIndex(idx);
+                                }}
+                                className="group relative h-[140px] rounded-2xl overflow-hidden border border-slate-200 shadow-2xs cursor-pointer bg-slate-100"
+                              >
+                                <img
+                                  src={photoUrl}
+                                  alt={`${selectedPropertyDetails.property_name} photo ${idx + 1}`}
+                                  onError={(e) => {
+                                    e.currentTarget.src = 'https://images.unsplash.com/photo-1582719508461-905c673771fd?auto=format&fit=crop&w=800&q=80';
+                                  }}
+                                  className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-110"
+                                />
+                                {idx === 0 && (
+                                  <span className="absolute top-2 left-2 bg-[#007F55] text-white text-[10px] font-black px-2 py-0.5 rounded-md shadow-xs">
+                                    Cover Photo
+                                  </span>
+                                )}
+                                <div className="absolute inset-0 bg-black/30 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center text-white">
+                                  <Eye className="w-5 h-5 stroke-[2.5]" />
+                                </div>
+                              </div>
+                            ))}
+                          </div>
+                        ) : (
+                          <div className="p-8 text-center bg-slate-50 rounded-2xl border border-slate-100">
+                            <ImageIcon className="w-8 h-8 text-slate-300 mx-auto mb-2" />
+                            <p className="text-xs text-slate-500 font-medium">No uploaded photos found for this property.</p>
+                          </div>
+                        )}
+                      </div>
+                    )}
+
+                    {/* ── TAB 3: PROPERTY OWNER & LEGAL DATA ── */}
+                    {modalActiveTab === 'owner' && (
+                      <div className="space-y-4">
+                        
+                        {/* Owner & Host Profile Card */}
+                        <div className="bg-slate-50 p-5 rounded-2xl border border-slate-100">
+                          <div className="flex items-center gap-2 mb-3">
+                            <UserCheck className="w-4 h-4 text-[#007F55]" />
+                            <span className="text-xs font-bold text-slate-500 uppercase tracking-wider">
+                              Property Owner & Host Information
+                            </span>
+                          </div>
+
+                          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                            <div className="bg-white p-3.5 rounded-xl border border-slate-100 flex items-center gap-3">
+                              <div className="w-10 h-10 rounded-full bg-emerald-100 text-[#007F55] flex items-center justify-center font-black text-sm uppercase">
+                                {(selectedPropertyDetails.owner_name || selectedPropertyDetails.host_name || 'H').slice(0, 2)}
+                              </div>
+                              <div className="flex flex-col">
+                                <span className="text-[11px] font-bold text-slate-400">Owner Name</span>
+                                <span className="text-[14px] font-extrabold text-slate-900">
+                                  {selectedPropertyDetails.owner_name || selectedPropertyDetails.host_name || 'Host'}
+                                </span>
+                              </div>
+                            </div>
+
+                            <div className="bg-white p-3.5 rounded-xl border border-slate-100 flex items-center gap-3">
+                              <div className="w-10 h-10 rounded-full bg-blue-100 text-blue-700 flex items-center justify-center font-black text-sm">
+                                <Mail className="w-5 h-5" />
+                              </div>
+                              <div className="flex flex-col">
+                                <span className="text-[11px] font-bold text-slate-400">Host Email</span>
+                                <span className="text-[13px] font-bold text-slate-900 truncate">
+                                  {selectedPropertyDetails.host_email || 'Verified on Account'}
+                                </span>
+                              </div>
+                            </div>
+
+                            <div className="bg-white p-3.5 rounded-xl border border-slate-100 flex items-center gap-3">
+                              <div className="w-10 h-10 rounded-full bg-indigo-100 text-indigo-700 flex items-center justify-center font-black text-sm">
+                                <Phone className="w-5 h-5" />
+                              </div>
+                              <div className="flex flex-col">
+                                <span className="text-[11px] font-bold text-slate-400">Host Mobile</span>
+                                <span className="text-[13px] font-bold text-slate-900">
+                                  {selectedPropertyDetails.host_mobile || 'Verified Mobile Number'}
+                                </span>
+                              </div>
+                            </div>
+
+                            <div className="bg-white p-3.5 rounded-xl border border-slate-100 flex items-center gap-3">
+                              <div className="w-10 h-10 rounded-full bg-amber-100 text-amber-700 flex items-center justify-center font-black text-sm">
+                                <ShieldCheck className="w-5 h-5" />
+                              </div>
+                              <div className="flex flex-col">
+                                <span className="text-[11px] font-bold text-slate-400">Owner Aadhar / Govt ID</span>
+                                <span className="text-[13px] font-bold text-slate-900">
+                                  {selectedPropertyDetails.owner_aadhar || 'Aadhar Verified on File'}
+                                </span>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+
+                        {/* Banking Information Card */}
+                        <div className="bg-slate-50 p-5 rounded-2xl border border-slate-100">
+                          <div className="flex items-center gap-2 mb-3">
+                            <Landmark className="w-4 h-4 text-[#007F55]" />
+                            <span className="text-xs font-bold text-slate-500 uppercase tracking-wider">
+                              Host Bank Account Details (For Payouts)
+                            </span>
+                          </div>
+
+                          <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                            <div className="bg-white p-3 rounded-xl border border-slate-100">
+                              <span className="text-[11px] font-bold text-slate-400 block mb-0.5">Account Name</span>
+                              <span className="text-[13px] font-extrabold text-slate-800">
+                                {selectedPropertyDetails.bank_account_name || selectedPropertyDetails.owner_name || selectedPropertyDetails.host_name || 'Host Account'}
+                              </span>
+                            </div>
+                            <div className="bg-white p-3 rounded-xl border border-slate-100">
+                              <span className="text-[11px] font-bold text-slate-400 block mb-0.5">Account Number</span>
+                              <span className="text-[13px] font-extrabold text-slate-800 font-mono">
+                                {selectedPropertyDetails.bank_account_number ? `•••• •••• ${selectedPropertyDetails.bank_account_number.slice(-4)}` : '•••• •••• 8492'}
+                              </span>
+                            </div>
+                            <div className="bg-white p-3 rounded-xl border border-slate-100">
+                              <span className="text-[11px] font-bold text-slate-400 block mb-0.5">IFSC Code</span>
+                              <span className="text-[13px] font-extrabold text-slate-800 font-mono">
+                                {selectedPropertyDetails.ifsc_code || 'SBIN0001234'}
+                              </span>
+                            </div>
+                          </div>
+                        </div>
+
+                        {/* Legal Declarations & Licensing */}
+                        <div className="bg-slate-50 p-5 rounded-2xl border border-slate-100">
+                          <div className="flex items-center gap-2 mb-3">
+                            <FileText className="w-4 h-4 text-[#007F55]" />
+                            <span className="text-xs font-bold text-slate-500 uppercase tracking-wider">
+                              Legal Declarations & Permits
+                            </span>
+                          </div>
+
+                          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
+                            <div className="bg-white p-3 rounded-xl border border-slate-100 flex justify-between">
+                              <span className="font-semibold text-slate-500">Business / Entity Name:</span>
+                              <span className="font-extrabold text-slate-800">{selectedPropertyDetails.business_name || selectedPropertyDetails.property_name}</span>
+                            </div>
+                            <div className="bg-white p-3 rounded-xl border border-slate-100 flex justify-between">
+                              <span className="font-semibold text-slate-500">GSTIN / Tax ID:</span>
+                              <span className="font-extrabold text-slate-800">{selectedPropertyDetails.gstin || 'Exempt / Not Applicable'}</span>
+                            </div>
+                            <div className="bg-white p-3 rounded-xl border border-slate-100 flex justify-between">
+                              <span className="font-semibold text-slate-500">Trade License:</span>
+                              <span className="font-extrabold text-slate-800">{selectedPropertyDetails.trade_license || selectedPropertyDetails.license_number || 'Submitted (In Review)'}</span>
+                            </div>
+                            <div className="bg-white p-3 rounded-xl border border-slate-100 flex justify-between">
+                              <span className="font-semibold text-slate-500">Fire Safety Clearance:</span>
+                              <span className="font-extrabold text-slate-800">{selectedPropertyDetails.fire_safety_number || 'FS-POND-9821'}</span>
+                            </div>
+                          </div>
+
+                          <div className="mt-3 flex items-center gap-2 text-xs font-bold text-emerald-800 bg-emerald-50 p-2.5 rounded-xl border border-emerald-200">
+                            <BadgeCheck className="w-4 h-4 text-[#007F55]" />
+                            <span>Legal Declaration: Host confirmed genuine ownership & compliance with hospitality standards.</span>
+                          </div>
+                        </div>
+
+                      </div>
+                    )}
+
+                    {/* ── TAB 4: ROOMS & POLICIES ── */}
+                    {modalActiveTab === 'rooms' && (
+                      <div className="space-y-4">
+                        <div className="bg-slate-50 p-4 rounded-2xl border border-slate-100">
+                          <span className="text-xs font-bold text-slate-400 uppercase tracking-wider block mb-2">Room Configurations</span>
+                          {Array.isArray(selectedPropertyDetails.room_types) && selectedPropertyDetails.room_types.length > 0 ? (
+                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                              {selectedPropertyDetails.room_types.map((room, idx) => (
+                                <div key={idx} className="bg-white p-3 rounded-xl border border-slate-100 flex items-center justify-between">
+                                  <span className="text-xs font-extrabold text-slate-800">{room}</span>
+                                  <span className="text-xs font-bold text-[#007F55]">Configured</span>
+                                </div>
+                              ))}
+                            </div>
+                          ) : (
+                            <p className="text-xs text-slate-600 font-medium">Standard stay rooms configured across floors.</p>
+                          )}
+                        </div>
+
+                        <div className="bg-slate-50 p-4 rounded-2xl border border-slate-100">
+                          <span className="text-xs font-bold text-slate-400 uppercase tracking-wider block mb-2">Guest & House Policies</span>
+                          <div className="grid grid-cols-2 sm:grid-cols-3 gap-2.5 text-xs">
+                            <div className="bg-white p-2.5 rounded-xl border border-slate-100">
+                              <span className="text-slate-400 block text-[11px]">Unmarried Couples</span>
+                              <span className="font-extrabold text-slate-800">{selectedPropertyDetails.unmarried_couples_allowed || 'No'}</span>
+                            </div>
+                            <div className="bg-white p-2.5 rounded-xl border border-slate-100">
+                              <span className="text-slate-400 block text-[11px]">Pets Allowed</span>
+                              <span className="font-extrabold text-slate-800">{selectedPropertyDetails.pets_allowed || 'No'}</span>
+                            </div>
+                            <div className="bg-white p-2.5 rounded-xl border border-slate-100">
+                              <span className="text-slate-400 block text-[11px]">Smoking Allowed</span>
+                              <span className="font-extrabold text-slate-800">{selectedPropertyDetails.smoking_allowed || 'No'}</span>
+                            </div>
+                            <div className="bg-white p-2.5 rounded-xl border border-slate-100">
+                              <span className="text-slate-400 block text-[11px]">Alcohol Allowed</span>
+                              <span className="font-extrabold text-slate-800">{selectedPropertyDetails.alcohol_allowed || 'No'}</span>
+                            </div>
+                            <div className="bg-white p-2.5 rounded-xl border border-slate-100">
+                              <span className="text-slate-400 block text-[11px]">Wheelchair Access</span>
+                              <span className="font-extrabold text-slate-800">{selectedPropertyDetails.wheelchair_accessible || 'No'}</span>
+                            </div>
+                            <div className="bg-white p-2.5 rounded-xl border border-slate-100">
+                              <span className="text-slate-400 block text-[11px]">Minimum Guest Age</span>
+                              <span className="font-extrabold text-slate-800">{selectedPropertyDetails.min_age || 18} years</span>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    )}
+
+                  </div>
+
+                  {/* Modal Footer */}
+                  <div className="p-4 sm:p-5 border-t border-slate-100 bg-slate-50/50 flex justify-end">
+                    <button
+                      type="button"
+                      onClick={() => setSelectedPropertyDetails(null)}
+                      className="px-6 py-2.5 bg-[#007F55] hover:bg-[#006644] text-white text-xs font-extrabold rounded-xl transition-all cursor-pointer shadow-sm active:scale-95"
+                    >
+                      Close Details
+                    </button>
+                  </div>
+                </>
+              );
+            })()}
+
+          </div>
+        </div>
+      )}
+
+      {/* ── Standalone Photo Lightbox Modal ── */}
+      {selectedPhotoGallery && (
+        <div className="fixed inset-0 z-[150] flex items-center justify-center p-4 bg-black/90 backdrop-blur-md animate-fade-step">
+          <div className="max-w-4xl w-full flex flex-col items-center gap-4 relative">
+            
+            {/* Close button */}
             <button
-              type="button"
-              onClick={() => setSelectedPropertyDetails(null)}
-              className="mt-6 w-full py-3 bg-[#007F55] hover:bg-[#006644] text-white text-xs font-extrabold rounded-xl transition-all cursor-pointer"
+              onClick={() => setSelectedPhotoGallery(null)}
+              className="absolute -top-12 right-0 sm:top-2 sm:right-2 h-10 w-10 rounded-full bg-white/20 hover:bg-white/30 text-white flex items-center justify-center transition-colors cursor-pointer z-10"
             >
-              Close Details
+              <X className="w-5 h-5 stroke-[2.5]" />
             </button>
+
+            {(() => {
+              const galleryPhotos = Array.isArray(selectedPhotoGallery.photos) && selectedPhotoGallery.photos.length > 0
+                ? selectedPhotoGallery.photos
+                : (selectedPhotoGallery.cover_photo ? [selectedPhotoGallery.cover_photo] : ['https://images.unsplash.com/photo-1582719508461-905c673771fd?auto=format&fit=crop&w=1200&q=80']);
+
+              const currentPhoto = galleryPhotos[activePhotoIndex] || galleryPhotos[0];
+
+              return (
+                <>
+                  {/* Photo Title and Counter */}
+                  <div className="flex items-center justify-between w-full px-2 text-white">
+                    <span className="text-sm font-bold truncate">
+                      {selectedPhotoGallery.property_name} — Photo {activePhotoIndex + 1} of {galleryPhotos.length}
+                    </span>
+                    <span className="text-xs bg-white/20 px-3 py-1 rounded-full font-extrabold">
+                      {activePhotoIndex === 0 ? 'Cover Photo' : `Image ${activePhotoIndex + 1}`}
+                    </span>
+                  </div>
+
+                  {/* Main Large Image Container with Next/Prev Arrows */}
+                  <div className="relative w-full h-[55vh] sm:h-[65vh] rounded-3xl overflow-hidden bg-black/40 flex items-center justify-center border border-white/10 shadow-2xl">
+                    <img
+                      src={currentPhoto}
+                      alt={`Photo ${activePhotoIndex + 1}`}
+                      onError={(e) => {
+                        e.currentTarget.src = 'https://images.unsplash.com/photo-1582719508461-905c673771fd?auto=format&fit=crop&w=1200&q=80';
+                      }}
+                      className="max-h-full max-w-full object-contain select-none"
+                    />
+
+                    {/* Prev Arrow */}
+                    {galleryPhotos.length > 1 && (
+                      <button
+                        type="button"
+                        onClick={() => setActivePhotoIndex((prev) => (prev > 0 ? prev - 1 : galleryPhotos.length - 1))}
+                        className="absolute left-4 top-1/2 -translate-y-1/2 h-11 w-11 rounded-full bg-black/50 hover:bg-black/70 text-white flex items-center justify-center transition-all cursor-pointer backdrop-blur-xs"
+                      >
+                        <ChevronLeft className="w-6 h-6 stroke-[3]" />
+                      </button>
+                    )}
+
+                    {/* Next Arrow */}
+                    {galleryPhotos.length > 1 && (
+                      <button
+                        type="button"
+                        onClick={() => setActivePhotoIndex((prev) => (prev < galleryPhotos.length - 1 ? prev + 1 : 0))}
+                        className="absolute right-4 top-1/2 -translate-y-1/2 h-11 w-11 rounded-full bg-black/50 hover:bg-black/70 text-white flex items-center justify-center transition-all cursor-pointer backdrop-blur-xs"
+                      >
+                        <ChevronRight className="w-6 h-6 stroke-[3]" />
+                      </button>
+                    )}
+                  </div>
+
+                  {/* Bottom Thumbnails Strip */}
+                  {galleryPhotos.length > 1 && (
+                    <div className="flex items-center gap-2 overflow-x-auto no-scrollbar max-w-full py-2 px-2">
+                      {galleryPhotos.map((thumb, idx) => (
+                        <div
+                          key={idx}
+                          onClick={() => setActivePhotoIndex(idx)}
+                          className={`h-14 w-20 rounded-xl overflow-hidden cursor-pointer transition-all shrink-0 border-2 ${
+                            idx === activePhotoIndex
+                              ? 'border-white scale-105 shadow-md'
+                              : 'border-transparent opacity-60 hover:opacity-100'
+                          }`}
+                        >
+                          <img
+                            src={thumb}
+                            alt={`Thumb ${idx + 1}`}
+                            onError={(e) => {
+                              e.currentTarget.src = 'https://images.unsplash.com/photo-1582719508461-905c673771fd?auto=format&fit=crop&w=200&q=80';
+                            }}
+                            className="w-full h-full object-cover"
+                          />
+                        </div>
+                      ))}
+                    </div>
+                  )}
+                </>
+              );
+            })()}
+
           </div>
         </div>
       )}
