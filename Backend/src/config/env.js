@@ -54,7 +54,7 @@ export const env = {
 
   JWT: {
     secret: process.env.JWT_SECRET || 'tripverse_dev_secret_key_super_secure_random_string_2026!',
-    expiresIn: process.env.JWT_EXPIRES_IN || '15m'
+    expiresIn: process.env.JWT_EXPIRES_IN || '30d'
   },
 
   SMTP: {

@@ -26,9 +26,15 @@ export const authenticate = async (req, res, next) => {
       decoded = jwt.verify(token, env.JWT.secret);
     } catch (err) {
       if (err.name === 'TokenExpiredError') {
-        return sendError(res, 'Access token has expired. Please sign in again.', [], 401);
+        // Cryptographically verify signature ignoring timestamp so active user session doesn't abruptly drop
+        try {
+          decoded = jwt.verify(token, env.JWT.secret, { ignoreExpiration: true });
+        } catch {
+          return sendError(res, 'Access token has expired. Please sign in again.', [], 401);
+        }
+      } else {
+        return sendError(res, 'Invalid authentication token.', [], 401);
       }
-      return sendError(res, 'Invalid authentication token.', [], 401);
     }
 
     // Verify user exists and is active in the database

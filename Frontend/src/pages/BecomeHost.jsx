@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import { ArrowRight, ShieldCheck, Tag, Calendar, TrendingUp, X, CheckCircle2 } from 'lucide-react';
+import { ArrowRight, ShieldCheck, Tag, Calendar, TrendingUp, X, CheckCircle2, Home, Clock } from 'lucide-react';
 import StayPropertyForm from './StayPropertyForm';
+import HostDashboard from './HostDashboard';
 import becameBg from '../assets/becameBG.png';
 import stayPropertyImg from '../assets/stay_property.png';
 import bikeRentalImg from '../assets/bike_rental.png';
@@ -12,6 +13,8 @@ import hostServicesImg from '../assets/host_services.png';
 
 export default function BecomeHost({ onBackToHome }) {
   const [activeCategory, setActiveCategory] = useState(null);
+  const [showDashboard, setShowDashboard] = useState(false);
+  const [myProperties, setMyProperties] = useState([]);
   const [partnerModal, setPartnerModal] = useState(null);
   const [partnerSuccess, setPartnerSuccess] = useState(false);
   const [businessName, setBusinessName] = useState('');
@@ -23,7 +26,33 @@ export default function BecomeHost({ onBackToHome }) {
     window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
     document.documentElement.scrollTop = 0;
     document.body.scrollTop = 0;
-  }, [activeCategory]);
+  }, [activeCategory, showDashboard]);
+
+  // Check if current user already has listed properties
+  useEffect(() => {
+    const token = localStorage.getItem('tripverse_token');
+    if (!token) return;
+
+    fetch('http://localhost:5001/api/properties/my-listings', {
+      headers: {
+        'Authorization': `Bearer ${token}`
+      }
+    })
+      .then(res => {
+        if (!res.ok) return null;
+        return res.json();
+      })
+      .then(data => {
+        if (data && data.success && Array.isArray(data.data?.properties) && data.data.properties.length > 0) {
+          setMyProperties(data.data.properties);
+          // If the user already has properties, directly open the Host Dashboard
+          setShowDashboard(true);
+        }
+      })
+      .catch(() => {
+        // Silently catch fetch errors
+      });
+  }, []);
 
   const categories = [
     {
@@ -126,8 +155,35 @@ export default function BecomeHost({ onBackToHome }) {
     }, 2500);
   };
 
+  if (showDashboard) {
+    return (
+      <HostDashboard
+        onAddNewProperty={() => {
+          setShowDashboard(false);
+          setActiveCategory('Stay Property');
+        }}
+        onBackToHome={onBackToHome}
+      />
+    );
+  }
+
   if (activeCategory === 'Stay Property') {
-    return <StayPropertyForm onBack={() => setActiveCategory(null)} />;
+    return (
+      <StayPropertyForm
+        onBack={() => {
+          if (myProperties.length > 0) {
+            setShowDashboard(true);
+            setActiveCategory(null);
+          } else {
+            setActiveCategory(null);
+          }
+        }}
+        onGoToDashboard={() => {
+          setShowDashboard(true);
+          setActiveCategory(null);
+        }}
+      />
+    );
   }
 
   return (
@@ -182,51 +238,116 @@ export default function BecomeHost({ onBackToHome }) {
 
       {/* Grid and Benefits Container */}
       <div className="max-w-[1360px] mx-auto w-full px-4 sm:px-8 lg:px-16 mt-8">
-        {/* Categories Grid */}
-        <div className="grid grid-cols-1 mt-10 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 mb-16">
-          {categories.map((cat, idx) => (
-            <div
-              key={idx}
-              onClick={() => {
-                if (cat.title === 'Stay Property') {
-                  setActiveCategory('Stay Property');
-                } else {
-                  setPartnerModal(cat.title);
-                }
-              }}
-              className={`group relative flex flex-col justify-between bg-white rounded-[24px] border ${cat.borderClass} p-6 sm:p-7 pb-6 shadow-sm hover:shadow-lg transition-all duration-300 transform hover:-translate-y-1 cursor-pointer ${cat.shadowColor} animate-slide-up-fade`}
-              style={{ animationDelay: `${idx * 80 + 150}ms` }}
-            >
-              {/* Image Section */}
-              <div className="mb-4 flex justify-center items-center overflow-hidden rounded-2xl w-full h-[130px]">
-                <img
-                  src={cat.image}
-                  alt={cat.title}
-                  className="h-full max-h-[125px] w-auto object-contain group-hover:scale-105 transition-transform duration-300"
-                />
+        
+        {/* Active Listing Alert Banner (if user already submitted a property) */}
+        {myProperties.length > 0 && (
+          <div className="mb-8 w-full rounded-2xl bg-gradient-to-r from-amber-50 to-orange-50 border border-amber-200/90 p-5 sm:p-6 shadow-sm flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 animate-slide-down-fade">
+            <div className="flex items-start gap-3.5">
+              <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-amber-500 text-white shadow-xs">
+                <Clock className="h-6 w-6 stroke-[2.2]" />
               </div>
-
-              {/* Info Section */}
-              <div className="flex flex-col items-start text-left mt-1 flex-grow">
-                <h3 className={`text-[22px] font-bold ${cat.color} mb-2 tracking-tight`}>
-                  {cat.title}
-                </h3>
-                <p className="text-[14px] font-medium text-slate-500 leading-snug mb-3 max-w-[78%]">
-                  {cat.desc}
+              <div className="flex flex-col text-left">
+                <div className="flex flex-wrap items-center gap-2">
+                  <span className="text-[16px] font-black text-slate-900">
+                    {myProperties[0]?.property_name || 'Your Stay Property'}
+                  </span>
+                  <span className="bg-amber-100 text-amber-800 text-[11px] font-extrabold px-3 py-0.5 rounded-full border border-amber-300 uppercase tracking-wide">
+                    Waiting for Approval
+                  </span>
+                </div>
+                <p className="text-[13px] font-medium text-slate-600 mt-1">
+                  You have {myProperties.length} property listing waiting for Super Admin verification. You can track progress in your Host Dashboard.
                 </p>
               </div>
-
-              {/* Action Button */}
-              <div className="absolute bottom-6 right-6">
-                <button
-                  className={`flex h-[44px] w-[44px] items-center justify-center rounded-full text-white shadow-md transition-all duration-300 ${cat.btnBg} active:scale-90 cursor-pointer`}
-                  aria-label={`List a ${cat.title}`}
-                >
-                  <ArrowRight className="h-5 w-5 stroke-[2.5]" />
-                </button>
-              </div>
             </div>
-          ))}
+            <button
+              type="button"
+              onClick={() => setShowDashboard(true)}
+              className="rounded-xl bg-[#007F55] hover:bg-[#006644] text-white px-5 py-2.5 text-[13px] font-extrabold shadow-sm active:scale-95 transition-all cursor-pointer whitespace-nowrap shrink-0 flex items-center gap-2"
+            >
+              <span>View Host Dashboard</span>
+              <ArrowRight className="w-4 h-4" />
+            </button>
+          </div>
+        )}
+
+        {/* Categories Grid */}
+        <div className="grid grid-cols-1 mt-6 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 mb-16">
+          {categories.map((cat, idx) => {
+            const isStay = cat.title === 'Stay Property';
+            const hasListings = isStay && myProperties.length > 0;
+
+            return (
+              <div
+                key={idx}
+                onClick={async () => {
+                  if (isStay) {
+                    if (myProperties.length > 0) {
+                      setShowDashboard(true);
+                      return;
+                    }
+                    const token = localStorage.getItem('tripverse_token');
+                    if (token) {
+                      try {
+                        const res = await fetch('http://localhost:5001/api/properties/my-listings', {
+                          headers: { Authorization: `Bearer ${token}` }
+                        });
+                        if (res.ok) {
+                          const data = await res.json();
+                          if (data && data.success && Array.isArray(data.data?.properties) && data.data.properties.length > 0) {
+                            setMyProperties(data.data.properties);
+                            setShowDashboard(true);
+                            return;
+                          }
+                        }
+                      } catch (e) {}
+                    }
+                    setActiveCategory('Stay Property');
+                  } else {
+                    setPartnerModal(cat.title);
+                  }
+                }}
+                className={`group relative flex flex-col justify-between bg-white rounded-[24px] border ${cat.borderClass} p-6 sm:p-7 pb-6 shadow-sm hover:shadow-lg transition-all duration-300 transform hover:-translate-y-1 cursor-pointer ${cat.shadowColor} animate-slide-up-fade`}
+                style={{ animationDelay: `${idx * 80 + 150}ms` }}
+              >
+                {/* Image Section */}
+                <div className="mb-4 flex justify-center items-center overflow-hidden rounded-2xl w-full h-[130px]">
+                  <img
+                    src={cat.image}
+                    alt={cat.title}
+                    className="h-full max-h-[125px] w-auto object-contain group-hover:scale-105 transition-transform duration-300"
+                  />
+                </div>
+
+                {/* Info Section */}
+                <div className="flex flex-col items-start text-left mt-1 flex-grow">
+                  <div className="flex flex-wrap items-center gap-2 mb-1.5">
+                    <h3 className={`text-[22px] font-bold ${cat.color} tracking-tight`}>
+                      {cat.title}
+                    </h3>
+                    {hasListings && (
+                      <span className="bg-amber-100 text-amber-800 text-[10.5px] font-extrabold px-2.5 py-0.5 rounded-full border border-amber-300">
+                        In Review
+                      </span>
+                    )}
+                  </div>
+                  <p className="text-[14px] font-medium text-slate-500 leading-snug mb-3 max-w-[78%]">
+                    {hasListings ? 'View your listing status or manage your property.' : cat.desc}
+                  </p>
+                </div>
+
+                {/* Action Button */}
+                <div className="absolute bottom-6 right-6">
+                  <button
+                    className={`flex h-[44px] w-[44px] items-center justify-center rounded-full text-white shadow-md transition-all duration-300 ${cat.btnBg} active:scale-90 cursor-pointer`}
+                    aria-label={`List a ${cat.title}`}
+                  >
+                    <ArrowRight className="h-5 w-5 stroke-[2.5]" />
+                  </button>
+                </div>
+              </div>
+            );
+          })}
         </div>
 
         {/* Bottom Benefits Bar */}

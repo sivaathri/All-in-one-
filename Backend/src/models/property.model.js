@@ -351,11 +351,11 @@ export class PropertyModel {
    */
   static async findByHostId(hostId, connection = null) {
     const sql = `
-      SELECT property_id, host_id, property_name, property_type, city, state,
-             status, rejection_reason, cover_photo, total_rooms, created_at, updated_at
-      FROM properties
-      WHERE host_id = ?
-      ORDER BY created_at DESC
+      SELECT p.*, u.full_name as host_name, u.email as host_email
+      FROM properties p
+      LEFT JOIN users u ON p.host_id = u.user_id
+      WHERE p.host_id = ?
+      ORDER BY p.created_at DESC
     `;
     const rows = await this._execute(sql, [hostId], connection);
     return rows.map(r => this._parseJsonFields(r));

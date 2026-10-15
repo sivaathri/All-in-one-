@@ -143,7 +143,7 @@ const categoryIcons = {
 };
 
 
-export default function StayPropertyForm({ onBack }) {
+export default function StayPropertyForm({ onBack, onGoToDashboard }) {
   const [currentStep, setCurrentStep] = useState(1);
   const [isSubmitted, setIsSubmitted] = useState(false);
 
@@ -532,16 +532,21 @@ export default function StayPropertyForm({ onBack }) {
     fetch('http://localhost:5001/api/properties/draft', {
       headers: { Authorization: `Bearer ${token}` }
     })
-      .then(res => res.json())
+      .then(res => {
+        if (!res.ok) return null;
+        return res.json();
+      })
       .then(resData => {
-        if (resData.success && resData.data?.hasDraft && resData.data?.draft) {
+        if (resData && resData.success && resData.data?.hasDraft && resData.data?.draft) {
           const draft = resData.data.draft;
           if (draft.current_step > 1 || draft.property_name || (draft.draft_data && Object.keys(draft.draft_data).length > 2)) {
             setDetectedDraft(draft);
           }
         }
       })
-      .catch(err => console.warn('Could not check active drafts:', err));
+      .catch(() => {
+        // Silently catch network or auth errors
+      });
   }, []);
 
   const handleAutoSaveDraft = async (stepToSave) => {
@@ -1105,7 +1110,11 @@ export default function StayPropertyForm({ onBack }) {
               onClick={() => {
                 setIsSubmitted(false);
                 setCurrentStep(1);
-                onBack();
+                if (onGoToDashboard) {
+                  onGoToDashboard();
+                } else {
+                  onBack();
+                }
               }}
               className="rounded-xl bg-[#007F55] hover:bg-[#006644] px-8 py-3.5 text-[14px] font-bold text-white shadow-md active:scale-95 transition-all cursor-pointer w-full sm:w-auto"
             >
@@ -1176,13 +1185,24 @@ export default function StayPropertyForm({ onBack }) {
       <div className="max-w-[1440px] mx-auto w-full flex-grow">
         {/* Navigation & Auto-save Status Row */}
         <div className="flex items-center justify-between gap-4 mb-6">
-          <button
-            onClick={onBack}
-            className="group flex items-center gap-2 text-[15px] font-semibold text-slate-600 hover:text-[#007F55] transition-colors duration-200 cursor-pointer"
-          >
-            <ArrowLeft className="h-4 w-4 transition-transform group-hover:-translate-x-1" />
-            Back to Home
-          </button>
+          <div className="flex items-center gap-3">
+            <button
+              onClick={onBack}
+              className="group flex items-center gap-2 text-[15px] font-semibold text-slate-600 hover:text-[#007F55] transition-colors duration-200 cursor-pointer"
+            >
+              <ArrowLeft className="h-4 w-4 transition-transform group-hover:-translate-x-1" />
+              <span>Back</span>
+            </button>
+            {onGoToDashboard && (
+              <button
+                type="button"
+                onClick={onGoToDashboard}
+                className="inline-flex items-center gap-1.5 rounded-xl bg-emerald-50 text-[#007F55] border border-emerald-200/80 px-3.5 py-1.5 text-[12.5px] font-extrabold hover:bg-emerald-100 transition-all cursor-pointer shadow-2xs"
+              >
+                <span>View Host Dashboard</span>
+              </button>
+            )}
+          </div>
 
           <div className="flex items-center gap-3">
             {isSavingDraft && (
@@ -1563,7 +1583,7 @@ export default function StayPropertyForm({ onBack }) {
                       <div className="w-full bg-[#E6F4EA]/40 border border-emerald-500/15 rounded-xl p-3.5 flex items-start gap-2.5">
                         <MapPin className="h-4.5 w-4.5 text-[#007F55] shrink-0 mt-0.5" />
                         <span className="text-[12px] font-medium text-[#15803D] leading-snug">
-                          <strong>Tip:</strong> Click anywhere on the map or drag the pin to set your exact location! You can also use <strong>GPS Auto-Pin</strong> to detect your current position, or click <strong>Locate Address</strong> to match your street address.
+                          <strong>Tip:</strong> Viewing real satellite imagery with overlaid street names & landmarks! Click anywhere or drag the red pin to set your exact property position. Use the <strong>Layers</strong> button at the bottom-left to toggle between Satellite, Default, and Terrain views.
                         </span>
                       </div>
                     </div>
