@@ -25,6 +25,37 @@
     font-family: 'Plus Jakarta Sans', sans-serif;
 }
 
+/* Modern Ultra-Thin Custom Scrollbar */
+html {
+    scrollbar-width: thin;
+    scrollbar-color: var(--primary) transparent;
+}
+
+::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+}
+
+::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #cbd5e1;
+    border-radius: 9999px;
+    transition: background 0.2s ease;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: var(--primary);
+}
+
+::-webkit-scrollbar-button {
+    display: none !important;
+    width: 0 !important;
+    height: 0 !important;
+}
+
 body {
     background-color: var(--white);
     color: var(--text-main);
