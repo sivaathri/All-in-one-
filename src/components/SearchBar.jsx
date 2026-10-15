@@ -2,7 +2,7 @@ import { useState, useEffect, useRef } from 'react';
 import { Search, MapPin, Calendar, User, ChevronDown } from 'lucide-react';
 
 const POPULAR_LOCATIONS = [
-  { name: 'Puducherry (Pondicherry)', subtitle: 'Pondicherry, India' },
+  { name: 'Puducherry ', subtitle: 'Pondicherry, India' },
   { name: 'Delhi', subtitle: 'National Capital Territory, India' },
   { name: 'Bengaluru', subtitle: 'Karnataka, India' },
   { name: 'Kochi', subtitle: 'Kerala, India' }
@@ -34,7 +34,7 @@ export default function SearchBar({ onSearch, isModifySearch }) {
         setIsLocationOpen(false);
       }
       if (
-        calendarRef.current && 
+        calendarRef.current &&
         !calendarRef.current.contains(event.target) &&
         !event.target.closest('.check-in-trigger') &&
         !event.target.closest('.check-out-trigger')
@@ -48,8 +48,8 @@ export default function SearchBar({ onSearch, isModifySearch }) {
     };
   }, []);
 
-  const filteredLocations = POPULAR_LOCATIONS.filter(loc => 
-    loc.name.toLowerCase().includes(searchQuery.toLowerCase()) || 
+  const filteredLocations = POPULAR_LOCATIONS.filter(loc =>
+    loc.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
     loc.subtitle.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
@@ -76,14 +76,14 @@ export default function SearchBar({ onSearch, isModifySearch }) {
   const handleDateClick = (date) => {
     if (!date) return;
     const dateStr = `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')}`;
-    
+
     if (!checkIn || (checkIn && checkOut)) {
       setCheckIn(dateStr);
       setCheckOut('');
     } else {
       const checkInTime = new Date(checkIn).getTime();
       const clickedTime = date.getTime();
-      
+
       if (clickedTime >= checkInTime) {
         setCheckOut(dateStr);
         setIsCalendarOpen(false); // Close dropdown when range is complete
@@ -97,8 +97,8 @@ export default function SearchBar({ onSearch, isModifySearch }) {
     if (!d1Str || !d2Date) return false;
     const d1 = new Date(d1Str);
     return d1.getFullYear() === d2Date.getFullYear() &&
-           d1.getMonth() === d2Date.getMonth() &&
-           d1.getDate() === d2Date.getDate();
+      d1.getMonth() === d2Date.getMonth() &&
+      d1.getDate() === d2Date.getDate();
   };
 
   const isBetween = (date, startStr, endStr) => {
@@ -111,10 +111,10 @@ export default function SearchBar({ onSearch, isModifySearch }) {
 
   const year = currentMonth.getFullYear();
   const month = currentMonth.getMonth();
-  
+
   const daysInMonth = new Date(year, month + 1, 0).getDate();
   const firstDayIndex = new Date(year, month, 1).getDay();
-  
+
   const daysArray = [];
   for (let i = 0; i < firstDayIndex; i++) {
     daysArray.push(null);
@@ -208,7 +208,7 @@ export default function SearchBar({ onSearch, isModifySearch }) {
         </div>
 
         {/* Check-In Date */}
-        <div 
+        <div
           onClick={() => setIsCalendarOpen(true)}
           className="check-in-trigger w-full lg:w-[20%] px-5 py-1.5 flex items-center gap-3.5 relative cursor-pointer hover:bg-slate-50/50 rounded-xl transition-colors"
         >
@@ -224,7 +224,7 @@ export default function SearchBar({ onSearch, isModifySearch }) {
 
           {/* Custom Calendar Dropdown */}
           {isCalendarOpen && (
-            <div 
+            <div
               ref={calendarRef}
               onClick={(e) => e.stopPropagation()}
               className="absolute left-1/2 -translate-x-1/2 lg:left-0 lg:translate-x-0 top-full mt-3 w-[340px] bg-white rounded-2xl border border-gray-150 p-5 shadow-2xl z-50"
@@ -267,9 +267,9 @@ export default function SearchBar({ onSearch, isModifySearch }) {
                   const isStart = isSameDay(checkIn, date);
                   const isEnd = isSameDay(checkOut, date);
                   const inRange = isBetween(date, checkIn, checkOut);
-                  
+
                   let dayClass = "h-9 w-full flex items-center justify-center text-[12.5px] font-bold relative transition-all ";
-                  
+
                   if (isStart && !checkOut) {
                     dayClass += "bg-[#0F766E] text-white rounded-full z-10";
                   } else if (isStart && checkOut) {
@@ -303,7 +303,7 @@ export default function SearchBar({ onSearch, isModifySearch }) {
         </div>
 
         {/* Check-Out Date */}
-        <div 
+        <div
           onClick={() => setIsCalendarOpen(true)}
           className="check-out-trigger w-full lg:w-[20%] px-5 py-1.5 flex items-center gap-3.5 relative cursor-pointer hover:bg-slate-50/50 rounded-xl transition-colors"
         >
