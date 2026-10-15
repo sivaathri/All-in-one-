@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { Mail, Lock, Eye, EyeOff, User, Phone, ChevronDown } from 'lucide-react';
+import { Mail, User, Phone, ChevronDown } from 'lucide-react';
 import { RoundIndiaFlag } from './SignIn';
 
 const COUNTRIES = [
@@ -25,14 +25,9 @@ export default function SignUp({
   const [phoneInput, setPhoneInput] = useState('');
   const [selectedCountry, setSelectedCountry] = useState(COUNTRIES[0]);
   const [isCountryDropdownOpen, setIsCountryDropdownOpen] = useState(false);
-  const [passwordInput, setPasswordInput] = useState('');
-  const [confirmPasswordInput, setConfirmPasswordInput] = useState('');
-  const [showPassword, setShowPassword] = useState(false);
-  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [agreeTerms, setAgreeTerms] = useState(false);
   const [focusedInput, setFocusedInput] = useState(null);
   const [loading, setLoading] = useState(false);
-  const [passwordError, setPasswordError] = useState('');
 
   const countryDropdownRef = useRef(null);
 
@@ -52,16 +47,11 @@ export default function SignUp({
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    if (passwordInput !== confirmPasswordInput) {
-      setPasswordError('Passwords do not match');
-      return;
-    }
-    setPasswordError('');
     setLoading(true);
     setTimeout(() => {
       setLoading(false);
       onSuccess({ name: nameInput, email: emailInput, phone: `${selectedCountry.code} ${phoneInput}` });
-    }, 1200);
+    }, 1000);
   };
 
   const handleSocialLogin = (provider) => {
@@ -188,60 +178,6 @@ export default function SignUp({
             </div>
           )}
         </div>
-
-        {/* Password input */}
-        <div className="relative flex items-center">
-          <Lock className={`absolute left-4.5 h-5 w-5 transition-colors duration-300 ${focusedInput === 'password' ? 'text-[#0F766E]' : 'text-slate-400'}`} />
-          <input
-            type={showPassword ? 'text' : 'password'}
-            required
-            placeholder="Create Password"
-            value={passwordInput}
-            onChange={(e) => {
-              setPasswordInput(e.target.value);
-              if (passwordError) setPasswordError('');
-            }}
-            onFocus={() => setFocusedInput('password')}
-            onBlur={() => setFocusedInput(null)}
-            className="w-full rounded-2xl border border-slate-200/90 bg-white pl-12 pr-12 py-3.5 text-[14px] font-semibold text-slate-800 placeholder-slate-400 outline-none focus:border-[#0F766E] focus:ring-4 focus:ring-[#0F766E]/10 transition-all duration-300 shadow-xs"
-          />
-          <button
-            type="button"
-            onClick={() => setShowPassword(!showPassword)}
-            className="absolute right-4.5 text-slate-400 hover:text-slate-600 transition-colors cursor-pointer"
-          >
-            {showPassword ? <EyeOff className="h-5 w-5" /> : <Eye className="h-5 w-5" />}
-          </button>
-        </div>
-
-        {/* Confirm Password input */}
-        <div className="relative flex items-center">
-          <Lock className={`absolute left-4.5 h-5 w-5 transition-colors duration-300 ${focusedInput === 'confirmPassword' ? 'text-[#0F766E]' : 'text-slate-400'}`} />
-          <input
-            type={showConfirmPassword ? 'text' : 'password'}
-            required
-            placeholder="Confirm Password"
-            value={confirmPasswordInput}
-            onChange={(e) => {
-              setConfirmPasswordInput(e.target.value);
-              if (passwordError) setPasswordError('');
-            }}
-            onFocus={() => setFocusedInput('confirmPassword')}
-            onBlur={() => setFocusedInput(null)}
-            className="w-full rounded-2xl border border-slate-200/90 bg-white pl-12 pr-12 py-3.5 text-[14px] font-semibold text-slate-800 placeholder-slate-400 outline-none focus:border-[#0F766E] focus:ring-4 focus:ring-[#0F766E]/10 transition-all duration-300 shadow-xs"
-          />
-          <button
-            type="button"
-            onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-            className="absolute right-4.5 text-slate-400 hover:text-slate-600 transition-colors cursor-pointer"
-          >
-            {showConfirmPassword ? <EyeOff className="h-5 w-5" /> : <Eye className="h-5 w-5" />}
-          </button>
-        </div>
-
-        {passwordError && (
-          <p className="text-xs font-bold text-red-500 px-1">{passwordError}</p>
-        )}
 
         {/* Terms check */}
         <div 
