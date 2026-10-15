@@ -11,27 +11,49 @@ export default function Navbar({ onNavigate = () => {}, currentPage = 'home' }) 
   // Authentication Popup states
   const [isAuthOpen, setIsAuthOpen] = useState(false);
   const [authTab, setAuthTab] = useState('login'); // 'login' or 'register'
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const [currentUser, setCurrentUser] = useState(null);
-  const [profileDropdownOpen, setProfileDropdownOpen] = useState(false);
-
-  const profileDropdownRef = useRef(null);
-
-  // Restore authenticated session from localStorage on mount (prevents logout on refresh)
-  useEffect(() => {
+  // Synchronous initial state from localStorage to eliminate any 1-second flash on refresh
+  const [currentUser, setCurrentUser] = useState(() => {
     try {
       const savedUserStr = localStorage.getItem('tripverse_user');
-      const savedToken = localStorage.getItem('tripverse_token');
-      if (savedUserStr) {
-        const parsed = JSON.parse(savedUserStr);
-        setCurrentUser(parsed);
-        setIsLoggedIn(true);
-      } else if (savedToken) {
-        setIsLoggedIn(true);
-      }
-    } catch (err) {
-      console.warn('Could not restore user session from localStorage:', err);
+      return savedUserStr ? JSON.parse(savedUserStr) : null;
+    } catch {
+      return null;
     }
+  });
+
+  const [isLoggedIn, setIsLoggedIn] = useState(() => {
+    try {
+      return Boolean(localStorage.getItem('tripverse_token') || localStorage.getItem('tripverse_user'));
+    } catch {
+      return false;
+    }
+  });
+
+  const [profileDropdownOpen, setProfileDropdownOpen] = useState(false);
+  const profileDropdownRef = useRef(null);
+
+  // Sync across tabs if user logs in or logs out elsewhere
+  useEffect(() => {
+    const handleStorageChange = () => {
+      try {
+        const savedUserStr = localStorage.getItem('tripverse_user');
+        const savedToken = localStorage.getItem('tripverse_token');
+        if (savedUserStr) {
+          setCurrentUser(JSON.parse(savedUserStr));
+          setIsLoggedIn(true);
+        } else if (savedToken) {
+          setIsLoggedIn(true);
+        } else {
+          setCurrentUser(null);
+          setIsLoggedIn(false);
+        }
+      } catch (err) {
+        console.warn('Cross-tab session sync error:', err);
+      }
+    };
+
+    window.addEventListener('storage', handleStorageChange);
+    return () => window.removeEventListener('storage', handleStorageChange);
   }, []);
 
   const handleAuthSuccess = (userData) => {
