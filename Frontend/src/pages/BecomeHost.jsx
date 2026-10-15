@@ -45,8 +45,6 @@ export default function BecomeHost({ onBackToHome }) {
       .then(data => {
         if (data && data.success && Array.isArray(data.data?.properties) && data.data.properties.length > 0) {
           setMyProperties(data.data.properties);
-          // If the user already has properties, directly open the Host Dashboard
-          setShowDashboard(true);
         }
       })
       .catch(() => {
@@ -162,7 +160,9 @@ export default function BecomeHost({ onBackToHome }) {
           setShowDashboard(false);
           setActiveCategory('Stay Property');
         }}
-        onBackToHome={onBackToHome}
+        onBackToHome={() => {
+          setShowDashboard(false);
+        }}
       />
     );
   }
