@@ -59,6 +59,7 @@ import {
 import stayPropertyImg from '../assets/step2.png';
 import puducherryMapImg from '../assets/puducherry_map.png';
 import step3Img from '../assets/step3.png';
+import LocationPickerMap from '../components/LocationPickerMap';
 
 // Icon mappings for amenities
 const amenityIcons = {
@@ -164,6 +165,8 @@ export default function StayPropertyForm({ onBack }) {
   const [stateVal, setStateVal] = useState('');
   const [countryVal, setCountryVal] = useState('');
   const [zipVal, setZipVal] = useState('');
+  const [latitude, setLatitude] = useState('11.941600');
+  const [longitude, setLongitude] = useState('79.808300');
 
   // Step 3 States (Dynamic pills flow)
   const [selectedRoomPills, setSelectedRoomPills] = useState([]);
@@ -987,32 +990,26 @@ export default function StayPropertyForm({ onBack }) {
                           Select Location on Map <span className="text-red-500">*</span>
                         </label>
                         <span className="text-[12px] font-medium text-slate-400">
-                          Drag the pin to the exact location of your property.
+                          Click anywhere on the map or drag the pin to set your exact property location.
                         </span>
                       </div>
 
-                      {/* Live Google Map Container */}
-                      <div className="relative w-full h-[290px] rounded-2xl overflow-hidden border border-slate-200 shadow-md bg-slate-50">
-                        <iframe
-                          title="Live Location Map"
-                          src={`https://maps.google.com/maps?q=${encodeURIComponent(
-                            (addressLine1 ? addressLine1 + ', ' : '') + (city || 'Puducherry') + ', ' + (stateVal || '') + ' ' + (zipVal || '') + ', ' + (countryVal || 'India')
-                          )}&t=&z=15&ie=UTF8&iwloc=&output=embed`}
-                          width="100%"
-                          height="100%"
-                          style={{ border: 0 }}
-                          allowFullScreen=""
-                          loading="lazy"
-                          referrerPolicy="no-referrer-when-downgrade"
-                          className="w-full h-full rounded-2xl"
-                        ></iframe>
-                      </div>
+                      {/* Interactive Pin Map with real-time Lat & Lng */}
+                      <LocationPickerMap
+                        latitude={latitude}
+                        longitude={longitude}
+                        onChange={({ lat, lng }) => {
+                          setLatitude(lat);
+                          setLongitude(lng);
+                        }}
+                        addressQuery={[addressLine1, city, stateVal, countryVal, zipVal].filter(Boolean).join(', ')}
+                      />
 
                       {/* Light Green Tip bar */}
-                      <div className="w-full bg-[#E6F4EA]/25 border border-emerald-500/10 rounded-xl p-3.5 flex items-start gap-2.5">
+                      <div className="w-full bg-[#E6F4EA]/40 border border-emerald-500/15 rounded-xl p-3.5 flex items-start gap-2.5">
                         <MapPin className="h-4.5 w-4.5 text-[#007F55] shrink-0 mt-0.5" />
                         <span className="text-[12px] font-medium text-[#15803D] leading-snug">
-                          <strong>Tip:</strong> You can type your street address, city, and zip code on the left to dynamically display your exact property location on the live Google Map!
+                          <strong>Tip:</strong> Click anywhere on the map or drag the pin to set your exact location! You can also use <strong>GPS Auto-Pin</strong> to detect your current position, or click <strong>Locate Address</strong> to match your street address.
                         </span>
                       </div>
                     </div>
