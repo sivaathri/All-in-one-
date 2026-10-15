@@ -193,14 +193,29 @@ export default function StayPropertyForm({ onBack }) {
     setRoomConfigs(prev => {
       const next = { ...prev };
       roomTypesOptions.forEach(opt => {
-        if (!next[opt]) {
-          const rowId = Date.now() + Math.random();
-          next[opt] = {
-            floor: 'All Floors',
-            quantity: '',
-            floorList: [{ id: rowId, floor: 'All Floors', quantity: '' }]
-          };
-        }
+        const rowId = Date.now() + Math.random();
+        const currentQty = prev[opt]?.quantity || '';
+        next[opt] = {
+          floor: 'All Floors',
+          quantity: currentQty,
+          floorList: [{ id: rowId, floor: 'All Floors', quantity: currentQty }]
+        };
+      });
+      return next;
+    });
+  };
+
+  const handleSetAllToAllFloors = () => {
+    setRoomConfigs(prev => {
+      const next = { ...prev };
+      selectedRoomPills.forEach(opt => {
+        const rowId = Date.now() + Math.random();
+        const currentQty = next[opt]?.quantity || '';
+        next[opt] = {
+          ...next[opt],
+          floor: 'All Floors',
+          floorList: [{ id: rowId, floor: 'All Floors', quantity: currentQty }]
+        };
       });
       return next;
     });
@@ -1147,14 +1162,24 @@ export default function StayPropertyForm({ onBack }) {
                         <label className="text-[15px] font-bold text-slate-800">
                           Select room types & allocate floors
                         </label>
-                        <div className="flex items-center gap-2">
+                        <div className="flex flex-wrap items-center gap-2">
                           <button
                             type="button"
                             onClick={handleSelectAllRoomTypes}
-                            className="text-[12px] font-bold text-[#007F55] bg-emerald-50 hover:bg-emerald-100/70 border border-emerald-200/60 px-3 py-1.5 rounded-xl transition-all cursor-pointer shadow-xs active:scale-95"
+                            className="text-[12px] font-bold text-[#007F55] bg-emerald-50 hover:bg-emerald-100/70 border border-emerald-200/60 px-3 py-1.5 rounded-xl transition-all cursor-pointer shadow-xs active:scale-95 flex items-center gap-1.5"
                           >
-                            + Select All ({roomTypesOptions.length}) Room Types
+                            <span>+ Select All ({roomTypesOptions.length}) Room Types (All Floors)</span>
                           </button>
+                          {selectedRoomPills.length > 0 && (
+                            <button
+                              type="button"
+                              onClick={handleSetAllToAllFloors}
+                              className="text-[12px] font-bold text-blue-700 bg-blue-50 hover:bg-blue-100/70 border border-blue-200/60 px-3 py-1.5 rounded-xl transition-all cursor-pointer shadow-xs active:scale-95 flex items-center gap-1"
+                              title="Set all currently selected room types to 'All Floors'"
+                            >
+                              <span>🏢 Set All to All Floors</span>
+                            </button>
+                          )}
                           {selectedRoomPills.length > 0 && (
                             <button
                               type="button"
@@ -1223,7 +1248,7 @@ export default function StayPropertyForm({ onBack }) {
                                   }}
                                   className="px-4 py-2.5 text-[13px] font-extrabold text-[#007F55] hover:bg-emerald-50/60 cursor-pointer border-b border-slate-100 flex items-center justify-between"
                                 >
-                                  <span>★ Select All Room Types</span>
+                                  <span>★ Select All Room Types (All Floors)</span>
                                   <span className="text-[11px] font-bold bg-emerald-100/70 text-[#007F55] px-2 py-0.5 rounded-md">
                                     {roomTypesOptions.length}
                                   </span>
@@ -2150,7 +2175,22 @@ export default function StayPropertyForm({ onBack }) {
                                 <tr key={roomType} className="align-top">
                                   {/* Floor */}
                                   <td className="py-5 pr-3 text-[14px] font-semibold text-slate-700">
-                                    {config.floor === 'Select Floor' ? 'Ground Floor' : config.floor}
+                                    {config.floorList && config.floorList.length > 1 ? (
+                                      <div className="flex flex-col gap-1 text-[12px]">
+                                        <span className="font-extrabold text-[#007F55] bg-emerald-50 px-2 py-0.5 rounded-md w-fit border border-emerald-200/60">
+                                          Multiple Floors ({config.floorList.length})
+                                        </span>
+                                        {config.floorList.map((fl, flIdx) => (
+                                          <span key={fl.id || flIdx} className="text-slate-650 font-medium">
+                                            • {fl.floor === 'All Floors' ? 'All Floors' : fl.floor}: <strong className="text-slate-800">{fl.quantity || 0}</strong> rooms
+                                          </span>
+                                        ))}
+                                      </div>
+                                    ) : (
+                                      <span className={config.floor === 'All Floors' ? 'font-bold text-[#007F55] bg-emerald-50 border border-emerald-200/60 px-2.5 py-1 rounded-lg inline-flex items-center gap-1 text-[12.5px]' : ''}>
+                                        {config.floor === 'All Floors' ? '🏢 All Floors' : (config.floor === 'Select Floor' ? 'Ground Floor' : config.floor)}
+                                      </span>
+                                    )}
                                   </td>
 
                                   {/* Room Type */}

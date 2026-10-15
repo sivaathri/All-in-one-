@@ -1,5 +1,6 @@
 import { Router } from 'express';
 import authRoutes from './auth.routes.js';
+import propertyRoutes from './property.routes.js';
 import { sendSuccess } from '../utils/response.js';
 
 const router = Router();
@@ -19,5 +20,6 @@ router.get('/health', (req, res) => {
  * Mount sub-routers
  */
 router.use('/auth', authRoutes);
+router.use('/properties', propertyRoutes);
 
 export default router;

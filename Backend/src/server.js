@@ -17,6 +17,8 @@ process.on('unhandledRejection', (reason) => {
   if (reason?.stack) console.error('\x1b[90m' + reason.stack + '\x1b[0m');
 });
 
+import { PropertyModel } from './models/property.model.js';
+
 const startServer = async () => {
   try {
     // 1. Validate environment configuration
@@ -24,6 +26,9 @@ const startServer = async () => {
 
     // 2. Test dependencies connectivity safely
     const isDbConnected = await testDatabaseConnection();
+    if (isDbConnected) {
+      await PropertyModel.initTable();
+    }
     await verifyMailConnection();
 
     // 3. Start listening
