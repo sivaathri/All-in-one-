@@ -164,11 +164,11 @@ export default function Navbar({ onNavigate = () => {}, currentPage = 'home' }) 
 
   return (
     <nav className="sticky top-0 z-50 w-full border-b border-gray-100 bg-white shadow-sm transition-all duration-300">
-      <div className="w-full px-4 sm:px-8 lg:px-12">
+      <div className="w-full px-4 sm:px-6 lg:px-8 xl:px-12">
         <div className="flex h-20 items-center justify-between">
           {/* Logo Section */}
-          <div className="flex items-center gap-3 cursor-pointer" onClick={() => onNavigate('home')}>
-            <svg className="w-10 h-10 shrink-0" viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <div className="flex items-center gap-2.5 sm:gap-3 cursor-pointer shrink-0" onClick={() => onNavigate('home')}>
+            <svg className="w-9 h-9 sm:w-10 sm:h-10 shrink-0" viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg">
               {/* Green double-headed route arrow underneath */}
               <path d="M7 22C9 28 27 28 29 22" stroke="#0F766E" strokeWidth="2.5" strokeLinecap="round" />
               {/* Left arrowhead pointing up-left */}
@@ -182,10 +182,10 @@ export default function Navbar({ onNavigate = () => {}, currentPage = 'home' }) 
               <circle cx="18" cy="13" r="2.8" fill="#0F766E" />
             </svg>
             <div className="flex flex-col">
-              <span className="text-[23px] font-extrabold tracking-tight text-[#0F766E] leading-none">
+              <span className="text-[20px] sm:text-[23px] font-extrabold tracking-tight text-[#0F766E] leading-none">
                 TripVerse
               </span>
-              <span className="text-[9px] font-bold tracking-wider text-slate-500 mt-1">
+              <span className="text-[8.5px] sm:text-[9px] font-bold tracking-wider text-slate-500 mt-1">
                 Explore. Experience. Enjoy.
               </span>
             </div>
@@ -193,7 +193,7 @@ export default function Navbar({ onNavigate = () => {}, currentPage = 'home' }) 
 
           {/* Desktop Navigation */}
           {currentPage !== 'become-host' && (
-            <div className="hidden lg:flex items-center gap-8">
+            <div className="hidden lg:flex items-center gap-3.5 xl:gap-6 2xl:gap-8">
             {menuItems.map((item) => {
               if (item.dropdown) {
                 const isRentals = item.name === 'Rentals';
@@ -217,7 +217,7 @@ export default function Navbar({ onNavigate = () => {}, currentPage = 'home' }) 
                           onNavigate('rent-home');
                         }
                       }}
-                      className={`flex items-center gap-1 text-[15px] font-semibold transition-colors duration-200 cursor-pointer outline-none ${
+                      className={`flex items-center gap-1 text-[13.5px] xl:text-[15px] font-semibold transition-colors duration-200 cursor-pointer outline-none whitespace-nowrap ${
                         isActive
                           ? 'text-[#0F766E]'
                           : 'text-slate-800 hover:text-[#0F766E]'
@@ -318,7 +318,7 @@ export default function Navbar({ onNavigate = () => {}, currentPage = 'home' }) 
                       onNavigate('home');
                     }
                   }}
-                  className={`relative py-2 text-[15px] font-semibold transition-colors duration-200 outline-none ${
+                  className={`relative py-2 text-[13.5px] xl:text-[15px] font-semibold transition-colors duration-200 outline-none whitespace-nowrap ${
                     isActive
                       ? 'text-[#0F766E]'
                       : 'text-slate-800 hover:text-[#0F766E]'
@@ -335,13 +335,13 @@ export default function Navbar({ onNavigate = () => {}, currentPage = 'home' }) 
           )}
 
           {/* Desktop Right Side Buttons */}
-          <div className="hidden lg:flex items-center gap-3">
+          <div className="hidden lg:flex items-center gap-2 xl:gap-3 shrink-0">
             {isLoggedIn ? (
               <>
                 {currentPage !== 'become-host' && (
                   <button
                     onClick={() => setIsBecomeHostOpen(true)}
-                    className="flex items-center gap-2 rounded-xl border border-[#0F766E] px-4 py-2 text-[14px] font-semibold text-[#0F766E] hover:bg-[#0F766E] hover:text-white transition-all duration-200 cursor-pointer outline-none"
+                    className="flex items-center gap-1.5 xl:gap-2 rounded-xl border border-[#0F766E] px-3 xl:px-4 py-2 text-[13px] xl:text-[14px] font-semibold text-[#0F766E] hover:bg-[#0F766E] hover:text-white transition-all duration-200 cursor-pointer outline-none whitespace-nowrap"
                   >
                     <svg className="w-4 h-4 fill-current shrink-0" viewBox="0 0 24 24">
                       <path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z" />
@@ -353,7 +353,7 @@ export default function Navbar({ onNavigate = () => {}, currentPage = 'home' }) 
                 {/* Wishlist Button */}
                 <button 
                   onClick={() => onNavigate('stays-results')}
-                  className="flex items-center gap-2 text-slate-700 hover:text-[#0F766E] font-semibold text-[14px] px-3 py-2 cursor-pointer transition-colors mr-1 shrink-0 outline-none"
+                  className="flex items-center gap-1.5 text-slate-700 hover:text-[#0F766E] font-semibold text-[13px] xl:text-[14px] px-2.5 xl:px-3 py-2 cursor-pointer transition-colors shrink-0 outline-none"
                 >
                   <Heart className="h-[18px] w-[18px] text-slate-700 stroke-[2.2]" />
                   <span>Wishlist</span>
@@ -575,6 +575,16 @@ export default function Navbar({ onNavigate = () => {}, currentPage = 'home' }) 
                     {displayEmail && <span className="text-[11px] font-semibold text-slate-400 mt-1 leading-none truncate">{displayEmail}</span>}
                   </div>
                 </div>
+                <button
+                  onClick={() => {
+                    setIsOpen(false);
+                    onNavigate('stays-results');
+                  }}
+                  className="flex items-center justify-center gap-2 w-full rounded-xl border border-slate-200 py-3 text-center text-sm font-semibold text-slate-700 hover:bg-slate-50 transition-colors outline-none cursor-pointer"
+                >
+                  <Heart className="h-4 w-4 text-slate-600 stroke-[2.2]" />
+                  <span>Wishlist</span>
+                </button>
                 <button
                   onClick={() => {
                     setIsOpen(false);

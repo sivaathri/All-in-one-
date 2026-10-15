@@ -560,7 +560,7 @@ export default function Adventures() {
       `}</style>
 
       {/* 1. HERO SECTION WITH ACCENT HEADER */}
-      <section className="relative w-full h-[360px] sm:h-[380px] lg:h-[420px] flex items-center mb-6">
+      <section className="relative w-full min-h-[480px] sm:min-h-[440px] lg:min-h-0 lg:h-[420px] flex items-start sm:items-center mb-6 pt-8 sm:pt-0">
         {/* Background Image and clean container crop */}
         <div className="absolute inset-0 z-0 overflow-hidden">
           <img 
@@ -592,7 +592,7 @@ export default function Adventures() {
         </div>
 
         {/* FLOATING SEARCH BAR OVERLAY CARD */}
-        <div className="absolute bottom-[12px] left-1/2 -translate-x-1/2 w-full max-w-[1760px] px-4 sm:px-8 lg:px-12 z-20">
+        <div className="absolute bottom-[-135px] sm:bottom-[-55px] lg:bottom-[12px] left-1/2 -translate-x-1/2 w-full max-w-[1760px] px-4 sm:px-8 lg:px-12 z-20">
           {activeDropdown && (
             <div 
               className="fixed inset-0 z-30 cursor-default" 
@@ -602,7 +602,7 @@ export default function Adventures() {
               }}
             />
           )}
-          <div className="bg-white rounded-2xl border border-slate-200/90 pl-6 pr-4 py-2 shadow-xl shadow-slate-200/35 flex flex-col lg:flex-row items-stretch lg:items-center justify-between gap-2 lg:gap-0 h-auto lg:h-[76px] relative z-40">
+          <div className="bg-white rounded-2xl border border-slate-200/90 pl-4 sm:pl-6 pr-4 py-2 shadow-xl shadow-slate-200/35 flex flex-col lg:flex-row items-stretch lg:items-center justify-between gap-2 lg:gap-0 h-auto lg:h-[76px] relative z-40">
             
             {/* Location selector */}
             <div className="flex items-center gap-3 px-4 py-1.5 rounded-2xl hover:bg-slate-50/80 transition-colors cursor-pointer text-left shrink-0">
@@ -804,7 +804,7 @@ export default function Adventures() {
       </section>
 
       {/* Main Grid Outer Container */}
-      <div className="max-w-[1760px] mx-auto px-4 sm:px-6 lg:px-8 py-6">
+      <div className="max-w-[1760px] mx-auto px-4 sm:px-6 lg:px-8 pt-36 sm:pt-16 lg:pt-6 pb-6">
         
         {/* Double-Column Master Layout */}
         <div className="grid grid-cols-1 xl:grid-cols-12 gap-6 items-start">

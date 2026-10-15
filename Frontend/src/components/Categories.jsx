@@ -46,7 +46,7 @@ export default function Categories({ onNavigate = () => {} }) {
   ];
 
   return (
-    <section className="w-full bg-white pt-16 pb-8">
+    <section className="w-full bg-white pt-24 sm:pt-20 lg:pt-16 pb-8">
       <div className="mx-auto max-w-[1760px] px-4 sm:px-6 lg:px-8">
         <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-7 gap-4 justify-center">
           {categories.map((cat, idx) => (

@@ -18,16 +18,30 @@
   font-family: 'Plus Jakarta Sans', 'Outfit', 'Inter', system-ui, -apple-system, sans-serif;
 }
 
-body {
+html, body {
   background-color: #F8FAFC;
   color: #0F172A;
   margin: 0;
   padding: 0;
+  width: 100%;
+  max-width: 100vw;
+  overflow-x: hidden;
+  -webkit-text-size-adjust: 100%;
+}
+
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
+/* Ensure all media stays responsive and never overflows parent */
+img, video, canvas, svg {
+  max-width: 100%;
 }
 
 /* Force standard elements to inherit font family */
 input, select, textarea, button {
   font-family: inherit;
+  font-size: 100%;
 }
 
 /* Modern Ultra-Thin Custom Scrollbar */

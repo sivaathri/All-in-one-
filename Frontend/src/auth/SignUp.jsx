@@ -536,7 +536,7 @@ export default function SignUp({
           )}
 
           {/* 6 OTP Digit Boxes */}
-          <div className="flex items-center justify-center gap-2 sm:gap-2.5 py-2" onPaste={handleOtpPaste}>
+          <div className="flex items-center justify-center gap-1.5 sm:gap-2.5 py-2" onPaste={handleOtpPaste}>
             {otp.map((digit, index) => (
               <input
                 key={index}
@@ -547,7 +547,7 @@ export default function SignUp({
                 value={digit}
                 onChange={(e) => handleOtpDigitChange(index, e.target.value)}
                 onKeyDown={(e) => handleOtpKeyDown(index, e)}
-                className="w-11 h-13 sm:w-12 sm:h-14 rounded-2xl border-2 border-slate-200 bg-white text-center text-xl font-bold text-slate-800 outline-none focus:border-[#0F766E] focus:ring-4 focus:ring-[#0F766E]/15 transition-all duration-200 shadow-xs"
+                className="w-9 h-11 sm:w-12 sm:h-14 rounded-xl sm:rounded-2xl border-2 border-slate-200 bg-white text-center text-lg sm:text-xl font-bold text-slate-800 outline-none focus:border-[#0F766E] focus:ring-4 focus:ring-[#0F766E]/15 transition-all duration-200 shadow-xs"
               />
             ))}
           </div>

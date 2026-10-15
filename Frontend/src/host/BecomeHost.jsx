@@ -212,23 +212,23 @@ export default function BecomeHost({ onBackToHome }) {
 
       {/* Full-width Header Block with Background Image */}
       <div 
-        className="w-full bg-no-repeat bg-right bg-contain min-h-[260px] sm:min-h-[290px] md:min-h-[330px] px-4 sm:px-8 lg:px-16 pt-2"
+        className="w-full bg-no-repeat bg-right-bottom sm:bg-right bg-contain min-h-[220px] sm:min-h-[290px] md:min-h-[330px] px-4 sm:px-8 lg:px-16 pt-2"
         style={{ backgroundImage: `url(${becameBg})` }}
       >
-        <div className="max-w-[1360px] mx-auto w-full pt-4">
+        <div className="max-w-[1360px] mx-auto w-full pt-2 sm:pt-4">
           {/* Text Content */}
           <div 
-            className="w-full mt-4 lg:w-[55%] text-left max-w-xl py-6 md:py-10 bg-white/80 lg:bg-transparent backdrop-blur-xs lg:backdrop-blur-none rounded-2xl p-4 lg:p-0 animate-slide-down-fade"
+            className="w-full mt-2 sm:mt-4 lg:w-[55%] text-left max-w-xl py-4 sm:py-6 md:py-10 bg-white/85 sm:bg-white/80 lg:bg-transparent backdrop-blur-xs lg:backdrop-blur-none rounded-2xl p-4 lg:p-0 animate-slide-down-fade"
             style={{ animationDelay: '100ms' }}
           >
-            <span className="text-[13px] sm:text-[14px] font-extrabold tracking-[0.08em] text-[#16A34A] uppercase block mb-3.5">
+            <span className="text-[12px] sm:text-[14px] font-extrabold tracking-[0.08em] text-[#16A34A] uppercase block mb-2 sm:mb-3.5">
               BECOME A HOST
             </span>
-            <h1 className="text-[36px] mt-20 sm:text-[46px] md:text-[54px] lg:text-[60px] font-extrabold text-[#0F172A] leading-[1.15] tracking-tight mb-6">
+            <h1 className="text-[30px] sm:text-[42px] md:text-[50px] lg:text-[58px] font-extrabold text-[#0F172A] leading-[1.15] tracking-tight mt-2 sm:mt-4 mb-3 sm:mb-6">
               What would you <br />
               <span className="text-[#16A34A]">like to list?</span>
             </h1>
-            <p className="text-[15px] sm:text-[16px] md:text-[17px] font-medium text-[#475569] leading-relaxed">
+            <p className="text-[14px] sm:text-[16px] md:text-[17px] font-medium text-[#475569] leading-relaxed">
               Choose a category to get started.<br />
               You can add and manage your listings with ease.
             </p>
@@ -382,13 +382,13 @@ export default function BecomeHost({ onBackToHome }) {
 
       {/* Partner Registration Modal for non-stay categories */}
       {partnerModal && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-xs p-4 animate-fade-step">
-          <div className="relative w-full max-w-lg rounded-3xl bg-white p-7 sm:p-9 shadow-2xl border border-slate-100 text-left">
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-xs p-3 sm:p-4 animate-fade-step">
+          <div className="relative w-full max-w-lg rounded-2xl sm:rounded-3xl bg-white p-5 sm:p-9 shadow-2xl border border-slate-100 text-left">
             <button
               onClick={() => setPartnerModal(null)}
-              className="absolute top-5 right-5 h-9 w-9 rounded-full bg-slate-100 flex items-center justify-center text-slate-500 hover:bg-slate-200 transition-colors cursor-pointer"
+              className="absolute top-4 right-4 sm:top-5 sm:right-5 h-8 w-8 sm:h-9 sm:w-9 rounded-full bg-slate-100 flex items-center justify-center text-slate-500 hover:bg-slate-200 transition-colors cursor-pointer"
             >
-              <X className="h-5 w-5" />
+              <X className="h-4 w-4 sm:h-5 sm:w-5" />
             </button>
 
             {partnerSuccess ? (

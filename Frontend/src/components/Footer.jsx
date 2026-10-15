@@ -5,8 +5,8 @@ export default function Footer({ onNavigate = () => {} }) {
     <footer className="w-full bg-[#F8FAFC] border-t border-slate-200 text-slate-500">
       
       {/* Main Multi-Column Section */}
-      <div className="mx-auto max-w-[1760px] px-4 sm:px-6 lg:px-8 py-14">
-        <div className="flex flex-col lg:flex-row items-stretch justify-between gap-8 lg:gap-4">
+      <div className="mx-auto max-w-[1760px] px-4 sm:px-6 lg:px-8 py-10 sm:py-14">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:flex lg:flex-row items-start justify-between gap-8 lg:gap-4">
           
           {/* Column 1: Brand Info */}
           <div className="space-y-4 text-left pr-4">

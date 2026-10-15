@@ -2022,7 +2022,7 @@ export default function FoodSpots() {
           </div>
         </div>
       ) : (
-        <div className="mx-auto max-w-[1760px] px-4 pt-8 pb-4">
+        <div className="mx-auto max-w-[1760px] px-4 pt-72 sm:pt-64 lg:pt-8 pb-4">
           <div className="mt-3">
             
             {/* ==================== LISTING GRID (Full Width) ==================== */}

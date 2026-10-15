@@ -177,7 +177,7 @@ export default function TrendingSection() {
           {showLeftArrow && (
             <button
               onClick={() => handleScroll('left')}
-              className="absolute left-0 top-[40%] -translate-y-1/2 -translate-x-5.5 z-20 flex h-11 w-11 items-center justify-center rounded-full bg-white border border-slate-200 shadow-md text-slate-700 hover:bg-slate-50 hover:scale-105 active:scale-95 transition-all duration-200 cursor-pointer"
+              className="absolute left-0 top-[40%] -translate-y-1/2 -translate-x-5.5 z-20 hidden sm:flex h-11 w-11 items-center justify-center rounded-full bg-white border border-slate-200 shadow-md text-slate-700 hover:bg-slate-50 hover:scale-105 active:scale-95 transition-all duration-200 cursor-pointer"
               aria-label="Scroll left"
             >
               <ChevronLeft className="h-5.5 w-5.5" strokeWidth={2.5} />
@@ -188,7 +188,7 @@ export default function TrendingSection() {
           {showRightArrow && (
             <button
               onClick={() => handleScroll('right')}
-              className="absolute right-0 top-[40%] -translate-y-1/2 translate-x-5.5 z-20 flex h-11 w-11 items-center justify-center rounded-full bg-white border border-slate-200 shadow-md text-slate-700 hover:bg-slate-50 hover:scale-105 active:scale-95 transition-all duration-200 cursor-pointer"
+              className="absolute right-0 top-[40%] -translate-y-1/2 translate-x-5.5 z-20 hidden sm:flex h-11 w-11 items-center justify-center rounded-full bg-white border border-slate-200 shadow-md text-slate-700 hover:bg-slate-50 hover:scale-105 active:scale-95 transition-all duration-200 cursor-pointer"
               aria-label="Scroll right"
             >
               <ChevronRight className="h-5.5 w-5.5" strokeWidth={2.5} />

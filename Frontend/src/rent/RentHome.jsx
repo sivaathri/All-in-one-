@@ -214,33 +214,33 @@ export default function RentHome({ onSearch, onSelectVehicle, initialVehicleType
           </p>
 
           {/* Single Badges Pill Capsule */}
-          <div className="mt-7 bg-white/95 border border-slate-200/60 shadow-sm rounded-full py-3 px-8 flex flex-wrap items-center gap-x-6 gap-y-2 w-fit">
-            <div className="flex items-center gap-2 text-[12.5px] font-extrabold text-[#0F172A]">
-              <svg className="h-4.5 w-4.5 text-[#0F172A]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+          <div className="mt-5 sm:mt-7 bg-white/95 border border-slate-200/60 shadow-sm rounded-2xl sm:rounded-full py-2.5 sm:py-3 px-3.5 sm:px-8 flex flex-wrap items-center gap-x-4 sm:gap-x-6 gap-y-2 w-fit">
+            <div className="flex items-center gap-1.5 sm:gap-2 text-[11px] sm:text-[12.5px] font-extrabold text-[#0F172A]">
+              <svg className="h-4 w-4 sm:h-4.5 sm:w-4.5 text-[#0F172A]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
                 <circle cx="12" cy="8" r="7" />
                 <polyline points="8.21 13.89 7 23 12 20 17 23 15.79 13.88" />
               </svg>
               <span>Best Prices</span>
             </div>
             
-            <div className="flex items-center gap-2 text-[12.5px] font-extrabold text-[#0F172A]">
-              <svg className="h-4.5 w-4.5 text-[#0F172A]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+            <div className="flex items-center gap-1.5 sm:gap-2 text-[11px] sm:text-[12.5px] font-extrabold text-[#0F172A]">
+              <svg className="h-4 w-4 sm:h-4.5 sm:w-4.5 text-[#0F172A]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
                 <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
                 <path d="m9 12 2 2 4-4" />
               </svg>
               <span>Verified Vehicles</span>
             </div>
             
-            <div className="flex items-center gap-2 text-[12.5px] font-extrabold text-[#0F172A]">
-              <svg className="h-4.5 w-4.5 text-[#0F172A]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+            <div className="flex items-center gap-1.5 sm:gap-2 text-[11px] sm:text-[12.5px] font-extrabold text-[#0F172A]">
+              <svg className="h-4 w-4 sm:h-4.5 sm:w-4.5 text-[#0F172A]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
                 <path d="M3 18v-6a9 9 0 0 1 18 0v6" />
                 <path d="M21 19a2 2 0 0 1-2 2h-1a2 2 0 0 1-2-2v-3a2 2 0 0 1 2-2h3zM3 19a2 2 0 0 0 2 2h1a2 2 0 0 0 2-2v-3a2 2 0 0 0-2-2H3z" />
               </svg>
               <span>24/7 Support</span>
             </div>
             
-            <div className="flex items-center gap-2 text-[12.5px] font-extrabold text-[#0F172A]">
-              <svg className="h-4.5 w-4.5 text-[#0F172A]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+            <div className="flex items-center gap-1.5 sm:gap-2 text-[11px] sm:text-[12.5px] font-extrabold text-[#0F172A]">
+              <svg className="h-4 w-4 sm:h-4.5 sm:w-4.5 text-[#0F172A]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
                 <rect x="3" y="4" width="18" height="18" rx="2" ry="2" />
                 <line x1="16" y1="2" x2="16" y2="6" />
                 <line x1="8" y1="2" x2="8" y2="6" />
@@ -253,19 +253,19 @@ export default function RentHome({ onSearch, onSelectVehicle, initialVehicleType
         </div>
 
         {/* ─── FLOATING CATEGORY TABS ─── */}
-        <div className="absolute bottom-0 left-1/2 -translate-x-1/2 translate-y-1/2 max-w-[920px] w-[calc(100%-2rem)] bg-white rounded-2xl shadow-xl border border-slate-100/80 flex overflow-hidden z-20">
+        <div className="absolute bottom-0 left-1/2 -translate-x-1/2 translate-y-1/2 max-w-[920px] w-[calc(100%-2rem)] bg-white rounded-2xl shadow-xl border border-slate-100/80 flex overflow-x-auto no-scrollbar sm:overflow-visible z-20">
           
           {/* Bike tab */}
           <button 
             onClick={() => { setActiveTab('Bike'); setSelectedTypes(['All']); }}
-            className={`flex-1 flex items-center justify-center gap-3 py-4 sm:py-5 text-left border-b-3 cursor-pointer transition-all ${
+            className={`flex-1 min-w-[120px] sm:min-w-0 flex items-center justify-center gap-2 sm:gap-3 py-3 sm:py-5 px-2 text-left border-b-3 cursor-pointer transition-all ${
               activeTab === 'Bike'
                 ? 'border-[#0D9488] bg-teal-50/10'
                 : 'border-transparent hover:bg-slate-50/60'
             }`}
           >
-            <div className={`h-10 w-10 rounded-xl flex items-center justify-center shrink-0 ${activeTab === 'Bike' ? 'bg-[#0D9488]/10 text-[#0D9488]' : 'bg-slate-100 text-slate-500'}`}>
-              <svg className="h-6 w-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+            <div className={`h-8 w-8 sm:h-10 sm:w-10 rounded-xl flex items-center justify-center shrink-0 ${activeTab === 'Bike' ? 'bg-[#0D9488]/10 text-[#0D9488]' : 'bg-slate-100 text-slate-500'}`}>
+              <svg className="h-5 w-5 sm:h-6 sm:w-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
                 <circle cx="5.5" cy="17.5" r="3" />
                 <circle cx="18.5" cy="17.5" r="3" />
                 <path d="M5.5 17.5l4-3 5 .5 4 2.5" />
@@ -274,46 +274,46 @@ export default function RentHome({ onSearch, onSelectVehicle, initialVehicleType
                 <path d="M6 13c1.5-1.5 3-1.5 4.5-.5" />
               </svg>
             </div>
-            <div>
-              <span className={`text-[12.5px] font-black block ${activeTab === 'Bike' ? 'text-slate-800' : 'text-slate-500'}`}>Bike Rental</span>
-              <span className={`text-[10px] font-bold block mt-0.5 ${activeTab === 'Bike' ? 'text-[#0D9488]' : 'text-slate-400'}`}>{tabCounts.Bike}+ Bikes</span>
+            <div className="min-w-0">
+              <span className={`text-[11.5px] sm:text-[12.5px] font-black block truncate ${activeTab === 'Bike' ? 'text-slate-800' : 'text-slate-500'}`}>Bike Rental</span>
+              <span className={`text-[9.5px] sm:text-[10px] font-bold block mt-0.5 truncate ${activeTab === 'Bike' ? 'text-[#0D9488]' : 'text-slate-400'}`}>{tabCounts.Bike}+ Bikes</span>
             </div>
           </button>
 
           {/* Car tab */}
           <button 
             onClick={() => { setActiveTab('Car'); setSelectedTypes(['All']); }}
-            className={`flex-1 flex items-center justify-center gap-3 py-4 sm:py-5 text-left border-b-3 cursor-pointer transition-all ${
+            className={`flex-1 min-w-[120px] sm:min-w-0 flex items-center justify-center gap-2 sm:gap-3 py-3 sm:py-5 px-2 text-left border-b-3 cursor-pointer transition-all ${
               activeTab === 'Car'
                 ? 'border-[#0D9488] bg-teal-50/10'
                 : 'border-transparent hover:bg-slate-50/60'
             }`}
           >
-            <div className={`h-10 w-10 rounded-xl flex items-center justify-center shrink-0 ${activeTab === 'Car' ? 'bg-[#0D9488]/10 text-[#0D9488]' : 'bg-slate-100 text-slate-500'}`}>
-              <svg className="h-6.5 w-6.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+            <div className={`h-8 w-8 sm:h-10 sm:w-10 rounded-xl flex items-center justify-center shrink-0 ${activeTab === 'Car' ? 'bg-[#0D9488]/10 text-[#0D9488]' : 'bg-slate-100 text-slate-500'}`}>
+              <svg className="h-5 w-5 sm:h-6.5 sm:w-6.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
                 <circle cx="6.5" cy="17.5" r="2.5" />
                 <circle cx="17.5" cy="17.5" r="2.5" />
                 <path d="M2 14.5h2c.5-2 2.5-2 3 0h6c.5-2 2.5-2 3 0h2.5c.8 0 1.5-.7 1.5-1.5v-3.5L16 6.5H8L4.5 9.5H3.5C2.7 9.5 2 10.2 2 11v3.5z" />
                 <path d="M8 7.5h5.5l1.5 2H6.5l1.5-2z" />
               </svg>
             </div>
-            <div>
-              <span className={`text-[12.5px] font-black block ${activeTab === 'Car' ? 'text-slate-800' : 'text-slate-500'}`}>Car Rental</span>
-              <span className={`text-[10px] font-bold block mt-0.5 ${activeTab === 'Car' ? 'text-[#0D9488]' : 'text-slate-400'}`}>{tabCounts.Car}+ Cars</span>
+            <div className="min-w-0">
+              <span className={`text-[11.5px] sm:text-[12.5px] font-black block truncate ${activeTab === 'Car' ? 'text-slate-800' : 'text-slate-500'}`}>Car Rental</span>
+              <span className={`text-[9.5px] sm:text-[10px] font-bold block mt-0.5 truncate ${activeTab === 'Car' ? 'text-[#0D9488]' : 'text-slate-400'}`}>{tabCounts.Car}+ Cars</span>
             </div>
           </button>
 
           {/* Scooter tab */}
           <button 
             onClick={() => { setActiveTab('Scooter'); setSelectedTypes(['All']); }}
-            className={`flex-1 flex items-center justify-center gap-3 py-4 sm:py-5 text-left border-b-3 cursor-pointer transition-all ${
+            className={`flex-1 min-w-[120px] sm:min-w-0 flex items-center justify-center gap-2 sm:gap-3 py-3 sm:py-5 px-2 text-left border-b-3 cursor-pointer transition-all ${
               activeTab === 'Scooter'
                 ? 'border-[#0D9488] bg-teal-50/10'
                 : 'border-transparent hover:bg-slate-50/60'
             }`}
           >
-            <div className={`h-10 w-10 rounded-xl flex items-center justify-center shrink-0 ${activeTab === 'Scooter' ? 'bg-[#0D9488]/10 text-[#0D9488]' : 'bg-slate-100 text-slate-500'}`}>
-              <svg className="h-6 w-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+            <div className={`h-8 w-8 sm:h-10 sm:w-10 rounded-xl flex items-center justify-center shrink-0 ${activeTab === 'Scooter' ? 'bg-[#0D9488]/10 text-[#0D9488]' : 'bg-slate-100 text-slate-500'}`}>
+              <svg className="h-5 w-5 sm:h-6 sm:w-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
                 <circle cx="6" cy="17.5" r="2.5" />
                 <circle cx="18" cy="17.5" r="2.5" />
                 <path d="M8.5 17.5h6" />
@@ -323,23 +323,23 @@ export default function RentHome({ onSearch, onSelectVehicle, initialVehicleType
                 <path d="M8.5 12c1.5-1.5 3.5-1.5 4.5 0" />
               </svg>
             </div>
-            <div>
-              <span className={`text-[12.5px] font-black block ${activeTab === 'Scooter' ? 'text-slate-800' : 'text-slate-500'}`}>Scooter Rental</span>
-              <span className={`text-[10px] font-bold block mt-0.5 ${activeTab === 'Scooter' ? 'text-[#0D9488]' : 'text-slate-400'}`}>{tabCounts.Scooter}+ Scooters</span>
+            <div className="min-w-0">
+              <span className={`text-[11.5px] sm:text-[12.5px] font-black block truncate ${activeTab === 'Scooter' ? 'text-slate-800' : 'text-slate-500'}`}>Scooter Rental</span>
+              <span className={`text-[9.5px] sm:text-[10px] font-bold block mt-0.5 truncate ${activeTab === 'Scooter' ? 'text-[#0D9488]' : 'text-slate-400'}`}>{tabCounts.Scooter}+ Scooters</span>
             </div>
           </button>
 
           {/* Bicycle tab */}
           <button 
             onClick={() => { setActiveTab('Bicycle'); setSelectedTypes(['All']); }}
-            className={`flex-1 flex items-center justify-center gap-3 py-4 sm:py-5 text-left border-b-3 cursor-pointer transition-all ${
+            className={`flex-1 min-w-[120px] sm:min-w-0 flex items-center justify-center gap-2 sm:gap-3 py-3 sm:py-5 px-2 text-left border-b-3 cursor-pointer transition-all ${
               activeTab === 'Bicycle'
                 ? 'border-[#0D9488] bg-teal-50/10'
                 : 'border-transparent hover:bg-slate-50/60'
             }`}
           >
-            <div className={`h-10 w-10 rounded-xl flex items-center justify-center shrink-0 ${activeTab === 'Bicycle' ? 'bg-[#0D9488]/10 text-[#0D9488]' : 'bg-slate-100 text-slate-500'}`}>
-              <svg className="h-6 w-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+            <div className={`h-8 w-8 sm:h-10 sm:w-10 rounded-xl flex items-center justify-center shrink-0 ${activeTab === 'Bicycle' ? 'bg-[#0D9488]/10 text-[#0D9488]' : 'bg-slate-100 text-slate-500'}`}>
+              <svg className="h-5 w-5 sm:h-6 sm:w-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
                 <circle cx="5.5" cy="17.5" r="3" />
                 <circle cx="18.5" cy="17.5" r="3" />
                 <path d="M5.5 17.5L10 12h5.5l3 5.5" />
@@ -349,9 +349,9 @@ export default function RentHome({ onSearch, onSelectVehicle, initialVehicleType
                 <path d="M10 12l-.5-2.5h-1.5" />
               </svg>
             </div>
-            <div>
-              <span className={`text-[12.5px] font-black block ${activeTab === 'Bicycle' ? 'text-slate-800' : 'text-slate-500'}`}>Bicycle Rental</span>
-              <span className={`text-[10px] font-bold block mt-0.5 ${activeTab === 'Bicycle' ? 'text-[#0D9488]' : 'text-slate-400'}`}>{tabCounts.Bicycle}+ Bicycles</span>
+            <div className="min-w-0">
+              <span className={`text-[11.5px] sm:text-[12.5px] font-black block truncate ${activeTab === 'Bicycle' ? 'text-slate-800' : 'text-slate-500'}`}>Bicycle Rental</span>
+              <span className={`text-[9.5px] sm:text-[10px] font-bold block mt-0.5 truncate ${activeTab === 'Bicycle' ? 'text-[#0D9488]' : 'text-slate-400'}`}>{tabCounts.Bicycle}+ Bicycles</span>
             </div>
           </button>
 

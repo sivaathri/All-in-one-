@@ -123,18 +123,18 @@ export default function HostDashboard({ onAddNewProperty, onBackToHome }) {
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
           
           {/* ── Left Sidebar (Host Dashboard Navigation) ── */}
-          <aside className="lg:col-span-3 flex flex-col gap-6">
-            <div className="bg-white rounded-3xl border border-slate-100 p-5 shadow-xs text-left">
-              <h2 className="text-xl font-extrabold text-slate-900 px-3 py-2 mb-2 tracking-tight">
+          <aside className="lg:col-span-3 flex flex-col gap-4 lg:gap-6">
+            <div className="bg-white rounded-2xl lg:rounded-3xl border border-slate-100 p-3 sm:p-4 lg:p-5 shadow-xs text-left">
+              <h2 className="hidden lg:block text-xl font-extrabold text-slate-900 px-3 py-2 mb-2 tracking-tight">
                 Host Dashboard
               </h2>
 
-              <nav className="space-y-1.5">
+              <nav className="flex lg:flex-col overflow-x-auto lg:overflow-visible no-scrollbar gap-1.5 pb-1 lg:pb-0">
                 {/* 1. My Properties */}
                 <button
                   type="button"
                   onClick={() => setActiveTab('My Properties')}
-                  className={`w-full flex items-center justify-between px-3.5 py-3 rounded-2xl text-[14px] font-bold transition-all cursor-pointer ${
+                  className={`flex items-center justify-between px-3.5 py-2.5 sm:py-3 rounded-xl sm:rounded-2xl text-[13px] sm:text-[14px] font-bold transition-all cursor-pointer whitespace-nowrap shrink-0 lg:w-full ${
                     activeTab === 'My Properties'
                       ? 'bg-[#E6F4EA] text-[#007F55] shadow-xs'
                       : 'text-slate-650 hover:bg-slate-50 hover:text-slate-900'
@@ -150,11 +150,11 @@ export default function HostDashboard({ onAddNewProperty, onBackToHome }) {
                 <button
                   type="button"
                   onClick={onAddNewProperty}
-                  className="w-full flex items-center justify-between px-3.5 py-3 rounded-2xl text-[14px] font-bold text-slate-650 hover:bg-slate-50 hover:text-slate-900 transition-all cursor-pointer"
+                  className="flex items-center justify-between px-3.5 py-2.5 sm:py-3 rounded-xl sm:rounded-2xl text-[13px] sm:text-[14px] font-bold text-slate-650 hover:bg-slate-50 hover:text-slate-900 transition-all cursor-pointer whitespace-nowrap shrink-0 lg:w-full"
                 >
-                  <div className="flex items-center gap-3">
-                    <div className="h-5 w-5 rounded-full border-2 border-current flex items-center justify-center">
-                      <Plus className="w-3.5 h-3.5 stroke-[3]" />
+                  <div className="flex items-center gap-2.5 sm:gap-3">
+                    <div className="h-4.5 w-4.5 sm:h-5 sm:w-5 rounded-full border-2 border-current flex items-center justify-center">
+                      <Plus className="w-3 h-3 sm:w-3.5 sm:h-3.5 stroke-[3]" />
                     </div>
                     <span>Add New Property</span>
                   </div>
@@ -164,14 +164,14 @@ export default function HostDashboard({ onAddNewProperty, onBackToHome }) {
                 <button
                   type="button"
                   onClick={() => setActiveTab('Bookings')}
-                  className={`w-full flex items-center justify-between px-3.5 py-3 rounded-2xl text-[14px] font-bold transition-all cursor-pointer ${
+                  className={`flex items-center justify-between px-3.5 py-2.5 sm:py-3 rounded-xl sm:rounded-2xl text-[13px] sm:text-[14px] font-bold transition-all cursor-pointer whitespace-nowrap shrink-0 lg:w-full ${
                     activeTab === 'Bookings'
                       ? 'bg-[#E6F4EA] text-[#007F55]'
                       : 'text-slate-650 hover:bg-slate-50 hover:text-slate-900'
                   }`}
                 >
-                  <div className="flex items-center gap-3">
-                    <Calendar className="w-5 h-5 stroke-[2.2]" />
+                  <div className="flex items-center gap-2.5 sm:gap-3">
+                    <Calendar className="w-4.5 h-4.5 sm:w-5 sm:h-5 stroke-[2.2]" />
                     <span>Bookings</span>
                   </div>
                 </button>
@@ -180,17 +180,17 @@ export default function HostDashboard({ onAddNewProperty, onBackToHome }) {
                 <button
                   type="button"
                   onClick={() => setActiveTab('Messages')}
-                  className={`w-full flex items-center justify-between px-3.5 py-3 rounded-2xl text-[14px] font-bold transition-all cursor-pointer ${
+                  className={`flex items-center justify-between px-3.5 py-2.5 sm:py-3 rounded-xl sm:rounded-2xl text-[13px] sm:text-[14px] font-bold transition-all cursor-pointer whitespace-nowrap shrink-0 lg:w-full ${
                     activeTab === 'Messages'
                       ? 'bg-[#E6F4EA] text-[#007F55]'
                       : 'text-slate-650 hover:bg-slate-50 hover:text-slate-900'
                   }`}
                 >
-                  <div className="flex items-center gap-3">
-                    <MessageSquare className="w-5 h-5 stroke-[2.2]" />
+                  <div className="flex items-center gap-2.5 sm:gap-3">
+                    <MessageSquare className="w-4.5 h-4.5 sm:w-5 sm:h-5 stroke-[2.2]" />
                     <span>Messages</span>
                   </div>
-                  <span className="flex h-5 w-5 items-center justify-center rounded-full bg-red-500 text-white text-[11px] font-black">
+                  <span className="flex h-4.5 w-4.5 sm:h-5 sm:w-5 items-center justify-center rounded-full bg-red-500 text-white text-[10px] sm:text-[11px] font-black ml-2 lg:ml-0">
                     3
                   </span>
                 </button>
@@ -199,14 +199,14 @@ export default function HostDashboard({ onAddNewProperty, onBackToHome }) {
                 <button
                   type="button"
                   onClick={() => setActiveTab('Payouts')}
-                  className={`w-full flex items-center justify-between px-3.5 py-3 rounded-2xl text-[14px] font-bold transition-all cursor-pointer ${
+                  className={`flex items-center justify-between px-3.5 py-2.5 sm:py-3 rounded-xl sm:rounded-2xl text-[13px] sm:text-[14px] font-bold transition-all cursor-pointer whitespace-nowrap shrink-0 lg:w-full ${
                     activeTab === 'Payouts'
                       ? 'bg-[#E6F4EA] text-[#007F55]'
                       : 'text-slate-650 hover:bg-slate-50 hover:text-slate-900'
                   }`}
                 >
-                  <div className="flex items-center gap-3">
-                    <CreditCard className="w-5 h-5 stroke-[2.2]" />
+                  <div className="flex items-center gap-2.5 sm:gap-3">
+                    <CreditCard className="w-4.5 h-4.5 sm:w-5 sm:h-5 stroke-[2.2]" />
                     <span>Payouts</span>
                   </div>
                 </button>
@@ -215,14 +215,14 @@ export default function HostDashboard({ onAddNewProperty, onBackToHome }) {
                 <button
                   type="button"
                   onClick={() => setActiveTab('Settings')}
-                  className={`w-full flex items-center justify-between px-3.5 py-3 rounded-2xl text-[14px] font-bold transition-all cursor-pointer ${
+                  className={`flex items-center justify-between px-3.5 py-2.5 sm:py-3 rounded-xl sm:rounded-2xl text-[13px] sm:text-[14px] font-bold transition-all cursor-pointer whitespace-nowrap shrink-0 lg:w-full ${
                     activeTab === 'Settings'
                       ? 'bg-[#E6F4EA] text-[#007F55]'
                       : 'text-slate-650 hover:bg-slate-50 hover:text-slate-900'
                   }`}
                 >
-                  <div className="flex items-center gap-3">
-                    <Settings className="w-5 h-5 stroke-[2.2]" />
+                  <div className="flex items-center gap-2.5 sm:gap-3">
+                    <Settings className="w-4.5 h-4.5 sm:w-5 sm:h-5 stroke-[2.2]" />
                     <span>Profile & Settings</span>
                   </div>
                 </button>
@@ -231,14 +231,14 @@ export default function HostDashboard({ onAddNewProperty, onBackToHome }) {
                 <button
                   type="button"
                   onClick={() => setActiveTab('Support')}
-                  className={`w-full flex items-center justify-between px-3.5 py-3 rounded-2xl text-[14px] font-bold transition-all cursor-pointer ${
+                  className={`flex items-center justify-between px-3.5 py-2.5 sm:py-3 rounded-xl sm:rounded-2xl text-[13px] sm:text-[14px] font-bold transition-all cursor-pointer whitespace-nowrap shrink-0 lg:w-full ${
                     activeTab === 'Support'
                       ? 'bg-[#E6F4EA] text-[#007F55]'
                       : 'text-slate-650 hover:bg-slate-50 hover:text-slate-900'
                   }`}
                 >
-                  <div className="flex items-center gap-3">
-                    <HelpCircle className="w-5 h-5 stroke-[2.2]" />
+                  <div className="flex items-center gap-2.5 sm:gap-3">
+                    <HelpCircle className="w-4.5 h-4.5 sm:w-5 sm:h-5 stroke-[2.2]" />
                     <span>Help & Support</span>
                   </div>
                 </button>
@@ -246,7 +246,7 @@ export default function HostDashboard({ onAddNewProperty, onBackToHome }) {
             </div>
 
             {/* List more properties promo card */}
-            <div className="bg-[#F4FAF6] rounded-3xl border border-emerald-100/90 p-5 text-center flex flex-col items-center gap-3 shadow-xs">
+            <div className="hidden lg:flex bg-[#F4FAF6] rounded-3xl border border-emerald-100/90 p-5 text-center flex-col items-center gap-3 shadow-xs">
               <div className="w-24 h-20 flex items-center justify-center">
                 <img
                   src={stayPropertyImg}
@@ -295,79 +295,79 @@ export default function HostDashboard({ onAddNewProperty, onBackToHome }) {
             </div>
 
             {/* ── 5 Stat Metric Cards Row ── */}
-            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3.5">
+            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-2.5 sm:gap-3.5">
               
               {/* 1. Total Properties */}
-              <div className="bg-white rounded-2xl border border-slate-100 p-4 shadow-xs flex items-center gap-3.5">
-                <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-blue-50 text-blue-600">
-                  <Home className="w-5 h-5 stroke-[2.2]" />
+              <div className="bg-white rounded-2xl border border-slate-100 p-3 sm:p-4 shadow-xs flex items-center gap-2.5 sm:gap-3.5">
+                <div className="flex h-9 w-9 sm:h-11 sm:w-11 shrink-0 items-center justify-center rounded-xl bg-blue-50 text-blue-600">
+                  <Home className="w-4 h-4 sm:w-5 sm:h-5 stroke-[2.2]" />
                 </div>
-                <div className="flex flex-col">
-                  <span className="text-xl font-black text-slate-900 leading-tight">
+                <div className="flex flex-col min-w-0">
+                  <span className="text-lg sm:text-xl font-black text-slate-900 leading-tight">
                     {totalCount > 0 ? totalCount : 1}
                   </span>
-                  <span className="text-[11.5px] font-bold text-slate-500 mt-0.5">
+                  <span className="text-[10.5px] sm:text-[11.5px] font-bold text-slate-500 mt-0.5 truncate">
                     Total Properties
                   </span>
                 </div>
               </div>
 
               {/* 2. Pending Approval */}
-              <div className="bg-white rounded-2xl border border-slate-100 p-4 shadow-xs flex items-center gap-3.5">
-                <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-amber-50 text-amber-500">
-                  <Clock className="w-5 h-5 stroke-[2.2]" />
+              <div className="bg-white rounded-2xl border border-slate-100 p-3 sm:p-4 shadow-xs flex items-center gap-2.5 sm:gap-3.5">
+                <div className="flex h-9 w-9 sm:h-11 sm:w-11 shrink-0 items-center justify-center rounded-xl bg-amber-50 text-amber-500">
+                  <Clock className="w-4 h-4 sm:w-5 sm:h-5 stroke-[2.2]" />
                 </div>
-                <div className="flex flex-col">
-                  <span className="text-xl font-black text-slate-900 leading-tight">
+                <div className="flex flex-col min-w-0">
+                  <span className="text-lg sm:text-xl font-black text-slate-900 leading-tight">
                     {totalCount > 0 ? pendingCount : 1}
                   </span>
-                  <span className="text-[11.5px] font-bold text-slate-500 mt-0.5">
+                  <span className="text-[10.5px] sm:text-[11.5px] font-bold text-slate-500 mt-0.5 truncate">
                     Pending Approval
                   </span>
                 </div>
               </div>
 
               {/* 3. Approved */}
-              <div className="bg-white rounded-2xl border border-slate-100 p-4 shadow-xs flex items-center gap-3.5">
-                <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-emerald-50 text-[#007F55]">
-                  <CheckCircle2 className="w-5 h-5 stroke-[2.2]" />
+              <div className="bg-white rounded-2xl border border-slate-100 p-3 sm:p-4 shadow-xs flex items-center gap-2.5 sm:gap-3.5">
+                <div className="flex h-9 w-9 sm:h-11 sm:w-11 shrink-0 items-center justify-center rounded-xl bg-emerald-50 text-[#007F55]">
+                  <CheckCircle2 className="w-4 h-4 sm:w-5 sm:h-5 stroke-[2.2]" />
                 </div>
-                <div className="flex flex-col">
-                  <span className="text-xl font-black text-slate-900 leading-tight">
+                <div className="flex flex-col min-w-0">
+                  <span className="text-lg sm:text-xl font-black text-slate-900 leading-tight">
                     {approvedCount}
                   </span>
-                  <span className="text-[11.5px] font-bold text-slate-500 mt-0.5">
+                  <span className="text-[10.5px] sm:text-[11.5px] font-bold text-slate-500 mt-0.5 truncate">
                     Approved
                   </span>
                 </div>
               </div>
 
               {/* 4. Rejected */}
-              <div className="bg-white rounded-2xl border border-slate-100 p-4 shadow-xs flex items-center gap-3.5">
-                <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-red-50 text-red-500">
-                  <XCircle className="w-5 h-5 stroke-[2.2]" />
+              <div className="bg-white rounded-2xl border border-slate-100 p-3 sm:p-4 shadow-xs flex items-center gap-2.5 sm:gap-3.5">
+                <div className="flex h-9 w-9 sm:h-11 sm:w-11 shrink-0 items-center justify-center rounded-xl bg-red-50 text-red-500">
+                  <XCircle className="w-4 h-4 sm:w-5 sm:h-5 stroke-[2.2]" />
                 </div>
-                <div className="flex flex-col">
-                  <span className="text-xl font-black text-slate-900 leading-tight">
+                <div className="flex flex-col min-w-0">
+                  <span className="text-lg sm:text-xl font-black text-slate-900 leading-tight">
                     {rejectedCount}
                   </span>
-                  <span className="text-[11.5px] font-bold text-slate-500 mt-0.5">
+                  <span className="text-[10.5px] sm:text-[11.5px] font-bold text-slate-500 mt-0.5 truncate">
                     Rejected
                   </span>
                 </div>
               </div>
 
               {/* 5. Blocked / Unlisted */}
-              <div className="bg-white rounded-2xl border border-slate-100 p-4 shadow-xs flex items-center gap-3.5 col-span-2 sm:col-span-1">
-                <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-slate-100 text-slate-500">
-                  <EyeOff className="w-5 h-5 stroke-[2.2]" />
+              <div className="bg-white rounded-2xl border border-slate-100 p-3 sm:p-4 shadow-xs flex items-center gap-2.5 sm:gap-3.5 col-span-2 sm:col-span-1">
+                <div className="flex h-9 w-9 sm:h-11 sm:w-11 shrink-0 items-center justify-center rounded-xl bg-slate-100 text-slate-500">
+                  <EyeOff className="w-4 h-4 sm:w-5 sm:h-5 stroke-[2.2]" />
                 </div>
-                <div className="flex flex-col">
-                  <span className="text-xl font-black text-slate-900 leading-tight">
+                <div className="flex flex-col min-w-0">
+                  <span className="text-lg sm:text-xl font-black text-slate-900 leading-tight">
                     {blockedCount}
                   </span>
-                  <span className="text-[11.5px] font-bold text-slate-500 mt-0.5">
-                    Blocked / Unlisted
+                  <span className="text-[10.5px] sm:text-[11.5px] font-bold text-slate-500 mt-0.5 truncate">
+                    Blocked
                   </span>
                 </div>
               </div>
@@ -405,10 +405,10 @@ export default function HostDashboard({ onAddNewProperty, onBackToHome }) {
                 return (
                   <div
                     key={prop.property_id}
-                    className="bg-white rounded-3xl border border-slate-150 p-6 shadow-sm hover:shadow-md transition-shadow flex flex-col gap-6"
+                    className="bg-white rounded-2xl sm:rounded-3xl border border-slate-150 p-4 sm:p-6 shadow-sm hover:shadow-md transition-shadow flex flex-col gap-5 sm:gap-6"
                   >
                     {/* Top Row: Thumbnail + Info + Status Card */}
-                    <div className="flex flex-col lg:flex-row items-start justify-between gap-6">
+                    <div className="flex flex-col lg:flex-row items-start justify-between gap-5 sm:gap-6">
                       
                       {/* Left Image Thumbnail */}
                       <div 
@@ -607,11 +607,11 @@ export default function HostDashboard({ onAddNewProperty, onBackToHome }) {
 
       {/* ── View Details Modal with Tabs (Overview, Uploaded Photos, Owner & Legal Data, Rooms & Policies) ── */}
       {selectedPropertyDetails && (
-        <div className="fixed inset-0 z-[120] flex items-center justify-center p-4 bg-black/60 backdrop-blur-xs animate-fade-step">
-          <div className="bg-white rounded-3xl max-w-3xl w-full max-h-[88vh] flex flex-col overflow-hidden text-left shadow-2xl relative">
+        <div className="fixed inset-0 z-[120] flex items-center justify-center p-3 sm:p-4 bg-black/60 backdrop-blur-xs animate-fade-step">
+          <div className="bg-white rounded-2xl sm:rounded-3xl max-w-3xl w-full max-h-[92vh] sm:max-h-[88vh] flex flex-col overflow-hidden text-left shadow-2xl relative">
             
             {/* Modal Header */}
-            <div className="p-6 sm:p-7 pb-4 border-b border-slate-100 flex items-start justify-between gap-4 bg-slate-50/50">
+            <div className="p-4 sm:p-7 pb-3 sm:pb-4 border-b border-slate-100 flex items-start justify-between gap-3 sm:gap-4 bg-slate-50/50">
               <div className="flex flex-col gap-1.5">
                 <div className="flex items-center gap-2">
                   <span className={`text-xs font-extrabold px-3 py-1 rounded-full uppercase tracking-wider ${
@@ -653,7 +653,7 @@ export default function HostDashboard({ onAddNewProperty, onBackToHome }) {
 
               return (
                 <>
-                  <div className="flex items-center gap-1 sm:gap-2 px-6 pt-3 border-b border-slate-100 bg-white overflow-x-auto no-scrollbar">
+                  <div className="flex items-center gap-1 sm:gap-2 px-4 sm:px-6 pt-3 border-b border-slate-100 bg-white overflow-x-auto no-scrollbar">
                     <button
                       type="button"
                       onClick={() => setModalActiveTab('overview')}
@@ -704,7 +704,7 @@ export default function HostDashboard({ onAddNewProperty, onBackToHome }) {
                   </div>
 
                   {/* Modal Body with Tab Content */}
-                  <div className="p-6 sm:p-7 overflow-y-auto flex-grow space-y-5 text-left">
+                  <div className="p-4 sm:p-7 overflow-y-auto flex-grow space-y-4 sm:space-y-5 text-left">
                     
                     {/* ── TAB 1: OVERVIEW ── */}
                     {modalActiveTab === 'overview' && (
@@ -1021,7 +1021,7 @@ export default function HostDashboard({ onAddNewProperty, onBackToHome }) {
             {/* Close button */}
             <button
               onClick={() => setSelectedPhotoGallery(null)}
-              className="absolute -top-12 right-0 sm:top-2 sm:right-2 h-10 w-10 rounded-full bg-white/20 hover:bg-white/30 text-white flex items-center justify-center transition-colors cursor-pointer z-10"
+              className="absolute top-2 right-2 h-9 w-9 sm:h-10 sm:w-10 rounded-full bg-black/60 sm:bg-white/20 hover:bg-black/80 sm:hover:bg-white/30 text-white flex items-center justify-center transition-colors cursor-pointer z-30 shadow-md"
             >
               <X className="w-5 h-5 stroke-[2.5]" />
             </button>

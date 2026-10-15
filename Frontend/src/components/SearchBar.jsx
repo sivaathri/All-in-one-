@@ -155,10 +155,10 @@ export default function SearchBar({ onSearch, isModifySearch }) {
     <div className={isModifySearch ? "w-full" : "w-full max-w-6xl"}>
       <form
         onSubmit={handleSearch}
-        className="w-full rounded-2xl bg-white py-4 pl-4 pr-4 border-2 border-[#0F766E] shadow-md flex flex-col lg:flex-row items-center gap-4 lg:gap-0 lg:divide-x lg:divide-slate-200/50"
+        className="w-full rounded-2xl bg-white py-3 sm:py-4 px-3 sm:px-4 border-2 border-[#0F766E] shadow-md flex flex-col lg:flex-row items-center gap-3 lg:gap-0 lg:divide-x lg:divide-slate-200/50"
       >
         {/* Search Input */}
-        <div ref={locationRef} className="w-full lg:w-[35%] pl-1.5 pr-5 py-1.5 flex items-center gap-3 relative">
+        <div ref={locationRef} className="w-full lg:w-[35%] px-2 sm:pl-1.5 sm:pr-5 py-1.5 flex items-center gap-3 relative">
           <Search className="h-5 w-5 text-slate-400 shrink-0 stroke-[2.2]" />
           <div className="flex flex-col w-full text-left">
             <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider leading-none">Where Are You Going?</span>
@@ -177,7 +177,7 @@ export default function SearchBar({ onSearch, isModifySearch }) {
 
           {/* Autocomplete Dropdown */}
           {isLocationOpen && (
-            <div className="absolute left-1/2 -translate-x-1/2 lg:left-0 lg:translate-x-0 top-full mt-3 w-80 rounded-2xl border border-gray-150 bg-white py-1 shadow-2xl z-50 overflow-hidden">
+            <div className="absolute left-1/2 -translate-x-1/2 lg:left-0 lg:translate-x-0 top-full mt-3 w-[calc(100vw-32px)] sm:w-80 max-w-[340px] rounded-2xl border border-gray-150 bg-white py-1 shadow-2xl z-50 overflow-hidden">
               {filteredLocations.length > 0 ? (
                 <div className="flex flex-col">
                   {filteredLocations.map((loc, idx) => (
@@ -227,7 +227,7 @@ export default function SearchBar({ onSearch, isModifySearch }) {
             <div
               ref={calendarRef}
               onClick={(e) => e.stopPropagation()}
-              className="absolute left-1/2 -translate-x-1/2 lg:left-0 lg:translate-x-0 top-full mt-3 w-[340px] bg-white rounded-2xl border border-gray-150 p-5 shadow-2xl z-50"
+              className="absolute left-1/2 -translate-x-1/2 lg:left-0 lg:translate-x-0 top-full mt-3 w-[calc(100vw-32px)] sm:w-[340px] max-w-[340px] bg-white rounded-2xl border border-gray-150 p-4 sm:p-5 shadow-2xl z-50"
             >
               {/* Month Selector Header */}
               <div className="flex items-center justify-between mb-4">
@@ -333,7 +333,7 @@ export default function SearchBar({ onSearch, isModifySearch }) {
 
           {/* Simple Dropdown for Guests selection */}
           {isGuestsOpen && (
-            <div className="absolute left-1/2 -translate-x-1/2 lg:left-auto lg:translate-x-0 lg:right-0 bottom-full lg:bottom-auto lg:top-full mt-2 w-64 rounded-xl border border-gray-150 bg-white p-4 shadow-xl z-50">
+            <div className="absolute left-1/2 -translate-x-1/2 lg:left-auto lg:translate-x-0 lg:right-0 bottom-full lg:bottom-auto lg:top-full mb-2 lg:mb-0 lg:mt-2 w-[calc(100vw-32px)] sm:w-64 max-w-xs rounded-xl border border-gray-150 bg-white p-4 shadow-xl z-50">
               <div className="space-y-3.5">
                 {/* Adults Count */}
                 <div className="flex items-center justify-between">
@@ -438,7 +438,7 @@ export default function SearchBar({ onSearch, isModifySearch }) {
         </div>
 
         {/* Search Button */}
-        <div className="w-full lg:w-auto p-1.5 shrink-0 pl-4 lg:pl-3">
+        <div className="w-full lg:w-auto p-1.5 shrink-0 px-2 sm:px-4 lg:pl-3">
           <button
             type="submit"
             className="w-full lg:w-auto rounded-xl bg-[#0F766E] px-8 py-3.5 text-xs font-bold text-white shadow-sm hover:bg-[#0c625c] active:scale-95 transition-all duration-200 cursor-pointer flex items-center justify-center gap-2 uppercase tracking-wider"
