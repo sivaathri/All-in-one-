@@ -478,6 +478,86 @@ export default function StayPropertyForm({ onBack }) {
         </svg>
       ),
     },
+    {
+      id: 'Farm Stay',
+      title: 'Farm Stay',
+      icon: (
+        <svg className="w-12 h-12" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M6 40H42" stroke="#15803D" strokeWidth="2.5" strokeLinecap="round" />
+          <path d="M12 24L18 13H30L36 24V40H12V24Z" stroke="#15803D" strokeWidth="2.5" strokeLinejoin="round" fill="#F0FDF4" />
+          <path d="M18 13L24 8L30 13" stroke="#15803D" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" />
+          <rect x="20" y="28" width="8" height="12" fill="#DCFCE7" stroke="#15803D" strokeWidth="1.5" />
+          <path d="M20 28L28 40M28 28L20 40" stroke="#15803D" strokeWidth="1.2" />
+          <circle cx="24" cy="18" r="2.5" fill="#DCFCE7" stroke="#15803D" strokeWidth="1.5" />
+          <path d="M38 34C40 32 42 33 42 30C42 27 38 27 38 30" stroke="#15803D" strokeWidth="1.5" strokeLinecap="round" fill="#DCFCE7" />
+          <path d="M38 40V30" stroke="#15803D" strokeWidth="2" strokeLinecap="round" />
+        </svg>
+      ),
+    },
+    {
+      id: 'Eco-Lodge',
+      title: 'Eco-Lodge',
+      icon: (
+        <svg className="w-12 h-12" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M8 40H40" stroke="#0D9488" strokeWidth="2.5" strokeLinecap="round" />
+          <path d="M14 40V35M34 40V35" stroke="#0D9488" strokeWidth="2" strokeLinecap="round" />
+          <path d="M10 35H38" stroke="#0D9488" strokeWidth="2" strokeLinecap="round" />
+          <path d="M12 35L24 10L36 35H12Z" stroke="#0D9488" strokeWidth="2.5" strokeLinejoin="round" fill="#F0FDFA" />
+          <path d="M21 35V25C21 23.9 21.9 23 23 23H25C26.1 23 27 23.9 27 25V35" fill="#CCFBF1" stroke="#0D9488" strokeWidth="1.5" />
+          <polygon points="24,14 21,20 27,20" fill="#CCFBF1" stroke="#0D9488" strokeWidth="1.2" />
+          <path d="M34 16C37 13 41 15 41 18C41 22 36 21 34 16Z" fill="#14B8A6" stroke="#0D9488" strokeWidth="1.5" />
+          <path d="M35 19L38 16" stroke="#FFFFFF" strokeWidth="1" strokeLinecap="round" />
+        </svg>
+      ),
+    },
+    {
+      id: 'Hostel',
+      title: 'Hostel',
+      icon: (
+        <svg className="w-12 h-12" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M8 40H40" stroke="#E11D48" strokeWidth="2.5" strokeLinecap="round" />
+          <path d="M12 12V40M36 12V40" stroke="#E11D48" strokeWidth="2.5" strokeLinecap="round" />
+          <rect x="12" y="18" width="24" height="5" rx="1.5" fill="#FFE4E6" stroke="#E11D48" strokeWidth="2" />
+          <rect x="14" y="15" width="5" height="3" rx="1" fill="#E11D48" />
+          <path d="M21 16H34" stroke="#E11D48" strokeWidth="1.5" strokeLinecap="round" />
+          <rect x="12" y="30" width="24" height="5" rx="1.5" fill="#FFE4E6" stroke="#E11D48" strokeWidth="2" />
+          <rect x="14" y="27" width="5" height="3" rx="1" fill="#E11D48" />
+          <path d="M21 28H34" stroke="#E11D48" strokeWidth="1.5" strokeLinecap="round" />
+          <path d="M30 18V35" stroke="#E11D48" strokeWidth="1.5" />
+          <path d="M30 23H36M30 28H36M30 33H36" stroke="#E11D48" strokeWidth="1.5" strokeLinecap="round" />
+        </svg>
+      ),
+    },
+    {
+      id: 'Guest House',
+      title: 'Guest House',
+      icon: (
+        <svg className="w-12 h-12" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M8 40H40" stroke="#4F46E5" strokeWidth="2.5" strokeLinecap="round" />
+          <rect x="12" y="20" width="24" height="20" rx="1" stroke="#4F46E5" strokeWidth="2.5" fill="#F8FAFC" />
+          <path d="M9 20L24 9L39 20" stroke="#4F46E5" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" />
+          <path d="M31 14V8H35V17" stroke="#4F46E5" strokeWidth="2" strokeLinejoin="round" fill="#EEF2FF" />
+          <rect x="15" y="23" width="5" height="5" rx="0.5" fill="#EEF2FF" stroke="#4F46E5" strokeWidth="1.5" />
+          <rect x="28" y="23" width="5" height="5" rx="0.5" fill="#EEF2FF" stroke="#4F46E5" strokeWidth="1.5" />
+          <path d="M21 40V33C21 31.3 22.3 30 24 30C25.7 30 27 31.3 27 33V40" fill="#4F46E5" stroke="#4F46E5" strokeWidth="1.5" />
+        </svg>
+      ),
+    },
+    {
+      id: 'Homestay',
+      title: 'Homestay',
+      icon: (
+        <svg className="w-12 h-12" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M8 40H40" stroke="#C026D3" strokeWidth="2.5" strokeLinecap="round" />
+          <path d="M12 22V40H36V22" stroke="#C026D3" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" fill="#FDF4FF" />
+          <path d="M8 22L24 10L40 22" stroke="#C026D3" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" />
+          <path d="M24 19.5C23.2 18.2 21.5 17.8 20.3 19C19 20.2 19.2 22 20.5 23.3L24 26.5L27.5 23.3C28.8 22 29 20.2 27.7 19C26.5 17.8 24.8 18.2 24 19.5Z" fill="#C026D3" />
+          <rect x="21" y="31" width="6" height="9" rx="0.5" fill="#C026D3" />
+          <rect x="14" y="27" width="4" height="4" rx="0.5" fill="#FDF4FF" stroke="#C026D3" strokeWidth="1.5" />
+          <rect x="30" y="27" width="4" height="4" rx="0.5" fill="#FDF4FF" stroke="#C026D3" strokeWidth="1.5" />
+        </svg>
+      ),
+    },
   ];
 
   if (isSubmitted) {
@@ -737,7 +817,7 @@ export default function StayPropertyForm({ onBack }) {
                       </span>
 
                       {/* Horizontal Grid */}
-                      <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-4">
+                      <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4">
                         {propertyTypes.map((type) => {
                           const isSelected = propertyType === type.id;
                           return (
