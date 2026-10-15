@@ -384,6 +384,218 @@ export default function StayPropertyForm({ onBack }) {
   const [submitError, setSubmitError] = useState('');
   const [submittedPropertyData, setSubmittedPropertyData] = useState(null);
 
+  // Cloud Draft (Cross-Device Resume) states
+  const [detectedDraft, setDetectedDraft] = useState(null);
+  const [isSavingDraft, setIsSavingDraft] = useState(false);
+  const [lastSavedTime, setLastSavedTime] = useState(null);
+
+  const collectCurrentFormData = () => ({
+    propertyName,
+    propertyType,
+    addressLine1,
+    addressLine2,
+    city,
+    stateVal,
+    countryVal,
+    zipVal,
+    latitude,
+    longitude,
+    selectedRoomPills,
+    roomConfigs,
+    selectedAmenities,
+    checkInTime,
+    checkOutTime,
+    minAge,
+    acceptedIds,
+    unmarriedCouplesAllowed,
+    maleOnlyGroupsAllowed,
+    scantyBaggageAllowed,
+    smokingAllowedStr,
+    alcoholAllowed,
+    nonVegAllowed,
+    outsideFoodAllowed,
+    foodDeliveryOptions,
+    wheelchairAccessible,
+    wheelchairProvided,
+    petsAllowedStr,
+    petsOnProperty,
+    extraMattressChild,
+    extraMattressAdult,
+    extraCotCost,
+    additionalRules,
+    uploadedPhotos,
+    distanceBeach,
+    distanceRailway,
+    distanceAirport,
+    distanceBus,
+    allowedGuestTypes,
+    instantBooking,
+    manualApproval,
+    aboutPropertyText,
+    gstin,
+    licenseNumber,
+    businessName,
+    pan,
+    tradeLicense,
+    fireSafetyNumber,
+    isLegalDeclared,
+    ownerName,
+    ownerAadhar,
+    ownerPhoto,
+    ownershipProof,
+    bankAccountName,
+    bankAccountNumber,
+    ifscCode,
+    cancelledCheque,
+    roomPrices,
+    occupancyAdjustments,
+    childAgeRanges,
+    instantPayment,
+    freeCancellation,
+    refundPolicies,
+    roomCapacities
+  });
+
+  const restoreFormData = (data) => {
+    if (!data) return;
+    if (data.propertyName !== undefined) setPropertyName(data.propertyName);
+    if (data.propertyType !== undefined) setPropertyType(data.propertyType);
+    if (data.addressLine1 !== undefined) setAddressLine1(data.addressLine1);
+    if (data.addressLine2 !== undefined) setAddressLine2(data.addressLine2);
+    if (data.city !== undefined) setCity(data.city);
+    if (data.stateVal !== undefined) setStateVal(data.stateVal);
+    if (data.countryVal !== undefined) setCountryVal(data.countryVal);
+    if (data.zipVal !== undefined) setZipVal(data.zipVal);
+    if (data.latitude !== undefined) setLatitude(data.latitude);
+    if (data.longitude !== undefined) setLongitude(data.longitude);
+    if (data.selectedRoomPills !== undefined) setSelectedRoomPills(data.selectedRoomPills);
+    if (data.roomConfigs !== undefined) setRoomConfigs(data.roomConfigs);
+    if (data.selectedAmenities !== undefined) setSelectedAmenities(data.selectedAmenities);
+    if (data.checkInTime !== undefined) setCheckInTime(data.checkInTime);
+    if (data.checkOutTime !== undefined) setCheckOutTime(data.checkOutTime);
+    if (data.minAge !== undefined) setMinAge(data.minAge);
+    if (data.acceptedIds !== undefined) setAcceptedIds(data.acceptedIds);
+    if (data.unmarriedCouplesAllowed !== undefined) setUnmarriedCouplesAllowed(data.unmarriedCouplesAllowed);
+    if (data.maleOnlyGroupsAllowed !== undefined) setMaleOnlyGroupsAllowed(data.maleOnlyGroupsAllowed);
+    if (data.scantyBaggageAllowed !== undefined) setScantyBaggageAllowed(data.scantyBaggageAllowed);
+    if (data.smokingAllowedStr !== undefined) setSmokingAllowedStr(data.smokingAllowedStr);
+    if (data.alcoholAllowed !== undefined) setAlcoholAllowed(data.alcoholAllowed);
+    if (data.nonVegAllowed !== undefined) setNonVegAllowed(data.nonVegAllowed);
+    if (data.outsideFoodAllowed !== undefined) setOutsideFoodAllowed(data.outsideFoodAllowed);
+    if (data.foodDeliveryOptions !== undefined) setFoodDeliveryOptions(data.foodDeliveryOptions);
+    if (data.wheelchairAccessible !== undefined) setWheelchairAccessible(data.wheelchairAccessible);
+    if (data.wheelchairProvided !== undefined) setWheelchairProvided(data.wheelchairProvided);
+    if (data.petsAllowedStr !== undefined) setPetsAllowedStr(data.petsAllowedStr);
+    if (data.petsOnProperty !== undefined) setPetsOnProperty(data.petsOnProperty);
+    if (data.extraMattressChild !== undefined) setExtraMattressChild(data.extraMattressChild);
+    if (data.extraMattressAdult !== undefined) setExtraMattressAdult(data.extraMattressAdult);
+    if (data.extraCotCost !== undefined) setExtraCotCost(data.extraCotCost);
+    if (data.additionalRules !== undefined) setAdditionalRules(data.additionalRules);
+    if (data.uploadedPhotos !== undefined) setUploadedPhotos(data.uploadedPhotos);
+    if (data.distanceBeach !== undefined) setDistanceBeach(data.distanceBeach);
+    if (data.distanceRailway !== undefined) setDistanceRailway(data.distanceRailway);
+    if (data.distanceAirport !== undefined) setDistanceAirport(data.distanceAirport);
+    if (data.distanceBus !== undefined) setDistanceBus(data.distanceBus);
+    if (data.allowedGuestTypes !== undefined) setAllowedGuestTypes(data.allowedGuestTypes);
+    if (data.instantBooking !== undefined) setInstantBooking(data.instantBooking);
+    if (data.manualApproval !== undefined) setManualApproval(data.manualApproval);
+    if (data.aboutPropertyText !== undefined) setAboutPropertyText(data.aboutPropertyText);
+    if (data.gstin !== undefined) setGstin(data.gstin);
+    if (data.licenseNumber !== undefined) setLicenseNumber(data.licenseNumber);
+    if (data.businessName !== undefined) setBusinessName(data.businessName);
+    if (data.pan !== undefined) setPan(data.pan);
+    if (data.tradeLicense !== undefined) setTradeLicense(data.tradeLicense);
+    if (data.fireSafetyNumber !== undefined) setFireSafetyNumber(data.fireSafetyNumber);
+    if (data.isLegalDeclared !== undefined) setIsLegalDeclared(data.isLegalDeclared);
+    if (data.ownerName !== undefined) setOwnerName(data.ownerName);
+    if (data.ownerAadhar !== undefined) setOwnerAadhar(data.ownerAadhar);
+    if (data.ownerPhoto !== undefined) setOwnerPhoto(data.ownerPhoto);
+    if (data.ownershipProof !== undefined) setOwnershipProof(data.ownershipProof);
+    if (data.bankAccountName !== undefined) setBankAccountName(data.bankAccountName);
+    if (data.bankAccountNumber !== undefined) setBankAccountNumber(data.bankAccountNumber);
+    if (data.ifscCode !== undefined) setIfscCode(data.ifscCode);
+    if (data.cancelledCheque !== undefined) setCancelledCheque(data.cancelledCheque);
+    if (data.roomPrices !== undefined) setRoomPrices(data.roomPrices);
+    if (data.occupancyAdjustments !== undefined) setOccupancyAdjustments(data.occupancyAdjustments);
+    if (data.childAgeRanges !== undefined) setChildAgeRanges(data.childAgeRanges);
+    if (data.instantPayment !== undefined) setInstantPayment(data.instantPayment);
+    if (data.freeCancellation !== undefined) setFreeCancellation(data.freeCancellation);
+    if (data.refundPolicies !== undefined) setRefundPolicies(data.refundPolicies);
+    if (data.roomCapacities !== undefined) setRoomCapacities(data.roomCapacities);
+  };
+
+  // Check for existing cloud draft on mount (Cross-device resume)
+  useEffect(() => {
+    const token = localStorage.getItem('tripverse_token');
+    if (!token) return;
+
+    fetch('http://localhost:5001/api/properties/draft', {
+      headers: { Authorization: `Bearer ${token}` }
+    })
+      .then(res => res.json())
+      .then(resData => {
+        if (resData.success && resData.data?.hasDraft && resData.data?.draft) {
+          const draft = resData.data.draft;
+          if (draft.current_step > 1 || draft.property_name || (draft.draft_data && Object.keys(draft.draft_data).length > 2)) {
+            setDetectedDraft(draft);
+          }
+        }
+      })
+      .catch(err => console.warn('Could not check active drafts:', err));
+  }, []);
+
+  const handleAutoSaveDraft = async (stepToSave) => {
+    const token = localStorage.getItem('tripverse_token');
+    if (!token) return;
+
+    setIsSavingDraft(true);
+    try {
+      const payload = {
+        currentStep: stepToSave || currentStep,
+        propertyName: propertyName || 'My Stay Property',
+        draftData: collectCurrentFormData()
+      };
+
+      const res = await fetch('http://localhost:5001/api/properties/draft', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
+        },
+        body: JSON.stringify(payload)
+      });
+      if (res.ok) {
+        setLastSavedTime(new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }));
+      }
+    } catch (e) {
+      console.warn('Draft auto-save notice:', e);
+    } finally {
+      setIsSavingDraft(false);
+    }
+  };
+
+  const handleResumeDraft = () => {
+    if (!detectedDraft) return;
+    restoreFormData(detectedDraft.draft_data);
+    setCurrentStep(detectedDraft.current_step || 1);
+    setDetectedDraft(null);
+  };
+
+  const handleDiscardDraft = async () => {
+    const token = localStorage.getItem('tripverse_token');
+    if (token) {
+      try {
+        await fetch('http://localhost:5001/api/properties/draft', {
+          method: 'DELETE',
+          headers: { Authorization: `Bearer ${token}` }
+        });
+      } catch (e) {
+        // ignore
+      }
+    }
+    setDetectedDraft(null);
+  };
+
   const handleFinalSubmit = async () => {
     if (!isLegalDeclared) {
       alert('Please check the declaration box to confirm details and submit.');
@@ -962,14 +1174,83 @@ export default function StayPropertyForm({ onBack }) {
       `}</style>
 
       <div className="max-w-[1440px] mx-auto w-full flex-grow">
-        {/* Back to Home Navigation */}
-        <button
-          onClick={onBack}
-          className="group flex items-center gap-2 text-[15px] font-semibold text-slate-600 hover:text-[#007F55] transition-colors duration-200 cursor-pointer mb-6"
-        >
-          <ArrowLeft className="h-4 w-4 transition-transform group-hover:-translate-x-1" />
-          Back to Home
-        </button>
+        {/* Navigation & Auto-save Status Row */}
+        <div className="flex items-center justify-between gap-4 mb-6">
+          <button
+            onClick={onBack}
+            className="group flex items-center gap-2 text-[15px] font-semibold text-slate-600 hover:text-[#007F55] transition-colors duration-200 cursor-pointer"
+          >
+            <ArrowLeft className="h-4 w-4 transition-transform group-hover:-translate-x-1" />
+            Back to Home
+          </button>
+
+          <div className="flex items-center gap-3">
+            {isSavingDraft && (
+              <span className="flex items-center gap-1.5 text-[12px] font-semibold text-slate-500 animate-pulse">
+                <span className="h-2 w-2 rounded-full bg-amber-500" />
+                Saving draft...
+              </span>
+            )}
+            {lastSavedTime && !isSavingDraft && (
+              <span className="hidden sm:inline-flex items-center gap-1.5 text-[12px] font-semibold text-slate-500">
+                <span className="h-2 w-2 rounded-full bg-emerald-500" />
+                Auto-saved at {lastSavedTime}
+              </span>
+            )}
+            <button
+              type="button"
+              onClick={() => {
+                handleAutoSaveDraft(currentStep);
+                onBack();
+              }}
+              className="flex items-center gap-1.5 rounded-xl border border-slate-200 bg-white hover:bg-slate-50 px-4 py-2 text-[13px] font-bold text-slate-700 shadow-2xs transition-all active:scale-95 cursor-pointer"
+            >
+              <Save className="h-3.5 w-3.5 text-[#007F55]" />
+              <span>Save & Exit</span>
+            </button>
+          </div>
+        </div>
+
+        {/* Cloud Draft Resume Prompt */}
+        {detectedDraft && (
+          <div className="w-full bg-gradient-to-r from-emerald-50 via-teal-50 to-emerald-50 border border-emerald-200 rounded-2xl p-5 mb-6 shadow-xs flex flex-col md:flex-row items-start md:items-center justify-between gap-4 animate-fade-step text-left">
+            <div className="flex items-start gap-3.5">
+              <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-[#007F55] text-white shadow-xs">
+                <Sparkles className="h-5 w-5" />
+              </div>
+              <div className="flex flex-col">
+                <div className="flex items-center gap-2">
+                  <span className="text-[15px] font-extrabold text-slate-900">
+                    Resume Previous Listing Progress
+                  </span>
+                  <span className="bg-[#007F55]/15 text-[#007F55] text-[10.5px] font-black px-2.5 py-0.5 rounded-full uppercase tracking-wider">
+                    Cloud Synced
+                  </span>
+                </div>
+                <p className="text-[13px] font-medium text-slate-600 mt-1 leading-snug">
+                  You have an unfinished draft for <strong>{detectedDraft.property_name || 'your property'}</strong> saved at <strong>Step {detectedDraft.current_step} of 9</strong>. Continue across your devices seamlessly!
+                </p>
+              </div>
+            </div>
+            <div className="flex items-center gap-3 shrink-0 self-end md:self-center">
+              <button
+                type="button"
+                onClick={handleDiscardDraft}
+                className="px-4 py-2 text-[13px] font-bold text-slate-500 hover:text-red-600 transition-colors cursor-pointer"
+              >
+                Discard & Start Fresh
+              </button>
+              <button
+                type="button"
+                onClick={handleResumeDraft}
+                className="flex items-center gap-2 rounded-xl bg-[#007F55] hover:bg-[#006644] text-white px-5 py-2.5 text-[13px] font-bold shadow-sm transition-all active:scale-95 cursor-pointer"
+              >
+                <span>Resume Step {detectedDraft.current_step}</span>
+                <ArrowRight className="h-4 w-4" />
+              </button>
+            </div>
+          </div>
+        )}
 
         {/* Sidebar & Form grid */}
         <div className="flex flex-col lg:flex-row gap-8 items-start">
@@ -3538,9 +3819,22 @@ export default function StayPropertyForm({ onBack }) {
 
                 <div className="flex items-center gap-3">
                   <button
+                    type="button"
+                    onClick={() => {
+                      handleAutoSaveDraft(currentStep);
+                      onBack();
+                    }}
+                    className="hidden sm:flex items-center gap-2 rounded-xl border border-slate-200 bg-white hover:bg-slate-50 px-5 py-3 text-[14px] font-bold text-slate-700 active:scale-95 transition-all cursor-pointer"
+                  >
+                    <Save className="h-4 w-4 text-[#007F55]" />
+                    <span>Save & Exit</span>
+                  </button>
+
+                  <button
                     disabled={isSubmitting}
                     onClick={() => {
                       if (currentStep < 9) {
+                        handleAutoSaveDraft(currentStep + 1);
                         setCurrentStep(currentStep + 1);
                       } else {
                         handleFinalSubmit();

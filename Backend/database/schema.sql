@@ -168,3 +168,24 @@ CREATE TABLE IF NOT EXISTS `properties` (
         ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
+-- --------------------------------------------------------
+-- Table: property_drafts
+-- Stores in-progress 9-step stay listing progress for cross-device resume.
+-- --------------------------------------------------------
+CREATE TABLE IF NOT EXISTS `property_drafts` (
+    `draft_id` BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
+    `user_id` BIGINT UNSIGNED NOT NULL,
+    `current_step` INT UNSIGNED NOT NULL DEFAULT 1,
+    `property_name` VARCHAR(255) NULL,
+    `draft_data` JSON NOT NULL,
+    `created_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    `updated_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    PRIMARY KEY (`draft_id`),
+    UNIQUE KEY `uq_user_draft` (`user_id`),
+    CONSTRAINT `fk_property_drafts_user`
+        FOREIGN KEY (`user_id`)
+        REFERENCES `users` (`user_id`)
+        ON DELETE CASCADE
+        ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+

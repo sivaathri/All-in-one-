@@ -145,6 +145,28 @@ export class PropertyModel {
 
       await query(createTableSql);
       console.log('[DATABASE] Table "properties" is verified and ready.');
+
+      // 3. Ensure 'property_drafts' table exists for cross-device resume
+      const createDraftsTableSql = `
+        CREATE TABLE IF NOT EXISTS property_drafts (
+          draft_id BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
+          user_id BIGINT UNSIGNED NOT NULL,
+          current_step INT UNSIGNED NOT NULL DEFAULT 1,
+          property_name VARCHAR(255) NULL,
+          draft_data JSON NOT NULL,
+          created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+          updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+          PRIMARY KEY (draft_id),
+          UNIQUE KEY uq_user_draft (user_id),
+          CONSTRAINT fk_property_drafts_user
+            FOREIGN KEY (user_id)
+            REFERENCES users (user_id)
+            ON DELETE CASCADE
+            ON UPDATE CASCADE
+        ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+      `;
+      await query(createDraftsTableSql);
+      console.log('[DATABASE] Table "property_drafts" is verified and ready.');
     } catch (err) {
       console.warn('[DATABASE] Table initialization notice:', err.message);
     }
@@ -399,6 +421,55 @@ export class PropertyModel {
     `;
     await this._execute(sql, [status, adminUserId, rejectionReason, propertyId], connection);
     return this.findById(propertyId, connection);
+  }
+
+  /**
+   * Upsert an active listing draft for cross-device resume.
+   */
+  static async saveDraft(userId, currentStep, propertyName, draftData, connection = null) {
+    const sql = `
+      INSERT INTO property_drafts (user_id, current_step, property_name, draft_data)
+      VALUES (?, ?, ?, ?)
+      ON DUPLICATE KEY UPDATE
+        current_step = VALUES(current_step),
+        property_name = VALUES(property_name),
+        draft_data = VALUES(draft_data),
+        updated_at = CURRENT_TIMESTAMP
+    `;
+    const serialized = typeof draftData === 'string' ? draftData : JSON.stringify(draftData);
+    await this._execute(sql, [userId, currentStep, propertyName || 'My Stay Property', serialized], connection);
+    return this.getDraft(userId, connection);
+  }
+
+  /**
+   * Retrieve active listing draft for a user.
+   */
+  static async getDraft(userId, connection = null) {
+    const sql = `
+      SELECT draft_id, user_id, current_step, property_name, draft_data, created_at, updated_at
+      FROM property_drafts
+      WHERE user_id = ?
+      LIMIT 1
+    `;
+    const rows = await this._execute(sql, [userId], connection);
+    if (!rows || rows.length === 0) return null;
+    const row = rows[0];
+    if (row.draft_data && typeof row.draft_data === 'string') {
+      try {
+        row.draft_data = JSON.parse(row.draft_data);
+      } catch (e) {
+        // keep as is
+      }
+    }
+    return row;
+  }
+
+  /**
+   * Discard or delete an active listing draft.
+   */
+  static async deleteDraft(userId, connection = null) {
+    const sql = `DELETE FROM property_drafts WHERE user_id = ?`;
+    return this._execute(sql, [userId], connection);
   }
 }
 

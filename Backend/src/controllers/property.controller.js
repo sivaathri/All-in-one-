@@ -173,6 +173,13 @@ export class PropertyController {
         isLegalDeclared: isLegalDeclared !== false
       });
 
+      // Clear any in-progress draft since property is now finalized & submitted
+      try {
+        await PropertyModel.deleteDraft(hostId);
+      } catch (e) {
+        // ignore draft deletion errors
+      }
+
       return sendSuccess(
         res,
         'Property listing submitted successfully! Your listing has been registered and is waiting for Super Admin approval.',
@@ -311,6 +318,62 @@ export class PropertyController {
         total: properties.length,
         properties
       });
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  /**
+   * Save or update an in-progress property listing draft.
+   */
+  static async saveDraft(req, res, next) {
+    try {
+      const userId = req.user.user_id;
+      const { currentStep = 1, propertyName = '', draftData = {} } = req.body;
+
+      const draft = await PropertyModel.saveDraft(
+        userId,
+        parseInt(currentStep, 10) || 1,
+        propertyName?.trim() || 'My Stay Property',
+        draftData
+      );
+
+      return sendSuccess(res, 'Listing draft saved successfully.', {
+        draftId: draft.draft_id,
+        currentStep: draft.current_step,
+        propertyName: draft.property_name,
+        updatedAt: draft.updated_at
+      });
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  /**
+   * Retrieve active listing draft for the authenticated host.
+   */
+  static async getDraft(req, res, next) {
+    try {
+      const userId = req.user.user_id;
+      const draft = await PropertyModel.getDraft(userId);
+
+      return sendSuccess(res, draft ? 'Active listing draft found.' : 'No active draft found.', {
+        hasDraft: !!draft,
+        draft: draft || null
+      });
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  /**
+   * Discard or delete the active listing draft.
+   */
+  static async deleteDraft(req, res, next) {
+    try {
+      const userId = req.user.user_id;
+      await PropertyModel.deleteDraft(userId);
+      return sendSuccess(res, 'Listing draft discarded successfully.');
     } catch (error) {
       next(error);
     }

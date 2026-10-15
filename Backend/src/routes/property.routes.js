@@ -40,6 +40,27 @@ router.get('/admin/all', authenticate, PropertyController.getAdminListings);
 router.patch('/:id/approval', authenticate, PropertyController.updateApprovalStatus);
 
 /**
+ * @route   POST /api/properties/draft
+ * @desc    Auto-save or update active listing draft (Cross-device sync)
+ * @access  Private
+ */
+router.post('/draft', authenticate, PropertyController.saveDraft);
+
+/**
+ * @route   GET /api/properties/draft
+ * @desc    Fetch active listing draft for authenticated host
+ * @access  Private
+ */
+router.get('/draft', authenticate, PropertyController.getDraft);
+
+/**
+ * @route   DELETE /api/properties/draft
+ * @desc    Discard / delete active listing draft
+ * @access  Private
+ */
+router.delete('/draft', authenticate, PropertyController.deleteDraft);
+
+/**
  * @route   GET /api/properties/:id
  * @desc    Get full property details by ID (public if approved, host/admin if waiting)
  * @access  Public / Private
