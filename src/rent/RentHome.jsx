@@ -1,4 +1,4 @@
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useEffect } from 'react';
 import { 
   Calendar, MapPin, Star, Heart, ArrowRight, Grid, List, 
   ChevronDown, SlidersHorizontal, ShieldCheck, DollarSign, Clock, Phone, Award,
@@ -68,8 +68,14 @@ function formatDateString(dateStr) {
   return `${day} ${mStr} ${year}, ${wStr}`;
 }
 
-export default function RentHome({ onSearch, onSelectVehicle }) {
-  const [activeTab, setActiveTab] = useState('Bike'); // 'Bike' | 'Car' | 'Scooter' | 'Bicycle'
+export default function RentHome({ onSearch, onSelectVehicle, initialVehicleType = 'Bike' }) {
+  const [activeTab, setActiveTab] = useState(initialVehicleType || 'Bike');
+
+  useEffect(() => {
+    if (initialVehicleType && (initialVehicleType === 'Bike' || initialVehicleType === 'Car' || initialVehicleType === 'Scooter' || initialVehicleType === 'Bicycle')) {
+      setActiveTab(initialVehicleType);
+    }
+  }, [initialVehicleType]);
   const [location, setLocation] = useState('Pondicherry, India');
   const [pickUpDate, setPickUpDate] = useState('2025-06-21');
   const [pickUpTime, setPickUpTime] = useState('10:00 AM');

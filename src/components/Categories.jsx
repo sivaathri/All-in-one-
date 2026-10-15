@@ -1,6 +1,5 @@
 import catStaysImg from '../assets/cat_stays.png';
-import catBikeImg from '../assets/cat_bike.png';
-import catCarImg from '../assets/cat_car.png';
+import catRentalsImg from '../assets/cat_rentals.png';
 import catFoodImg from '../assets/cat_food.png';
 import catAdventureImg from '../assets/cat_adventure.png';
 import catTaxiImg from '../assets/cat_taxi.png';
@@ -15,14 +14,9 @@ export default function Categories({ onNavigate = () => {} }) {
       image: catStaysImg
     },
     {
-      title: 'Bike Rental',
-      exploreLink: '#bike-rental',
-      image: catBikeImg
-    },
-    {
-      title: 'Car Rental',
-      exploreLink: '#car-rental',
-      image: catCarImg
+      title: 'Rentals',
+      exploreLink: '#rentals',
+      image: catRentalsImg
     },
     {
       title: 'Food Spots',
@@ -54,7 +48,7 @@ export default function Categories({ onNavigate = () => {} }) {
   return (
     <section className="w-full bg-white pt-16 pb-8">
       <div className="mx-auto max-w-[1760px] px-4 sm:px-6 lg:px-8">
-        <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-8 gap-4 justify-center">
+        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-7 gap-4 justify-center">
           {categories.map((cat, idx) => (
             <a
               key={idx}
@@ -65,7 +59,7 @@ export default function Categories({ onNavigate = () => {} }) {
                   onNavigate('food-spots');
                 } else if (cat.title === 'Stays') {
                   onNavigate('stays-results');
-                } else if (cat.title === 'Bike Rental' || cat.title === 'Car Rental') {
+                } else if (cat.title === 'Rentals' || cat.title === 'Bike Rental' || cat.title === 'Car Rental') {
                   onNavigate('rent-home');
                 } else if (cat.title === 'Activities' || cat.title === 'Adventures') {
                   onNavigate('activities');

@@ -155,7 +155,7 @@ function App() {
       ) : currentPage === 'my-bookings' ? (
         <MyBookings onNavigate={navigateToPage} />
       ) : currentPage === 'rent-home' ? (
-        <RentHome onSearch={handleRentalSearch} onSelectVehicle={handleRentalSelect} />
+        <RentHome onSearch={handleRentalSearch} onSelectVehicle={handleRentalSelect} initialVehicleType={rentalSearchParams?.vehicleType || 'Bike'} />
       ) : currentPage === 'rent-results' ? (
         <RentResults searchParams={rentalSearchParams} onBack={() => navigateToPage('rent-home')} onSelectVehicle={handleRentalSelect} onSearch={handleRentalSearch} />
       ) : currentPage === 'rent-detail' ? (

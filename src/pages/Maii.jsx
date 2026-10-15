@@ -76,8 +76,7 @@ export default function Maii() {
   // Category list from maii.html
   const categories = [
     { name: 'Stays', icon: 'https://img.icons8.com/color/96/000000/city-buildings.png', href: '#stays' },
-    { name: 'Bike Rental', icon: 'https://img.icons8.com/color/96/000000/bicycle.png', href: '#bike-rental' },
-    { name: 'Car Rental', icon: 'https://img.icons8.com/color/96/000000/car--v1.png', href: '#car-rental' },
+    { name: 'Rentals', icon: 'https://img.icons8.com/color/96/000000/car--v1.png', href: '#rentals' },
     { name: 'Food Spots', icon: 'https://img.icons8.com/color/96/000000/hamburger.png', href: '#food-spots' },
     { name: 'Activities', icon: 'https://img.icons8.com/color/96/000000/parachute.png', href: '#activities' },
     { name: 'Taxi Booking', icon: 'https://img.icons8.com/color/96/000000/taxi.png', href: '#taxi-booking' },

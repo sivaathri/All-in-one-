@@ -121,7 +121,15 @@ export default function Navbar({ onNavigate = () => {}, currentPage = 'home' }) 
   const menuItems = [
     { name: 'Home', path: '#home' },
     { name: 'Stays', path: '#stays' },
-    { name: 'Rentals', path: '#rentals' },
+    { 
+      name: 'Rentals', 
+      path: '#rentals',
+      dropdown: true,
+      dropdownItems: [
+        { name: 'Bike Rental', vehicleType: 'Bike', desc: 'Scooters, Royal Enfields & Sports Bikes' },
+        { name: 'Car Rental', vehicleType: 'Car', desc: 'Sedans, Hatchbacks, SUVs & Thar' }
+      ]
+    },
     { name: 'Food Spots', path: '#food' },
     { name: 'Activities', path: '#activities' },
     { name: 'Taxi Booking', path: '#taxi' },
@@ -188,6 +196,8 @@ export default function Navbar({ onNavigate = () => {}, currentPage = 'home' }) 
                         setActiveMenu(item.name);
                         if (item.name === 'Services') {
                           onNavigate('services');
+                        } else if (item.name === 'Rentals') {
+                          onNavigate('rent-home');
                         }
                       }}
                       className={`flex items-center gap-1 text-[15px] font-semibold transition-colors duration-200 cursor-pointer outline-none ${
@@ -207,12 +217,13 @@ export default function Navbar({ onNavigate = () => {}, currentPage = 'home' }) 
                     {isDropdownOpen && (
                       <div className="absolute left-0 top-full mt-1 w-64 origin-top-left rounded-2xl border border-gray-100 bg-white p-2 shadow-xl ring-1 ring-black/5 transition-all duration-200 z-50 animate-in fade-in slide-in-from-top-1">
                         <div className="px-2.5 py-1.5 text-[10px] font-extrabold uppercase tracking-wider text-slate-400 border-b border-slate-100 mb-1">
-                          Vehicle Roadside Support
+                          {item.name === 'Rentals' ? 'Self-Drive Fleet in Pondy' : 'Vehicle Roadside Support'}
                         </div>
                         {item.dropdownItems.map((subItem) => {
                           const subName = typeof subItem === 'string' ? subItem : subItem.name;
                           const subTab = typeof subItem === 'object' ? subItem.tab : null;
                           const subDesc = typeof subItem === 'object' ? subItem.desc : null;
+                          const subVehicle = typeof subItem === 'object' ? subItem.vehicleType : (subName.includes('Car') ? 'Car' : 'Bike');
                           return (
                             <button
                               key={subName}
@@ -222,6 +233,8 @@ export default function Navbar({ onNavigate = () => {}, currentPage = 'home' }) 
                                 setActiveMenu(item.name);
                                 if (item.name === 'Services') {
                                   onNavigate('services', subTab ? { tab: subTab } : null);
+                                } else if (item.name === 'Rentals') {
+                                  onNavigate('rent-home', { vehicleType: subVehicle });
                                 }
                               }}
                               className="w-full text-left rounded-xl px-3 py-2 text-xs font-semibold text-slate-700 hover:bg-teal-50 hover:text-[#0F766E] transition-colors outline-none cursor-pointer flex flex-col group"
@@ -246,12 +259,16 @@ export default function Navbar({ onNavigate = () => {}, currentPage = 'home' }) 
                           <button
                             onClick={() => {
                               setDropdown(false);
-                              setActiveMenu('Services');
-                              onNavigate('services');
+                              setActiveMenu(item.name);
+                              if (item.name === 'Services') {
+                                onNavigate('services');
+                              } else if (item.name === 'Rentals') {
+                                onNavigate('rent-home');
+                              }
                             }}
                             className="w-full text-center py-1.5 text-[11px] font-bold text-[#0F766E] hover:underline cursor-pointer"
                           >
-                            Explore All Services →
+                            Explore All {item.name} →
                           </button>
                         </div>
                       </div>
@@ -425,6 +442,8 @@ export default function Navbar({ onNavigate = () => {}, currentPage = 'home' }) 
                         setActiveMenu(item.name);
                         if (item.name === 'Services') {
                           onNavigate('services');
+                        } else if (item.name === 'Rentals') {
+                          onNavigate('rent-home');
                         }
                       }}
                       className="block w-full text-left px-3 py-1 text-xs font-bold uppercase tracking-wider text-[#0F766E] hover:underline"
@@ -435,6 +454,7 @@ export default function Navbar({ onNavigate = () => {}, currentPage = 'home' }) 
                       {item.dropdownItems.map((subItem) => {
                         const subName = typeof subItem === 'string' ? subItem : subItem.name;
                         const subTab = typeof subItem === 'object' ? subItem.tab : null;
+                        const subVehicle = typeof subItem === 'object' ? subItem.vehicleType : (subName.includes('Car') ? 'Car' : 'Bike');
                         return (
                           <button
                             key={subName}
@@ -443,6 +463,8 @@ export default function Navbar({ onNavigate = () => {}, currentPage = 'home' }) 
                               setActiveMenu(item.name);
                               if (item.name === 'Services') {
                                 onNavigate('services', subTab ? { tab: subTab } : null);
+                              } else if (item.name === 'Rentals') {
+                                onNavigate('rent-home', { vehicleType: subVehicle });
                               }
                             }}
                             className="block w-full text-left rounded-lg px-3 py-2 text-sm font-medium text-slate-600 hover:bg-slate-50 hover:text-[#0F766E] transition-colors outline-none cursor-pointer"
