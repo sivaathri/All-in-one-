@@ -12,9 +12,57 @@ export default function Navbar({ onNavigate = () => {}, currentPage = 'home' }) 
   const [isAuthOpen, setIsAuthOpen] = useState(false);
   const [authTab, setAuthTab] = useState('login'); // 'login' or 'register'
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [currentUser, setCurrentUser] = useState(null);
   const [profileDropdownOpen, setProfileDropdownOpen] = useState(false);
 
   const profileDropdownRef = useRef(null);
+
+  // Restore authenticated session from localStorage on mount (prevents logout on refresh)
+  useEffect(() => {
+    try {
+      const savedUserStr = localStorage.getItem('tripverse_user');
+      const savedToken = localStorage.getItem('tripverse_token');
+      if (savedUserStr) {
+        const parsed = JSON.parse(savedUserStr);
+        setCurrentUser(parsed);
+        setIsLoggedIn(true);
+      } else if (savedToken) {
+        setIsLoggedIn(true);
+      }
+    } catch (err) {
+      console.warn('Could not restore user session from localStorage:', err);
+    }
+  }, []);
+
+  const handleAuthSuccess = (userData) => {
+    if (userData) {
+      const user = userData.user || userData;
+      setCurrentUser(user);
+    } else {
+      try {
+        const saved = localStorage.getItem('tripverse_user');
+        if (saved) setCurrentUser(JSON.parse(saved));
+      } catch (e) {}
+    }
+    setIsLoggedIn(true);
+  };
+
+  const handleLogout = () => {
+    localStorage.removeItem('tripverse_token');
+    localStorage.removeItem('tripverse_user');
+    setIsLoggedIn(false);
+    setCurrentUser(null);
+    setProfileDropdownOpen(false);
+  };
+
+  const displayName = currentUser?.fullName || currentUser?.name || 'User';
+  const displayEmail = currentUser?.email || currentUser?.mobileNumber || currentUser?.phone || '';
+  const userInitials = displayName
+    .split(' ')
+    .filter(Boolean)
+    .slice(0, 2)
+    .map((part) => part[0]?.toUpperCase())
+    .join('') || 'U';
 
   // Click outside profile dropdown handler
   useEffect(() => {
@@ -289,14 +337,18 @@ export default function Navbar({ onNavigate = () => {}, currentPage = 'home' }) 
                     className="flex items-center gap-2 rounded-xl bg-slate-50 border border-slate-200/60 p-1.5 pr-3 hover:bg-slate-100 transition-colors cursor-pointer select-none outline-none"
                   >
                     <div className="h-8 w-8 rounded-lg bg-[#0F766E] text-white flex items-center justify-center font-extrabold text-[13px] shadow-sm shadow-teal-700/10">
-                      RK
+                      {userInitials}
                     </div>
-                    <span className="text-[13px] font-bold text-slate-800">Rohit Kumar</span>
+                    <span className="text-[13px] font-bold text-slate-800 max-w-[130px] truncate">{displayName}</span>
                     <ChevronDown className={`h-3.5 w-3.5 text-slate-500 transition-transform ${profileDropdownOpen ? 'rotate-180' : ''}`} />
                   </button>
 
                   {profileDropdownOpen && (
-                    <div className="absolute right-0 mt-2.5 w-48 origin-top-right rounded-xl border border-gray-150 bg-white p-1.5 shadow-lg ring-1 ring-black/5 z-40">
+                    <div className="absolute right-0 mt-2.5 w-52 origin-top-right rounded-xl border border-gray-150 bg-white p-1.5 shadow-lg ring-1 ring-black/5 z-40">
+                      <div className="px-3.5 py-2 border-b border-slate-100 mb-1 text-left">
+                        <p className="text-[12.5px] font-bold text-slate-900 truncate">{displayName}</p>
+                        {displayEmail && <p className="text-[10px] text-slate-400 font-medium truncate mt-0.5">{displayEmail}</p>}
+                      </div>
                       <button
                         onClick={() => {
                           setProfileDropdownOpen(false);
@@ -317,10 +369,7 @@ export default function Navbar({ onNavigate = () => {}, currentPage = 'home' }) 
                       </button>
                       <div className="border-t border-slate-100 my-1"></div>
                       <button
-                        onClick={() => {
-                          setProfileDropdownOpen(false);
-                          setIsLoggedIn(false);
-                        }}
+                        onClick={handleLogout}
                         className="w-full text-left rounded-lg px-3.5 py-2.5 text-[12.5px] font-bold text-red-650 hover:bg-red-50/50 transition-colors cursor-pointer"
                       >
                         Logout
@@ -480,11 +529,11 @@ export default function Navbar({ onNavigate = () => {}, currentPage = 'home' }) 
                 )}
                 <div className="flex items-center gap-3 bg-slate-50 border border-slate-150 p-3.5 rounded-xl">
                   <div className="h-10 w-10 rounded-xl bg-[#0F766E] text-white flex items-center justify-center font-black text-[15px]">
-                    RK
+                    {userInitials}
                   </div>
-                  <div className="flex flex-col text-left">
-                    <span className="text-[14px] font-bold text-slate-800 leading-none">Rohit Kumar</span>
-                    <span className="text-[11px] font-semibold text-slate-400 mt-1 leading-none">rohit.kumar@example.com</span>
+                  <div className="flex flex-col text-left truncate">
+                    <span className="text-[14px] font-bold text-slate-800 leading-none truncate">{displayName}</span>
+                    {displayEmail && <span className="text-[11px] font-semibold text-slate-400 mt-1 leading-none truncate">{displayEmail}</span>}
                   </div>
                 </div>
                 <button
@@ -507,7 +556,7 @@ export default function Navbar({ onNavigate = () => {}, currentPage = 'home' }) 
                 </button>
                 <button
                   onClick={() => {
-                    setIsLoggedIn(false);
+                    handleLogout();
                     setIsOpen(false);
                   }}
                   className="w-full rounded-xl border border-red-250 hover:bg-red-50/50 py-3 text-center text-sm font-semibold text-red-600 transition-colors outline-none"
@@ -553,7 +602,7 @@ export default function Navbar({ onNavigate = () => {}, currentPage = 'home' }) 
         isOpen={isAuthOpen}
         onClose={() => setIsAuthOpen(false)}
         initialTab={authTab}
-        onSuccess={() => setIsLoggedIn(true)}
+        onSuccess={handleAuthSuccess}
       />
     </nav>
   );

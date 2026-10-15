@@ -227,22 +227,40 @@ export default function SignUp({
         otp: enteredOtp
       });
 
+      let token = mobileRes.data?.token || null;
+      let userData = mobileRes.data?.user || null;
+
       // 2. In development, auto-verify email OTP to activate account in MySQL if available
       if (generatedEmailOtp) {
-        await authApi.verifyEmailOtp({
-          email: emailInput.trim(),
-          otp: generatedEmailOtp
-        }).catch((err) => console.warn('Email auto-verify notice:', err.message));
+        try {
+          const emailRes = await authApi.verifyEmailOtp({
+            email: emailInput.trim(),
+            otp: generatedEmailOtp
+          });
+          if (emailRes.data?.token) token = emailRes.data.token;
+          if (emailRes.data?.user) userData = emailRes.data.user;
+        } catch (err) {
+          console.warn('Email auto-verify notice:', err.message);
+        }
       }
 
-      setLoading(false);
-      onSuccess({
+      // Consolidate user data
+      const finalUser = userData || {
+        fullName: nameInput.trim(),
         name: nameInput.trim(),
         email: emailInput.trim(),
-        phone: fullMobile,
-        authType: 'mobile-otp-signup',
-        serverData: mobileRes.data
-      });
+        mobileNumber: fullMobile,
+        phone: fullMobile
+      };
+
+      // Persist session to localStorage so page refresh stays logged in
+      if (token) {
+        localStorage.setItem('tripverse_token', token);
+      }
+      localStorage.setItem('tripverse_user', JSON.stringify(finalUser));
+
+      setLoading(false);
+      onSuccess(finalUser);
     } catch (apiErr) {
       setLoading(false);
       setError(apiErr.message || 'OTP verification failed. Please check the code.');

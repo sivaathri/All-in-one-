@@ -194,11 +194,26 @@ export class AuthService {
 
       await UserModel.setEmailVerified(user.user_id, newStatus, connection);
 
-      return {
+      const result = {
         emailVerified: true,
         mobileVerified: Boolean(user.mobile_verified),
         accountStatus: newStatus
       };
+
+      if (newStatus === 'active') {
+        result.token = jwt.sign(
+          { userId: user.user_id, email: user.email },
+          env.JWT.secret,
+          { expiresIn: env.JWT.expiresIn }
+        );
+        result.user = this._formatSafeUser({
+          ...user,
+          email_verified: true,
+          account_status: 'active'
+        });
+      }
+
+      return result;
     });
 
     return updatedUser;
@@ -218,12 +233,21 @@ export class AuthService {
     }
 
     if (user.mobile_verified) {
-      return {
+      const result = {
         emailVerified: Boolean(user.email_verified),
         mobileVerified: true,
         accountStatus: user.account_status,
         alreadyVerified: true
       };
+      if (user.account_status === 'active') {
+        result.token = jwt.sign(
+          { userId: user.user_id, email: user.email },
+          env.JWT.secret,
+          { expiresIn: env.JWT.expiresIn }
+        );
+        result.user = this._formatSafeUser(user);
+      }
+      return result;
     }
 
     const updatedUser = await withTransaction(async (connection) => {
@@ -240,11 +264,26 @@ export class AuthService {
 
       await UserModel.setMobileVerified(user.user_id, newStatus, connection);
 
-      return {
+      const result = {
         emailVerified: Boolean(user.email_verified),
         mobileVerified: true,
         accountStatus: newStatus
       };
+
+      if (newStatus === 'active') {
+        result.token = jwt.sign(
+          { userId: user.user_id, email: user.email },
+          env.JWT.secret,
+          { expiresIn: env.JWT.expiresIn }
+        );
+        result.user = this._formatSafeUser({
+          ...user,
+          mobile_verified: true,
+          account_status: 'active'
+        });
+      }
+
+      return result;
     });
 
     return updatedUser;
