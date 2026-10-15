@@ -18,7 +18,7 @@ export default function StayDetail({ stay, searchParams, onBack, isLiked, onTogg
   const [showChat, setShowChat] = useState(false);
   const [guestDetails, setGuestDetails] = useState({ name: '', email: '', phone: '', whatsapp: false, specialRequests: '' });
   const [chatMessages, setChatMessages] = useState([
-    { sender: 'property', text: "Hello! Thank you for choosing Sea Breeze Resort. How can we help you today?" }
+    { sender: 'property', text: `Hello! Thank you for choosing ${stay?.name || 'our property'}. How can we help you today?` }
   ]);
   const [newMessage, setNewMessage] = useState('');
 

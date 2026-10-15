@@ -379,6 +379,146 @@ export default function StayPropertyForm({ onBack }) {
   // Synchronized room capacities state and dynamic synchronizer
   const [roomCapacities, setRoomCapacities] = useState({});
 
+  // Backend submission & approval status states
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submitError, setSubmitError] = useState('');
+  const [submittedPropertyData, setSubmittedPropertyData] = useState(null);
+
+  const handleFinalSubmit = async () => {
+    if (!isLegalDeclared) {
+      alert('Please check the declaration box to confirm details and submit.');
+      return;
+    }
+
+    const token = localStorage.getItem('tripverse_token');
+    if (!token) {
+      setSubmitError('You must be signed in to submit a property listing. Please sign in or create an account first.');
+      window.dispatchEvent(new CustomEvent('open-auth-modal', { detail: { tab: 'login' } }));
+      return;
+    }
+
+    setIsSubmitting(true);
+    setSubmitError('');
+
+    try {
+      // Calculate total rooms
+      const totalRoomsCount = Object.values(roomConfigs).reduce((sum, c) => {
+        const qty = parseInt(c?.quantity, 10) || 0;
+        return sum + qty;
+      }, 0) || (selectedRoomPills.length > 0 ? selectedRoomPills.length : 1);
+
+      const payload = {
+        // Step 1: Basic Information
+        propertyName: propertyName || 'My Stay Property',
+        propertyType,
+
+        // Step 2: Location Details
+        addressLine1: addressLine1 || 'Main Street',
+        addressLine2,
+        city: city || 'Puducherry',
+        state: stateVal || 'Pondicherry',
+        zipCode: zipVal || '605001',
+        latitude: parseFloat(latitude) || 11.941600,
+        longitude: parseFloat(longitude) || 79.808300,
+
+        // Step 3: Room Setup
+        roomTypes: selectedRoomPills.length > 0 ? selectedRoomPills : ['Single'],
+        roomConfigs,
+        totalRooms: totalRoomsCount,
+
+        // Step 4: Pricing & Availability
+        roomPrices,
+        occupancyAdjustments,
+        childPricing: childAgeRanges,
+        instantPayment,
+        freeCancellation,
+        refundPolicies,
+        roomCapacities,
+
+        // Step 5: Property Rules & Policies
+        checkInTime,
+        checkOutTime,
+        minAge,
+        acceptedIds,
+        unmarriedCouplesAllowed,
+        maleOnlyGroupsAllowed,
+        scantyBaggageAllowed,
+        smokingAllowed: smokingAllowedStr,
+        alcoholAllowed,
+        nonVegAllowed,
+        outsideFoodAllowed,
+        foodDeliveryOptions,
+        wheelchairAccessible,
+        wheelchairProvided,
+        petsAllowed: petsAllowedStr,
+        petsOnProperty,
+        extraMattressChild,
+        extraMattressAdult,
+        extraCotCost,
+        additionalRules,
+
+        // Step 6: Facilities & Amenities
+        amenities: selectedAmenities,
+
+        // Step 7: Photos
+        photos: uploadedPhotos.length > 0 ? uploadedPhotos : [
+          'https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=400&q=80'
+        ],
+        coverPhoto: uploadedPhotos[0] || 'https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=400&q=80',
+
+        // Step 8: About this property
+        aboutPropertyText,
+        distanceBeach,
+        distanceRailway,
+        distanceAirport,
+        distanceBus,
+        allowedGuestTypes,
+        instantBooking,
+        manualApproval,
+
+        // Step 9: Legal Info
+        gstin,
+        licenseNumber,
+        businessName,
+        panNumber: pan,
+        tradeLicense,
+        fireSafetyNumber,
+        ownerName: ownerName || 'Host',
+        ownerAadhar,
+        ownerPhoto,
+        ownershipProof,
+        bankAccountName,
+        bankAccountNumber,
+        ifscCode,
+        cancelledCheque,
+        isLegalDeclared: true
+      };
+
+      const res = await fetch('http://localhost:5001/api/properties', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
+        },
+        body: JSON.stringify(payload)
+      });
+
+      const data = await res.json();
+
+      if (!res.ok) {
+        throw new Error(data.message || 'Failed to submit property listing.');
+      }
+
+      setSubmittedPropertyData(data.data || null);
+      setIsSubmitted(true);
+    } catch (err) {
+      console.error('[SUBMIT PROPERTY ERROR]:', err);
+      setSubmitError(err.message || 'Server error occurred while submitting listing. Please try again.');
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
   useEffect(() => {
     // 1. Sync room prices
     setRoomPrices(prev => {
@@ -713,17 +853,38 @@ export default function StayPropertyForm({ onBack }) {
           
           <h2 className="text-3xl font-extrabold text-slate-900">Listing Submitted!</h2>
           <p className="text-[15px] font-medium text-slate-500 max-w-md mx-auto leading-relaxed">
-            Congratulations! Your property <strong>{propertyName || 'Luxury Stay Villa'}</strong> has been successfully listed and is now <strong>waiting for approval</strong>. Our team will review the details and publish it live within 24 hours.
+            Congratulations! Your property <strong>{submittedPropertyData?.propertyName || propertyName || 'Luxury Stay Villa'}</strong> has been successfully saved to the database and is now <strong>waiting for approval</strong>.
           </p>
 
           <div className="w-full bg-[#E6F4EA]/30 border border-emerald-500/10 rounded-2xl p-5 text-left mt-2 flex flex-col gap-3">
-            <div className="flex gap-3 items-center">
-              <span className="text-[13px] font-bold text-emerald-800">✓ Listing Status:</span>
-              <span className="bg-[#FEF3C7] text-[#D97706] text-[10.5px] font-extrabold px-2.5 py-0.5 rounded-full uppercase tracking-wider">Waiting for Approval</span>
+            <div className="flex gap-3 items-center justify-between border-b border-emerald-100/60 pb-2.5">
+              <span className="text-[13px] font-bold text-emerald-800">✓ Listing ID:</span>
+              <span className="text-[13px] font-mono font-extrabold text-slate-800 bg-white px-2.5 py-0.5 rounded-md border border-slate-200">
+                #TVP-{submittedPropertyData?.propertyId || '101'}
+              </span>
             </div>
-            <div className="flex gap-3 items-center">
+            <div className="flex gap-3 items-center justify-between border-b border-emerald-100/60 pb-2.5">
+              <span className="text-[13px] font-bold text-emerald-800">✓ Created By (Host):</span>
+              <span className="text-[13px] font-bold text-slate-800">
+                {submittedPropertyData?.hostName || 'Authenticated Host'}
+              </span>
+            </div>
+            <div className="flex gap-3 items-center justify-between border-b border-emerald-100/60 pb-2.5">
+              <span className="text-[13px] font-bold text-emerald-800">✓ Listing Status:</span>
+              <span className="bg-[#FEF3C7] text-[#D97706] text-[11px] font-extrabold px-3 py-1 rounded-full uppercase tracking-wider border border-amber-200">
+                Waiting for Approval
+              </span>
+            </div>
+            <div className="flex gap-3 items-center justify-between">
               <span className="text-[13px] font-bold text-emerald-800">✓ Launch Promotion:</span>
               <span className="text-[13px] font-bold text-slate-700">3 Months Free Subscription Active 🎁</span>
+            </div>
+          </div>
+
+          <div className="w-full bg-blue-50/70 border border-blue-200/70 rounded-2xl p-4 text-left flex items-start gap-3">
+            <ShieldCheck className="w-5 h-5 text-blue-600 shrink-0 mt-0.5" />
+            <div className="text-[12.5px] font-medium text-blue-900 leading-relaxed">
+              <strong>Super Admin Approval Policy:</strong> Your stay listing has been securely saved in the database under your account. To protect guests and ensure quality, only after a <strong>Super Admin</strong> approves this listing will it become visible to travelers in search results.
             </div>
           </div>
 
@@ -1979,17 +2140,26 @@ export default function StayPropertyForm({ onBack }) {
                         multiple
                         accept="image/*"
                         onChange={(e) => {
-                          if (e.target.files) {
+                          if (e.target.files && e.target.files.length > 0) {
                             const files = Array.from(e.target.files);
-                            const newUrls = files.map(file => URL.createObjectURL(file));
-                            const combined = [...uploadedPhotos, ...newUrls];
-                            if (combined.length > 10) {
-                              setUploadedPhotos(combined.slice(0, 10));
-                              setPhotoError('You can upload a maximum of 10 photos. Extra photos were ignored.');
-                            } else {
-                              setUploadedPhotos(combined);
-                              setPhotoError('');
-                            }
+                            const promises = files.map(file => {
+                              return new Promise((resolve) => {
+                                const reader = new FileReader();
+                                reader.onload = (event) => resolve(event.target.result);
+                                reader.onerror = () => resolve(URL.createObjectURL(file));
+                                reader.readAsDataURL(file);
+                              });
+                            });
+                            Promise.all(promises).then(newUrls => {
+                              const combined = [...uploadedPhotos, ...newUrls];
+                              if (combined.length > 10) {
+                                setUploadedPhotos(combined.slice(0, 10));
+                                setPhotoError('You can upload a maximum of 10 photos. Extra photos were ignored.');
+                              } else {
+                                setUploadedPhotos(combined);
+                                setPhotoError('');
+                              }
+                            });
                           }
                         }}
                         className="absolute inset-0 opacity-0 cursor-pointer"
@@ -3060,7 +3230,10 @@ export default function StayPropertyForm({ onBack }) {
                             accept="image/*"
                             onChange={(e) => {
                               if (e.target.files && e.target.files[0]) {
-                                setOwnerPhoto(URL.createObjectURL(e.target.files[0]));
+                                const file = e.target.files[0];
+                                const reader = new FileReader();
+                                reader.onload = (evt) => setOwnerPhoto(evt.target.result);
+                                reader.readAsDataURL(file);
                               }
                             }}
                             className="absolute inset-0 opacity-0 cursor-pointer"
@@ -3310,6 +3483,34 @@ export default function StayPropertyForm({ onBack }) {
                         </span>
                       </div>
                     </div>
+
+                    {/* Submission Error Banner */}
+                    {submitError && (
+                      <div className="w-full bg-red-50 border border-red-200/90 rounded-2xl p-4 flex items-start justify-between gap-3 text-left animate-shake">
+                        <div className="flex items-start gap-3">
+                          <span className="text-red-600 font-bold text-lg leading-none mt-0.5">⚠️</span>
+                          <div className="flex flex-col">
+                            <span className="text-[13.5px] font-bold text-red-800 leading-snug">{submitError}</span>
+                            {submitError.includes('signed in') && (
+                              <button
+                                type="button"
+                                onClick={() => window.dispatchEvent(new CustomEvent('open-auth-modal', { detail: { tab: 'login' } }))}
+                                className="text-[12.5px] font-extrabold text-[#007F55] hover:underline mt-1.5 cursor-pointer w-fit"
+                              >
+                                Click here to Sign In or Create Host Account →
+                              </button>
+                            )}
+                          </div>
+                        </div>
+                        <button
+                          type="button"
+                          onClick={() => setSubmitError('')}
+                          className="text-slate-400 hover:text-slate-700 font-bold text-sm cursor-pointer p-1"
+                        >
+                          ✕
+                        </button>
+                      </div>
+                    )}
                   </div>
                 </>
               )}
@@ -3325,7 +3526,10 @@ export default function StayPropertyForm({ onBack }) {
                   </button>
                 ) : (
                   <button
-                    onClick={() => setCurrentStep(currentStep - 1)}
+                    onClick={() => {
+                      setSubmitError('');
+                      setCurrentStep(currentStep - 1);
+                    }}
                     className="flex items-center gap-2 rounded-xl border border-slate-200 bg-white px-6 py-3 text-[14px] font-bold text-slate-700 hover:bg-slate-50 active:scale-95 transition-all cursor-pointer"
                   >
                     ← Previous
@@ -3334,21 +3538,18 @@ export default function StayPropertyForm({ onBack }) {
 
                 <div className="flex items-center gap-3">
                   <button
+                    disabled={isSubmitting}
                     onClick={() => {
                       if (currentStep < 9) {
                         setCurrentStep(currentStep + 1);
                       } else {
-                        if (!isLegalDeclared) {
-                          alert('Please check the declaration box to confirm details and submit.');
-                          return;
-                        }
-                        setIsSubmitted(true);
+                        handleFinalSubmit();
                       }
                     }}
-                    className="flex items-center gap-2 rounded-xl bg-[#007F55] px-6 py-3 text-[14px] font-bold text-white shadow-md hover:bg-[#006644] active:scale-95 transition-all cursor-pointer"
+                    className="flex items-center gap-2 rounded-xl bg-[#007F55] px-7 py-3 text-[14px] font-bold text-white shadow-md hover:bg-[#006644] active:scale-95 transition-all cursor-pointer disabled:opacity-60 disabled:cursor-not-allowed"
                   >
-                    {currentStep === 9 ? 'Submit' : 'Continue'}
-                    <ArrowRight className="h-4.5 w-4.5" />
+                    {currentStep === 9 ? (isSubmitting ? 'Saving to Database...' : 'Submit Listing') : 'Continue'}
+                    {!isSubmitting && <ArrowRight className="h-4.5 w-4.5" />}
                   </button>
                 </div>
               </div>

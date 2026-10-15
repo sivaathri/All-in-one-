@@ -206,6 +206,52 @@ export default function StaysResults({ searchParams, onSearch }) {
   const [isSortOpen, setIsSortOpen] = useState(false);
   const sortRef = useRef(null);
 
+  // DB Approved Properties state
+  const [dbStays, setDbStays] = useState([]);
+
+  useEffect(() => {
+    fetch('http://localhost:5001/api/properties')
+      .then(res => res.json())
+      .then(data => {
+        if (data.success && Array.isArray(data.data?.properties)) {
+          const mapped = data.data.properties.map(p => {
+            const firstPrice = p.room_prices && typeof p.room_prices === 'object'
+              ? Object.values(p.room_prices)[0]
+              : null;
+            const priceNum = parseInt(firstPrice, 10) || 4500;
+            const imagesList = Array.isArray(p.photos) && p.photos.length > 0
+              ? p.photos
+              : [p.cover_photo || "https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=600&q=80"];
+
+            return {
+              id: p.property_id,
+              name: p.property_name,
+              rating: 4.9,
+              reviewsCount: 1,
+              location: `${p.address_line_1}, ${p.city} • Verified Host`,
+              tag: p.property_type,
+              discount: "New Listing",
+              originalPrice: Math.round(priceNum * 1.25),
+              price: priceNum,
+              totalPrice: priceNum * 4,
+              taxes: Math.round(priceNum * 0.18),
+              images: imagesList,
+              amenities: Array.isArray(p.amenities) && p.amenities.length > 0 ? p.amenities.slice(0, 4) : ["Free Wi-Fi", "Air Conditioning"],
+              extraAmenitiesCount: Array.isArray(p.amenities) ? Math.max(0, p.amenities.length - 4) : 0,
+              verified: true,
+              description: p.about_property_text || `${p.property_name} is a verified ${p.property_type} in ${p.city}.`,
+              subRatings: { cleanliness: 4.9, location: 4.8, service: 4.9, value: 4.8, comfort: 4.9, facilities: 4.8 },
+              reviews: []
+            };
+          });
+          setDbStays(mapped);
+        }
+      })
+      .catch(err => console.warn('Could not fetch DB approved properties:', err));
+  }, []);
+
+  const allStays = [...dbStays, ...INITIAL_STAYS];
+
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (sortRef.current && !sortRef.current.contains(event.target)) {
@@ -671,7 +717,7 @@ export default function StaysResults({ searchParams, onSearch }) {
             <div className={`relative z-20 flex flex-col sm:flex-row justify-between sm:items-center gap-4 bg-white rounded-2xl border border-slate-200 p-5 shadow-xs sr-anim sr-fade-up sr-d2${mounted ? ' sr-in' : ''}`}>
               <div className="text-left">
                 <h2 className="text-xl font-bold text-slate-900 tracking-tight">
-                  120 Stays found in Pondicherry
+                  {allStays.length} Stays found in {searchParams?.destination || 'Pondicherry'}
                 </h2>
                 <p className="text-[13px] font-medium text-slate-500 mt-1.5">
                   {formatDateString(searchParams?.checkIn)} - {formatDateString(searchParams?.checkOut)} (4 Nights) • {searchParams?.guests || '3 Adults, 1 Child, 1 Room'}
@@ -734,7 +780,7 @@ export default function StaysResults({ searchParams, onSearch }) {
 
             {/* Stays List */}
             <div className="space-y-6">
-              {INITIAL_STAYS.map((stay, stayIdx) => {
+              {allStays.map((stay, stayIdx) => {
                 const currentImgIdx = activeImageIndices[stay.id] || 0;
                 const isHovered = hoveredStay === stay.id;
                 const cardDelay = ['sr-d3','sr-d4','sr-d5'][stayIdx] || 'sr-d5';
