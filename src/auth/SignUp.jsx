@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { Mail, User, Phone, ChevronDown, ShieldCheck, ArrowRight, ArrowLeft, RefreshCw, CheckCircle2 } from 'lucide-react';
+import { Mail, User, Phone, ChevronDown, ShieldCheck, ArrowRight, ArrowLeft, RefreshCw } from 'lucide-react';
 import { RoundIndiaFlag } from './SignIn';
 
 const COUNTRIES = [
@@ -20,7 +20,7 @@ export default function SignUp({
   onSwitchToSignIn = () => {},
   isSubmitting = false 
 }) {
-  // Step: 'form' | 'verify'
+  // Step: 'form' | 'otp'
   const [step, setStep] = useState('form');
 
   // Form input states
@@ -32,24 +32,19 @@ export default function SignUp({
   const [agreeTerms, setAgreeTerms] = useState(false);
   const [focusedInput, setFocusedInput] = useState(null);
 
-  // OTP Verification states
-  const [phoneOtp, setPhoneOtp] = useState(['', '', '', '', '', '']);
-  const [emailOtp, setEmailOtp] = useState(['', '', '', '', '', '']);
+  // Mobile OTP states
+  const [otp, setOtp] = useState(['', '', '', '', '', '']);
   const [generatedPhoneOtp, setGeneratedPhoneOtp] = useState('');
-  const [generatedEmailOtp, setGeneratedEmailOtp] = useState('');
-  const [phoneTimer, setPhoneTimer] = useState(30);
-  const [emailTimer, setEmailTimer] = useState(30);
-  const [canResendPhone, setCanResendPhone] = useState(false);
-  const [canResendEmail, setCanResendEmail] = useState(false);
+  const [timer, setTimer] = useState(30);
+  const [canResend, setCanResend] = useState(false);
 
-  // Loading & error states
+  // Status & error states
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
 
   // Refs
   const countryDropdownRef = useRef(null);
-  const phoneOtpRefs = useRef([]);
-  const emailOtpRefs = useRef([]);
+  const otpRefs = useRef([]);
 
   // Click outside listener for country dropdown
   useEffect(() => {
@@ -66,37 +61,24 @@ export default function SignUp({
     };
   }, [isCountryDropdownOpen]);
 
-  // Timers countdown for Phone & Email OTPs
+  // Countdown timer for Mobile OTP resend
   useEffect(() => {
-    let phoneInterval = null;
-    let emailInterval = null;
-
-    if (step === 'verify') {
-      if (phoneTimer > 0) {
-        phoneInterval = setInterval(() => {
-          setPhoneTimer((prev) => prev - 1);
-        }, 1000);
-      } else {
-        setCanResendPhone(true);
-      }
-
-      if (emailTimer > 0) {
-        emailInterval = setInterval(() => {
-          setEmailTimer((prev) => prev - 1);
-        }, 1000);
-      } else {
-        setCanResendEmail(true);
-      }
+    let interval = null;
+    if (step === 'otp' && timer > 0) {
+      interval = setInterval(() => {
+        setTimer((prev) => prev - 1);
+      }, 1000);
+    } else if (timer === 0) {
+      setCanResend(true);
+      if (interval) clearInterval(interval);
     }
-
     return () => {
-      if (phoneInterval) clearInterval(phoneInterval);
-      if (emailInterval) clearInterval(emailInterval);
+      if (interval) clearInterval(interval);
     };
-  }, [step, phoneTimer, emailTimer]);
+  }, [step, timer]);
 
-  // Step 1: Handle initial form submission & generate both OTPs
-  const handleProceedToVerification = (e) => {
+  // Step 1: Send Mobile OTP
+  const handleSendMobileOtp = (e) => {
     e.preventDefault();
 
     if (!nameInput.trim()) {
@@ -120,152 +102,105 @@ export default function SignUp({
     setError('');
     setLoading(true);
 
-    // Generate random 6-digit OTP for Phone and Email
-    const newPhoneOtp = Math.floor(100000 + Math.random() * 900000).toString();
-    const newEmailOtp = Math.floor(100000 + Math.random() * 900000).toString();
+    // Generate random 6-digit Mobile OTP
+    const newOtpCode = Math.floor(100000 + Math.random() * 900000).toString();
+    setGeneratedPhoneOtp(newOtpCode);
 
-    setGeneratedPhoneOtp(newPhoneOtp);
-    setGeneratedEmailOtp(newEmailOtp);
-
-    // Prominently console log both generated OTPs
-    console.log('====================================================');
-    console.log('%c🔑 TRIPVERSE SIGN UP: DUAL OTP VERIFICATION', 'color: #0F766E; font-size: 15px; font-weight: bold;');
-    console.log(`📱 Mobile Number: ${selectedCountry.code} ${phoneInput}`);
-    console.log(`📲 Mobile OTP:    %c${newPhoneOtp}`, 'color: #EA580C; font-size: 16px; font-weight: bold; background: #FFF7ED; padding: 2px 8px; border-radius: 4px; border: 1px solid #FDBA74;');
-    console.log(`✉️ Email Address: ${emailInput}`);
-    console.log(`📧 Email OTP:     %c${newEmailOtp}`, 'color: #2563EB; font-size: 16px; font-weight: bold; background: #EFF6FF; padding: 2px 8px; border-radius: 4px; border: 1px solid #BFDBFE;');
-    console.log('====================================================');
+    // Console the generated Mobile OTP prominently
+    console.log('--------------------------------------------------');
+    console.log('%c🔑 TRIPVERSE SIGN UP: MOBILE OTP', 'color: #0F766E; font-size: 15px; font-weight: bold;');
+    console.log(`👤 Name:   ${nameInput.trim()}`);
+    console.log(`✉️ Email:  ${emailInput.trim()}`);
+    console.log(`📱 Mobile: ${selectedCountry.code} ${phoneInput}`);
+    console.log(`🔢 Generated OTP: %c${newOtpCode}`, 'color: #EA580C; font-size: 18px; font-weight: bold; background: #FFF7ED; padding: 2px 8px; border-radius: 4px; border: 1px solid #FDBA74;');
+    console.log('--------------------------------------------------');
 
     setTimeout(() => {
       setLoading(false);
-      setStep('verify');
-      setPhoneOtp(['', '', '', '', '', '']);
-      setEmailOtp(['', '', '', '', '', '']);
-      setPhoneTimer(30);
-      setEmailTimer(30);
-      setCanResendPhone(false);
-      setCanResendEmail(false);
-      // Auto-focus first input
+      setStep('otp');
+      setOtp(['', '', '', '', '', '']);
+      setTimer(30);
+      setCanResend(false);
+      // Focus first input box
       setTimeout(() => {
-        phoneOtpRefs.current[0]?.focus();
+        otpRefs.current[0]?.focus();
       }, 100);
     }, 700);
   };
 
   // Resend Mobile OTP
-  const handleResendPhoneOtp = () => {
-    if (!canResendPhone) return;
-    const newPhoneOtp = Math.floor(100000 + Math.random() * 900000).toString();
-    setGeneratedPhoneOtp(newPhoneOtp);
-    setPhoneTimer(30);
-    setCanResendPhone(false);
-    setPhoneOtp(['', '', '', '', '', '']);
-    console.log('%c📲 RESENT MOBILE OTP: %c' + newPhoneOtp, 'color: #0F766E; font-weight: bold;', 'color: #EA580C; font-weight: bold; background: #FFF7ED; padding: 2px 6px;');
-    phoneOtpRefs.current[0]?.focus();
+  const handleResendOtp = () => {
+    if (!canResend) return;
+    setLoading(true);
+
+    const newOtpCode = Math.floor(100000 + Math.random() * 900000).toString();
+    setGeneratedPhoneOtp(newOtpCode);
+
+    // Console the resent OTP
+    console.log('--------------------------------------------------');
+    console.log('%c🔄 RESENT SIGN UP MOBILE OTP', 'color: #0F766E; font-size: 14px; font-weight: bold;');
+    console.log(`📱 Mobile: ${selectedCountry.code} ${phoneInput}`);
+    console.log(`🔢 New Generated OTP: %c${newOtpCode}`, 'color: #EA580C; font-size: 18px; font-weight: bold; background: #FFF7ED; padding: 2px 8px; border-radius: 4px; border: 1px solid #FDBA74;');
+    console.log('--------------------------------------------------');
+
+    setTimeout(() => {
+      setLoading(false);
+      setTimer(30);
+      setCanResend(false);
+      setOtp(['', '', '', '', '', '']);
+      setError('');
+      otpRefs.current[0]?.focus();
+    }, 600);
   };
 
-  // Resend Email OTP
-  const handleResendEmailOtp = () => {
-    if (!canResendEmail) return;
-    const newEmailOtp = Math.floor(100000 + Math.random() * 900000).toString();
-    setGeneratedEmailOtp(newEmailOtp);
-    setEmailTimer(30);
-    setCanResendEmail(false);
-    setEmailOtp(['', '', '', '', '', '']);
-    console.log('%c📧 RESENT EMAIL OTP: %c' + newEmailOtp, 'color: #0F766E; font-weight: bold;', 'color: #2563EB; font-weight: bold; background: #EFF6FF; padding: 2px 6px;');
-    emailOtpRefs.current[0]?.focus();
-  };
-
-  // Handle Mobile OTP digit change
-  const handlePhoneOtpChange = (index, value) => {
+  // OTP digit typing
+  const handleOtpDigitChange = (index, value) => {
     if (!/^\d*$/.test(value)) return;
-    const newOtp = [...phoneOtp];
+    const newOtp = [...otp];
     newOtp[index] = value.slice(-1);
-    setPhoneOtp(newOtp);
+    setOtp(newOtp);
     if (error) setError('');
+
     if (value && index < 5) {
-      phoneOtpRefs.current[index + 1]?.focus();
-    } else if (value && index === 5) {
-      emailOtpRefs.current[0]?.focus();
+      otpRefs.current[index + 1]?.focus();
     }
   };
 
-  // Handle Email OTP digit change
-  const handleEmailOtpChange = (index, value) => {
-    if (!/^\d*$/.test(value)) return;
-    const newOtp = [...emailOtp];
-    newOtp[index] = value.slice(-1);
-    setEmailOtp(newOtp);
-    if (error) setError('');
-    if (value && index < 5) {
-      emailOtpRefs.current[index + 1]?.focus();
+  const handleOtpKeyDown = (index, e) => {
+    if (e.key === 'Backspace' && !otp[index] && index > 0) {
+      otpRefs.current[index - 1]?.focus();
     }
   };
 
-  // Backspace handling
-  const handlePhoneKeyDown = (index, e) => {
-    if (e.key === 'Backspace' && !phoneOtp[index] && index > 0) {
-      phoneOtpRefs.current[index - 1]?.focus();
-    }
-  };
-
-  const handleEmailKeyDown = (index, e) => {
-    if (e.key === 'Backspace' && !emailOtp[index] && index > 0) {
-      emailOtpRefs.current[index - 1]?.focus();
-    }
-  };
-
-  // Paste handling for Mobile OTP
-  const handlePhonePaste = (e) => {
+  const handleOtpPaste = (e) => {
     e.preventDefault();
     const pasted = e.clipboardData.getData('text').replace(/\D/g, '').slice(0, 6);
     if (!pasted) return;
-    const newOtp = [...phoneOtp];
+    const newOtp = [...otp];
     for (let i = 0; i < 6; i++) {
       newOtp[i] = pasted[i] || '';
     }
-    setPhoneOtp(newOtp);
+    setOtp(newOtp);
     if (error) setError('');
-    emailOtpRefs.current[0]?.focus();
+    const nextEmpty = newOtp.findIndex((d) => !d);
+    if (nextEmpty !== -1) {
+      otpRefs.current[nextEmpty]?.focus();
+    } else {
+      otpRefs.current[5]?.focus();
+    }
   };
 
-  // Paste handling for Email OTP
-  const handleEmailPaste = (e) => {
+  // Step 2: Verify Mobile OTP and create account
+  const handleVerifyOtpAndCreate = (e) => {
     e.preventDefault();
-    const pasted = e.clipboardData.getData('text').replace(/\D/g, '').slice(0, 6);
-    if (!pasted) return;
-    const newOtp = [...emailOtp];
-    for (let i = 0; i < 6; i++) {
-      newOtp[i] = pasted[i] || '';
-    }
-    setEmailOtp(newOtp);
-    if (error) setError('');
-  };
-
-  // Step 2: Verify both OTPs and complete registration
-  const handleVerifyBothOtps = (e) => {
-    e.preventDefault();
-    const enteredPhone = phoneOtp.join('');
-    const enteredEmail = emailOtp.join('');
-
-    if (enteredPhone.length !== 6) {
-      setError('Please enter the 6-digit Mobile OTP');
-      return;
-    }
-    if (enteredEmail.length !== 6) {
-      setError('Please enter the 6-digit Email OTP');
+    const enteredOtp = otp.join('');
+    if (enteredOtp.length !== 6) {
+      setError('Please enter the complete 6-digit OTP code');
       return;
     }
 
-    // Validate phone OTP (allows generated or demo 123456)
-    if (generatedPhoneOtp && enteredPhone !== generatedPhoneOtp && enteredPhone !== '123456') {
-      setError(`Invalid Mobile OTP code. Check console (F12) for: ${generatedPhoneOtp}`);
-      return;
-    }
-
-    // Validate email OTP (allows generated or demo 123456)
-    if (generatedEmailOtp && enteredEmail !== generatedEmailOtp && enteredEmail !== '123456') {
-      setError(`Invalid Email OTP code. Check console (F12) for: ${generatedEmailOtp}`);
+    if (generatedPhoneOtp && enteredOtp !== generatedPhoneOtp && enteredOtp !== '123456') {
+      setError(`Invalid OTP code. Check your browser console (F12) for: ${generatedPhoneOtp}`);
       return;
     }
 
@@ -275,14 +210,15 @@ export default function SignUp({
     setTimeout(() => {
       setLoading(false);
       onSuccess({
-        name: nameInput,
-        email: emailInput,
+        name: nameInput.trim(),
+        email: emailInput.trim(),
         phone: `${selectedCountry.code} ${phoneInput}`,
-        authType: 'dual-otp-signup'
+        authType: 'mobile-otp-signup'
       });
     }, 1000);
   };
 
+  // Social login handler
   const handleSocialLogin = (provider) => {
     setLoading(true);
     setTimeout(() => {
@@ -291,12 +227,9 @@ export default function SignUp({
     }, 800);
   };
 
-  const isPhoneFilled = phoneOtp.join('').length === 6;
-  const isEmailFilled = emailOtp.join('').length === 6;
-
   return (
     <div className="flex flex-col gap-5 animate-form-slide text-left">
-      {/* ================= STEP 1: REGISTRATION FORM ================= */}
+      {/* ================= STEP 1: FORM ================= */}
       {step === 'form' && (
         <>
           {/* Heading */}
@@ -317,7 +250,7 @@ export default function SignUp({
             </div>
           )}
 
-          <form onSubmit={handleProceedToVerification} className="flex flex-col gap-3.5">
+          <form onSubmit={handleSendMobileOtp} className="flex flex-col gap-3.5">
             {/* Full Name input */}
             <div className="relative flex items-center">
               <User className={`absolute left-4.5 h-5 w-5 transition-colors duration-300 ${focusedInput === 'name' ? 'text-[#0F766E]' : 'text-slate-400'}`} />
@@ -467,11 +400,11 @@ export default function SignUp({
                     <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
                     <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" />
                   </svg>
-                  <span>Sending verification codes...</span>
+                  <span>Sending Mobile OTP...</span>
                 </>
               ) : (
                 <>
-                  <span>Get Started &bull; Verify with OTP</span>
+                  <span>Get Started &bull; Get OTP</span>
                   <ArrowRight className="w-4.5 h-4.5" />
                 </>
               )}
@@ -518,19 +451,30 @@ export default function SignUp({
         </>
       )}
 
-      {/* ================= STEP 2: DUAL OTP VERIFICATION ================= */}
-      {step === 'verify' && (
-        <form onSubmit={handleVerifyBothOtps} className="flex flex-col gap-4 text-left animate-form-slide">
+      {/* ================= STEP 2: MOBILE OTP VERIFICATION ================= */}
+      {step === 'otp' && (
+        <form onSubmit={handleVerifyOtpAndCreate} className="flex flex-col gap-4 text-left animate-form-slide">
           {/* Header */}
           <div className="text-center flex flex-col items-center gap-1.5">
             <div className="w-12 h-12 rounded-2xl bg-teal-50 border border-teal-100 text-[#0F766E] flex items-center justify-center mb-0.5 shadow-xs">
               <ShieldCheck className="w-6 h-6" />
             </div>
-            <h2 className="text-[25px] font-bold text-[#0D233A] leading-tight tracking-tight">
-              Verify Email & Mobile
+            <h2 className="text-[26px] font-bold text-[#0D233A] leading-tight tracking-tight">
+              Verify Mobile Number
             </h2>
-            <p className="text-[13px] font-semibold text-slate-400 max-w-[340px]">
-              Enter the 6-digit verification codes sent to your phone and email
+            <p className="text-[13.5px] font-semibold text-slate-400 max-w-[320px]">
+              Enter the 6-digit verification code sent to{' '}
+              <span className="text-slate-800 font-bold">{selectedCountry.code} {phoneInput}</span>
+              <button
+                type="button"
+                onClick={() => {
+                  setStep('form');
+                  setError('');
+                }}
+                className="ml-2 text-[#0F766E] hover:underline font-bold text-xs cursor-pointer inline-flex items-center gap-0.5"
+              >
+                Edit
+              </button>
             </p>
           </div>
 
@@ -542,132 +486,66 @@ export default function SignUp({
             </div>
           )}
 
-          {/* SECTION 1: MOBILE OTP */}
-          <div className="rounded-2xl border border-slate-200/90 bg-slate-50/40 p-3.5 flex flex-col gap-2.5 shadow-2xs">
-            <div className="flex items-center justify-between">
-              <div className="flex items-center gap-2">
-                <div className="w-7 h-7 rounded-lg bg-teal-100/60 text-[#0F766E] flex items-center justify-center">
-                  <Phone className="w-4 h-4" />
-                </div>
-                <div>
-                  <div className="text-[13px] font-bold text-slate-800 flex items-center gap-1.5">
-                    <span>Mobile OTP</span>
-                    {isPhoneFilled && (
-                      <CheckCircle2 className="w-4 h-4 text-emerald-600 inline" />
-                    )}
-                  </div>
-                  <div className="text-[11.5px] font-medium text-slate-400">
-                    {selectedCountry.code} {phoneInput}
-                  </div>
-                </div>
-              </div>
-
-              {/* Resend Phone Timer / Action */}
-              <div className="text-right">
-                {canResendPhone ? (
-                  <button
-                    type="button"
-                    onClick={handleResendPhoneOtp}
-                    className="text-xs font-bold text-[#0F766E] hover:underline cursor-pointer flex items-center gap-1"
-                  >
-                    <RefreshCw className="w-3 h-3" />
-                    <span>Resend OTP</span>
-                  </button>
-                ) : (
-                  <span className="text-[11.5px] font-semibold text-slate-400">
-                    Resend in <strong className="text-[#0F766E]">{phoneTimer}s</strong>
-                  </span>
-                )}
-              </div>
-            </div>
-
-            {/* 6 Input Boxes for Phone */}
-            <div className="flex items-center justify-center gap-2" onPaste={handlePhonePaste}>
-              {phoneOtp.map((digit, index) => (
-                <input
-                  key={`phone-${index}`}
-                  ref={(el) => (phoneOtpRefs.current[index] = el)}
-                  type="text"
-                  inputMode="numeric"
-                  maxLength={1}
-                  value={digit}
-                  onChange={(e) => handlePhoneOtpChange(index, e.target.value)}
-                  onKeyDown={(e) => handlePhoneKeyDown(index, e)}
-                  className="w-10 h-12 sm:w-11 sm:h-12.5 rounded-xl border-2 border-slate-200 bg-white text-center text-lg font-bold text-slate-800 outline-none focus:border-[#0F766E] focus:ring-4 focus:ring-[#0F766E]/15 transition-all shadow-2xs"
-                />
-              ))}
-            </div>
+          {/* 6 OTP Digit Boxes */}
+          <div className="flex items-center justify-center gap-2 sm:gap-2.5 py-2" onPaste={handleOtpPaste}>
+            {otp.map((digit, index) => (
+              <input
+                key={index}
+                ref={(el) => (otpRefs.current[index] = el)}
+                type="text"
+                inputMode="numeric"
+                maxLength={1}
+                value={digit}
+                onChange={(e) => handleOtpDigitChange(index, e.target.value)}
+                onKeyDown={(e) => handleOtpKeyDown(index, e)}
+                className="w-11 h-13 sm:w-12 sm:h-14 rounded-2xl border-2 border-slate-200 bg-white text-center text-xl font-bold text-slate-800 outline-none focus:border-[#0F766E] focus:ring-4 focus:ring-[#0F766E]/15 transition-all duration-200 shadow-xs"
+              />
+            ))}
           </div>
 
-          {/* SECTION 2: EMAIL OTP */}
-          <div className="rounded-2xl border border-slate-200/90 bg-slate-50/40 p-3.5 flex flex-col gap-2.5 shadow-2xs">
-            <div className="flex items-center justify-between">
-              <div className="flex items-center gap-2">
-                <div className="w-7 h-7 rounded-lg bg-blue-100/60 text-blue-600 flex items-center justify-center">
-                  <Mail className="w-4 h-4" />
-                </div>
-                <div>
-                  <div className="text-[13px] font-bold text-slate-800 flex items-center gap-1.5">
-                    <span>Email OTP</span>
-                    {isEmailFilled && (
-                      <CheckCircle2 className="w-4 h-4 text-emerald-600 inline" />
-                    )}
-                  </div>
-                  <div className="text-[11.5px] font-medium text-slate-400 max-w-[190px] truncate">
-                    {emailInput}
-                  </div>
-                </div>
-              </div>
-
-              {/* Resend Email Timer / Action */}
-              <div className="text-right">
-                {canResendEmail ? (
-                  <button
-                    type="button"
-                    onClick={handleResendEmailOtp}
-                    className="text-xs font-bold text-blue-600 hover:underline cursor-pointer flex items-center gap-1"
-                  >
-                    <RefreshCw className="w-3 h-3" />
-                    <span>Resend OTP</span>
-                  </button>
-                ) : (
-                  <span className="text-[11.5px] font-semibold text-slate-400">
-                    Resend in <strong className="text-blue-600">{emailTimer}s</strong>
-                  </span>
-                )}
-              </div>
-            </div>
-
-            {/* 6 Input Boxes for Email */}
-            <div className="flex items-center justify-center gap-2" onPaste={handleEmailPaste}>
-              {emailOtp.map((digit, index) => (
-                <input
-                  key={`email-${index}`}
-                  ref={(el) => (emailOtpRefs.current[index] = el)}
-                  type="text"
-                  inputMode="numeric"
-                  maxLength={1}
-                  value={digit}
-                  onChange={(e) => handleEmailOtpChange(index, e.target.value)}
-                  onKeyDown={(e) => handleEmailKeyDown(index, e)}
-                  className="w-10 h-12 sm:w-11 sm:h-12.5 rounded-xl border-2 border-slate-200 bg-white text-center text-lg font-bold text-slate-800 outline-none focus:border-blue-600 focus:ring-4 focus:ring-blue-600/15 transition-all shadow-2xs"
-                />
-              ))}
-            </div>
-          </div>
-
-          {/* Console / Demo Badge */}
+          {/* Helper Console Hint */}
           <div className="text-center">
-            <span className="inline-block px-3.5 py-1.5 rounded-full bg-teal-50 border border-teal-100 text-[11.5px] font-semibold text-[#0F766E] shadow-2xs">
-              💡 Codes in Console (F12) &bull; Mobile: <strong className="text-orange-600">{generatedPhoneOtp || '123456'}</strong> &bull; Email: <strong className="text-blue-600">{generatedEmailOtp || '123456'}</strong>
+            <span className="inline-block px-3.5 py-1.5 rounded-full bg-teal-50 border border-teal-100 text-[12px] font-semibold text-[#0F766E] shadow-2xs">
+              💡 OTP logged in browser console (F12) &bull; Code: <strong className="text-orange-600 font-bold tracking-wider">{generatedPhoneOtp || '123456'}</strong>
             </span>
           </div>
 
-          {/* Verify & Complete Button */}
+          {/* Resend Timer / Action */}
+          <div className="flex items-center justify-between px-1 text-[13px]">
+            <button
+              type="button"
+              onClick={() => {
+                setStep('form');
+                setError('');
+              }}
+              className="flex items-center gap-1 font-semibold text-slate-500 hover:text-slate-800 transition-colors cursor-pointer"
+            >
+              <ArrowLeft className="w-3.5 h-3.5" />
+              <span>Change details</span>
+            </button>
+
+            {canResend ? (
+              <button
+                type="button"
+                onClick={handleResendOtp}
+                disabled={loading}
+                className="flex items-center gap-1 font-bold text-[#0F766E] hover:underline cursor-pointer"
+              >
+                <RefreshCw className="w-3.5 h-3.5" />
+                <span>Resend OTP</span>
+              </button>
+            ) : (
+              <span className="font-semibold text-slate-400">
+                Resend OTP in <span className="text-[#0F766E] font-bold">{timer}s</span>
+              </span>
+            )}
+          </div>
+
+          {/* Verify & Create Account Button */}
           <button
             type="submit"
-            disabled={loading || !isPhoneFilled || !isEmailFilled || isSubmitting}
-            className="w-full mt-1 rounded-2xl bg-[#0F766E] hover:bg-[#0c625c] disabled:bg-slate-200 disabled:text-slate-400 disabled:cursor-not-allowed text-white py-3.5 text-[15px] font-bold shadow-md shadow-teal-800/10 active:scale-98 transition-all duration-200 flex items-center justify-center gap-2 cursor-pointer"
+            disabled={loading || otp.join('').length < 6 || isSubmitting}
+            className="w-full mt-2 rounded-2xl bg-[#0F766E] hover:bg-[#0c625c] disabled:bg-slate-200 disabled:text-slate-400 disabled:cursor-not-allowed text-white py-3.5 text-[15px] font-bold shadow-md shadow-teal-800/10 active:scale-98 transition-all duration-200 flex items-center justify-center gap-2 cursor-pointer"
           >
             {loading ? (
               <>
@@ -675,27 +553,12 @@ export default function SignUp({
                   <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
                   <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" />
                 </svg>
-                <span>Verifying codes...</span>
+                <span>Creating account...</span>
               </>
             ) : (
-              <span>Verify & Complete Registration</span>
+              <span>Verify & Create Account</span>
             )}
           </button>
-
-          {/* Back to Edit Button */}
-          <div className="text-center pt-0.5">
-            <button
-              type="button"
-              onClick={() => {
-                setStep('form');
-                setError('');
-              }}
-              className="inline-flex items-center gap-1.5 text-xs font-bold text-slate-500 hover:text-slate-800 transition-colors cursor-pointer"
-            >
-              <ArrowLeft className="w-3.5 h-3.5" />
-              <span>Back to edit details</span>
-            </button>
-          </div>
         </form>
       )}
     </div>
