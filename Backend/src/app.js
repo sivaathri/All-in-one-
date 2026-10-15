@@ -5,8 +5,12 @@ import { env } from './config/env.js';
 import routes from './routes/index.js';
 import { generalLimiter } from './middleware/rate-limit.middleware.js';
 import { notFoundHandler, errorHandler } from './middleware/error.middleware.js';
+import { requestLogger } from './middleware/logger.middleware.js';
 
 const app = express();
+
+// Real-time terminal logger for API hits
+app.use(requestLogger);
 
 // 1. Security Headers
 app.use(helmet());

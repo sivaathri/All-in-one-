@@ -1,5 +1,5 @@
 import { env } from '../config/env.js';
-import { otpRepository } from '../repositories/otp.repository.js';
+import { OtpModel } from '../models/otp.model.js';
 import { generateSecureOtp, hashOtp, verifyOtpHash } from '../utils/otp.js';
 
 export class OtpService {
@@ -8,7 +8,7 @@ export class OtpService {
    * Throws 429 error if cooldown is active.
    */
   async assertResendCooldown(userId, verificationType) {
-    const lastCreatedAt = await otpRepository.getLastOtpCreatedAt(userId, verificationType);
+    const lastCreatedAt = await OtpModel.getLastCreatedAt(userId, verificationType);
     if (!lastCreatedAt) return;
 
     const elapsedSeconds = Math.floor((Date.now() - new Date(lastCreatedAt).getTime()) / 1000);
@@ -30,13 +30,13 @@ export class OtpService {
    */
   async createAndSaveOtp({ userId, verificationType, connection = null }) {
     // Invalidate existing pending OTPs
-    await otpRepository.invalidatePendingOtps(userId, verificationType, connection);
+    await OtpModel.invalidatePending(userId, verificationType, connection);
 
     const plainOtp = generateSecureOtp(env.OTP.length);
     const otpHash = hashOtp(plainOtp);
     const expiresAt = new Date(Date.now() + env.OTP.expiryMinutes * 60 * 1000);
 
-    await otpRepository.create(
+    await OtpModel.create(
       {
         userId,
         verificationType,
@@ -57,7 +57,7 @@ export class OtpService {
    * Enforces attempt limits, expiration, single-use, and timing-safe comparison.
    */
   async verifyOtp({ userId, verificationType, plainOtp, connection = null }) {
-    const pendingRecord = await otpRepository.getLatestPendingOtp(userId, verificationType, connection);
+    const pendingRecord = await OtpModel.getLatestPending(userId, verificationType, connection);
 
     if (!pendingRecord) {
       const error = new Error('No active verification code found. Please request a new OTP.');
@@ -84,7 +84,7 @@ export class OtpService {
     const isMatch = verifyOtpHash(plainOtp, pendingRecord.otp_hash);
 
     if (!isMatch) {
-      await otpRepository.incrementAttempts(pendingRecord.otp_id, connection);
+      await OtpModel.incrementAttempts(pendingRecord.otp_id, connection);
       const remaining = env.OTP.maxAttempts - (pendingRecord.attempts + 1);
 
       const error = new Error(
@@ -97,7 +97,7 @@ export class OtpService {
     }
 
     // 4. Mark as verified atomically (concurrency guard)
-    const marked = await otpRepository.markVerified(pendingRecord.otp_id, connection);
+    const marked = await OtpModel.markVerified(pendingRecord.otp_id, connection);
     if (!marked) {
       const error = new Error('Verification code has already been used.');
       error.statusCode = 400;

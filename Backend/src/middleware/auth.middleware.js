@@ -1,6 +1,6 @@
 import jwt from 'jsonwebtoken';
 import { env } from '../config/env.js';
-import { userRepository } from '../repositories/user.repository.js';
+import { UserModel } from '../models/user.model.js';
 import { sendError } from '../utils/response.js';
 
 /**
@@ -32,7 +32,7 @@ export const authenticate = async (req, res, next) => {
     }
 
     // Verify user exists and is active in the database
-    const user = await userRepository.findById(decoded.userId);
+    const user = await UserModel.findById(decoded.userId);
 
     if (!user) {
       return sendError(res, 'Account associated with this session no longer exists.', [], 401);

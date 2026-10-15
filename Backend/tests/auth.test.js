@@ -11,8 +11,8 @@ process.env.JWT_EXPIRES_IN = '15m';
 import app from '../src/app.js';
 import { env } from '../src/config/env.js';
 import { setTransactionHandler } from '../src/config/database.js';
-import { userRepository } from '../src/repositories/user.repository.js';
-import { otpRepository } from '../src/repositories/otp.repository.js';
+import { UserModel } from '../src/models/user.model.js';
+import { OtpModel } from '../src/models/otp.model.js';
 import { notificationService } from '../src/services/notification.service.js';
 import { hashOtp } from '../src/utils/otp.js';
 
@@ -49,32 +49,32 @@ function wireTestRepositories() {
     return callback(fakeConnection);
   });
 
-  // Mock UserRepository methods
-  userRepository.findById = async (userId) => {
+  // Mock UserModel methods
+  UserModel.findById = async (userId) => {
     return store.users.find((u) => u.user_id === Number(userId)) || null;
   };
 
-  userRepository.findByEmail = async (email) => {
+  UserModel.findByEmail = async (email) => {
     return store.users.find((u) => u.email.toLowerCase() === email.toLowerCase()) || null;
   };
 
-  userRepository.findByMobile = async (mobile) => {
+  UserModel.findByMobile = async (mobile) => {
     return store.users.find((u) => u.mobile_number === mobile) || null;
   };
 
-  userRepository.findByIdentifier = async (identifier) => {
+  UserModel.findByIdentifier = async (identifier) => {
     return store.users.find(
       (u) => u.email.toLowerCase() === identifier.toLowerCase() || u.mobile_number === identifier
     ) || null;
   };
 
-  userRepository.findExistingUser = async (email, mobile) => {
+  UserModel.findExistingUser = async (email, mobile) => {
     return store.users.find(
       (u) => u.email.toLowerCase() === email.toLowerCase() || u.mobile_number === mobile
     ) || null;
   };
 
-  userRepository.create = async ({ fullName, email, mobileNumber, accountStatus = 'pending' }) => {
+  UserModel.create = async ({ fullName, email, mobileNumber, accountStatus = 'pending' }) => {
     const user = {
       user_id: store.nextUserId++,
       full_name: fullName,
@@ -90,7 +90,7 @@ function wireTestRepositories() {
     return user.user_id;
   };
 
-  userRepository.setEmailVerified = async (userId, accountStatus = null) => {
+  UserModel.setEmailVerified = async (userId, accountStatus = null) => {
     const user = store.users.find((u) => u.user_id === Number(userId));
     if (!user) return false;
     user.email_verified = true;
@@ -99,7 +99,7 @@ function wireTestRepositories() {
     return true;
   };
 
-  userRepository.setMobileVerified = async (userId, accountStatus = null) => {
+  UserModel.setMobileVerified = async (userId, accountStatus = null) => {
     const user = store.users.find((u) => u.user_id === Number(userId));
     if (!user) return false;
     user.mobile_verified = true;
@@ -108,7 +108,7 @@ function wireTestRepositories() {
     return true;
   };
 
-  userRepository.updateAccountStatus = async (userId, status) => {
+  UserModel.updateAccountStatus = async (userId, status) => {
     const user = store.users.find((u) => u.user_id === Number(userId));
     if (!user) return false;
     user.account_status = status;
@@ -116,8 +116,8 @@ function wireTestRepositories() {
     return true;
   };
 
-  // Mock OtpRepository methods
-  otpRepository.create = async ({ userId, verificationType, otpHash, expiresAt }) => {
+  // Mock OtpModel methods
+  OtpModel.create = async ({ userId, verificationType, otpHash, expiresAt }) => {
     const otpRecord = {
       otp_id: store.nextOtpId++,
       user_id: Number(userId),
@@ -132,14 +132,14 @@ function wireTestRepositories() {
     return otpRecord.otp_id;
   };
 
-  otpRepository.getLatestPendingOtp = async (userId, verificationType) => {
+  OtpModel.getLatestPending = async (userId, verificationType) => {
     const matching = store.otps
       .filter((o) => o.user_id === Number(userId) && o.verification_type === verificationType && !o.verified_at)
       .sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
     return matching[0] || null;
   };
 
-  otpRepository.incrementAttempts = async (otpId) => {
+  OtpModel.incrementAttempts = async (otpId) => {
     const record = store.otps.find((o) => o.otp_id === Number(otpId));
     if (record) {
       record.attempts += 1;
@@ -148,7 +148,7 @@ function wireTestRepositories() {
     return false;
   };
 
-  otpRepository.markVerified = async (otpId) => {
+  OtpModel.markVerified = async (otpId) => {
     const record = store.otps.find((o) => o.otp_id === Number(otpId) && !o.verified_at);
     if (record) {
       record.verified_at = new Date().toISOString();
@@ -157,7 +157,7 @@ function wireTestRepositories() {
     return false;
   };
 
-  otpRepository.invalidatePendingOtps = async (userId, verificationType) => {
+  OtpModel.invalidatePending = async (userId, verificationType) => {
     let count = 0;
     store.otps.forEach((o) => {
       if (o.user_id === Number(userId) && o.verification_type === verificationType && !o.verified_at) {
@@ -168,7 +168,7 @@ function wireTestRepositories() {
     return count;
   };
 
-  otpRepository.getLastOtpCreatedAt = async (userId, verificationType) => {
+  OtpModel.getLastCreatedAt = async (userId, verificationType) => {
     const matching = store.otps
       .filter((o) => o.user_id === Number(userId) && o.verification_type === verificationType)
       .sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
@@ -676,8 +676,8 @@ describe('TripVerse Authentication Module 1 Test Suite', () => {
     });
 
     it('should handle database connection errors safely without leaking internal details', async () => {
-      const originalFind = userRepository.findByIdentifier;
-      userRepository.findByIdentifier = async () => {
+      const originalFind = UserModel.findByIdentifier;
+      UserModel.findByIdentifier = async () => {
         const dbErr = new Error('Database connection lost');
         dbErr.code = 'ECONNREFUSED';
         throw dbErr;
@@ -688,7 +688,7 @@ describe('TripVerse Authentication Module 1 Test Suite', () => {
         .send({ identifier: 'test@example.com' });
 
       // Restore
-      userRepository.findByIdentifier = originalFind;
+      UserModel.findByIdentifier = originalFind;
 
       assert.equal(res.status, 503);
       assert.equal(res.body.success, false);

@@ -27,9 +27,6 @@ tripverse-backend/
 │   │   ├── index.js                # Models aggregator
 │   │   ├── user.model.js           # User Model for `users` table
 │   │   └── otp.model.js            # OTP Model for `signup_otps` table
-│   ├── repositories/               # Data Access Layer / Model bridges
-│   │   ├── user.repository.js      # Parameterized queries on `users` table
-│   │   └── otp.repository.js       # Atomic queries and single-use guards on `signup_otps`
 │   ├── routes/                     # Express route declarations
 │   │   ├── index.js                # Master router with health check & route prefixes
 │   │   └── auth.routes.js          # Authentication endpoint route definitions

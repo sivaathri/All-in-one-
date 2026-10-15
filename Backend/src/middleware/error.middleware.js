@@ -5,6 +5,10 @@ import { sendError } from '../utils/response.js';
  * 404 Route Not Found handler.
  */
 export const notFoundHandler = (req, res) => {
+  if (env.NODE_ENV !== 'test') {
+    console.warn(`\x1b[33m⚠️  [404 NOT FOUND]\x1b[0m ${req.method} ${req.originalUrl} does not match any route.`);
+  }
+
   return sendError(
     res,
     `Resource not found: ${req.method} ${req.originalUrl}`,
@@ -15,12 +19,30 @@ export const notFoundHandler = (req, res) => {
 
 /**
  * Global application error handler.
- * Sanitizes errors so internal DB messages, credentials, and stack traces are never leaked.
+ * Logs comprehensive crash and error details in terminal while keeping API output secure.
  */
 export const errorHandler = (err, req, res, next) => {
-  // Log full error internally for monitoring/debugging
+  const statusCode = err.statusCode || (res.statusCode >= 400 ? res.statusCode : 500);
+
+  // Detailed Terminal Diagnostics for Developer
   if (env.NODE_ENV !== 'test') {
-    console.error(`[ERROR] ${req.method} ${req.originalUrl}:`, err);
+    console.error('\n\x1b[31m\x1b[1m' + '─'.repeat(70) + '\x1b[0m');
+    console.error(`\x1b[31m\x1b[1m🚨 [API ERROR / CRASH REASON]\x1b[0m ${req.method} ${req.originalUrl}`);
+    console.error(`\x1b[33mStatus Code:\x1b[0m ${statusCode}`);
+    console.error(`\x1b[33mWhy it failed:\x1b[0m ${err.message || 'Unknown error'}`);
+
+    if (err.code) {
+      console.error(`\x1b[33mError Code:\x1b[0m ${err.code}`);
+    }
+
+    if (err.errors && err.errors.length > 0) {
+      console.error(`\x1b[33mValidation Errors:\x1b[0m`, JSON.stringify(err.errors, null, 2));
+    }
+
+    if (err.stack && env.NODE_ENV === 'development') {
+      console.error(`\x1b[90mStack Trace:\n${err.stack}\x1b[0m`);
+    }
+    console.error('\x1b[31m\x1b[1m' + '─'.repeat(70) + '\x1b[0m\n');
   }
 
   // Handle express body parser syntax error (invalid JSON)
@@ -38,8 +60,6 @@ export const errorHandler = (err, req, res, next) => {
     return sendError(res, 'Database connection unavailable. Please verify service status.', [], 503);
   }
 
-  // Handle explicit status codes from custom errors
-  const statusCode = err.statusCode || (res.statusCode >= 400 ? res.statusCode : 500);
   const safeMessage = statusCode === 500 && env.NODE_ENV === 'production'
     ? 'An unexpected error occurred while processing your request.'
     : (err.message || 'The request could not be completed.');

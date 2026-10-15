@@ -1,7 +1,7 @@
 import jwt from 'jsonwebtoken';
 import { env } from '../config/env.js';
 import { withTransaction } from '../config/database.js';
-import { userRepository } from '../repositories/user.repository.js';
+import { UserModel } from '../models/user.model.js';
 import { otpService } from './otp.service.js';
 import { notificationService } from './notification.service.js';
 import { maskIdentifier } from '../utils/otp.js';
@@ -34,7 +34,7 @@ export class AuthService {
     const normalizedMobile = mobileNumber.trim();
 
     // 1. Check if an account already exists with either credential
-    const existingUser = await userRepository.findExistingUser(normalizedEmail, normalizedMobile);
+    const existingUser = await UserModel.findExistingUser(normalizedEmail, normalizedMobile);
 
     if (existingUser) {
       if (existingUser.account_status === 'active') {
@@ -59,7 +59,7 @@ export class AuthService {
 
     // 2. Atomic creation of pending user & dual OTP generation in a transaction
     const { userId, emailOtp, mobileOtp } = await withTransaction(async (connection) => {
-      const newUserId = await userRepository.create(
+      const newUserId = await UserModel.create(
         {
           fullName: fullName.trim(),
           email: normalizedEmail,
@@ -159,7 +159,7 @@ export class AuthService {
    */
   async verifyEmailOtp({ email, otp }) {
     const normalizedEmail = email.trim().toLowerCase();
-    const user = await userRepository.findByEmail(normalizedEmail);
+    const user = await UserModel.findByEmail(normalizedEmail);
 
     if (!user) {
       const error = new Error('Invalid email or verification code.');
@@ -188,7 +188,7 @@ export class AuthService {
       const willActivate = Boolean(user.mobile_verified);
       const newStatus = willActivate ? 'active' : 'pending';
 
-      await userRepository.setEmailVerified(user.user_id, newStatus, connection);
+      await UserModel.setEmailVerified(user.user_id, newStatus, connection);
 
       return {
         emailVerified: true,
@@ -205,7 +205,7 @@ export class AuthService {
    */
   async verifyMobileOtp({ mobileNumber, otp }) {
     const normalizedMobile = mobileNumber.trim();
-    const user = await userRepository.findByMobile(normalizedMobile);
+    const user = await UserModel.findByMobile(normalizedMobile);
 
     if (!user) {
       const error = new Error('Invalid mobile number or verification code.');
@@ -234,7 +234,7 @@ export class AuthService {
       const willActivate = Boolean(user.email_verified);
       const newStatus = willActivate ? 'active' : 'pending';
 
-      await userRepository.setMobileVerified(user.user_id, newStatus, connection);
+      await UserModel.setMobileVerified(user.user_id, newStatus, connection);
 
       return {
         emailVerified: Boolean(user.email_verified),
@@ -251,7 +251,7 @@ export class AuthService {
    */
   async requestSignInOtp({ identifier }) {
     const trimmedIdentifier = identifier.trim();
-    const user = await userRepository.findByIdentifier(trimmedIdentifier);
+    const user = await UserModel.findByIdentifier(trimmedIdentifier);
 
     // Constant-time/generic response to prevent account enumeration
     const genericResponse = {
@@ -329,7 +329,7 @@ export class AuthService {
    */
   async verifySignInOtp({ identifier, otp }) {
     const trimmedIdentifier = identifier.trim();
-    const user = await userRepository.findByIdentifier(trimmedIdentifier);
+    const user = await UserModel.findByIdentifier(trimmedIdentifier);
 
     if (!user) {
       const error = new Error('Invalid credentials or verification code.');
@@ -384,7 +384,7 @@ export class AuthService {
    */
   async resendOtp({ identifier, type }) {
     const trimmedIdentifier = identifier.trim();
-    const user = await userRepository.findByIdentifier(trimmedIdentifier);
+    const user = await UserModel.findByIdentifier(trimmedIdentifier);
 
     if (!user) {
       const error = new Error('No account found for the specified identifier.');
@@ -452,7 +452,7 @@ export class AuthService {
    * Get authenticated user profile.
    */
   async getProfile(userId) {
-    const user = await userRepository.findById(userId);
+    const user = await UserModel.findById(userId);
 
     if (!user) {
       const error = new Error('User not found.');
