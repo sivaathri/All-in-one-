@@ -1,7 +1,7 @@
 import { useState, useRef, useEffect } from 'react';
 import { Menu, X, ChevronDown, Heart } from 'lucide-react';
 import { AuthModal } from '../auth';
-import BecomeHostModal from './BecomeHostModal';
+import BecomeHostModal from '../host/BecomeHostModal';
 
 export default function Navbar({ onNavigate = () => {}, currentPage = 'home' }) {
   const [activeMenu, setActiveMenu] = useState('Stays');

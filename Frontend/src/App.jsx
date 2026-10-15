@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import Navbar from './components/Navbar';
 import Home from './pages/Home';
-import BecomeHost from './pages/BecomeHost';
+import BecomeHost from './host/BecomeHost';
 import Footer from './components/Footer';
 import StaysResults from './pages/StaysResults';
 import MyBookings from './pages/MyBookings';
