@@ -42,6 +42,21 @@ const HIDDEN_MS = 10_000;   // Hidden for 10 seconds
 export default function PromoToast() {
   const [visible, setVisible] = useState(false);
   const [promoIndex, setPromoIndex] = useState(0);
+  const [hasActiveModal, setHasActiveModal] = useState(false);
+
+  // Detect if any modal (such as AuthModal / Sign Up modal) is open
+  useEffect(() => {
+    const checkModal = () => {
+      const modal = document.querySelector('.animate-modal-backdrop, [role="dialog"], .fixed.inset-0.z-50, .fixed.inset-0.z-\\[100\\]');
+      setHasActiveModal(!!modal);
+    };
+
+    checkModal();
+    const observer = new MutationObserver(checkModal);
+    observer.observe(document.body, { childList: true, subtree: true });
+
+    return () => observer.disconnect();
+  }, []);
 
   useEffect(() => {
     let timeoutId;
@@ -72,16 +87,17 @@ export default function PromoToast() {
   }, []);
 
   const promo = PROMOS[promoIndex];
+  const shouldShow = visible && !hasActiveModal;
 
   return (
     <div
       role="alert"
       aria-live="polite"
-      className="fixed bottom-6 left-5 z-[9999] transition-all duration-[420ms] ease-[cubic-bezier(0.34,1.56,0.64,1)]"
+      className="fixed bottom-6 left-5 z-30 transition-all duration-[420ms] ease-[cubic-bezier(0.34,1.56,0.64,1)]"
       style={{
-        transform: visible ? 'translateX(0) translateY(0)' : 'translateX(-120%) translateY(20px)',
-        opacity: visible ? 1 : 0,
-        pointerEvents: visible ? 'auto' : 'none',
+        transform: shouldShow ? 'translateX(0) translateY(0)' : 'translateX(-140%) translateY(20px)',
+        opacity: shouldShow ? 1 : 0,
+        pointerEvents: shouldShow ? 'auto' : 'none',
       }}
     >
       <div className="flex items-center gap-3 bg-white rounded-2xl shadow-[0_8px_32px_rgba(0,0,0,0.18)] border border-slate-200/80 p-3 pr-4 w-[290px] max-w-[calc(100vw-40px)]">
