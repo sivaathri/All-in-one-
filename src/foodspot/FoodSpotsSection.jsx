@@ -1,5 +1,5 @@
 import { useRef, useState, useEffect } from 'react';
-import { ChevronLeft, ChevronRight, ArrowRight, Heart, Star, Utensils } from 'lucide-react';
+import { ChevronLeft, ChevronRight, ArrowRight, Heart, Utensils } from 'lucide-react';
 
 const FOOD_ITEMS = [
   {
@@ -196,24 +196,9 @@ function FoodCard({ item }) {
           {item.location}
         </div>
 
-        {/* Rating and Reviews */}
-        <div className="mt-1.5 flex items-center gap-1.5 text-[11.5px] font-semibold text-slate-450">
-          <Star className="h-3.5 w-3.5 fill-amber-400 text-amber-400 shrink-0" strokeWidth={0} />
-          <span className="text-slate-800 font-extrabold ml-0.5">{item.rating.toFixed(1)}</span>
-          <span>({item.reviews} reviews)</span>
-        </div>
-
         {/* Cuisine Type */}
         <div className="mt-1.5 text-[11.5px] font-bold text-slate-400 leading-tight">
           {item.cuisine}
-        </div>
-
-        {/* Price Tag */}
-        <div className="flex items-center gap-1 mt-1.5">
-          <span className="text-[15.5px] font-black text-[#0F766E]">₹{item.price.toLocaleString()}</span>
-          <span className="text-[11.5px] font-bold text-slate-400">
-            {item.pricePeriod}
-          </span>
         </div>
       </div>
     </div>
