@@ -187,6 +187,97 @@ export default function StayPropertyForm({ onBack }) {
     };
   }, []);
 
+  // Multi-floor and All-room-types helpers
+  const handleSelectAllRoomTypes = () => {
+    setSelectedRoomPills([...roomTypesOptions]);
+    setRoomConfigs(prev => {
+      const next = { ...prev };
+      roomTypesOptions.forEach(opt => {
+        if (!next[opt]) {
+          const rowId = Date.now() + Math.random();
+          next[opt] = {
+            floor: 'All Floors',
+            quantity: '',
+            floorList: [{ id: rowId, floor: 'All Floors', quantity: '' }]
+          };
+        }
+      });
+      return next;
+    });
+  };
+
+  const handleClearAllRoomTypes = () => {
+    setSelectedRoomPills([]);
+    setRoomConfigs({});
+  };
+
+  const addFloorRow = (roomType) => {
+    const config = roomConfigs[roomType] || { floor: 'Select Floor', quantity: '', floorList: [] };
+    const list = config.floorList && config.floorList.length > 0
+      ? config.floorList
+      : [{ id: Date.now() - 1, floor: config.floor || 'Select Floor', quantity: config.quantity || '' }];
+
+    const updatedList = [
+      ...list,
+      { id: Date.now() + Math.random(), floor: 'Select Floor', quantity: '' }
+    ];
+
+    const totalQty = updatedList.reduce((sum, r) => sum + (parseInt(r.quantity, 10) || 0), 0);
+
+    setRoomConfigs({
+      ...roomConfigs,
+      [roomType]: {
+        ...config,
+        floor: updatedList[0]?.floor || 'Select Floor',
+        quantity: totalQty > 0 ? String(totalQty) : '',
+        floorList: updatedList
+      }
+    });
+  };
+
+  const removeFloorRow = (roomType, rowId) => {
+    const config = roomConfigs[roomType];
+    if (!config || !config.floorList) return;
+    const updatedList = config.floorList.filter(r => r.id !== rowId);
+    const totalQty = updatedList.reduce((sum, r) => sum + (parseInt(r.quantity, 10) || 0), 0);
+
+    setRoomConfigs({
+      ...roomConfigs,
+      [roomType]: {
+        ...config,
+        floor: updatedList[0]?.floor || 'Select Floor',
+        quantity: totalQty > 0 ? String(totalQty) : '',
+        floorList: updatedList
+      }
+    });
+  };
+
+  const updateFloorRow = (roomType, rowId, field, value) => {
+    const config = roomConfigs[roomType] || { floor: 'Select Floor', quantity: '', floorList: [] };
+    const list = config.floorList && config.floorList.length > 0
+      ? config.floorList
+      : [{ id: rowId, floor: config.floor || 'Select Floor', quantity: config.quantity || '' }];
+
+    const updatedList = list.map(r => {
+      if (r.id === rowId) {
+        return { ...r, [field]: value };
+      }
+      return r;
+    });
+
+    const totalQty = updatedList.reduce((sum, r) => sum + (parseInt(r.quantity, 10) || 0), 0);
+
+    setRoomConfigs({
+      ...roomConfigs,
+      [roomType]: {
+        ...config,
+        floor: updatedList[0]?.floor || 'Select Floor',
+        quantity: totalQty > 0 ? String(totalQty) : '',
+        floorList: updatedList
+      }
+    });
+  };
+
   // Step 4 States
   const [selectedAmenities, setSelectedAmenities] = useState(['Free Wi-Fi', 'Air Conditioning', 'Free Parking', 'Housekeeping']);
 
@@ -383,8 +474,30 @@ export default function StayPropertyForm({ onBack }) {
   ];
 
   const floorOptions = [
-    'Select Floor', 'Ground Floor', '1st Floor', '2nd Floor', '3rd Floor', 
-    '4th Floor', '5th Floor', '6th Floor', '7th Floor', '8th Floor', '9th Floor', '10th Floor', '11th Floor', '12th Floor', '13th Floor', '14th Floor', '15th Floor', '16th Floor', '17th Floor', '18th Floor', '19th Floor', '20th Floor'
+    'Select Floor',
+    'All Floors',
+    'Basement',
+    'Ground Floor',
+    '1st Floor',
+    '2nd Floor',
+    '3rd Floor',
+    '4th Floor',
+    '5th Floor',
+    '6th Floor',
+    '7th Floor',
+    '8th Floor',
+    '9th Floor',
+    '10th Floor',
+    '11th Floor',
+    '12th Floor',
+    '13th Floor',
+    '14th Floor',
+    '15th Floor',
+    '16th Floor',
+    '17th Floor',
+    '18th Floor',
+    '19th Floor',
+    '20th Floor'
   ];
 
   const steps = [
@@ -1028,28 +1141,48 @@ export default function StayPropertyForm({ onBack }) {
                   {/* Form Box Room Setup */}
                   <div className="w-full bg-white rounded-2xl border border-slate-100 p-8 flex flex-col gap-6 text-left">
                     
-                    {/* Header Row: Dropdown and Pills */}
+                    {/* Header Row: Dropdown, Actions & Pills */}
                     <div className="flex flex-col gap-3">
-                      <label className="text-[15px] font-bold text-slate-800">
-                        Select room type
-                      </label>
+                      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2.5">
+                        <label className="text-[15px] font-bold text-slate-800">
+                          Select room types & allocate floors
+                        </label>
+                        <div className="flex items-center gap-2">
+                          <button
+                            type="button"
+                            onClick={handleSelectAllRoomTypes}
+                            className="text-[12px] font-bold text-[#007F55] bg-emerald-50 hover:bg-emerald-100/70 border border-emerald-200/60 px-3 py-1.5 rounded-xl transition-all cursor-pointer shadow-xs active:scale-95"
+                          >
+                            + Select All ({roomTypesOptions.length}) Room Types
+                          </button>
+                          {selectedRoomPills.length > 0 && (
+                            <button
+                              type="button"
+                              onClick={handleClearAllRoomTypes}
+                              className="text-[12px] font-bold text-red-650 bg-red-50 hover:bg-red-100/70 border border-red-200/60 px-3 py-1.5 rounded-xl transition-all cursor-pointer shadow-xs active:scale-95"
+                            >
+                              Clear All
+                            </button>
+                          )}
+                        </div>
+                      </div>
+
                       <div className="flex flex-wrap items-center gap-3.5">
-                        
                         {/* Custom dropdown inline */}
-                        <div ref={dropdownRef} className="relative min-w-[200px]">
+                        <div ref={dropdownRef} className="relative min-w-[220px]">
                           <button
                             type="button"
                             onClick={() => setIsRoomTypeDropdownOpen(!isRoomTypeDropdownOpen)}
-                            className="w-full rounded-xl border border-slate-200 bg-white px-4 py-2.5 text-[14px] font-bold text-slate-700 outline-none flex items-center justify-between cursor-pointer hover:border-slate-300 transition-colors"
+                            className="w-full rounded-xl border border-slate-200 bg-white px-4 py-2.5 text-[14px] font-bold text-slate-700 outline-none flex items-center justify-between cursor-pointer hover:border-slate-300 transition-colors shadow-xs"
                           >
-                            <span>-- Select --</span>
+                            <span>-- Select Room Type --</span>
                             <svg className={`w-4 h-4 text-slate-500 transition-transform ${isRoomTypeDropdownOpen ? 'rotate-180' : ''}`} fill="none" viewBox="0 0 24 24" stroke="currentColor">
                               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M19 9l-7 7-7-7" />
                             </svg>
                           </button>
 
                           {isRoomTypeDropdownOpen && (
-                            <div className="absolute top-[50px] left-0 w-full bg-white border border-slate-200 rounded-xl shadow-lg z-25 py-1.5 max-h-[260px] overflow-y-auto">
+                            <div className="absolute top-[50px] left-0 w-full min-w-[260px] bg-white border border-slate-200 rounded-xl shadow-xl z-25 py-1.5 max-h-[290px] overflow-y-auto">
                               {/* Search / Custom input box */}
                               <div className="px-3 py-2 border-b border-slate-100 sticky top-0 bg-white z-10">
                                 <input
@@ -1062,9 +1195,14 @@ export default function StayPropertyForm({ onBack }) {
                                       const customVal = dropdownSearch.trim();
                                       if (!selectedRoomPills.includes(customVal)) {
                                         setSelectedRoomPills([...selectedRoomPills, customVal]);
+                                        const rowId = Date.now() + Math.random();
                                         setRoomConfigs({
                                           ...roomConfigs,
-                                          [customVal]: { floor: 'Select Floor', quantity: '' }
+                                          [customVal]: {
+                                            floor: 'All Floors',
+                                            quantity: '',
+                                            floorList: [{ id: rowId, floor: 'All Floors', quantity: '' }]
+                                          }
                                         });
                                       }
                                       setDropdownSearch('');
@@ -1076,16 +1214,37 @@ export default function StayPropertyForm({ onBack }) {
                                 />
                               </div>
 
-                              {/* Custom Room Type option (if search is not empty and doesn't exactly match) */}
+                              {/* Quick Select All item inside dropdown */}
+                              {!dropdownSearch.trim() && (
+                                <div
+                                  onClick={() => {
+                                    handleSelectAllRoomTypes();
+                                    setIsRoomTypeDropdownOpen(false);
+                                  }}
+                                  className="px-4 py-2.5 text-[13px] font-extrabold text-[#007F55] hover:bg-emerald-50/60 cursor-pointer border-b border-slate-100 flex items-center justify-between"
+                                >
+                                  <span>★ Select All Room Types</span>
+                                  <span className="text-[11px] font-bold bg-emerald-100/70 text-[#007F55] px-2 py-0.5 rounded-md">
+                                    {roomTypesOptions.length}
+                                  </span>
+                                </div>
+                              )}
+
+                              {/* Custom Room Type option */}
                               {dropdownSearch.trim() && !roomTypesOptions.some(opt => opt.toLowerCase() === dropdownSearch.trim().toLowerCase()) && (
                                 <div
                                   onClick={() => {
                                     const customVal = dropdownSearch.trim();
                                     if (!selectedRoomPills.includes(customVal)) {
                                       setSelectedRoomPills([...selectedRoomPills, customVal]);
+                                      const rowId = Date.now() + Math.random();
                                       setRoomConfigs({
                                         ...roomConfigs,
-                                        [customVal]: { floor: 'Select Floor', quantity: '' }
+                                        [customVal]: {
+                                          floor: 'All Floors',
+                                          quantity: '',
+                                          floorList: [{ id: rowId, floor: 'All Floors', quantity: '' }]
+                                        }
                                       });
                                     }
                                     setDropdownSearch('');
@@ -1108,28 +1267,28 @@ export default function StayPropertyForm({ onBack }) {
                                       onClick={() => {
                                         if (!isAdded) {
                                           setSelectedRoomPills([...selectedRoomPills, opt]);
+                                          const rowId = Date.now() + Math.random();
                                           setRoomConfigs({
                                             ...roomConfigs,
-                                            [opt]: { floor: 'Select Floor', quantity: '' }
+                                            [opt]: {
+                                              floor: 'All Floors',
+                                              quantity: '',
+                                              floorList: [{ id: rowId, floor: 'All Floors', quantity: '' }]
+                                            }
                                           });
                                         }
                                         setDropdownSearch('');
                                         setIsRoomTypeDropdownOpen(false);
                                       }}
-                                      className={`px-4 py-2 text-[13.5px] font-bold cursor-pointer transition-colors ${
+                                      className={`px-4 py-2 text-[13.5px] font-bold cursor-pointer transition-colors flex items-center justify-between ${
                                         isAdded ? 'bg-slate-50 text-slate-400 cursor-not-allowed' : 'text-slate-700 hover:bg-slate-50'
                                       }`}
                                     >
-                                      {opt}
+                                      <span>{opt}</span>
+                                      {isAdded && <span className="text-[11px] font-semibold text-emerald-600">✓ Added</span>}
                                     </div>
                                   );
                                 })}
-
-                              {dropdownSearch.trim() && roomTypesOptions.filter(opt => opt.toLowerCase().includes(dropdownSearch.toLowerCase())).length === 0 && (
-                                <div className="px-4 py-3 text-[13px] text-slate-400 text-center font-medium">
-                                  Press Enter to add "{dropdownSearch.trim()}" as a custom room type!
-                                </div>
-                              )}
                             </div>
                           )}
                         </div>
@@ -1139,7 +1298,7 @@ export default function StayPropertyForm({ onBack }) {
                           {selectedRoomPills.map((pill) => (
                             <div
                               key={pill}
-                              className="bg-[#EFF6FF] text-[#1E40AF] px-4 py-1.5 rounded-full text-[13px] font-bold flex items-center gap-1.5"
+                              className="bg-[#EFF6FF] border border-blue-200/60 text-[#1E40AF] px-3.5 py-1.5 rounded-full text-[13px] font-bold flex items-center gap-1.5 shadow-2xs"
                             >
                               <span>{pill}</span>
                               <button
@@ -1150,7 +1309,8 @@ export default function StayPropertyForm({ onBack }) {
                                   delete updatedConfigs[pill];
                                   setRoomConfigs(updatedConfigs);
                                 }}
-                                className="text-[#1E40AF]/60 hover:text-[#1E40AF] font-bold cursor-pointer text-[15px]"
+                                className="text-[#1E40AF]/60 hover:text-red-500 font-bold cursor-pointer text-[15px] ml-0.5"
+                                title={`Remove ${pill}`}
                               >
                                 ×
                               </button>
@@ -1162,79 +1322,146 @@ export default function StayPropertyForm({ onBack }) {
                     </div>
 
                     {/* Horizontal Divider */}
-                    <div className="border-t border-slate-100 my-2"></div>
+                    <div className="border-t border-slate-100 my-1"></div>
 
-                    {/* Room Config Rows List */}
+                    {/* Room Config Cards List (Floor Allocations) */}
                     <div className="flex flex-col gap-6">
                       {selectedRoomPills.map((roomType) => {
-                        const config = roomConfigs[roomType] || { floor: 'Select Floor', quantity: '' };
+                        const config = roomConfigs[roomType] || { floor: 'All Floors', quantity: '', floorList: [] };
+                        const floorList = config.floorList && config.floorList.length > 0
+                          ? config.floorList
+                          : [{ id: 1, floor: config.floor || 'All Floors', quantity: config.quantity || '' }];
+
+                        const totalQuantity = floorList.reduce((sum, r) => sum + (parseInt(r.quantity, 10) || 0), 0);
+
                         return (
                           <div 
                             key={roomType} 
-                            className="w-full border border-slate-200 rounded-2xl p-6 bg-white flex flex-col md:flex-row items-center gap-6"
+                            className="w-full border border-slate-200/90 rounded-2xl p-5 sm:p-6 bg-white shadow-xs flex flex-col gap-4 text-left transition-all hover:border-slate-300"
                           >
-                            {/* Room Type Header column */}
-                            <div className="w-full md:w-[12%] text-left shrink-0">
-                              <span className="text-[16px] font-bold text-slate-800 block">
-                                {roomType}
-                              </span>
-                            </div>
-
-                            {/* Floor selection column */}
-                            <div className="w-full md:flex-1 flex flex-col gap-1.5 text-left">
-                              <label className="text-[13px] font-bold text-slate-500">Floor</label>
-                              <div className="relative">
-                                <select
-                                  value={config.floor}
-                                  onChange={(e) => {
-                                    setRoomConfigs({
-                                      ...roomConfigs,
-                                      [roomType]: { ...config, floor: e.target.value }
-                                    });
-                                  }}
-                                  className="w-full rounded-xl border border-slate-200 bg-white px-4 py-2.5 text-[14px] font-medium text-slate-700 outline-none cursor-pointer appearance-none"
-                                >
-                                  {floorOptions.map((fOpt) => (
-                                    <option key={fOpt} value={fOpt}>
-                                      {fOpt}
-                                    </option>
-                                  ))}
-                                </select>
-                                <div className="absolute inset-y-0 right-4 flex items-center pointer-events-none text-slate-400">
-                                  <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M19 9l-7 7-7-7" />
-                                  </svg>
-                                </div>
-                              </div>
-                            </div>
-
-                            {/* Quantity column */}
-                            <div className="w-full md:flex-1 flex flex-col gap-1.5 text-left">
-                              <label className="text-[13px] font-bold text-slate-700">
-                                {config.floor === 'Select Floor' 
-                                  ? `Number of ${roomType} in (Select floor first)` 
-                                  : `Number of ${roomType} in ${config.floor}`
-                                }
-                              </label>
-                              <input
-                                type="text"
-                                placeholder={`Enter number of ${roomType} rooms`}
-                                value={config.quantity}
-                                onChange={(e) => {
-                                  setRoomConfigs({
-                                    ...roomConfigs,
-                                    [roomType]: { ...config, quantity: e.target.value }
-                                  });
-                                }}
-                                className="w-full rounded-xl border border-slate-200 bg-white px-4 py-2.5 text-[14px] font-medium text-slate-800 outline-none focus:border-[#007F55] focus:ring-1"
-                              />
-                              
-                              {/* Helper Text below input */}
-                              {config.floor !== 'Select Floor' && config.quantity && (
-                                <span className="text-[12px] font-semibold text-slate-500 mt-0.5">
-                                  {config.quantity} {roomType} room(s) in {config.floor}
+                            {/* Card Top Row: Room Type Title + Total Count Badge + Remove */}
+                            <div className="flex items-center justify-between border-b border-slate-100 pb-3">
+                              <div className="flex items-center gap-3">
+                                <span className="text-[17px] font-extrabold text-slate-900">
+                                  {roomType}
                                 </span>
-                              )}
+                                {totalQuantity > 0 && (
+                                  <span className="px-3 py-0.5 rounded-full bg-emerald-50 border border-emerald-200/80 text-[#007F55] text-[12px] font-extrabold">
+                                    Total: {totalQuantity} {roomType} {totalQuantity === 1 ? 'Room' : 'Rooms'}
+                                  </span>
+                                )}
+                              </div>
+
+                              <button
+                                type="button"
+                                onClick={() => {
+                                  setSelectedRoomPills(selectedRoomPills.filter(p => p !== roomType));
+                                  const updatedConfigs = { ...roomConfigs };
+                                  delete updatedConfigs[roomType];
+                                  setRoomConfigs(updatedConfigs);
+                                }}
+                                className="text-[12px] font-bold text-red-600 hover:text-red-700 hover:underline cursor-pointer flex items-center gap-1"
+                              >
+                                ✕ Remove Room Type
+                              </button>
+                            </div>
+
+                            {/* Floor Allocation Rows */}
+                            <div className="flex flex-col gap-3.5">
+                              {floorList.map((row, rIdx) => (
+                                <div
+                                  key={row.id || rIdx}
+                                  className="grid grid-cols-1 md:grid-cols-12 gap-3.5 items-center bg-slate-50/60 p-3.5 rounded-xl border border-slate-150"
+                                >
+                                  {/* Floor Dropdown Column */}
+                                  <div className="md:col-span-5 flex flex-col gap-1 text-left">
+                                    <label className="text-[12px] font-extrabold text-slate-700">
+                                      Floor
+                                    </label>
+                                    <div className="relative">
+                                      <select
+                                        value={row.floor}
+                                        onChange={(e) => updateFloorRow(roomType, row.id, 'floor', e.target.value)}
+                                        className="w-full rounded-xl border border-slate-200 bg-white px-3.5 py-2.5 text-[13.5px] font-semibold text-slate-800 outline-none cursor-pointer appearance-none focus:border-[#007F55] focus:ring-1 focus:ring-[#007F55]"
+                                      >
+                                        {floorOptions.map((fOpt) => (
+                                          <option key={fOpt} value={fOpt}>
+                                            {fOpt === 'All Floors' ? '🏢 All Floors (Entire Property)' : fOpt}
+                                          </option>
+                                        ))}
+                                      </select>
+                                      <div className="absolute inset-y-0 right-3.5 flex items-center pointer-events-none text-slate-400">
+                                        <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M19 9l-7 7-7-7" />
+                                        </svg>
+                                      </div>
+                                    </div>
+                                  </div>
+
+                                  {/* Quantity Input Column */}
+                                  <div className="md:col-span-6 flex flex-col gap-1 text-left">
+                                    <label className="text-[12px] font-extrabold text-slate-700">
+                                      {row.floor === 'Select Floor'
+                                        ? `Number of ${roomType} rooms`
+                                        : row.floor === 'All Floors'
+                                          ? `Number of ${roomType} in All Floors`
+                                          : `Number of ${roomType} in ${row.floor}`
+                                      }
+                                    </label>
+                                    <div className="flex items-center gap-2">
+                                      <input
+                                        type="number"
+                                        min="0"
+                                        placeholder={`e.g. 5`}
+                                        value={row.quantity}
+                                        onChange={(e) => updateFloorRow(roomType, row.id, 'quantity', e.target.value)}
+                                        className="w-full rounded-xl border border-slate-200 bg-white px-3.5 py-2.5 text-[14px] font-bold text-slate-800 outline-none focus:border-[#007F55] focus:ring-1 focus:ring-[#007F55]"
+                                      />
+                                      {floorList.length > 1 && (
+                                        <button
+                                          type="button"
+                                          onClick={() => removeFloorRow(roomType, row.id)}
+                                          className="p-2.5 text-slate-400 hover:text-red-600 rounded-xl hover:bg-red-50 transition cursor-pointer shrink-0"
+                                          title="Remove this floor allocation"
+                                        >
+                                          <Trash2 className="w-4 h-4" />
+                                        </button>
+                                      )}
+                                    </div>
+                                    {row.floor !== 'Select Floor' && row.quantity && (
+                                      <span className="text-[11.5px] font-bold text-[#007F55] mt-0.5">
+                                        ✓ {row.quantity} {roomType} room(s) {row.floor === 'All Floors' ? 'across All Floors' : `in ${row.floor}`}
+                                      </span>
+                                    )}
+                                  </div>
+
+                                  {/* Delete Column on wider screens if single button */}
+                                  <div className="hidden md:flex md:col-span-1 items-center justify-center">
+                                    {floorList.length > 1 && (
+                                      <button
+                                        type="button"
+                                        onClick={() => removeFloorRow(roomType, row.id)}
+                                        className="p-2 text-slate-400 hover:text-red-600 rounded-lg hover:bg-red-50 transition cursor-pointer"
+                                        title="Remove this floor"
+                                      >
+                                        <Trash2 className="w-4 h-4" />
+                                      </button>
+                                    )}
+                                  </div>
+                                </div>
+                              ))}
+                            </div>
+
+                            {/* + Add Floor Row Button */}
+                            <div className="pt-1">
+                              <button
+                                type="button"
+                                onClick={() => addFloorRow(roomType)}
+                                className="inline-flex items-center gap-1.5 text-[13px] font-extrabold text-[#007F55] hover:text-[#00553C] bg-emerald-50/70 hover:bg-emerald-100/70 border border-emerald-200/50 px-3.5 py-1.5 rounded-xl transition cursor-pointer shadow-2xs"
+                              >
+                                <Plus className="w-3.5 h-3.5 stroke-[3]" />
+                                <span>+ Add Another Floor for {roomType}</span>
+                              </button>
                             </div>
 
                           </div>
@@ -1242,8 +1469,17 @@ export default function StayPropertyForm({ onBack }) {
                       })}
 
                       {selectedRoomPills.length === 0 && (
-                        <div className="text-center py-12 border border-dashed border-slate-200 rounded-2xl bg-slate-50/20">
-                          <span className="text-[14px] font-bold text-slate-400">Please select a room type from the dropdown to configure rooms.</span>
+                        <div className="text-center py-12 border border-dashed border-slate-200 rounded-2xl bg-slate-50/30 flex flex-col items-center justify-center gap-3">
+                          <span className="text-[14px] font-bold text-slate-500">
+                            No room types selected yet.
+                          </span>
+                          <button
+                            type="button"
+                            onClick={handleSelectAllRoomTypes}
+                            className="text-[13px] font-extrabold text-white bg-[#007F55] hover:bg-[#006644] px-4 py-2 rounded-xl transition cursor-pointer shadow-sm"
+                          >
+                            Select All Room Types Now
+                          </button>
                         </div>
                       )}
                     </div>
