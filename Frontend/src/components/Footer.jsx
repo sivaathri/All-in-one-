@@ -113,7 +113,7 @@ export default function Footer({ onNavigate = () => {} }) {
               <li><a href="#airport-pickup" className="hover:text-[#0F766E] transition-colors">Airport Pickup</a></li>
               <li>
                 <button
-                  onClick={() => onNavigate('become-host')}
+                  onClick={() => window.dispatchEvent(new CustomEvent('open-become-host-modal'))}
                   className="hover:text-[#0F766E] transition-colors cursor-pointer border-none bg-transparent p-0 text-[12px] font-semibold text-slate-500"
                 >
                   Become a Host

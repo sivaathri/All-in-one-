@@ -1,6 +1,7 @@
 import { useState, useRef, useEffect } from 'react';
 import { Menu, X, ChevronDown, Heart } from 'lucide-react';
 import { AuthModal } from '../auth';
+import BecomeHostModal from './BecomeHostModal';
 
 export default function Navbar({ onNavigate = () => {}, currentPage = 'home' }) {
   const [activeMenu, setActiveMenu] = useState('Stays');
@@ -8,9 +9,10 @@ export default function Navbar({ onNavigate = () => {}, currentPage = 'home' }) 
   const [rentalsDropdown, setRentalsDropdown] = useState(false);
   const [servicesDropdown, setServicesDropdown] = useState(false);
 
-  // Authentication Popup states
+  // Authentication & Host Popup states
   const [isAuthOpen, setIsAuthOpen] = useState(false);
   const [authTab, setAuthTab] = useState('login'); // 'login' or 'register'
+  const [isBecomeHostOpen, setIsBecomeHostOpen] = useState(false);
   // Synchronous initial state from localStorage to eliminate any 1-second flash on refresh
   const [currentUser, setCurrentUser] = useState(() => {
     try {
@@ -54,6 +56,13 @@ export default function Navbar({ onNavigate = () => {}, currentPage = 'home' }) 
 
     window.addEventListener('storage', handleStorageChange);
     return () => window.removeEventListener('storage', handleStorageChange);
+  }, []);
+
+  // Listen for global open-become-host-modal events (e.g. from footer)
+  useEffect(() => {
+    const handleOpenHostModal = () => setIsBecomeHostOpen(true);
+    window.addEventListener('open-become-host-modal', handleOpenHostModal);
+    return () => window.removeEventListener('open-become-host-modal', handleOpenHostModal);
   }, []);
 
   const handleAuthSuccess = (userData) => {
@@ -323,7 +332,7 @@ export default function Navbar({ onNavigate = () => {}, currentPage = 'home' }) 
               <>
                 {currentPage !== 'become-host' && (
                   <button
-                    onClick={() => onNavigate('become-host')}
+                    onClick={() => setIsBecomeHostOpen(true)}
                     className="flex items-center gap-2 rounded-xl border border-[#0F766E] px-4 py-2 text-[14px] font-semibold text-[#0F766E] hover:bg-[#0F766E] hover:text-white transition-all duration-200 cursor-pointer outline-none"
                   >
                     <svg className="w-4 h-4 fill-current shrink-0" viewBox="0 0 24 24">
@@ -404,7 +413,7 @@ export default function Navbar({ onNavigate = () => {}, currentPage = 'home' }) 
               <>
                 {currentPage !== 'become-host' && (
                   <button
-                    onClick={() => onNavigate('become-host')}
+                    onClick={() => setIsBecomeHostOpen(true)}
                     className="flex items-center gap-2 rounded-xl border border-[#0F766E] px-4 py-2 text-[14px] font-semibold text-[#0F766E] hover:bg-[#0F766E] hover:text-white transition-all duration-200 cursor-pointer outline-none"
                   >
                     <svg className="w-4 h-4 fill-current shrink-0" viewBox="0 0 24 24">
@@ -538,7 +547,7 @@ export default function Navbar({ onNavigate = () => {}, currentPage = 'home' }) 
                 {currentPage !== 'become-host' && (
                   <button
                     onClick={() => {
-                      onNavigate('become-host');
+                      setIsBecomeHostOpen(true);
                       setIsOpen(false);
                     }}
                     className="flex items-center justify-center gap-2 w-full rounded-xl border border-[#0F766E] py-3 text-center text-sm font-semibold text-[#0F766E] hover:bg-[#0F766E] hover:text-white transition-all duration-200 cursor-pointer outline-none mb-1"
@@ -591,7 +600,7 @@ export default function Navbar({ onNavigate = () => {}, currentPage = 'home' }) 
                 {currentPage !== 'become-host' && (
                   <button
                     onClick={() => {
-                      onNavigate('become-host');
+                      setIsBecomeHostOpen(true);
                       setIsOpen(false);
                     }}
                     className="flex items-center justify-center gap-2 w-full rounded-xl border border-[#0F766E] py-3 text-center text-sm font-semibold text-[#0F766E] hover:bg-[#0F766E] hover:text-white transition-all duration-200 cursor-pointer outline-none"
@@ -625,6 +634,13 @@ export default function Navbar({ onNavigate = () => {}, currentPage = 'home' }) 
         onClose={() => setIsAuthOpen(false)}
         initialTab={authTab}
         onSuccess={handleAuthSuccess}
+      />
+
+      {/* Become a Host Modal */}
+      <BecomeHostModal
+        isOpen={isBecomeHostOpen}
+        onClose={() => setIsBecomeHostOpen(false)}
+        onStartListing={() => onNavigate('become-host')}
       />
     </nav>
   );
