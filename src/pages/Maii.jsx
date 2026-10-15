@@ -81,8 +81,7 @@ export default function Maii() {
     { name: 'Food Spots', icon: 'https://img.icons8.com/color/96/000000/hamburger.png', href: '#food-spots' },
     { name: 'Activities', icon: 'https://img.icons8.com/color/96/000000/parachute.png', href: '#activities' },
     { name: 'Taxi Booking', icon: 'https://img.icons8.com/color/96/000000/taxi.png', href: '#taxi-booking' },
-    { name: 'Puncture Service', icon: 'https://img.icons8.com/color/96/000000/wheel.png', href: '#puncture-service' },
-    { name: 'Mechanic Service', icon: 'https://img.icons8.com/color/96/000000/maintenance.png', href: '#mechanic-service' },
+    { name: 'Services', icon: 'https://img.icons8.com/color/96/000000/maintenance.png', href: '#services' },
     { name: 'Tour Packages', icon: 'https://img.icons8.com/color/96/000000/luggage.png', href: '#tour-packages' }
   ];
 

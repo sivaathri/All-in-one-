@@ -10,6 +10,7 @@ import RentResults from './rent/RentResults';
 import RentDetail from './rent/RentDetail';
 import FoodSpots from './foodspot/FoodSpots';
 import Adventures from './adventures/Adventures';
+import Services from './pages/Services';
 import './App.css';
 
 // ─── Search transition overlay ──────────────────────────────────────────────
@@ -73,6 +74,7 @@ function App() {
   const [selectedVehicle, setSelectedVehicle] = useState(null);
   const [transitionType, setTransitionType] = useState('stays'); // 'stays' | 'rentals'
   const [pendingRentalParams, setPendingRentalParams] = useState(null);
+  const [servicesTab, setServicesTab] = useState('all');
 
   // Sync browser back/forward buttons
   useEffect(() => {
@@ -95,6 +97,11 @@ function App() {
   const navigateToPage = (pageName, params = null) => {
     if (pageName === 'rent-home' && params) {
       setRentalSearchParams(prev => ({ ...prev, ...params }));
+    }
+    if (pageName === 'services' && params?.tab) {
+      setServicesTab(params.tab);
+    } else if (pageName === 'services' && !params) {
+      setServicesTab('all');
     }
     if (pageName === currentPage) return;
     setCurrentPage(pageName);
@@ -157,6 +164,8 @@ function App() {
         <FoodSpots />
       ) : currentPage === 'adventures' || currentPage === 'activities' ? (
         <Adventures />
+      ) : currentPage === 'services' ? (
+        <Services initialTab={servicesTab} onNavigate={navigateToPage} />
       ) : (
         <BecomeHost onBackToHome={() => navigateToPage('home')} />
       )}

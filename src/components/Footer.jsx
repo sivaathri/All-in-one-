@@ -85,8 +85,30 @@ export default function Footer({ onNavigate = () => {} }) {
             </h4>
             <ul className="space-y-2 text-[12px] font-semibold text-slate-500">
               <li><a href="#taxi-booking" className="hover:text-[#0F766E] transition-colors">Taxi Booking</a></li>
-              <li><a href="#puncture-service" className="hover:text-[#0F766E] transition-colors">Puncture Service</a></li>
-              <li><a href="#mechanic-service" className="hover:text-[#0F766E] transition-colors">Mechanic Service</a></li>
+              <li>
+                <button
+                  onClick={() => onNavigate('services')}
+                  className="hover:text-[#0F766E] transition-colors cursor-pointer border-none bg-transparent p-0 text-[12px] font-semibold text-slate-500 text-left"
+                >
+                  Vehicle Services (Roadside Assistance)
+                </button>
+              </li>
+              <li>
+                <button
+                  onClick={() => onNavigate('services', { tab: 'mechanic' })}
+                  className="hover:text-[#0F766E] transition-colors cursor-pointer border-none bg-transparent p-0 text-[11.5px] font-medium text-slate-400 hover:text-[#0F766E] pl-2 text-left"
+                >
+                  • Mechanic Service
+                </button>
+              </li>
+              <li>
+                <button
+                  onClick={() => onNavigate('services', { tab: 'puncture' })}
+                  className="hover:text-[#0F766E] transition-colors cursor-pointer border-none bg-transparent p-0 text-[11.5px] font-medium text-slate-400 hover:text-[#0F766E] pl-2 text-left"
+                >
+                  • Puncture Service
+                </button>
+              </li>
               <li><a href="#tour-packages" className="hover:text-[#0F766E] transition-colors">Tour Packages</a></li>
               <li><a href="#airport-pickup" className="hover:text-[#0F766E] transition-colors">Airport Pickup</a></li>
               <li>

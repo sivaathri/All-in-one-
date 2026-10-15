@@ -32,10 +32,9 @@ export default function HeroSection({ onSearch }) {
           </p>
         </div>
 
-        {/* Search Bar & Features container at the bottom */}
-        <div className="w-full flex flex-col items-center gap-6">
+        {/* Search Bar container shifted towards the bottom */}
+        <div className="w-full flex flex-col items-center translate-y-7 sm:translate-y-6 z-30">
           <SearchBar onSearch={onSearch} />
-          <Features />
         </div>
 
       </div>

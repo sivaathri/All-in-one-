@@ -72,6 +72,8 @@ export default function Navbar({ onNavigate = () => {}, currentPage = 'home' }) 
       setActiveMenu('Food Spots');
     } else if (currentPage === 'adventures' || currentPage === 'activities') {
       setActiveMenu('Activities');
+    } else if (currentPage === 'services') {
+      setActiveMenu('Services');
     }
   }, [currentPage]);
 
@@ -118,12 +120,20 @@ export default function Navbar({ onNavigate = () => {}, currentPage = 'home' }) 
 
   const menuItems = [
     { name: 'Home', path: '#home' },
-    { name: 'Stays', path: '#stays', active: true },
+    { name: 'Stays', path: '#stays' },
     { name: 'Rentals', path: '#rentals' },
     { name: 'Food Spots', path: '#food' },
     { name: 'Activities', path: '#activities' },
     { name: 'Taxi Booking', path: '#taxi' },
-    { name: 'Services', path: '#services' },
+    { 
+      name: 'Services', 
+      path: '#services',
+      dropdown: true,
+      dropdownItems: [
+        { name: 'Mechanic Service', tab: 'mechanic', desc: 'On-spot breakdown & repairs', icon: 'wrench' },
+        { name: 'Puncture Service', tab: 'puncture', desc: 'Doorstep & roadside tyre fix', icon: 'disc' }
+      ]
+    },
     { name: 'Tour Packages', path: '#packages' }
   ];
 
@@ -164,31 +174,86 @@ export default function Navbar({ onNavigate = () => {}, currentPage = 'home' }) 
                 const isRentals = item.name === 'Rentals';
                 const isDropdownOpen = isRentals ? rentalsDropdown : servicesDropdown;
                 const setDropdown = isRentals ? setRentalsDropdown : setServicesDropdown;
+                const isActive = activeMenu === item.name;
 
                 return (
                   <div
                     key={item.name}
-                    className="relative"
+                    className="relative py-2"
                     onMouseEnter={() => setDropdown(true)}
                     onMouseLeave={() => setDropdown(false)}
                   >
-                    <button className="flex items-center gap-1 text-[15px] font-semibold text-slate-800 hover:text-[#0F766E] transition-colors duration-200 cursor-pointer outline-none">
+                    <button
+                      onClick={() => {
+                        setActiveMenu(item.name);
+                        if (item.name === 'Services') {
+                          onNavigate('services');
+                        }
+                      }}
+                      className={`flex items-center gap-1 text-[15px] font-semibold transition-colors duration-200 cursor-pointer outline-none ${
+                        isActive
+                          ? 'text-[#0F766E]'
+                          : 'text-slate-800 hover:text-[#0F766E]'
+                      }`}
+                    >
                       {item.name}
-                      <ChevronDown className="h-3.5 w-3.5 text-slate-800 shrink-0 stroke-[2.5]" />
+                      <ChevronDown className={`h-3.5 w-3.5 shrink-0 stroke-[2.5] transition-transform duration-200 ${isDropdownOpen ? 'rotate-180 text-[#0F766E]' : 'text-slate-700'}`} />
                     </button>
+                    {isActive && (
+                      <span className="absolute bottom-[-8px] left-1/2 -translate-x-1/2 w-6 h-[2.5px] rounded-full bg-[#0F766E]" />
+                    )}
                     
                     {/* Dropdown Menu */}
                     {isDropdownOpen && (
-                      <div className="absolute left-0 mt-0 w-48 origin-top-left rounded-xl border border-gray-100 bg-white p-1.5 shadow-lg ring-1 ring-black/5 transition-all duration-200">
-                        {item.dropdownItems.map((subItem) => (
-                          <a
-                            key={subItem}
-                            href={`#${subItem.toLowerCase().replace(/\s+/g, '-')}`}
-                            className="block rounded-lg px-3 py-2 text-xs font-semibold text-slate-700 hover:bg-teal-50 hover:text-[#0F766E] transition-colors outline-none"
+                      <div className="absolute left-0 top-full mt-1 w-64 origin-top-left rounded-2xl border border-gray-100 bg-white p-2 shadow-xl ring-1 ring-black/5 transition-all duration-200 z-50 animate-in fade-in slide-in-from-top-1">
+                        <div className="px-2.5 py-1.5 text-[10px] font-extrabold uppercase tracking-wider text-slate-400 border-b border-slate-100 mb-1">
+                          Vehicle Roadside Support
+                        </div>
+                        {item.dropdownItems.map((subItem) => {
+                          const subName = typeof subItem === 'string' ? subItem : subItem.name;
+                          const subTab = typeof subItem === 'object' ? subItem.tab : null;
+                          const subDesc = typeof subItem === 'object' ? subItem.desc : null;
+                          return (
+                            <button
+                              key={subName}
+                              onClick={(e) => {
+                                e.preventDefault();
+                                setDropdown(false);
+                                setActiveMenu(item.name);
+                                if (item.name === 'Services') {
+                                  onNavigate('services', subTab ? { tab: subTab } : null);
+                                }
+                              }}
+                              className="w-full text-left rounded-xl px-3 py-2 text-xs font-semibold text-slate-700 hover:bg-teal-50 hover:text-[#0F766E] transition-colors outline-none cursor-pointer flex flex-col group"
+                            >
+                              <div className="flex items-center justify-between w-full">
+                                <span className="font-extrabold text-[13px] text-slate-900 group-hover:text-[#0F766E]">
+                                  {subName}
+                                </span>
+                                <span className="text-[10px] font-bold text-teal-600 bg-teal-50/80 px-1.5 py-0.5 rounded opacity-0 group-hover:opacity-100 transition-opacity">
+                                  Select
+                                </span>
+                              </div>
+                              {subDesc && (
+                                <span className="text-[11px] text-slate-400 font-normal mt-0.5 leading-snug">
+                                  {subDesc}
+                                </span>
+                              )}
+                            </button>
+                          );
+                        })}
+                        <div className="mt-1 pt-1 border-t border-slate-100">
+                          <button
+                            onClick={() => {
+                              setDropdown(false);
+                              setActiveMenu('Services');
+                              onNavigate('services');
+                            }}
+                            className="w-full text-center py-1.5 text-[11px] font-bold text-[#0F766E] hover:underline cursor-pointer"
                           >
-                            {subItem}
-                          </a>
-                        ))}
+                            Explore All Services →
+                          </button>
+                        </div>
                       </div>
                     )}
                   </div>
@@ -213,6 +278,8 @@ export default function Navbar({ onNavigate = () => {}, currentPage = 'home' }) 
                       onNavigate('food-spots');
                     } else if (item.name === 'Activities' || item.name === 'Adventures') {
                       onNavigate('activities');
+                    } else if (item.name === 'Services') {
+                      onNavigate('services');
                     } else {
                       onNavigate('home');
                     }
@@ -352,20 +419,38 @@ export default function Navbar({ onNavigate = () => {}, currentPage = 'home' }) 
               if (item.dropdown) {
                 return (
                   <div key={item.name} className="py-1">
-                    <span className="block px-3 py-1 text-xs font-semibold uppercase tracking-wider text-slate-400">
+                    <button
+                      onClick={() => {
+                        setIsOpen(false);
+                        setActiveMenu(item.name);
+                        if (item.name === 'Services') {
+                          onNavigate('services');
+                        }
+                      }}
+                      className="block w-full text-left px-3 py-1 text-xs font-bold uppercase tracking-wider text-[#0F766E] hover:underline"
+                    >
                       {item.name}
-                    </span>
+                    </button>
                     <div className="mt-1 pl-4 space-y-1">
-                      {item.dropdownItems.map((subItem) => (
-                        <a
-                          key={subItem}
-                          href={`#${subItem.toLowerCase().replace(/\s+/g, '-')}`}
-                          onClick={() => setIsOpen(false)}
-                          className="block rounded-lg px-3 py-2 text-sm font-medium text-slate-600 hover:bg-slate-50 hover:text-[#0F766E] transition-colors outline-none"
-                        >
-                          {subItem}
-                        </a>
-                      ))}
+                      {item.dropdownItems.map((subItem) => {
+                        const subName = typeof subItem === 'string' ? subItem : subItem.name;
+                        const subTab = typeof subItem === 'object' ? subItem.tab : null;
+                        return (
+                          <button
+                            key={subName}
+                            onClick={() => {
+                              setIsOpen(false);
+                              setActiveMenu(item.name);
+                              if (item.name === 'Services') {
+                                onNavigate('services', subTab ? { tab: subTab } : null);
+                              }
+                            }}
+                            className="block w-full text-left rounded-lg px-3 py-2 text-sm font-medium text-slate-600 hover:bg-slate-50 hover:text-[#0F766E] transition-colors outline-none cursor-pointer"
+                          >
+                            {subName}
+                          </button>
+                        );
+                      })}
                     </div>
                   </div>
                 );
@@ -390,6 +475,8 @@ export default function Navbar({ onNavigate = () => {}, currentPage = 'home' }) 
                       onNavigate('food-spots');
                     } else if (item.name === 'Activities' || item.name === 'Adventures') {
                       onNavigate('activities');
+                    } else if (item.name === 'Services') {
+                      onNavigate('services');
                     } else {
                       onNavigate('home');
                     }

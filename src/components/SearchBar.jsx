@@ -155,7 +155,7 @@ export default function SearchBar({ onSearch, isModifySearch }) {
     <div className={isModifySearch ? "w-full" : "w-full max-w-6xl"}>
       <form
         onSubmit={handleSearch}
-        className="w-full rounded-2xl bg-white py-4 pl-4 pr-4 border border-slate-100/80 flex flex-col lg:flex-row items-center gap-4 lg:gap-0 lg:divide-x lg:divide-slate-200/50"
+        className="w-full rounded-2xl bg-white py-4 pl-4 pr-4 border-2 border-[#0F766E] shadow-md flex flex-col lg:flex-row items-center gap-4 lg:gap-0 lg:divide-x lg:divide-slate-200/50"
       >
         {/* Search Input */}
         <div ref={locationRef} className="w-full lg:w-[35%] pl-1.5 pr-5 py-1.5 flex items-center gap-3 relative">
