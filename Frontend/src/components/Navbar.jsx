@@ -58,11 +58,19 @@ export default function Navbar({ onNavigate = () => {}, currentPage = 'home' }) 
     return () => window.removeEventListener('storage', handleStorageChange);
   }, []);
 
-  // Listen for global open-become-host-modal events (e.g. from footer)
+  // Listen for global open-become-host-modal and open-auth-modal events
   useEffect(() => {
     const handleOpenHostModal = () => setIsBecomeHostOpen(true);
+    const handleOpenAuthModal = (e) => {
+      setAuthTab(e?.detail?.tab || 'login');
+      setIsAuthOpen(true);
+    };
     window.addEventListener('open-become-host-modal', handleOpenHostModal);
-    return () => window.removeEventListener('open-become-host-modal', handleOpenHostModal);
+    window.addEventListener('open-auth-modal', handleOpenAuthModal);
+    return () => {
+      window.removeEventListener('open-become-host-modal', handleOpenHostModal);
+      window.removeEventListener('open-auth-modal', handleOpenAuthModal);
+    };
   }, []);
 
   const handleAuthSuccess = (userData) => {
