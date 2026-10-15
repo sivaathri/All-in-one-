@@ -145,6 +145,13 @@ const categoryIcons = {
 export default function StayPropertyForm({ onBack }) {
   const [currentStep, setCurrentStep] = useState(1);
   const [isSubmitted, setIsSubmitted] = useState(false);
+
+  // Always scroll to top on mount and when moving between steps
+  useEffect(() => {
+    window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
+    document.documentElement.scrollTop = 0;
+    document.body.scrollTop = 0;
+  }, [currentStep]);
   
   // Step 1 States
   const [propertyName, setPropertyName] = useState('');

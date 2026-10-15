@@ -94,6 +94,13 @@ function App() {
     return () => window.removeEventListener('popstate', handlePopState);
   }, []);
 
+  // Always scroll to the top whenever currentPage changes
+  useEffect(() => {
+    window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
+    document.documentElement.scrollTop = 0;
+    document.body.scrollTop = 0;
+  }, [currentPage]);
+
   const navigateToPage = (pageName, params = null) => {
     if (pageName === 'rent-home' && params) {
       setRentalSearchParams(prev => ({ ...prev, ...params }));
@@ -103,7 +110,16 @@ function App() {
     } else if (pageName === 'services' && !params) {
       setServicesTab('all');
     }
-    if (pageName === currentPage) return;
+
+    // Always scroll to top immediately when any menu item is clicked
+    window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
+    document.documentElement.scrollTop = 0;
+    document.body.scrollTop = 0;
+
+    if (pageName === currentPage) {
+      window.scrollTo({ top: 0, left: 0, behavior: 'smooth' });
+      return;
+    }
     setCurrentPage(pageName);
     window.history.pushState({ page: pageName }, '', `#${pageName}`);
   };

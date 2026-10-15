@@ -11,7 +11,7 @@ export default function Navbar({ onNavigate = () => {}, currentPage = 'home' }) 
   // Authentication Popup states
   const [isAuthOpen, setIsAuthOpen] = useState(false);
   const [authTab, setAuthTab] = useState('login'); // 'login' or 'register'
-  const [isLoggedIn, setIsLoggedIn] = useState(true);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [emailInput, setEmailInput] = useState('');
@@ -319,17 +319,20 @@ export default function Navbar({ onNavigate = () => {}, currentPage = 'home' }) 
 
           {/* Desktop Right Side Buttons */}
           <div className="hidden lg:flex items-center gap-3">
-            {currentPage !== 'become-host' && (
-              <button
-                onClick={() => onNavigate('become-host')}
-                className="rounded-lg border border-[#0F766E] px-4.5 py-2 text-[14px] font-semibold text-[#0F766E] hover:bg-[#0F766E] hover:text-white transition-all duration-200 cursor-pointer outline-none"
-              >
-                Become a Host
-              </button>
-            )}
-            
             {isLoggedIn ? (
               <>
+                {currentPage !== 'become-host' && (
+                  <button
+                    onClick={() => onNavigate('become-host')}
+                    className="flex items-center gap-2 rounded-xl border border-[#0F766E] px-4 py-2 text-[14px] font-semibold text-[#0F766E] hover:bg-[#0F766E] hover:text-white transition-all duration-200 cursor-pointer outline-none"
+                  >
+                    <svg className="w-4 h-4 fill-current shrink-0" viewBox="0 0 24 24">
+                      <path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z" />
+                    </svg>
+                    <span>Become a Host</span>
+                  </button>
+                )}
+
                 {/* Wishlist Button */}
                 <button 
                   onClick={() => onNavigate('stays-results')}
@@ -362,53 +365,64 @@ export default function Navbar({ onNavigate = () => {}, currentPage = 'home' }) 
                     <ChevronDown className={`h-3.5 w-3.5 text-slate-500 transition-transform ${profileDropdownOpen ? 'rotate-180' : ''}`} />
                   </button>
 
-                {profileDropdownOpen && (
-                  <div className="absolute right-0 mt-2.5 w-48 origin-top-right rounded-xl border border-gray-150 bg-white p-1.5 shadow-lg ring-1 ring-black/5 z-40">
-                    <button
-                      onClick={() => {
-                        setProfileDropdownOpen(false);
-                        onNavigate('my-bookings');
-                      }}
-                      className="w-full text-left rounded-lg px-3.5 py-2.5 text-[12.5px] font-bold text-slate-700 hover:bg-slate-50 transition-colors cursor-pointer"
-                    >
-                      My Bookings
-                    </button>
-                    <button
-                      onClick={() => {
-                        setProfileDropdownOpen(false);
-                        onNavigate('become-host');
-                      }}
-                      className="w-full text-left rounded-lg px-3.5 py-2.5 text-[12.5px] font-bold text-slate-700 hover:bg-slate-50 transition-colors cursor-pointer"
-                    >
-                      Host Dashboard
-                    </button>
-                    <div className="border-t border-slate-100 my-1"></div>
-                    <button
-                      onClick={() => {
-                        setProfileDropdownOpen(false);
-                        setIsLoggedIn(false);
-                      }}
-                      className="w-full text-left rounded-lg px-3.5 py-2.5 text-[12.5px] font-bold text-red-650 hover:bg-red-50/50 transition-colors cursor-pointer"
-                    >
-                      Logout
-                    </button>
-                  </div>
-                )}
-              </div>
-            </>
-          ) : (
+                  {profileDropdownOpen && (
+                    <div className="absolute right-0 mt-2.5 w-48 origin-top-right rounded-xl border border-gray-150 bg-white p-1.5 shadow-lg ring-1 ring-black/5 z-40">
+                      <button
+                        onClick={() => {
+                          setProfileDropdownOpen(false);
+                          onNavigate('my-bookings');
+                        }}
+                        className="w-full text-left rounded-lg px-3.5 py-2.5 text-[12.5px] font-bold text-slate-700 hover:bg-slate-50 transition-colors cursor-pointer"
+                      >
+                        My Bookings
+                      </button>
+                      <button
+                        onClick={() => {
+                          setProfileDropdownOpen(false);
+                          onNavigate('become-host');
+                        }}
+                        className="w-full text-left rounded-lg px-3.5 py-2.5 text-[12.5px] font-bold text-slate-700 hover:bg-slate-50 transition-colors cursor-pointer"
+                      >
+                        Host Dashboard
+                      </button>
+                      <div className="border-t border-slate-100 my-1"></div>
+                      <button
+                        onClick={() => {
+                          setProfileDropdownOpen(false);
+                          setIsLoggedIn(false);
+                        }}
+                        className="w-full text-left rounded-lg px-3.5 py-2.5 text-[12.5px] font-bold text-red-650 hover:bg-red-50/50 transition-colors cursor-pointer"
+                      >
+                        Logout
+                      </button>
+                    </div>
+                  )}
+                </div>
+              </>
+            ) : (
               <>
+                {currentPage !== 'become-host' && (
+                  <button
+                    onClick={() => onNavigate('become-host')}
+                    className="flex items-center gap-2 rounded-xl border border-[#0F766E] px-4 py-2 text-[14px] font-semibold text-[#0F766E] hover:bg-[#0F766E] hover:text-white transition-all duration-200 cursor-pointer outline-none"
+                  >
+                    <svg className="w-4 h-4 fill-current shrink-0" viewBox="0 0 24 24">
+                      <path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z" />
+                    </svg>
+                    <span>Become a Host</span>
+                  </button>
+                )}
                 <button
                   onClick={() => { setIsAuthOpen(true); setAuthTab('login'); }}
-                  className="rounded-lg border border-[#0F766E] px-5 py-2 text-[14px] font-semibold text-[#0F766E] hover:bg-[#0F766E] hover:text-white transition-all duration-200 cursor-pointer outline-none"
+                  className="rounded-xl border border-[#0F766E] px-4.5 py-2 text-[14px] font-semibold text-[#0F766E] hover:bg-[#0F766E] hover:text-white transition-all duration-200 cursor-pointer outline-none"
                 >
-                  Login
+                  Sign In
                 </button>
                 <button
                   onClick={() => { setIsAuthOpen(true); setAuthTab('register'); }}
-                  className="rounded-lg bg-[#0F766E] border border-transparent px-5 py-2 text-[14px] font-semibold text-white shadow-sm hover:bg-[#0c625c] transition-all duration-200 cursor-pointer outline-none"
+                  className="rounded-xl bg-[#0F766E] border border-[#0F766E] px-4.5 py-2 text-[14px] font-semibold text-white shadow-sm hover:bg-[#0c625c] transition-all duration-200 cursor-pointer outline-none"
                 >
-                  Register
+                  Get Started
                 </button>
               </>
             )}
@@ -518,20 +532,22 @@ export default function Navbar({ onNavigate = () => {}, currentPage = 'home' }) 
 
           {/* Mobile CTA Buttons */}
           <div className="mt-6 space-y-2.5 border-t border-gray-100 pt-6">
-            {currentPage !== 'become-host' && (
-              <button
-                onClick={() => {
-                  onNavigate('become-host');
-                  setIsOpen(false);
-                }}
-                className="w-full rounded-xl border border-[#0F766E] py-3 text-center text-sm font-semibold text-[#0F766E] hover:bg-[#0F766E] hover:text-white transition-all duration-200 cursor-pointer outline-none"
-              >
-                Become a Host
-              </button>
-            )}
-            
             {isLoggedIn ? (
               <div className="flex flex-col gap-2">
+                {currentPage !== 'become-host' && (
+                  <button
+                    onClick={() => {
+                      onNavigate('become-host');
+                      setIsOpen(false);
+                    }}
+                    className="flex items-center justify-center gap-2 w-full rounded-xl border border-[#0F766E] py-3 text-center text-sm font-semibold text-[#0F766E] hover:bg-[#0F766E] hover:text-white transition-all duration-200 cursor-pointer outline-none mb-1"
+                  >
+                    <svg className="w-4 h-4 fill-current shrink-0" viewBox="0 0 24 24">
+                      <path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z" />
+                    </svg>
+                    <span>Become a Host</span>
+                  </button>
+                )}
                 <div className="flex items-center gap-3 bg-slate-50 border border-slate-150 p-3.5 rounded-xl">
                   <div className="h-10 w-10 rounded-xl bg-[#0F766E] text-white flex items-center justify-center font-black text-[15px]">
                     RK
@@ -571,17 +587,31 @@ export default function Navbar({ onNavigate = () => {}, currentPage = 'home' }) 
               </div>
             ) : (
               <>
+                {currentPage !== 'become-host' && (
+                  <button
+                    onClick={() => {
+                      onNavigate('become-host');
+                      setIsOpen(false);
+                    }}
+                    className="flex items-center justify-center gap-2 w-full rounded-xl border border-[#0F766E] py-3 text-center text-sm font-semibold text-[#0F766E] hover:bg-[#0F766E] hover:text-white transition-all duration-200 cursor-pointer outline-none"
+                  >
+                    <svg className="w-4 h-4 fill-current shrink-0" viewBox="0 0 24 24">
+                      <path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z" />
+                    </svg>
+                    <span>Become a Host</span>
+                  </button>
+                )}
                 <button
                   onClick={() => { setIsAuthOpen(true); setAuthTab('login'); setIsOpen(false); }}
                   className="w-full rounded-xl border border-[#0F766E] py-3 text-center text-sm font-semibold text-[#0F766E] hover:bg-[#0F766E] hover:text-white transition-all duration-200 cursor-pointer outline-none"
                 >
-                  Login
+                  Sign In
                 </button>
                 <button
                   onClick={() => { setIsAuthOpen(true); setAuthTab('register'); setIsOpen(false); }}
                   className="w-full rounded-xl bg-[#0F766E] py-3 text-center text-sm font-semibold text-white shadow-md hover:bg-[#0c625c] transition-all cursor-pointer outline-none"
                 >
-                  Register
+                  Get Started
                 </button>
               </>
             )}

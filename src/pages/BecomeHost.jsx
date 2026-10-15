@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { ArrowRight, ShieldCheck, Tag, Calendar, TrendingUp, X, CheckCircle2 } from 'lucide-react';
 import StayPropertyForm from './StayPropertyForm';
 import becameBg from '../assets/becameBG.png';
@@ -17,6 +17,13 @@ export default function BecomeHost({ onBackToHome }) {
   const [businessName, setBusinessName] = useState('');
   const [phone, setPhone] = useState('');
   const [email, setEmail] = useState('');
+
+  // Always scroll to top when category or form view changes
+  useEffect(() => {
+    window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
+    document.documentElement.scrollTop = 0;
+    document.body.scrollTop = 0;
+  }, [activeCategory]);
 
   const categories = [
     {
