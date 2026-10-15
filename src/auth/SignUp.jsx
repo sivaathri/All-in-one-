@@ -1,5 +1,19 @@
-import React, { useState } from 'react';
-import { Mail, Lock, Eye, EyeOff, User, Phone } from 'lucide-react';
+import React, { useState, useRef, useEffect } from 'react';
+import { Mail, Lock, Eye, EyeOff, User, Phone, ChevronDown } from 'lucide-react';
+import { RoundIndiaFlag } from './SignIn';
+
+const COUNTRIES = [
+  { code: '+91', name: 'India', flag: '🇮🇳', isIndia: true },
+  { code: '+1', name: 'United States', flag: '🇺🇸' },
+  { code: '+44', name: 'United Kingdom', flag: '🇬🇧' },
+  { code: '+971', name: 'United Arab Emirates', flag: '🇦🇪' },
+  { code: '+1', name: 'Canada', flag: '🇨🇦' },
+  { code: '+61', name: 'Australia', flag: '🇦🇺' },
+  { code: '+65', name: 'Singapore', flag: '🇸🇬' },
+  { code: '+966', name: 'Saudi Arabia', flag: '🇸🇦' },
+  { code: '+49', name: 'Germany', flag: '🇩🇪' },
+  { code: '+33', name: 'France', flag: '🇫🇷' },
+];
 
 export default function SignUp({ 
   onSuccess = () => {}, 
@@ -9,6 +23,8 @@ export default function SignUp({
   const [nameInput, setNameInput] = useState('');
   const [emailInput, setEmailInput] = useState('');
   const [phoneInput, setPhoneInput] = useState('');
+  const [selectedCountry, setSelectedCountry] = useState(COUNTRIES[0]);
+  const [isCountryDropdownOpen, setIsCountryDropdownOpen] = useState(false);
   const [passwordInput, setPasswordInput] = useState('');
   const [confirmPasswordInput, setConfirmPasswordInput] = useState('');
   const [showPassword, setShowPassword] = useState(false);
@@ -17,6 +33,22 @@ export default function SignUp({
   const [focusedInput, setFocusedInput] = useState(null);
   const [loading, setLoading] = useState(false);
   const [passwordError, setPasswordError] = useState('');
+
+  const countryDropdownRef = useRef(null);
+
+  useEffect(() => {
+    function handleClickOutside(e) {
+      if (countryDropdownRef.current && !countryDropdownRef.current.contains(e.target)) {
+        setIsCountryDropdownOpen(false);
+      }
+    }
+    if (isCountryDropdownOpen) {
+      document.addEventListener('mousedown', handleClickOutside);
+    }
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [isCountryDropdownOpen]);
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -28,7 +60,7 @@ export default function SignUp({
     setLoading(true);
     setTimeout(() => {
       setLoading(false);
-      onSuccess({ name: nameInput, email: emailInput, phone: phoneInput });
+      onSuccess({ name: nameInput, email: emailInput, phone: `${selectedCountry.code} ${phoneInput}` });
     }, 1200);
   };
 
@@ -83,19 +115,78 @@ export default function SignUp({
           />
         </div>
 
-        {/* Phone input */}
-        <div className="relative flex items-center">
-          <Phone className={`absolute left-4.5 h-5 w-5 transition-colors duration-300 ${focusedInput === 'phone' ? 'text-[#0F766E]' : 'text-slate-400'}`} />
-          <input
-            type="tel"
-            required
-            placeholder="Phone Number"
-            value={phoneInput}
-            onChange={(e) => setPhoneInput(e.target.value)}
-            onFocus={() => setFocusedInput('phone')}
-            onBlur={() => setFocusedInput(null)}
-            className="w-full rounded-2xl border border-slate-200/90 bg-white pl-12 pr-4 py-3.5 text-[14px] font-semibold text-slate-800 placeholder-slate-400 outline-none focus:border-[#0F766E] focus:ring-4 focus:ring-[#0F766E]/10 transition-all duration-300 shadow-xs"
-          />
+        {/* Phone input with circular flag dropdown */}
+        <div className="relative">
+          <div className="flex items-center rounded-2xl border border-slate-200/90 bg-white shadow-xs focus-within:border-[#0F766E] focus-within:ring-4 focus-within:ring-[#0F766E]/10 transition-all duration-300">
+            {/* Country Selector Button */}
+            <button
+              type="button"
+              onClick={() => setIsCountryDropdownOpen(!isCountryDropdownOpen)}
+              className="flex items-center gap-2 pl-3.5 pr-2.5 py-3 hover:bg-slate-50/80 rounded-l-2xl select-none cursor-pointer outline-none transition-colors border-r border-slate-100 shrink-0"
+            >
+              {selectedCountry.isIndia ? (
+                <RoundIndiaFlag className="w-6 h-6" />
+              ) : (
+                <span className="text-xl leading-none">{selectedCountry.flag}</span>
+              )}
+              <span className="text-[15px] font-bold text-[#0D233A] tracking-tight">
+                {selectedCountry.code}
+              </span>
+              <ChevronDown className={`w-3.5 h-3.5 text-slate-500 transition-transform duration-200 stroke-[2.5] ${isCountryDropdownOpen ? 'rotate-180' : ''}`} />
+            </button>
+
+            {/* Number input */}
+            <input
+              type="tel"
+              required
+              maxLength={selectedCountry.code === '+91' ? 10 : 15}
+              placeholder="Mobile Number"
+              value={phoneInput}
+              onChange={(e) => setPhoneInput(e.target.value.replace(/\D/g, ''))}
+              onFocus={() => setFocusedInput('phone')}
+              onBlur={() => setFocusedInput(null)}
+              className="w-full bg-transparent px-3.5 py-3.5 text-[15px] font-semibold text-slate-800 placeholder-slate-400 outline-none tracking-wide"
+            />
+          </div>
+
+          {/* Country Dropdown Popup */}
+          {isCountryDropdownOpen && (
+            <div
+              ref={countryDropdownRef}
+              className="absolute top-[calc(100%+6px)] left-0 z-40 w-72 bg-white rounded-2xl shadow-xl border border-slate-150 p-2 animate-form-slide max-h-56 overflow-y-auto no-scrollbar"
+            >
+              <div className="text-[11px] font-bold text-slate-400 uppercase tracking-wider px-2 py-1">
+                Select Country
+              </div>
+              <div className="flex flex-col gap-0.5 mt-1">
+                {COUNTRIES.map((country) => (
+                  <button
+                    key={country.name}
+                    type="button"
+                    onClick={() => {
+                      setSelectedCountry(country);
+                      setIsCountryDropdownOpen(false);
+                    }}
+                    className={`flex items-center justify-between px-2.5 py-2 rounded-xl text-left text-xs font-semibold cursor-pointer transition-colors ${
+                      selectedCountry.code === country.code && selectedCountry.name === country.name
+                        ? 'bg-teal-50 text-[#0F766E]'
+                        : 'hover:bg-slate-50 text-slate-700'
+                    }`}
+                  >
+                    <div className="flex items-center gap-2.5">
+                      {country.isIndia ? (
+                        <RoundIndiaFlag className="w-5 h-5" />
+                      ) : (
+                        <span className="text-base leading-none">{country.flag}</span>
+                      )}
+                      <span>{country.name}</span>
+                    </div>
+                    <span className="font-bold text-slate-400">{country.code}</span>
+                  </button>
+                ))}
+              </div>
+            </div>
+          )}
         </div>
 
         {/* Password input */}
