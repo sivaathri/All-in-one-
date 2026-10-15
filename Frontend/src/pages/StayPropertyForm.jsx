@@ -933,7 +933,7 @@ export default function StayPropertyForm({ onBack }) {
                         />
                       </div>
 
-                      {/* State & Country Grid */}
+                      {/* State & Zip / Postal Code Grid */}
                       <div className="grid grid-cols-2 gap-4">
                         <div className="flex flex-col gap-1.5">
                           <label className="text-[14px] font-bold text-slate-800">
@@ -951,35 +951,19 @@ export default function StayPropertyForm({ onBack }) {
                             <option value="Kerala">Kerala</option>
                           </select>
                         </div>
+
                         <div className="flex flex-col gap-1.5">
                           <label className="text-[14px] font-bold text-slate-800">
-                            Country <span className="text-red-500">*</span>
+                            Zip / Postal Code <span className="text-red-500">*</span>
                           </label>
-                          <select
-                            value={countryVal}
-                            onChange={(e) => setCountryVal(e.target.value)}
-                            className="w-full rounded-xl border border-slate-200 bg-white px-3 py-2.5 text-[14px] font-medium text-slate-700 outline-none focus:border-[#007F55] focus:ring-1 focus:ring-[#007F55] transition-all cursor-pointer"
-                          >
-                            <option value="">Select country</option>
-                            <option value="India">India</option>
-                            <option value="United States">United States</option>
-                            <option value="United Kingdom">United Kingdom</option>
-                          </select>
+                          <input
+                            type="text"
+                            placeholder="Enter zip / postal code"
+                            value={zipVal}
+                            onChange={(e) => setZipVal(e.target.value)}
+                            className="w-full rounded-xl border border-slate-200 bg-white px-4 py-2.5 text-[14px] font-medium text-slate-800 placeholder-slate-400 outline-none focus:border-[#007F55] focus:ring-1 focus:ring-[#007F55] transition-all"
+                          />
                         </div>
-                      </div>
-
-                      {/* Zip / Postal Code */}
-                      <div className="flex flex-col gap-1.5">
-                        <label className="text-[14px] font-bold text-slate-800">
-                          Zip / Postal Code <span className="text-red-500">*</span>
-                        </label>
-                        <input
-                          type="text"
-                          placeholder="Enter zip / postal code"
-                          value={zipVal}
-                          onChange={(e) => setZipVal(e.target.value)}
-                          className="w-full rounded-xl border border-slate-200 bg-white px-4 py-2.5 text-[14px] font-medium text-slate-800 placeholder-slate-400 outline-none focus:border-[#007F55] focus:ring-1 focus:ring-[#007F55] transition-all"
-                        />
                       </div>
                     </div>
 
@@ -1002,7 +986,7 @@ export default function StayPropertyForm({ onBack }) {
                           setLatitude(lat);
                           setLongitude(lng);
                         }}
-                        addressQuery={[addressLine1, city, stateVal, countryVal, zipVal].filter(Boolean).join(', ')}
+                        addressQuery={[addressLine1, city, stateVal, zipVal].filter(Boolean).join(', ')}
                       />
 
                       {/* Light Green Tip bar */}
